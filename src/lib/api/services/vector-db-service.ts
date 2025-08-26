@@ -51,7 +51,7 @@ export class VectorDBService extends BaseService {
       throw this.createValidationError('userId is required');
     }
     
-    const endpoint = API_ENDPOINTS.GET_USER_TABLE_NAMES_AUTH.replace('{user_id}', userId);
+    const endpoint = API_ENDPOINTS.GET_USER_TABLE_NAMES_AUTH(userId);
     const response = await this.get<any>(endpoint);
     
     // Handle different response structures

@@ -103,9 +103,7 @@ export class BusinessRulesService extends BaseService {
     try {
       // First get the user's current database
       const userCurrentDBResponse = await this.get<any>(
-        userId 
-          ? `${API_ENDPOINTS.GET_USER_CURRENT_DB}/${userId}`
-          : API_ENDPOINTS.GET_USER_CURRENT_DB
+        API_ENDPOINTS.GET_USER_CURRENT_DB(userId || '')
       );
 
       if (!userCurrentDBResponse.data || !userCurrentDBResponse.data.db_id) {
@@ -136,9 +134,7 @@ export class BusinessRulesService extends BaseService {
     try {
       // First get the user's current database
       const userCurrentDBResponse = await this.get<any>(
-        userId 
-          ? `${API_ENDPOINTS.GET_USER_CURRENT_DB}/${userId}`
-          : API_ENDPOINTS.GET_USER_CURRENT_DB
+        API_ENDPOINTS.GET_USER_CURRENT_DB(userId || '')
       );
 
       if (!userCurrentDBResponse.data || !userCurrentDBResponse.data.db_id) {

@@ -17,9 +17,12 @@ import {
   ArrowLeft,
   Clock,
   User,
+  FileText,
 } from "lucide-react";
 import { DatabaseQueryForm } from "@/components/database-query/DatabaseQueryForm";
 import { QueryHistoryPanel } from "@/components/database-query/QueryHistoryPanel";
+import { QueryModeToggle } from "@/components/database-query/QueryModeToggle";
+import { IntegratedReportGenerator } from "@/components/database-query/IntegratedReportGenerator";
 
 export default function DatabaseQueryPage() {
   const router = useRouter();
@@ -37,6 +40,7 @@ export default function DatabaseQueryPage() {
   // Local state
   const [showHistory, setShowHistory] = useState(false);
   const [currentQuery, setCurrentQuery] = useState<string>("");
+  const [queryMode, setQueryMode] = useState<'query' | 'reports'>('query');
 
   // Load query history on mount
   useEffect(() => {
@@ -131,8 +135,7 @@ export default function DatabaseQueryPage() {
                       Database Query
                     </h1>
                     <p className="text-gray-400">
-                      Ask questions in natural language and get intelligent
-                      results
+                      Run quick queries or generate comprehensive AI-powered reports
                     </p>
                   </div>
                 </div>
@@ -147,7 +150,7 @@ export default function DatabaseQueryPage() {
               </div>
 
               {/* Feature Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                 <Card className="bg-gray-900/50 border-blue-400/30">
                   <CardContent className="pt-6">
                     <div className="flex items-center gap-3">
@@ -156,17 +159,35 @@ export default function DatabaseQueryPage() {
                       </div>
                       <div>
                         <h3 className="text-white font-medium">
-                          Natural Language
+                          Quick Queries
                         </h3>
                         <p className="text-gray-400 text-sm">
-                          Ask questions in plain English
+                          Instant results for simple questions
                         </p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gray-900/50 border-blue-400/30">
+                <Card className="bg-gray-900/50 border-purple-400/30">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                        <FileText className="w-4 h-4 text-purple-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-medium">
+                          AI Reports
+                        </h3>
+                        <p className="text-gray-400 text-sm">
+                          Comprehensive analysis & insights
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gray-900/50 border-green-400/30">
                   <CardContent className="pt-6">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
@@ -241,13 +262,47 @@ export default function DatabaseQueryPage() {
               </Card>
             </div>
 
-            {/* Query Form */}
+            {/* Mode Toggle */}
+            <div className="mb-6">
+              <QueryModeToggle
+                mode={queryMode}
+                onModeChange={setQueryMode}
+                hasDatabase={hasCurrentDatabase}
+              />
+              
+              {/* Quick Navigation */}
+              <div className="mt-4 flex items-center gap-2 text-sm text-gray-400">
+                <span>Quick access:</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push('/ai-results')}
+                  className="text-purple-400 hover:text-purple-300 hover:bg-purple-400/10"
+                >
+                  <FileText className="w-4 h-4 mr-1" />
+                  View AI Reports
+                </Button>
+              </div>
+            </div>
+
+            {/* Query Form or Report Generator */}
             <div className="mb-8">
+              {queryMode === 'query' ? (
               <DatabaseQueryForm
                 onSubmit={handleQuerySubmit}
                 loading={loading}
                 hasDatabase={hasCurrentDatabase}
               />
+              ) : (
+                <IntegratedReportGenerator
+                  userId={user?.user_id}
+                  onReportComplete={(results) => {
+                    console.log('Report completed:', results);
+                    // Store results for the results page
+                    sessionStorage.setItem('reportResults', JSON.stringify(results));
+                  }}
+                />
+              )}
             </div>
 
             {/* Error Display */}
@@ -277,16 +332,24 @@ export default function DatabaseQueryPage() {
                     <Database className="w-8 h-8 text-blue-400" />
                   </div>
                   <h3 className="text-white text-lg font-medium mb-2">
-                    Ready to Ask Questions
+                    Ready to Get Started
                   </h3>
                   <p className="text-gray-400 mb-4">
-                    Ask your question in natural language above to get started
+                    {queryMode === 'query' 
+                      ? 'Ask your question in natural language above to get started'
+                      : 'Describe what you want to analyze and generate comprehensive reports'
+                    }
                   </p>
                   {!hasCurrentDatabase && (
                     <p className="text-yellow-400 text-sm mb-4">
                       Please select a database first
                     </p>
                   )}
+                  <div className="flex justify-center gap-2 mt-4">
+                    <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+                      {queryMode === 'query' ? 'Quick Query Mode' : 'AI Report Mode'}
+                    </Badge>
+                  </div>
                 </CardContent>
               </Card>
             </div>

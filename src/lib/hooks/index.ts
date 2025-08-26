@@ -11,6 +11,9 @@ export { useFileQuery } from "./use-file-query";
 export { useNewTable } from "./use-new-table";
 export { useUserAccess } from "./use-user-access";
 export { useVectorDB } from "./use-vector-db";
+export { useReports } from "./use-reports";
+export { useReportStructure } from "./use-report-structure";
+export { useReportHistory } from "./use-report-history";
 
 // File operations
 export { useFileOperations, useSmartFileUpload } from "./use-smart-file-upload";
@@ -29,4 +32,4 @@ export { useUserSettings } from "./use-user-settings";
 export { useThemeTransition } from "./useThemeTransition";
 
 // Context hooks
-// export { useUserContext } from "./use-user-context"; // Keep if needed for specific context usage
+export { useUserContext } from "./use-user-context";

@@ -40,6 +40,7 @@ export function useExcelToDB() {
    * Push Excel data to database
    */
   const pushDataToDatabase = useCallback(async (request: {
+    user_id: string;
     table_full_name: string;
     column_mapping: Record<string, string>;
     excel_file: File;
@@ -70,6 +71,7 @@ export function useExcelToDB() {
    * Get AI-powered column mapping suggestions
    */
   const getAIMapping = useCallback(async (request: {
+    user_id: string;
     table_full_name: string;
     excel_file: File;
   }) => {

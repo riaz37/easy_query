@@ -38,12 +38,12 @@ export class ExcelToDBService extends BaseService {
 
   /**
    * Push Excel data to database using provided column mapping
-   * User ID is extracted from JWT token on backend
+   * User ID is required for the API call
    */
   async pushDataToDatabase(
-    request: Omit<ExcelToDBPushDataRequest, 'user_id'>
+    request: ExcelToDBPushDataRequest
   ): Promise<ServiceResponse<ExcelToDBPushDataResponse>> {
-    this.validateRequired(request, ['table_full_name', 'column_mapping', 'excel_file']);
+    this.validateRequired(request, ['user_id', 'table_full_name', 'column_mapping', 'excel_file']);
     this.validateTypes(request, {
       table_full_name: 'string',
       skip_first_row: 'boolean',
@@ -76,21 +76,22 @@ export class ExcelToDBService extends BaseService {
       throw this.createValidationError('Invalid file type. Only Excel files (.xls, .xlsx) and CSV files are supported');
     }
 
-    // Validate file size (e.g., 10MB limit)
-    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    // Validate file size (e.g., 50MB limit to match component)
+    const maxFileSize = 50 * 1024 * 1024; // 50MB
     if (request.excel_file.size > maxFileSize) {
-      throw this.createValidationError('File size exceeds maximum limit of 10MB');
+      throw this.createValidationError('File size exceeds maximum limit of 50MB');
     }
 
-    // Validate table name format
-    if (!/^[a-zA-Z][a-zA-Z0-9_]*\.[a-zA-Z][a-zA-Z0-9_]*$/.test(request.table_full_name)) {
-      throw this.createValidationError('Table full name must be in format "schema.table_name"');
+    // Validate table name format - Updated to match actual API (can be just table name or schema.table_name)
+    if (request.table_full_name.trim().length === 0) {
+      throw this.createValidationError('Table full name cannot be empty');
     }
 
     // Validate column mapping
     this.validateColumnMapping(request.column_mapping);
 
     const formData = new FormData();
+    formData.append('user_id', request.user_id);
     formData.append('table_full_name', request.table_full_name);
     formData.append('column_mapping', JSON.stringify(request.column_mapping));
     formData.append('skip_first_row', String(request.skip_first_row ?? true));
@@ -109,12 +110,12 @@ export class ExcelToDBService extends BaseService {
 
   /**
    * Get AI-powered column mapping suggestions
-   * User ID is extracted from JWT token on backend
+   * User ID is required for the API call
    */
   async getAIMapping(
-    request: Omit<ExcelToDBGetAIMappingRequest, 'user_id'>
+    request: ExcelToDBGetAIMappingRequest
   ): Promise<ServiceResponse<ExcelToDBGetAIMappingResponse>> {
-    this.validateRequired(request, ['table_full_name', 'excel_file']);
+    this.validateRequired(request, ['user_id', 'table_full_name', 'excel_file']);
     this.validateTypes(request, { table_full_name: 'string' });
 
     if (request.table_full_name.trim().length === 0) {
@@ -136,12 +137,13 @@ export class ExcelToDBService extends BaseService {
       throw this.createValidationError('Invalid file type. Only Excel files (.xls, .xlsx) and CSV files are supported');
     }
 
-    // Validate table name format
-    if (!/^[a-zA-Z][a-zA-Z0-9_]*\.[a-zA-Z][a-zA-Z0-9_]*$/.test(request.table_full_name)) {
-      throw this.createValidationError('Table full name must be in format "schema.table_name"');
+    // Validate table name format - Updated to match actual API (can be just table name or schema.table_name)
+    if (request.table_full_name.trim().length === 0) {
+      throw this.createValidationError('Table full name cannot be empty');
     }
 
     const formData = new FormData();
+    formData.append('user_id', request.user_id);
     formData.append('table_full_name', request.table_full_name);
     formData.append('excel_file', request.excel_file);
 
