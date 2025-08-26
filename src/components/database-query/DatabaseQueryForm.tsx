@@ -1,19 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Play, Database, AlertCircle, Loader2, Sparkles } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Play, Database, AlertCircle, Loader2, Sparkles, Brain, Zap, Clock } from "lucide-react";
 
 interface DatabaseQueryFormProps {
   onSubmit: (query: string) => void;
   loading: boolean;
   hasDatabase: boolean;
+  currentQuery?: string;
 }
 
-export function DatabaseQueryForm({ onSubmit, loading, hasDatabase }: DatabaseQueryFormProps) {
+export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery }: DatabaseQueryFormProps) {
   const [query, setQuery] = useState("");
   const [queryHistory, setQueryHistory] = useState<string[]>([
     "Show me all users from last month",
@@ -23,6 +25,32 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase }: DatabaseQu
     "Show me the revenue breakdown by month",
     "List all employees in the sales department",
   ]);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [processingTime, setProcessingTime] = useState(0);
+
+  // Update local query when currentQuery changes
+  useEffect(() => {
+    if (currentQuery) {
+      setQuery(currentQuery);
+    }
+  }, [currentQuery]);
+
+  // Handle loading state changes
+  useEffect(() => {
+    if (loading) {
+      setLocalLoading(true);
+      setProcessingTime(0);
+      
+      const interval = setInterval(() => {
+        setProcessingTime(prev => prev + 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    } else {
+      setLocalLoading(false);
+      setProcessingTime(0);
+    }
+  }, [loading]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +65,12 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase }: DatabaseQu
 
   const handleClear = () => {
     setQuery("");
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -55,7 +89,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase }: DatabaseQu
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask your question in natural language... (e.g., 'Show me all users from last month')"
               className="min-h-[120px] bg-gray-800/50 border-blue-400/30 text-white placeholder:text-gray-400 resize-none"
-              disabled={!hasDatabase || loading}
+              disabled={!hasDatabase || localLoading}
             />
             {!hasDatabase && (
               <div className="flex items-center gap-2 text-yellow-400 text-sm">
@@ -65,22 +99,64 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase }: DatabaseQu
             )}
           </div>
 
+          {/* Loading Progress Indicator */}
+          {localLoading && (
+            <div className="space-y-3 p-4 bg-blue-900/20 border border-blue-400/30 rounded-lg">
+              <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2 text-blue-400">
+                  <Brain className="w-4 h-4 animate-pulse" />
+                  <span>AI Processing Your Query</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Clock className="w-4 h-4" />
+                  <span>{formatTime(processingTime)}</span>
+                </div>
+              </div>
+              
+              <Progress value={Math.min((processingTime / 30) * 100, 90)} className="h-2" />
+              
+              <div className="grid grid-cols-2 gap-2 text-xs text-gray-400">
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span>Analyzing question</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <span>Connecting to DB</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                  <span>Processing query</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                  <span>Generating results</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Button
                 type="submit"
-                disabled={!query.trim() || !hasDatabase || loading}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={!query.trim() || !hasDatabase || localLoading}
+                className="bg-blue-600 hover:bg-blue-700 text-white min-w-[140px]"
               >
-                {loading ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {localLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
                 ) : (
-                  <Play className="w-4 h-4 mr-2" />
+                  <>
+                    <Play className="w-4 h-4 mr-2" />
+                    Ask Question
+                  </>
                 )}
-                {loading ? "Processing..." : "Ask Question"}
               </Button>
               
-              {query && (
+              {query && !localLoading && (
                 <Button
                   type="button"
                   variant="outline"
@@ -108,8 +184,9 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase }: DatabaseQu
               <Badge
                 key={index}
                 variant="outline"
-                className="cursor-pointer border-blue-400/30 text-blue-400 hover:bg-blue-400/10 hover:border-blue-400/50"
+                className="cursor-pointer border-blue-400/30 text-blue-400 hover:bg-blue-400/10 hover:border-blue-400/50 transition-all duration-200"
                 onClick={() => handleQuerySelect(template)}
+                disabled={localLoading}
               >
                 {template.length > 40 ? template.substring(0, 40) + "..." : template}
               </Badge>
@@ -130,6 +207,16 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase }: DatabaseQu
             </ul>
           </div>
         </div>
+
+        {/* Processing Status */}
+        {localLoading && (
+          <div className="p-3 bg-green-900/20 border border-green-400/30 rounded-lg">
+            <div className="flex items-center gap-2 text-green-400 text-sm">
+              <Zap className="w-4 h-4 animate-pulse" />
+              <span>Your query is being processed by AI. This may take a few moments...</span>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

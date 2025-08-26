@@ -20,22 +20,35 @@ import {
   Sparkles,
   BarChart3,
   Loader2,
+  Brain,
+  Zap,
+  Database,
+  TrendingUp,
+  FileBarChart,
 } from "lucide-react";
 import { useUserContext } from "@/lib/hooks/use-user-context";
 
 interface IntegratedReportGeneratorProps {
   userId?: string;
   onReportComplete?: (results: any) => void;
+  onReportStart?: () => void;
+  isReportGenerating?: boolean;
 }
 
 export function IntegratedReportGenerator({
   userId,
   onReportComplete,
+  onReportStart,
+  isReportGenerating = false,
 }: IntegratedReportGeneratorProps) {
   const { user } = useUserContext();
   const [userQuery, setUserQuery] = useState("");
   const [selectedStructure, setSelectedStructure] =
     useState<string>("financial_report");
+  const [reportProgress, setReportProgress] = useState(0);
+  const [processingSteps, setProcessingSteps] = useState<string[]>([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [processingTime, setProcessingTime] = useState(0);
 
   // Hooks
   const reports = useReports();
@@ -55,12 +68,73 @@ export function IntegratedReportGenerator({
     }
   }, [reports.reportResults, onReportComplete]);
 
+  // Enhanced progress tracking for report generation
+  useEffect(() => {
+    if (reports.isGenerating) {
+      setReportProgress(0);
+      setProcessingTime(0);
+      setCurrentStep(0);
+      
+      // Define processing steps for reports
+      setProcessingSteps([
+        "Analyzing your report request...",
+        "Connecting to database...",
+        "Generating SQL queries...",
+        "Executing database queries...",
+        "Processing business rules...",
+        "Analyzing data patterns...",
+        "Generating insights...",
+        "Compiling final report..."
+      ]);
+      
+      // Simulate progress with real-time updates
+      const progressInterval = setInterval(() => {
+        setReportProgress(prev => {
+          if (prev >= 95) {
+            clearInterval(progressInterval);
+            return 95;
+          }
+          return prev + 2;
+        });
+      }, 1000);
+
+      // Update current step based on progress
+      const stepInterval = setInterval(() => {
+        setCurrentStep(prev => {
+          const newStep = Math.floor((reportProgress / 100) * processingSteps.length);
+          return Math.min(newStep, processingSteps.length - 1);
+        });
+      }, 2000);
+
+      // Track processing time
+      const timeInterval = setInterval(() => {
+        setProcessingTime(prev => prev + 1);
+      }, 1000);
+
+      return () => {
+        clearInterval(progressInterval);
+        clearInterval(stepInterval);
+        clearInterval(timeInterval);
+      };
+    } else {
+      setReportProgress(0);
+      setProcessingTime(0);
+      setCurrentStep(0);
+      setProcessingSteps([]);
+    }
+  }, [reports.isGenerating, reportProgress, processingSteps.length]);
+
   // Generate report
   const handleGenerateReport = async () => {
     if (!user?.user_id || !userQuery.trim()) return;
 
     console.log('Starting report generation for user:', user.user_id);
     console.log('User query:', userQuery);
+
+    // Notify parent component that report generation has started
+    if (onReportStart) {
+      onReportStart();
+    }
 
     try {
       const taskId = await reports.generateReport({
@@ -74,9 +148,19 @@ export function IntegratedReportGenerator({
       reports.startMonitoring(taskId, {
         onProgress: (status) => {
           console.log("Report progress:", status);
+          // Update progress based on real status
+          if (status.progress_percentage) {
+            setReportProgress(status.progress_percentage);
+          }
+          if (status.current_step) {
+            setCurrentStep(processingSteps.findIndex(step => 
+              step.toLowerCase().includes(status.current_step.toLowerCase())
+            ) || currentStep);
+          }
         },
         onComplete: (results) => {
           console.log("Report completed:", results);
+          setReportProgress(100);
           // Store results for the results page
           if (onReportComplete) {
             onReportComplete(results);
@@ -95,6 +179,11 @@ export function IntegratedReportGenerator({
   // Generate report and wait for completion
   const handleGenerateReportAndWait = async () => {
     if (!user?.user_id || !userQuery.trim()) return;
+
+    // Notify parent component that report generation has started
+    if (onReportStart) {
+      onReportStart();
+    }
 
     try {
       await reports.generateReportAndWait({
@@ -170,6 +259,13 @@ export function IntegratedReportGenerator({
     }
   };
 
+  // Format time
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   // Memoize the report structure section to prevent unnecessary re-renders
   const reportStructureSection = useMemo(() => {
     if (reportStructure.isLoading) {
@@ -186,7 +282,9 @@ export function IntegratedReportGenerator({
     if (!reportStructure.structure) return null;
 
     return (
-      <Card className="bg-gray-900/50 border-purple-400/30">
+      <Card className={`bg-gray-900/50 border-purple-400/30 transition-all duration-300 ${
+        reports.isGenerating ? 'opacity-60 scale-95' : ''
+      }`}>
         <CardHeader>
           <CardTitle className="text-purple-400 flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
@@ -201,7 +299,8 @@ export function IntegratedReportGenerator({
             <select
               value={selectedStructure}
               onChange={(e) => setSelectedStructure(e.target.value)}
-              className="w-full p-3 border rounded-lg bg-gray-800/50 border-purple-400/30 text-white"
+              disabled={reports.isGenerating}
+              className="w-full p-3 border rounded-lg bg-gray-800/50 border-purple-400/30 text-white disabled:opacity-50"
             >
               {Object.keys(reportStructure.structure).map((key) => (
                 <option key={key} value={key}>
@@ -221,15 +320,86 @@ export function IntegratedReportGenerator({
         </CardContent>
       </Card>
     );
-  }, [reportStructure.structure, reportStructure.isLoading, selectedStructure]);
+  }, [reportStructure.structure, reportStructure.isLoading, selectedStructure, reports.isGenerating]);
 
   return (
     <div className="space-y-6">
+      {/* Loading Overlay for Report Generation */}
+      {reports.isGenerating && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-gray-900/95 border border-purple-400/30 rounded-2xl p-8 max-w-md w-full mx-4">
+            <div className="text-center space-y-6">
+              {/* Animated Brain Icon */}
+              <div className="relative">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto border border-purple-400/30">
+                  <Brain className="w-10 h-10 text-purple-400 animate-pulse" />
+                </div>
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                  <Zap className="w-3 h-3 text-white" />
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-purple-400">Generating Report</span>
+                  <span className="text-gray-400">{reportProgress}%</span>
+                </div>
+                <Progress value={reportProgress} className="h-2" />
+              </div>
+
+              {/* Current Step */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-center gap-2 text-purple-400">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="text-sm font-medium">AI Report Generation</span>
+                </div>
+                <p className="text-gray-300 text-sm">
+                  {processingSteps[currentStep] || "Preparing..."}
+                </p>
+              </div>
+
+              {/* Query Preview */}
+              <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50">
+                <p className="text-xs text-gray-400 mb-1">Processing:</p>
+                <p className="text-white text-sm font-medium">
+                  {userQuery.length > 60 
+                    ? userQuery.substring(0, 60) + "..." 
+                    : userQuery
+                  }
+                </p>
+              </div>
+
+              {/* Processing Stats */}
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                <div className="text-center">
+                  <div className="text-purple-400 font-medium">Time</div>
+                  <div className="text-gray-300">{formatTime(processingTime)}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-purple-400 font-medium">Step</div>
+                  <div className="text-gray-300">{currentStep + 1}/{processingSteps.length}</div>
+                </div>
+              </div>
+
+              {/* Tips */}
+              <div className="text-xs text-gray-500 space-y-1">
+                <p>• This may take several minutes</p>
+                <p>• AI is analyzing multiple data sources</p>
+                <p>• Report will be generated automatically</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Report Structure Selection */}
       {reportStructureSection}
 
       {/* Query Input */}
-      <Card className="bg-gray-900/50 border-purple-400/30">
+      <Card className={`bg-gray-900/50 border-purple-400/30 transition-all duration-300 ${
+        reports.isGenerating ? 'opacity-60 scale-95' : ''
+      }`}>
         <CardHeader>
           <CardTitle className="text-purple-400 flex items-center gap-2">
             <Sparkles className="w-5 h-5" />
@@ -246,18 +416,65 @@ export function IntegratedReportGenerator({
               onChange={(e) => setUserQuery(e.target.value)}
               placeholder="e.g., Show me the financial report of May, or Generate a comprehensive sales analysis for Q2"
               className="min-h-[120px] bg-gray-800/50 border-purple-400/30 text-white placeholder:text-gray-400 resize-none"
+              disabled={reports.isGenerating}
             />
           </div>
+
+          {/* Enhanced Progress Indicator for Report Generation */}
+          {reports.isGenerating && (
+            <div className="space-y-3 p-4 bg-purple-900/20 border border-purple-400/30 rounded-lg">
+              <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2 text-purple-400">
+                  <Brain className="w-4 h-4 animate-pulse" />
+                  <span>AI Generating Your Report</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Clock className="w-4 h-4" />
+                  <span>{formatTime(processingTime)}</span>
+                </div>
+              </div>
+              
+              <Progress value={reportProgress} className="h-2" />
+              
+              <div className="grid grid-cols-2 gap-2 text-xs text-gray-400">
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span>Analyzing request</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <span>Connecting to DB</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                  <span>Processing data</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                  <span>Generating insights</span>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="flex gap-2 flex-wrap">
             <Button
               onClick={handleGenerateReport}
               disabled={!userQuery.trim() || reports.isGenerating}
-              className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
+              className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2 min-w-[160px]"
             >
-              <Play className="h-4 w-4" />
-              Generate Report
+              {reports.isGenerating ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Play className="h-4 w-4" />
+                  Generate Report
+                </>
+              )}
             </Button>
 
             <Button
@@ -513,6 +730,16 @@ export function IntegratedReportGenerator({
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Processing Status */}
+      {reports.isGenerating && (
+        <div className="p-3 bg-green-900/20 border border-green-400/30 rounded-lg">
+          <div className="flex items-center gap-2 text-green-400 text-sm">
+            <Zap className="w-4 h-4 animate-pulse" />
+            <span>Your report is being generated by AI. This may take several minutes...</span>
+          </div>
+        </div>
       )}
     </div>
   );
