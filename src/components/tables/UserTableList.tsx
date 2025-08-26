@@ -17,10 +17,13 @@ const UserTableList: React.FC<UserTableListProps> = ({
   searchTerm,
   onSearchTermChange,
 }) => {
-  const filteredTables = tables.filter((table) =>
-    table.table_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    table.full_name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredTables = tables.filter((table) => {
+    const tableName = table?.table_name || '';
+    const fullName = table?.full_name || '';
+    
+    return tableName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           fullName.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div className="space-y-4">
@@ -47,10 +50,10 @@ const UserTableList: React.FC<UserTableListProps> = ({
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-white font-medium">{table.table_name}</h4>
-                  <p className="text-slate-400 text-sm">{table.full_name}</p>
+                  <h4 className="text-white font-medium">{table?.table_name || 'Unnamed Table'}</h4>
+                  <p className="text-slate-400 text-sm">{table?.full_name || 'No full name'}</p>
                 </div>
-                <Badge variant="secondary">{table.columns?.length || 0} columns</Badge>
+                <Badge variant="secondary">{table?.columns?.length || 0} columns</Badge>
               </div>
             </Card>
           ))}

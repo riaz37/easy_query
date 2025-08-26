@@ -18,16 +18,16 @@ import {
   File,
   Info,
   History,
-  BarChart3,
   AlertCircle,
   X,
   Database,
+  Brain,
+  Settings,
 } from "lucide-react";
 import {
   FileUpload,
   FileResults,
   FileQueryForm,
-  FileQueryStats,
   QueryHistoryPanel,
   TableSelector,
   AdvancedQueryParams,
@@ -45,7 +45,6 @@ export default function FileQueryPage() {
   const [isExecuting, setIsExecuting] = useState(false);
   const [queryResults, setQueryResults] = useState<FileQueryResult[]>([]);
   const [queryError, setQueryError] = useState<string | null>(null);
-  const [executionTime, setExecutionTime] = useState<number>(0);
 
   // File upload state
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
@@ -121,7 +120,6 @@ export default function FileQueryPage() {
       setIsExecuting(true);
       setQueryError(null);
       setQueryResults([]);
-      setExecutionTime(0);
       setQuery(queryText);
 
       const startTime = Date.now();
@@ -154,34 +152,45 @@ export default function FileQueryPage() {
 
           // Extract results from the answer sources or create structured result
           let results: FileQueryResult[] = [];
-          if (
-            searchResponse.answer &&
-            searchResponse.answer.sources &&
-            Array.isArray(searchResponse.answer.sources)
-          ) {
-            results = searchResponse.answer.sources.map((source, index) => ({
-              id: `result-${index}`,
-              answer: source.content || source.text || null, // Don't fallback to JSON.stringify
+          
+          if (searchResponse.answer) {
+            // Create the main result with the AI-generated answer
+            const mainResult: FileQueryResult = {
+              id: "main-answer",
+              answer: searchResponse.answer.answer, // This is the actual AI response
               confidence: searchResponse.answer.confidence,
               sources_used: searchResponse.answer.sources_used,
               query: searchResponse.query,
-              ...source,
-            }));
-          } else if (searchResponse.answer) {
-            // If no sources, create a result from the answer
-            results = [
-              {
-                id: "result-0",
-                answer: searchResponse.answer.answer,
-                confidence: searchResponse.answer.confidence,
-                sources_used: searchResponse.answer.sources_used,
-                query: searchResponse.query,
-              },
-            ];
+              context_length: searchResponse.answer.context_length,
+              prompt_length: searchResponse.answer.prompt_length,
+              // Add source information
+              sources: searchResponse.answer.sources || [],
+            };
+            
+            results.push(mainResult);
+            
+            // If there are individual sources with content, add them as separate results
+            if (searchResponse.answer.sources && Array.isArray(searchResponse.answer.sources)) {
+              searchResponse.answer.sources.forEach((source, index) => {
+                if (source.content || source.text) {
+                  results.push({
+                    id: `source-${index}`,
+                    answer: source.content || source.text,
+                    confidence: searchResponse.answer.confidence,
+                    sources_used: 1,
+                    query: searchResponse.query,
+                    source_file: source.file_name,
+                    source_title: source.title,
+                    page_range: source.page_range,
+                    document_number: source.document_number,
+                    is_source: true, // Mark this as a source result
+                  });
+                }
+              });
+            }
           }
 
           setQueryResults(results);
-          setExecutionTime(Date.now() - startTime);
 
           // Save to history
           if (user?.user_id) {
@@ -194,7 +203,6 @@ export default function FileQueryPage() {
               results: results,
               metadata: {
                 resultCount: results.length,
-                executionTime: Date.now() - startTime,
                 fileIds: completedFileIds,
               },
             });
@@ -259,7 +267,6 @@ export default function FileQueryPage() {
     setQuery("");
     setQueryResults([]);
     setQueryError(null);
-    setExecutionTime(0);
     setSelectedTable(null); // Also clear selected table
   }, []);
 
@@ -267,7 +274,6 @@ export default function FileQueryPage() {
   const handleHistorySelect = useCallback((historyItem: any) => {
     setQuery(historyItem.query);
     setQueryResults(historyItem.results || []);
-    setExecutionTime(historyItem.metadata?.executionTime || 0);
     // Note: Table selection would need to be stored in history metadata to restore it
     toast.success("Query loaded from history");
   }, []);
@@ -400,7 +406,7 @@ export default function FileQueryPage() {
                   <CardContent className="pt-6">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                        <BarChart3 className="w-4 h-4 text-purple-400" />
+                        <Brain className="w-4 h-4 text-purple-400" />
                       </div>
                       <div>
                         <h3 className="text-white font-medium">
@@ -462,7 +468,7 @@ export default function FileQueryPage() {
                   <Card className="bg-gray-900/50 border-purple-400/30">
                     <CardHeader>
                       <CardTitle className="text-purple-400 flex items-center gap-2">
-                        <BarChart3 className="w-5 h-5" />
+                        <FileText className="w-5 h-5" />
                         Query Results
                       </CardTitle>
                     </CardHeader>
@@ -562,41 +568,17 @@ export default function FileQueryPage() {
                 {/* Advanced Query Parameters */}
                 <Card className="bg-gray-900/50 border-purple-400/30">
                   <CardHeader>
-                    <CardTitle className="text-purple-400 flex items-center gap-2">
-                      <BarChart3 className="w-5 h-5" />
-                      Advanced Options
-                    </CardTitle>
+                                          <CardTitle className="text-purple-400 flex items-center gap-2">
+                        <Settings className="w-5 h-5" />
+                        Advanced Options
+                      </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <AdvancedQueryParams />
                   </CardContent>
                 </Card>
 
-                {/* Query Statistics */}
-                {query && (
-                  <Card className="bg-gray-900/50 border-yellow-400/30">
-                    <CardHeader>
-                      <CardTitle className="text-yellow-400 flex items-center gap-2">
-                        <BarChart3 className="w-5 h-5" />
-                        Query Statistics
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <FileQueryStats
-                        query={query}
-                        resultCount={queryResults.length}
-                        executionTime={executionTime}
-                        uploadedFilesCount={uploadedFiles.length}
-                        completedFilesCount={
-                          uploadedFiles.filter((f) => f.status === "completed").length
-                        }
-                        failedFilesCount={
-                          uploadedFiles.filter((f) => f.status === "failed").length
-                        }
-                      />
-                    </CardContent>
-                  </Card>
-                )}
+
 
                 {/* Query History */}
                 <Card className="bg-gray-900/50 border-indigo-400/30">

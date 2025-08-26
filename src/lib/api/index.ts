@@ -57,6 +57,10 @@ export {
   excelToDBService,
   newTableService,
   userAccessService,
+  parentCompanyService,
+  subCompanyService,
+  UserConfigService,
+  DatabaseConfigService,
 } from './services/service-registry';
 
 // Export service interfaces and types

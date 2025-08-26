@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { TableFlowVisualization } from "./TableFlowVisualization";
 import { ExcelToDBManager } from "./ExcelToDBManager";
+import { TableManagementSection } from "./TableManagementSection";
 import { ServiceRegistry } from "@/lib/api/services/service-registry";
 import { UserCurrentDBTableData } from "@/types/api";
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
@@ -36,7 +37,7 @@ export function TablesManager() {
   const [success, setSuccess] = useState<string | null>(null);
   const [dbId, setDbId] = useState<number>(1); // Default database ID
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("management");
+  const [activeTab, setActiveTab] = useState("visualization");
   const [selectedTableForViewing, setSelectedTableForViewing] =
     useState<string>("");
 
@@ -56,7 +57,7 @@ export function TablesManager() {
     setSuccess(null);
 
     try {
-      await ServiceRegistry.userCurrentDB.setUserCurrentDB(user.user_id, { db_id: dbId });
+      await ServiceRegistry.userCurrentDB.setUserCurrentDB({ db_id: dbId }, user.user_id);
       setSuccess(`Successfully set database ID ${dbId} for user ${user.user_id}`);
       // Auto-fetch table data after setting the database
       setTimeout(() => {
@@ -390,7 +391,7 @@ export function TablesManager() {
                   {tableData.table_info.unmatched_business_rules.map(
                     (rule, index) => (
                       <Badge
-                        key={index}
+                        key={`rule-${index}-${rule.substring(0, 20)}`}
                         variant="secondary"
                         className="bg-yellow-900/20 text-yellow-400"
                       >
@@ -408,22 +409,29 @@ export function TablesManager() {
       {/* Main Content Tabs */}
       {user?.user_id && (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-800/50">
-            <TabsTrigger
-              value="visualization"
-              className="flex items-center gap-2 data-[state=active]:bg-slate-700"
-            >
-              <Table className="h-4 w-4" />
-              Table Visualization
-            </TabsTrigger>
-            <TabsTrigger
-              value="excel-import"
-              className="flex items-center gap-2 data-[state=active]:bg-slate-700"
-            >
-              <FileSpreadsheet className="h-4 w-4" />
-              Excel Import
-            </TabsTrigger>
-          </TabsList>
+                  <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+          <TabsTrigger
+            value="visualization"
+            className="flex items-center gap-2 data-[state=active]:bg-slate-700"
+          >
+            <Table className="h-4 w-4" />
+            Table Visualization
+          </TabsTrigger>
+          <TabsTrigger
+            value="table-management"
+            className="flex items-center gap-2 data-[state=active]:bg-slate-700"
+          >
+            <Settings className="h-4 w-4" />
+            Table Management
+          </TabsTrigger>
+          <TabsTrigger
+            value="excel-import"
+            className="flex items-center gap-2 data-[state=active]:bg-slate-700"
+          >
+            <FileSpreadsheet className="h-4 w-4" />
+            Excel Import
+          </TabsTrigger>
+        </TabsList>
 
           {/* Table Visualization Tab */}
           <TabsContent value="visualization" className="space-y-6 mt-6">
@@ -492,6 +500,18 @@ export function TablesManager() {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          {/* Table Management Tab */}
+          <TabsContent value="table-management" className="mt-6">
+            <TableManagementSection
+              userId={user?.user_id}
+              databaseId={dbId}
+              onTableCreated={() => {
+                // Refresh table data when a new table is created
+                fetchTableData();
+              }}
+            />
           </TabsContent>
 
           {/* Excel Import Tab */}

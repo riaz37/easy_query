@@ -77,14 +77,14 @@ export const API_ENDPOINTS = {
   UPDATE_USER_CONFIG_BY_ID: (id: number) => `${baseUrl}/user-config/${id}`,
 
   // User Table Names endpoints (authenticated)
-  GET_USER_TABLE_NAMES_AUTH: `${baseUrl}/user/{user_id}/table-names`, // Authenticated endpoint with user ID
+  GET_USER_TABLE_NAMES_AUTH: (userId: string) => `${baseUrl}/user/${encodeURIComponent(userId)}/table-names`, // Authenticated endpoint with user ID
   ADD_USER_TABLE_NAME_AUTH: (userId: string) => `${baseUrl}/user/${encodeURIComponent(userId)}/table-names`, // Authenticated endpoint with user ID
   DELETE_USER_TABLE_NAME_AUTH: (userId: string, tableName: string) =>
     `${baseUrl}/user/${encodeURIComponent(userId)}/table-names/${encodeURIComponent(tableName)}`, // Authenticated endpoint with user ID
 
   // User Current Database endpoints (authenticated)
-  SET_USER_CURRENT_DB: `${baseUrl}/mssql-config/user-current-db`, // PUT endpoint for authenticated user
-  GET_USER_CURRENT_DB: `${baseUrl}/mssql-config/user-current-db`, // GET endpoint for authenticated user
+  SET_USER_CURRENT_DB: (userId: string) => `${baseUrl}/mssql-config/user-current-db/${encodeURIComponent(userId)}`, // PUT endpoint for authenticated user
+  GET_USER_CURRENT_DB: (userId: string) => `${baseUrl}/mssql-config/user-current-db/${encodeURIComponent(userId)}`, // GET endpoint for authenticated user
 
   // MSSQL Config Advanced Operations
   GENERATE_TABLE_INFO: `${baseUrl}/mssql-config/generate-table-info`,
@@ -93,18 +93,22 @@ export const API_ENDPOINTS = {
 
   // Excel to Database endpoints (authenticated)
   EXCEL_TO_DB_HEALTH: `${baseUrl}/excel-to-db/health`,
-  EXCEL_TO_DB_PUSH_DATA: `${baseUrl}/excel-to-db/push-data`,
-  EXCEL_TO_DB_GET_AI_MAPPING: `${baseUrl}/excel-to-db/get-ai-mapping`,
+  EXCEL_TO_DB_PUSH_DATA: `${baseUrl}/excel-to-db/excel-to-db/push-data`,
+  EXCEL_TO_DB_GET_AI_MAPPING: `${baseUrl}/excel-to-db/excel-to-db/get-ai-mapping`,
 
   // New Table Management endpoints (authenticated)
   NEW_TABLE_CREATE: `${baseUrl}/new-table/create`,
   NEW_TABLE_GET_DATA_TYPES: `${baseUrl}/new-table/data-types`,
-  NEW_TABLE_GET_USER_TABLES: `${baseUrl}/new-table/user-tables`,
-  NEW_TABLE_GET_TABLES_BY_DB: (dbId: number) =>
-    `${baseUrl}/new-table/tables-by-db/${dbId}`,
-  NEW_TABLE_SETUP_TRACKING: `${baseUrl}/new-table/setup-tracking-table`,
-  NEW_TABLE_UPDATE_BUSINESS_RULE: `${baseUrl}/new-table/update-business-rule`,
-  NEW_TABLE_GET_BUSINESS_RULE: `${baseUrl}/new-table/get-business-rule`,
+  NEW_TABLE_GET_USER_TABLES: (userId: string) => `${baseUrl}/new-table/user-tables/${encodeURIComponent(userId)}`,
+  NEW_TABLE_UPDATE_BUSINESS_RULE: (userId: string) => `${baseUrl}/new-table/user-business-rule/${encodeURIComponent(userId)}`,
+  NEW_TABLE_GET_BUSINESS_RULE: (userId: string) => `${baseUrl}/new-table/user-business-rule/${encodeURIComponent(userId)}`,
+
+  // Report Generation endpoints
+  GENERATE_REPORT_BACKGROUND: `${baseUrl}/reports/generate-report-background`,
+  GET_REPORT_TASK_STATUS: (taskId: string) => `${baseUrl}/reports/task-status/${taskId}`,
+  UPDATE_REPORT_STRUCTURE: (id: number) => `${baseUrl}/mssql-config/mssql-config/${id}/report-structure`,
+  GET_REPORT_HISTORY: `${baseUrl}/reports/history`,
+  DELETE_REPORT_TASK: (taskId: string) => `${baseUrl}/reports/task/${taskId}`,
 };
 
 /**

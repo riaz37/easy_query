@@ -754,7 +754,7 @@ export interface UserCurrentDBTableData {
   updated_at: string;
 }
 
-// Excel to Database Types
+// Excel to Database Types - Updated to match actual API responses
 export interface ExcelToDBHealthResponse {
   status: string;
   message: string;
@@ -775,8 +775,7 @@ export interface ExcelToDBPushDataResponse {
   data: {
     rows_processed: number;
     rows_inserted: number;
-    table_name: string;
-    operation_time: number;
+    errors: any[] | null;
   };
 }
 
@@ -793,7 +792,7 @@ export interface ColumnMappingSuggestion {
   data_type_match: boolean;
 }
 
-// New API response format
+// Updated API response format to match actual API
 export interface MappingDetail {
   table_column: string;
   excel_column: string;
@@ -829,31 +828,107 @@ export interface LegacyExcelToDBGetAIMappingResponse {
     };
   };
 }
-// New Table Management Types
-export interface TableColumn {
-  name: string;
-  data_type: string;
-  nullable: boolean;
-  is_primary: boolean;
-  is_identity: boolean;
-}
 
-export interface CreateTableRequest {
+
+// New Table API Types (matching backend API structure)
+export interface NewTableCreateRequest {
   user_id: string;
   table_name: string;
   schema: string;
-  columns: TableColumn[];
+  columns: Array<{
+    name: string;
+    data_type: string;
+    nullable: boolean;
+    is_primary: boolean;
+    is_identity: boolean;
+  }>;
 }
 
-export interface CreateTableResponse {
-  status: string;
+export interface NewTableCreateResponse {
+  success: boolean;
   message: string;
   data: {
+    table_name: string;
     schema: string;
-    table: string;
-    columns: TableColumn[];
-    table_schema_stored: boolean;
-    db_id: number;
+    columns: Array<{
+      name: string;
+      data_type: string;
+      nullable: boolean;
+      is_primary: boolean;
+      is_identity: boolean;
+    }>;
+    created_at: string;
+    user_id: string;
+  };
+}
+
+export interface NewTableGetRequest {
+  user_id: string;
+  table_name?: string;
+  database_id?: number;
+}
+
+export interface NewTableGetResponse {
+  success: boolean;
+  message: string;
+  data: Array<{
+    table_name: string;
+    schema: string;
+    columns: Array<{
+      name: string;
+      data_type: string;
+      nullable: boolean;
+      is_primary: boolean;
+      is_identity: boolean;
+    }>;
+    created_at: string;
+    user_id: string;
+  }>;
+}
+
+export interface NewTableUpdateRequest {
+  user_id: string;
+  table_name: string;
+  schema?: string;
+  columns?: Array<{
+    name: string;
+    data_type: string;
+    nullable: boolean;
+    is_primary: boolean;
+    is_identity: boolean;
+  }>;
+}
+
+export interface NewTableUpdateResponse {
+  success: boolean;
+  message: string;
+  data: {
+    table_name: string;
+    schema: string;
+    columns: Array<{
+      name: string;
+      data_type: string;
+      nullable: boolean;
+      is_primary: boolean;
+      is_identity: boolean;
+    }>;
+    updated_at: string;
+    user_id: string;
+  };
+}
+
+export interface NewTableDeleteRequest {
+  user_id: string;
+  table_name: string;
+}
+
+export interface NewTableDeleteResponse {
+  success: boolean;
+  message: string;
+  data: {
+    deleted: boolean;
+    table_name: string;
+    user_id: string;
   };
 }
 
@@ -866,6 +941,53 @@ export interface DataTypesResponse {
     date_time: string[];
     binary: string[];
     other: string[];
+  };
+}
+
+// User Tables API Types - Updated to match actual API responses
+export interface UserTableColumn {
+  name: string;
+  type: string;
+  is_foreign: boolean;
+  is_primary: boolean;
+  max_length: number | null;
+  is_required: boolean;
+}
+
+export interface UserTableSchema {
+  schema: string;
+  columns: UserTableColumn[];
+  full_name: string;
+  created_at: string;
+  table_name: string;
+  sample_data: any[];
+  primary_keys: string[];
+  relationships: any[];
+  row_count_sample: number;
+}
+
+export interface UserTable {
+  table_name: string;
+  schema_name: string;
+  table_schema: UserTableSchema;
+  created_by_user: string;
+  table_full_name: string;
+  creation_timestamp: string;
+}
+
+export interface UserTablesResponse {
+  status: string;
+  message: string;
+  data: {
+    user_id: string;
+    current_db_id: number;
+    tables: UserTable[];
+    business_rule: string;
+    business_rule_exists: boolean;
+    count: number;
+    created_at: string;
+    updated_at: string;
+    business_rule_endpoint: string;
   };
 }
 

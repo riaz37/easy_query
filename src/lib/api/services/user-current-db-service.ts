@@ -23,10 +23,8 @@ export class UserCurrentDBService extends BaseService {
       throw this.createValidationError(`Invalid request: ${validation.errors.join(", ")}`);
     }
 
-    // If userId is provided, include it in the URL path as required by the API
-    const endpoint = userId 
-      ? `${API_ENDPOINTS.SET_USER_CURRENT_DB}/${userId}`
-      : API_ENDPOINTS.SET_USER_CURRENT_DB;
+    // Use the updated endpoint that accepts userId parameter
+    const endpoint = API_ENDPOINTS.SET_USER_CURRENT_DB(userId || '');
 
     // Use PUT method as per the API specification
     return this.put<UserCurrentDBResponse>(endpoint, request);
@@ -37,10 +35,8 @@ export class UserCurrentDBService extends BaseService {
    * User ID is extracted from JWT token on backend
    */
   async getUserCurrentDB(userId?: string): Promise<ServiceResponse<UserCurrentDBResponse>> {
-    // If userId is provided, include it in the URL path as required by the API
-    const endpoint = userId 
-      ? `${API_ENDPOINTS.GET_USER_CURRENT_DB}/${userId}`
-      : API_ENDPOINTS.GET_USER_CURRENT_DB;
+    // Use the updated endpoint that accepts userId parameter
+    const endpoint = API_ENDPOINTS.GET_USER_CURRENT_DB(userId || '');
 
     return this.get<UserCurrentDBResponse>(endpoint);
   }

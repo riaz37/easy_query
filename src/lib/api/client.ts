@@ -13,8 +13,8 @@ const DEFAULT_CONFIG: ApiRequestConfig = {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  timeout: 120000, // 2 minutes for search queries
-  retries: 1,
+  timeout: 300000, // 5 minutes for long-running operations like reports
+  retries: 2, // Increase retries for better reliability
 };
 
 /**
@@ -138,8 +138,12 @@ export class ApiClient {
       // Increment retry count
       config.retryCount++;
 
-      // Exponential backoff
-      const delay = Math.pow(2, config.retryCount) * 1000;
+      // Exponential backoff with jitter for better distribution
+      const baseDelay = Math.pow(2, config.retryCount) * 1000;
+      const jitter = Math.random() * 1000; // Add up to 1 second of randomness
+      const delay = baseDelay + jitter;
+
+      console.log(`Retrying request after ${Math.round(delay)}ms (attempt ${config.retryCount + 1}/${config.retries + 1})`);
 
       // Wait and retry
       await new Promise((resolve) => setTimeout(resolve, delay));

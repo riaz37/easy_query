@@ -2,15 +2,27 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { File, Download, Copy, ChevronLeft, ChevronRight } from 'lucide-react';
+import { File, Download, Copy, ChevronLeft, ChevronRight, FileText, Brain } from 'lucide-react';
 import { toast } from 'sonner';
 
 export interface FileQueryResult {
   id: string;
   answer?: string;
-  confidence?: string;
+  confidence?: string | number;
   sources_used?: number;
   query?: string;
+  content?: string;
+  text?: string;
+  source?: string;
+  filename?: string;
+  source_file?: string;
+  source_title?: string;
+  page_range?: string;
+  document_number?: number;
+  is_source?: boolean;
+  sources?: any[];
+  context_length?: number;
+  prompt_length?: number;
   [key: string]: any; // Allow for additional properties
 }
 
@@ -24,6 +36,7 @@ interface FileResultsProps {
 export function FileResults({ results, query, isLoading = false, className = "" }: FileResultsProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
   // Pagination calculations
   const totalPages = Math.ceil(results.length / itemsPerPage);
@@ -74,20 +87,42 @@ export function FileResults({ results, query, isLoading = false, className = "" 
     toast.success('Results exported successfully');
   };
 
-  // Get result display content
+  // Get result display content - prioritize answer over source content
   const getResultContent = (result: FileQueryResult) => {
-    if (result.answer) {
+    // First priority: actual answer from AI
+    if (result.answer && result.answer.trim()) {
       return result.answer;
     }
     
-    // If no answer, try to find other content
+    // Second priority: content field
+    if (result.content && result.content.trim()) {
+      return result.content;
+    }
+    
+    // Third priority: text field
+    if (result.text && result.text.trim()) {
+      return result.text;
+    }
+    
+    // Last resort: try other string fields
     const contentKeys = Object.keys(result).filter(key => 
       key !== 'id' && 
       key !== 'confidence' && 
       key !== 'sources_used' && 
       key !== 'query' &&
+      key !== 'filename' &&
+      key !== 'source' &&
+      key !== 'source_file' &&
+      key !== 'source_title' &&
+      key !== 'page_range' &&
+      key !== 'document_number' &&
+      key !== 'is_source' &&
+      key !== 'sources' &&
+      key !== 'context_length' &&
+      key !== 'prompt_length' &&
       typeof result[key] === 'string' &&
-      result[key].length > 0
+      result[key] && 
+      result[key].trim().length > 0
     );
     
     if (contentKeys.length > 0) {
@@ -97,100 +132,181 @@ export function FileResults({ results, query, isLoading = false, className = "" 
     return 'No content available';
   };
 
+  // Get result type and styling
+  const getResultType = (result: FileQueryResult) => {
+    if (result.is_source) {
+      return {
+        type: 'source',
+        icon: <FileText className="w-4 h-4 text-blue-400" />,
+        label: `Source ${result.document_number || 'Document'}`,
+        bgColor: 'bg-blue-900/20',
+        borderColor: 'border-blue-400/30',
+        textColor: 'text-blue-400'
+      };
+    }
+    
+    return {
+      type: 'answer',
+      icon: <Brain className="w-4 h-4 text-purple-400" />,
+      label: 'AI Answer',
+      bgColor: 'bg-purple-900/20',
+      borderColor: 'border-purple-400/30',
+      textColor: 'text-purple-400'
+    };
+  };
+
+  // Get confidence level styling
+  const getConfidenceStyle = (confidence: string | number | undefined) => {
+    if (!confidence) return 'border-gray-400/30 text-gray-400';
+    
+    const conf = typeof confidence === 'string' ? confidence.toLowerCase() : confidence;
+    
+    if (conf === 'high' || (typeof conf === 'number' && conf > 0.8)) {
+      return 'border-green-400/30 text-green-400';
+    } else if (conf === 'medium' || (typeof conf === 'number' && conf > 0.5)) {
+      return 'border-yellow-400/30 text-yellow-400';
+    } else {
+      return 'border-red-400/30 text-red-400';
+    }
+  };
+
+  // Toggle expanded state
+  const toggleExpanded = (id: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
   if (isLoading) {
     return (
-      <Card className={className}>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span className="ml-2 text-gray-600">Processing query...</span>
-          </div>
-        </CardContent>
-      </Card>
+      <div className={`${className} text-center py-8`}>
+        <Loader2 className="h-8 w-8 mx-auto text-purple-400 animate-spin mb-4" />
+        <p className="text-white font-medium">Processing your query...</p>
+        <p className="text-gray-400 text-sm">This may take a few moments</p>
+      </div>
     );
   }
 
   if (!results || results.length === 0) {
     return (
-      <Card className={className}>
-        <CardContent className="p-6">
-          <div className="text-center">
-            <File className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 dark:text-gray-400">
-              No results found for your query. Try rephrasing your question or uploading different files.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className={`${className} text-center py-8`}>
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800/50 flex items-center justify-center border border-gray-600/30">
+          <AlertCircle className="w-8 h-8 text-yellow-400" />
+        </div>
+        <p className="text-white font-medium mb-2">No results found</p>
+        <p className="text-gray-400 text-sm max-w-md mx-auto">
+          No results found for your query. Try rephrasing your question or uploading different files.
+        </p>
+      </div>
     );
   }
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <File className="w-5 h-5" />
-            Query Results
-            <Badge variant="secondary" className="ml-2">
-              {results.length} results
-            </Badge>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={exportResults}
-            disabled={results.length === 0}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Export CSV
-          </Button>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className={className}>
         {/* Results List */}
-        <div className="space-y-4">
-          {currentResults.map((result, index) => (
-            <div
-              key={result.id || index}
-              className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 space-y-2">
+        <div className="space-y-4 mb-6">
+          {currentResults.map((result, index) => {
+            const resultId = result.id || `result-${index}`;
+            const isExpanded = expandedItems.has(resultId);
+            const content = getResultContent(result);
+            const shouldTruncate = content.length > 300;
+            const displayContent = isExpanded || !shouldTruncate 
+              ? content 
+              : content.substring(0, 300) + '...';
+            
+            const resultType = getResultType(result);
+
+            return (
+              <div
+                key={resultId}
+                className={`group ${resultType.bgColor} border ${resultType.borderColor} rounded-lg hover:bg-gray-700/30 hover:border-purple-400/30 transition-all duration-200`}
+              >
+                <div className="p-4">
+                  {/* Result Header */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      {resultType.icon}
+                      <span className={`font-medium ${resultType.textColor}`}>
+                        {resultType.label}
+                      </span>
+                      {result.source_file && (
+                        <Badge variant="outline" className="border-gray-400/30 text-gray-400 text-xs">
+                          📄 {result.source_file}
+                        </Badge>
+                      )}
+                      {result.source_title && (
+                        <Badge variant="outline" className="border-green-400/30 text-green-400 text-xs">
+                          📋 {result.source_title}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {result.confidence && (
+                        <Badge variant="outline" className={`text-xs ${getConfidenceStyle(result.confidence)}`}>
+                          {typeof result.confidence === 'number' 
+                            ? `${Math.round(result.confidence * 100)}%` 
+                            : result.confidence}
+                        </Badge>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(content)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-purple-400 hover:bg-purple-400/10"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
                   {/* Result Content */}
-                  <div className="prose prose-sm max-w-none">
-                    <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
-                      {getResultContent(result)}
-                    </p>
+                  <div className="bg-gray-900/50 border border-gray-600/30 rounded-lg p-4 mb-3">
+                    <div className="text-white leading-relaxed whitespace-pre-wrap">
+                      {displayContent}
+                    </div>
+                    {shouldTruncate && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleExpanded(resultId)}
+                        className="mt-2 text-purple-400 hover:bg-purple-400/10 p-0 h-auto"
+                      >
+                        {isExpanded ? 'Show less' : 'Show more'}
+                      </Button>
+                    )}
                   </div>
                   
                   {/* Metadata */}
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
-                    {result.confidence && (
-                      <span>Confidence: {result.confidence}</span>
-                    )}
+                  <div className="flex items-center gap-4 text-xs text-gray-400">
                     {result.sources_used !== undefined && (
-                      <span>Sources: {result.sources_used}</span>
+                      <span className="flex items-center gap-1">
+                        📚 {result.sources_used} sources
+                      </span>
                     )}
-                    {result.query && (
-                      <span>Query: {result.query}</span>
+                    {result.page_range && (
+                      <span className="flex items-center gap-1">
+                        📄 Page {result.page_range}
+                      </span>
                     )}
+                    {result.context_length && (
+                      <span className="flex items-center gap-1">
+                        📊 {result.context_length.toLocaleString()} chars context
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1">
+                      📝 {content.length} characters
+                    </span>
                   </div>
                 </div>
-                
-                {/* Actions */}
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => copyToClipboard(getResultContent(result))}
-                  >
-                    <Copy className="w-4 h-4" />
-                  </Button>
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Pagination */}
@@ -243,7 +359,6 @@ export function FileResults({ results, query, isLoading = false, className = "" 
           </select>
           <span>per page</span>
         </div>
-      </CardContent>
-    </Card>
-  );
+      </div>
+    );
 } 

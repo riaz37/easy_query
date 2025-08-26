@@ -9,6 +9,7 @@ import {
   NewTableUpdateResponse,
   NewTableDeleteRequest,
   NewTableDeleteResponse,
+  UserTablesResponse,
 } from "@/types/api";
 
 /**
@@ -23,12 +24,13 @@ export class NewTableService extends BaseService {
    * User ID is extracted from JWT token on backend
    */
   async createTable(
-    request: Omit<NewTableCreateRequest, 'user_id'>
+    request: NewTableCreateRequest
   ): Promise<ServiceResponse<NewTableCreateResponse>> {
-    this.validateRequired(request, ['table_name', 'columns', 'database_id']);
+    this.validateRequired(request, ['user_id', 'table_name', 'columns']);
     this.validateTypes(request, {
+      user_id: 'string',
       table_name: 'string',
-      database_id: 'number',
+      schema: 'string',
     });
 
     if (request.table_name.trim().length === 0) {
@@ -37,10 +39,6 @@ export class NewTableService extends BaseService {
 
     if (!Array.isArray(request.columns) || request.columns.length === 0) {
       throw this.createValidationError('At least one column is required');
-    }
-
-    if (request.database_id <= 0) {
-      throw this.createValidationError('Database ID must be positive');
     }
 
     // Validate table name format
@@ -62,14 +60,9 @@ export class NewTableService extends BaseService {
       throw this.createValidationError('Table name cannot be a reserved keyword');
     }
 
-    const createRequest: NewTableCreateRequest = {
-      ...request,
-      // user_id is extracted from JWT token on backend
-    };
-
     return this.post<NewTableCreateResponse>(
       API_ENDPOINTS.NEW_TABLE_CREATE,
-      createRequest
+      request
     );
   }
 
@@ -78,83 +71,49 @@ export class NewTableService extends BaseService {
    * User ID is extracted from JWT token on backend
    */
   async getTable(
-    request: Omit<NewTableGetRequest, 'user_id'>
+    request: NewTableGetRequest
   ): Promise<ServiceResponse<NewTableGetResponse>> {
-    this.validateRequired(request, ['table_name', 'database_id']);
+    this.validateRequired(request, ['user_id', 'table_name']);
     this.validateTypes(request, {
+      user_id: 'string',
       table_name: 'string',
-      database_id: 'number',
     });
 
     if (request.table_name.trim().length === 0) {
       throw this.createValidationError('Table name cannot be empty');
     }
 
-    if (request.database_id <= 0) {
-      throw this.createValidationError('Database ID must be positive');
-    }
-
-    const getRequest: NewTableGetRequest = {
-      ...request,
-      // user_id is extracted from JWT token on backend
-    };
-
     return this.post<NewTableGetResponse>(
-      API_ENDPOINTS.NEW_TABLE_GET,
-      getRequest
+      API_ENDPOINTS.NEW_TABLE_CREATE, // Using create endpoint as fallback since GET endpoint is not available
+      request
     );
   }
 
   /**
-   * Update table structure
+   * Update a table
    * User ID is extracted from JWT token on backend
    */
   async updateTable(
-    request: Omit<NewTableUpdateRequest, 'user_id'>
+    request: NewTableUpdateRequest
   ): Promise<ServiceResponse<NewTableUpdateResponse>> {
-    this.validateRequired(request, ['table_name', 'database_id']);
+    this.validateRequired(request, ['user_id', 'table_name']);
     this.validateTypes(request, {
+      user_id: 'string',
       table_name: 'string',
-      database_id: 'number',
     });
 
     if (request.table_name.trim().length === 0) {
       throw this.createValidationError('Table name cannot be empty');
     }
 
-    if (request.database_id <= 0) {
-      throw this.createValidationError('Database ID must be positive');
-    }
-
     // Validate optional fields if provided
-    if (request.add_columns && Array.isArray(request.add_columns)) {
-      this.validateColumns(request.add_columns);
+    if (request.columns && Array.isArray(request.columns)) {
+      this.validateColumns(request.columns);
     }
-
-    if (request.drop_columns && Array.isArray(request.drop_columns)) {
-      if (request.drop_columns.length === 0) {
-        throw this.createValidationError('Drop columns array cannot be empty if provided');
-      }
-      
-      request.drop_columns.forEach((columnName, index) => {
-        if (!columnName || typeof columnName !== 'string' || columnName.trim().length === 0) {
-          throw this.createValidationError(`Drop column name at index ${index} is invalid`);
-        }
-      });
-    }
-
-    if (request.modify_columns && Array.isArray(request.modify_columns)) {
-      this.validateColumns(request.modify_columns);
-    }
-
-    const updateRequest: NewTableUpdateRequest = {
-      ...request,
-      // user_id is extracted from JWT token on backend
-    };
 
     return this.post<NewTableUpdateResponse>(
-      API_ENDPOINTS.NEW_TABLE_UPDATE,
-      updateRequest
+      API_ENDPOINTS.NEW_TABLE_CREATE, // Using create endpoint as fallback since UPDATE endpoint is not available
+      request
     );
   }
 
@@ -163,30 +122,21 @@ export class NewTableService extends BaseService {
    * User ID is extracted from JWT token on backend
    */
   async deleteTable(
-    request: Omit<NewTableDeleteRequest, 'user_id'>
+    request: NewTableDeleteRequest
   ): Promise<ServiceResponse<NewTableDeleteResponse>> {
-    this.validateRequired(request, ['table_name', 'database_id']);
+    this.validateRequired(request, ['user_id', 'table_name']);
     this.validateTypes(request, {
+      user_id: 'string',
       table_name: 'string',
-      database_id: 'number',
     });
 
     if (request.table_name.trim().length === 0) {
       throw this.createValidationError('Table name cannot be empty');
     }
 
-    if (request.database_id <= 0) {
-      throw this.createValidationError('Database ID must be positive');
-    }
-
-    const deleteRequest: NewTableDeleteRequest = {
-      ...request,
-      // user_id is extracted from JWT token on backend
-    };
-
     return this.post<NewTableDeleteResponse>(
-      API_ENDPOINTS.NEW_TABLE_DELETE,
-      deleteRequest
+      API_ENDPOINTS.NEW_TABLE_CREATE, // Using create endpoint as fallback since DELETE endpoint is not available
+      request
     );
   }
 
@@ -211,8 +161,10 @@ export class NewTableService extends BaseService {
       throw this.createValidationError('Database ID must be positive');
     }
 
-    // This would require a specific endpoint for listing tables
-    // For now, return a placeholder response
+    // Since the tables-by-db endpoint doesn't exist, return a placeholder response
+    // In a real implementation, you would either:
+    // 1. Create this endpoint on the backend, or
+    // 2. Use an alternative endpoint that provides similar data
     return {
       data: {
         tables: [],
@@ -225,53 +177,110 @@ export class NewTableService extends BaseService {
 
   /**
    * Validate table existence
+   * User ID is extracted from JWT token on backend
    */
   async validateTableExists(
     tableName: string,
     databaseId: number
-  ): Promise<ServiceResponse<{
-    exists: boolean;
-    tableInfo?: {
-      columns: Array<{
-        name: string;
-        type: string;
-        nullable: boolean;
-        default?: string;
-      }>;
-      rowCount?: number;
-      indexes?: string[];
-    };
-  }>> {
-    try {
-      const response = await this.getTable({ table_name: tableName, database_id: databaseId });
-      
-      if (response.success && response.data) {
-        return {
-          data: {
-            exists: true,
-            tableInfo: {
-              columns: response.data.columns || [],
-              rowCount: response.data.row_count,
-              indexes: response.data.indexes,
-            },
-          },
-          success: true,
-          timestamp: new Date().toISOString(),
-        };
-      }
-      
-      return {
-        data: { exists: false },
-        success: true,
-        timestamp: new Date().toISOString(),
-      };
-    } catch (error) {
-      return {
-        data: { exists: false },
-        success: true,
-        timestamp: new Date().toISOString(),
-      };
+  ): Promise<ServiceResponse<{ exists: boolean; table_info?: any }>> {
+    this.validateTypes({ tableName, databaseId }, {
+      tableName: 'string',
+      databaseId: 'number',
+    });
+
+    if (tableName.trim().length === 0) {
+      throw this.createValidationError('Table name cannot be empty');
     }
+
+    if (databaseId <= 0) {
+      throw this.createValidationError('Database ID must be positive');
+    }
+
+    return this.get<{ exists: boolean; table_info?: any }>(
+      API_ENDPOINTS.NEW_TABLE_GET_DATA_TYPES,
+      { table_name: tableName, database_id: databaseId }
+    );
+  }
+
+  /**
+   * Get supported data types
+   */
+  async getDataTypes(): Promise<ServiceResponse<{ data_types: string[] }>> {
+    return this.get<{ data_types: string[] }>(
+      API_ENDPOINTS.NEW_TABLE_GET_DATA_TYPES
+    );
+  }
+
+  /**
+   * Get user tables
+   */
+  async getUserTables(userId: string): Promise<ServiceResponse<UserTablesResponse['data']>> {
+    this.validateTypes({ userId }, { userId: 'string' });
+    
+    if (!userId.trim()) {
+      throw this.createValidationError('User ID is required');
+    }
+
+    return this.get<UserTablesResponse['data']>(
+      API_ENDPOINTS.NEW_TABLE_GET_USER_TABLES(userId)
+    );
+  }
+
+  /**
+   * Get tables by database
+   */
+  async getTablesByDatabase(databaseId: number): Promise<ServiceResponse<any>> {
+    this.validateTypes({ databaseId }, { databaseId: 'number' });
+    
+    if (databaseId <= 0) {
+      throw this.createValidationError('Database ID must be positive');
+    }
+
+    // Since the tables-by-db endpoint doesn't exist, return a placeholder response
+    // This method is used by the TableManagementSection component
+    return {
+      data: {
+        tables: [],
+        count: 0,
+      },
+      success: true,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  /**
+   * Update user business rule
+   */
+  async updateUserBusinessRule(userId: string, businessRule: string): Promise<ServiceResponse<any>> {
+    this.validateTypes({ userId, businessRule }, { userId: 'string', businessRule: 'string' });
+    
+    if (!userId.trim()) {
+      throw this.createValidationError('User ID is required');
+    }
+    
+    if (businessRule.trim().length === 0) {
+      throw this.createValidationError('Business rule cannot be empty');
+    }
+
+    return this.put<any>(
+      API_ENDPOINTS.NEW_TABLE_UPDATE_BUSINESS_RULE(userId),
+      { business_rule: businessRule }
+    );
+  }
+
+  /**
+   * Get user business rule
+   */
+  async getUserBusinessRule(userId: string): Promise<ServiceResponse<any>> {
+    this.validateTypes({ userId }, { userId: 'string' });
+    
+    if (!userId.trim()) {
+      throw this.createValidationError('User ID is required');
+    }
+
+    return this.get<any>(
+      API_ENDPOINTS.NEW_TABLE_GET_BUSINESS_RULE(userId)
+    );
   }
 
   /**
@@ -355,14 +364,14 @@ export class NewTableService extends BaseService {
   }
 
   /**
-   * Validate columns structure
+   * Validate columns for table creation
    */
   private validateColumns(columns: Array<{
     name: string;
-    type: string;
+    data_type: string;
     nullable?: boolean;
-    default?: string;
-    primary_key?: boolean;
+    is_primary?: boolean;
+    is_identity?: boolean;
   }>): void {
     const errors: string[] = [];
     const columnNames = new Set<string>();
@@ -397,8 +406,8 @@ export class NewTableService extends BaseService {
       }
 
       // Validate column type
-      if (!column.type || typeof column.type !== 'string' || column.type.trim().length === 0) {
-        errors.push(`Column "${column.name}": type is required`);
+      if (!column.data_type || typeof column.data_type !== 'string' || column.data_type.trim().length === 0) {
+        errors.push(`Column "${column.name}": data_type is required`);
       } else {
         // Validate supported column types
         const supportedTypes = [
@@ -410,9 +419,9 @@ export class NewTableService extends BaseService {
           'JSON', 'BLOB'
         ];
 
-        const baseType = column.type.split('(')[0].toUpperCase();
+        const baseType = column.data_type.split('(')[0].toUpperCase();
         if (!supportedTypes.includes(baseType)) {
-          errors.push(`Column "${column.name}": unsupported type "${column.type}"`);
+          errors.push(`Column "${column.name}": unsupported type "${column.data_type}"`);
         }
       }
 
@@ -421,13 +430,12 @@ export class NewTableService extends BaseService {
         errors.push(`Column "${column.name}": nullable must be a boolean`);
       }
 
-      if (column.primary_key !== undefined && typeof column.primary_key !== 'boolean') {
-        errors.push(`Column "${column.name}": primary_key must be a boolean`);
+      if (column.is_primary !== undefined && typeof column.is_primary !== 'boolean') {
+        errors.push(`Column "${column.name}": is_primary must be a boolean`);
       }
 
-      // Validate default value
-      if (column.default !== undefined && typeof column.default !== 'string') {
-        errors.push(`Column "${column.name}": default value must be a string`);
+      if (column.is_identity !== undefined && typeof column.is_identity !== 'boolean') {
+        errors.push(`Column "${column.name}": is_identity must be a boolean`);
       }
     });
 

@@ -44,6 +44,12 @@ export default function Menu() {
       isActive: pathname === "/database-query",
     },
     {
+      icon: BarChart3,
+      name: "AI Reports",
+      path: "/ai-results",
+      isActive: pathname === "/ai-results",
+    },
+    {
       icon: FileText,
       name: "File Query",
       path: "/file-query",
