@@ -4,4 +4,4 @@ export { QueryCharts } from "./QueryCharts";
 export { QueryStats } from "./QueryStats";
 export { QueryHistoryPanel } from "./QueryHistoryPanel"; 
 export { QueryModeToggle } from "./QueryModeToggle";
-export { IntegratedReportGenerator } from "./IntegratedReportGenerator"; 
+ 

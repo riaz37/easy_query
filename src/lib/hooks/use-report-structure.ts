@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { ServiceRegistry } from "../api";
 import { ReportStructure, UpdateReportStructureRequest } from "../../types/reports";
 
@@ -26,9 +26,16 @@ export function useReportStructure(): UseReportStructureReturn {
     loadedUserId: null,
   });
 
+  // Use ref to track current state without causing re-renders
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
   const loadStructure = useCallback(async (userId: string) => {
     // Check if we already have the structure for this userId
-    if (state.structure && state.loadedUserId === userId && !state.isLoading) {
+    const currentState = stateRef.current;
+    if (currentState.structure && currentState.loadedUserId === userId && !currentState.isLoading) {
       return; // Already loaded for this userId, don't reload
     }
 
@@ -60,7 +67,7 @@ export function useReportStructure(): UseReportStructureReturn {
         isLoading: false,
       }));
     }
-  }, [state.structure, state.loadedUserId, state.isLoading]);
+  }, []); // Empty dependency array since we're using ref
 
   const updateStructure = useCallback(async (userId: string, structure: UpdateReportStructureRequest) => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
