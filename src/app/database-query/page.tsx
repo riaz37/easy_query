@@ -125,18 +125,33 @@ export default function DatabaseQueryPage() {
       console.log("Sending query with user ID:", user.user_id); // Debug log
 
       const response = await sendQuery({
-        user_id: user.user_id,
-        query: query,
+        userId: user.user_id,
+        question: query,
         database_id: currentDatabase?.database_id,
       });
 
       console.log("Query response:", response);
       toast.success("Query submitted successfully!");
+      
+      // Store results in sessionStorage for the results page
+      if (response.success && response.data) {
+        const queryResult = {
+          query: query,
+          userId: user.user_id,
+          databaseId: currentDatabase?.database_id,
+          timestamp: new Date().toISOString(),
+          result: response.data
+        };
+        sessionStorage.setItem('databaseQueryResult', JSON.stringify(queryResult));
+        
+        // Redirect to results page
+        router.push('/database-query-results');
+      }
     } catch (error) {
       console.error("Query submission failed:", error);
       toast.error("Failed to submit query. Please try again.");
     }
-  }, [hasCurrentDatabase, user?.user_id, sendQuery, currentDatabase?.database_id]);
+  }, [hasCurrentDatabase, user?.user_id, sendQuery, currentDatabase?.database_id, router]);
 
   const handleModeChange = useCallback((mode: 'query' | 'reports') => {
     setQueryMode(mode);

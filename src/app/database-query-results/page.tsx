@@ -75,9 +75,9 @@ export default function DatabaseQueryResultsPage() {
   }
 
   // Extract data for display
-  const queryData = currentQuery.result?.data || [];
+  const queryData = currentQuery.result?.payload?.data || [];
   const columns = queryData.length > 0 ? Object.keys(queryData[0]) : [];
-  const sqlQuery = currentQuery.result?.sql || "";
+  const sqlQuery = currentQuery.result?.payload?.sql || "";
 
   return (
     <div className="w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
@@ -219,7 +219,7 @@ export default function DatabaseQueryResultsPage() {
                       </div>
                       <div className="text-center">
                         <div className="text-2xl font-bold text-purple-400">
-                          {currentQuery.result?.status_code || "N/A"}
+                          {currentQuery.result?.payload?.status_code || "N/A"}
                         </div>
                         <div className="text-xs text-gray-400">Status Code</div>
                       </div>

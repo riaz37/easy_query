@@ -23,6 +23,7 @@ export interface SearchQueryParams {
 export interface DbQueryParams {
   question: string;
   userId?: string; // Added userId to DbQueryParams
+  database_id?: number; // Added database_id for database selection
 }
 
 /**
