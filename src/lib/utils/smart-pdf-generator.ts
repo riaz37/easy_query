@@ -213,6 +213,11 @@ export class SmartPDFGenerator {
       this.addSmartTable(section.table);
     }
     
+    // Add graph visualization if available
+    if (section.graph_and_analysis && section.table) {
+      this.addGraphVisualization(section.graph_and_analysis, section.table);
+    }
+    
     this.currentY += 20;
   }
 
@@ -231,6 +236,15 @@ export class SmartPDFGenerator {
     const tableData = table.data || [];
     const tableHeaders = table.columns || [];
     
+    // Debug logging
+    console.log('PDF Generator - Table Data Structure:', {
+      headers: tableHeaders,
+      dataLength: tableData.length,
+      firstRow: tableData[0],
+      dataType: Array.isArray(tableData) ? 'array' : typeof tableData,
+      firstRowType: tableData[0] ? (Array.isArray(tableData[0]) ? 'array' : typeof tableData[0]) : 'undefined'
+    });
+    
     if (tableData.length > 0 && tableHeaders.length > 0) {
       // Check if table needs special handling
       const isWideTable = tableHeaders.length > this.maxColumnsPerPage;
@@ -241,7 +255,80 @@ export class SmartPDFGenerator {
       } else {
         this.addSimpleTable(tableHeaders, tableData);
       }
+    } else {
+      console.warn('PDF Generator - No table data or headers found:', { tableData, tableHeaders });
+      // Add a note about no data
+      this.doc.setFontSize(10);
+      this.doc.setFont('helvetica', 'italic');
+      this.doc.setTextColor(255, 140, 0);
+      this.doc.text('Note: No data available for this table.', this.margin, this.currentY);
+      this.currentY += 8;
+      this.doc.setTextColor(0, 0, 0);
     }
+  }
+
+  /**
+   * Add graph visualization to PDF
+   */
+  private addGraphVisualization(graphData: any, tableData: any): void {
+    this.addPageBreak();
+    
+    // Graph title
+    this.doc.setFontSize(14);
+    this.doc.setFont('helvetica', 'bold');
+    this.doc.text('Data Visualization:', this.margin, this.currentY);
+    this.currentY += 10;
+    
+    // Graph type and configuration
+    this.doc.setFontSize(12);
+    this.doc.setFont('helvetica', 'normal');
+    this.doc.text(`Graph Type: ${graphData.graph_type}`, this.margin, this.currentY);
+    this.currentY += 8;
+    
+    // Column mapping information
+    this.doc.text(`X-Axis: ${graphData.column_mapping.x}`, this.margin, this.currentY);
+    this.currentY += 6;
+    this.doc.text(`Y-Axis: ${graphData.column_mapping.y}`, this.margin, this.currentY);
+    this.currentY += 6;
+    
+    if (graphData.column_mapping.color) {
+      this.doc.text(`Color: ${graphData.column_mapping.color}`, this.margin, this.currentY);
+      this.currentY += 6;
+    }
+    
+    this.currentY += 10;
+    
+    // Add a note about graph data
+    this.doc.setFontSize(10);
+    this.doc.setFont('helvetica', 'italic');
+    this.doc.setTextColor(255, 140, 0);
+    this.doc.text('Note: Interactive graph visualization is available in the web interface.', this.margin, this.currentY);
+    this.currentY += 8;
+    this.doc.setTextColor(0, 0, 0);
+    
+    // Add sample data summary for the graph
+    if (tableData.data && tableData.data.length > 0) {
+      this.doc.setFontSize(10);
+      this.doc.setFont('helvetica', 'normal');
+      this.doc.text('Graph Data Summary:', this.margin, this.currentY);
+      this.currentY += 6;
+      
+      // Show first few data points
+      const sampleData = tableData.data.slice(0, 5);
+      sampleData.forEach((row: any, index: number) => {
+        const xValue = row[graphData.column_mapping.x] || 'N/A';
+        const yValue = row[graphData.column_mapping.y] || 'N/A';
+        this.doc.text(`${index + 1}. ${graphData.column_mapping.x}: ${xValue}, ${graphData.column_mapping.y}: ${yValue}`, this.margin + 10, this.currentY);
+        this.currentY += 5;
+      });
+      
+      if (tableData.data.length > 5) {
+        this.doc.text(`... and ${tableData.data.length - 5} more data points`, this.margin + 10, this.currentY);
+        this.currentY += 5;
+      }
+    }
+    
+    this.currentY += 10;
   }
 
   /**
@@ -333,9 +420,27 @@ export class SmartPDFGenerator {
    */
   private addSimpleTable(headers: string[], data: any[]): void {
     try {
+      // Convert object data to array format for autoTable
+      const formattedData = data.map(row => {
+        if (Array.isArray(row)) {
+          // If already an array, use as is
+          return row;
+        } else if (typeof row === 'object' && row !== null) {
+          // Convert object to array of values
+          return headers.map(header => {
+            const value = row[header];
+            if (value === null || value === undefined) return '';
+            return String(value);
+          });
+        } else {
+          // Fallback for other data types
+          return [String(row)];
+        }
+      });
+
       autoTable(this.doc, {
         head: [headers],
-        body: data,
+        body: formattedData,
         startY: this.currentY,
         margin: { left: this.margin, right: this.margin },
         styles: {
@@ -382,9 +487,24 @@ export class SmartPDFGenerator {
     });
     this.currentY += 8;
     
+    // Convert object data to array format if needed
+    const formattedData = data.map(row => {
+      if (Array.isArray(row)) {
+        return row;
+      } else if (typeof row === 'object' && row !== null) {
+        return headers.map(header => {
+          const value = row[header];
+          if (value === null || value === undefined) return '';
+          return String(value);
+        });
+      } else {
+        return [String(row)];
+      }
+    });
+    
     // Data rows
     this.doc.setFont('helvetica', 'normal');
-    data.slice(0, this.maxRowsPerPage).forEach(row => {
+    formattedData.slice(0, this.maxRowsPerPage).forEach(row => {
       row.forEach((cell: any, index: number) => {
         const x = this.margin + (index * 30);
         if (x < this.pageWidth - this.margin) {
@@ -399,11 +519,11 @@ export class SmartPDFGenerator {
       }
     });
     
-    if (data.length > this.maxRowsPerPage) {
+    if (formattedData.length > this.maxRowsPerPage) {
       this.currentY += 5;
       this.doc.setFontSize(10);
       this.doc.setFont('helvetica', 'italic');
-      this.doc.text(`... and ${data.length - this.maxRowsPerPage} more rows`, this.margin, this.currentY);
+      this.doc.text(`... and ${formattedData.length - this.maxRowsPerPage} more rows`, this.margin, this.currentY);
       this.currentY += 8;
     }
   }
