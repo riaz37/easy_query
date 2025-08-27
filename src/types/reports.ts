@@ -70,19 +70,64 @@ export interface ReportSection {
   };
   graph_and_analysis?: GraphAnalysis;
   analysis?: any;
-  llm_analysis?: {
-    analysis: string;
-    analysis_subject: string;
-    data_coverage: string;
-    metadata: any;
-  };
 }
 
 export interface GraphAnalysis {
   graph_type: string;
   theme: string;
   image_url: string;
+  column_mapping?: {
+    x: string;
+    y: string;
+    color?: string;
+    size?: string;
+    group?: string;
+  };
+  analysis?: {
+    total_records: number;
+    columns_count: number;
+    sql_query: string;
+    generation_time: string;
+    data_summary: string;
+    query: string;
+  };
+  llm_analysis?: {
+    analysis: string;
+    analysis_subject: string;
+    data_coverage: string;
+    metadata: {
+      analysis_timestamp: string;
+      data_summary: {
+        total_rows: number;
+        total_columns: number;
+        columns: string[];
+        first_100_rows: number;
+        last_100_rows: number;
+      };
+      query: string;
+      subject: string;
+    };
+  };
 }
+
+// Available graph types for reference
+export type GraphType = 
+  // Basic Charts
+  | "bar" | "column" | "line" | "area" | "scatter" | "bubble"
+  // Distribution Charts
+  | "histogram" | "box" | "violin" | "density" | "qq_plot"
+  // Composition Charts
+  | "pie" | "donut" | "treemap" | "sunburst" | "funnel"
+  // Comparison Charts
+  | "grouped_bar" | "stacked_bar" | "waterfall"
+  // Time Series Charts
+  | "multi_line" | "step" | "candlestick"
+  // Correlation Charts
+  | "heatmap" | "correlation_matrix"
+  // Geographic Charts
+  | "choropleth" | "scatter_map" | "bubble_map"
+  // Advanced Charts
+  | "radar" | "polar" | "3d_scatter" | "surface" | "contour";
 
 export interface UpdateReportStructureRequest {
   report_structure: string;
