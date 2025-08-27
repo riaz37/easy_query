@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, CheckCircle } from "lucide-react";
+import { FileText, CheckCircle, Download, Eye, Loader2 } from "lucide-react";
+import { generateAndDownloadPDF, generatePDFBlob } from "@/lib/utils/smart-pdf-generator";
 
 interface ReportResultsPreviewProps {
   reportResults: any;
@@ -10,6 +11,38 @@ interface ReportResultsPreviewProps {
 export function ReportResultsPreview({
   reportResults,
 }: ReportResultsPreviewProps) {
+  const [pdfGenerating, setPdfGenerating] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    setPdfGenerating(true);
+    try {
+      await generateAndDownloadPDF(
+        reportResults, 
+        `AI_Report_${reportResults.database_id}_${new Date().toISOString().split('T')[0]}.pdf`
+      );
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setPdfGenerating(false);
+    }
+  };
+
+  const handlePreviewPDF = async () => {
+    setPdfGenerating(true);
+    try {
+      const blob = await generatePDFBlob(reportResults);
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to preview PDF:', error);
+      alert('Failed to preview PDF. Please try again.');
+    } finally {
+      setPdfGenerating(false);
+    }
+  };
+
   return (
     <Card className="bg-gray-900/50 border-green-400/30">
       <CardHeader>
@@ -47,21 +80,56 @@ export function ReportResultsPreview({
             </div>
           </div>
 
-          <div className="text-center">
-            <Button
-              onClick={() => {
-                // Store results and redirect to detailed view
-                sessionStorage.setItem(
-                  "reportResults",
-                  JSON.stringify(reportResults)
-                );
-                window.open("/ai-results", "_blank");
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              View Full Report
-            </Button>
+          <div className="text-center space-y-3">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                onClick={() => {
+                  // Store results and redirect to detailed view
+                  sessionStorage.setItem(
+                    "reportResults",
+                    JSON.stringify(reportResults)
+                  );
+                  window.open("/ai-results", "_blank");
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                View Full Report
+              </Button>
+              
+              <Button
+                onClick={handlePreviewPDF}
+                disabled={pdfGenerating}
+                variant="outline"
+                className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+              >
+                {pdfGenerating ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Eye className="w-4 h-4 mr-2" />
+                )}
+                Preview PDF
+              </Button>
+              
+              <Button
+                onClick={handleDownloadPDF}
+                disabled={pdfGenerating}
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                {pdfGenerating ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Download className="w-4 h-4 mr-2" />
+                )}
+                Download PDF
+              </Button>
+            </div>
+            
+            {pdfGenerating && (
+              <div className="text-sm text-gray-400">
+                Generating PDF... This may take a few moments.
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

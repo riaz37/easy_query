@@ -249,8 +249,8 @@ export const useQueryStore = create<QueryStore>()(
             parameters: queryRequest.parameters,
           };
           
-          // Use authenticated QueryService.sendDatabaseQuery API (no userId needed)
-          const result = await queryService.sendDatabaseQuery(queryRequest.query);
+          // Use authenticated QueryService.sendDatabaseQuery API (userId required)
+          const result = await queryService.sendDatabaseQuery(queryRequest.query, queryRequest.userId || 'default');
           
           // Transform API response to our QueryResult format
           const queryResult: QueryResult = {

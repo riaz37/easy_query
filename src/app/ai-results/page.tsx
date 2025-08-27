@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
   ArrowLeft, 
   FileText, 
@@ -15,10 +17,270 @@ import {
   Download,
   Clock,
   Eye,
-  FileDown
+  FileDown,
+  Search,
+  Filter,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { ReportResults } from '@/types/reports';
-import { generateAndDownloadPDF, generatePDFBlob } from '@/lib/utils/pdf-report-generator';
+import { generateAndDownloadPDF, generatePDFBlob } from '@/lib/utils/smart-pdf-generator';
+
+// Enhanced Table Component for AI Results
+function EnhancedResultsTable({ data, columns }: { data: any[], columns: string[] }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  // Filter and search data
+  const filteredData = React.useMemo(() => {
+    let filtered = data;
+    
+    if (searchTerm) {
+      filtered = filtered.filter((row) =>
+        Object.values(row).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    }
+    
+    return filtered;
+  }, [data, searchTerm]);
+
+  // Sort data
+  const sortedData = React.useMemo(() => {
+    if (!sortColumn) return filteredData;
+    
+    return [...filteredData].sort((a, b) => {
+      const aValue = a[sortColumn];
+      const bValue = b[sortColumn];
+      
+      if (aValue === null || aValue === undefined) return 1;
+      if (bValue === null || bValue === undefined) return -1;
+      
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+      }
+      
+      const aString = String(aValue).toLowerCase();
+      const bString = String(bValue).toLowerCase();
+      
+      if (sortDirection === "asc") {
+        return aString.localeCompare(bString);
+      } else {
+        return bString.localeCompare(aString);
+      }
+    });
+  }, [filteredData, sortColumn, sortDirection]);
+
+  // Pagination
+  const totalPages = Math.ceil(sortedData.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentData = sortedData.slice(startIndex, endIndex);
+
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
+    setCurrentPage(1);
+  };
+
+  if (!data || data.length === 0) {
+    return (
+      <Card className="bg-gray-900/50 border-blue-400/30">
+        <CardContent className="pt-12 pb-12 text-center">
+          <div className="text-gray-400">
+            No data to display
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="bg-gray-900/50 border-blue-400/30">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-blue-400 flex items-center gap-2">
+            <Filter className="w-5 h-5" />
+            Data Table
+          </CardTitle>
+          <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+            {data.length} rows
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Search and Controls */}
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 flex-1 max-w-md">
+            <Search className="w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="Search in data..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-gray-800/50 border-blue-400/30 text-white placeholder:text-gray-400"
+            />
+            {searchTerm && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearSearch}
+                className="text-gray-400 hover:text-white"
+              >
+                Clear
+              </Button>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-400">Page size:</span>
+            <select
+              value={pageSize}
+              onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+              className="bg-gray-800/50 border border-blue-400/30 text-white rounded px-2 py-1 text-sm"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Results Table */}
+        <div className="rounded-lg border border-blue-400/30 overflow-hidden">
+          <Table>
+            <TableHeader className="bg-gray-800/50">
+              <TableRow className="hover:bg-transparent">
+                {columns.map((column) => (
+                  <TableHead
+                    key={column}
+                    className="text-blue-400 font-medium cursor-pointer hover:bg-gray-700/50 transition-colors"
+                    onClick={() => handleSort(column)}
+                  >
+                    <div className="flex items-center gap-2">
+                      {column}
+                      {sortColumn === column && (
+                        <Badge variant="outline" size="sm" className="text-xs">
+                          {sortDirection === "asc" ? "↑" : "↓"}
+                        </Badge>
+                      )}
+                    </div>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {currentData.map((row, rowIndex) => (
+                <TableRow
+                  key={rowIndex}
+                  className="hover:bg-gray-700/30 border-b border-gray-700/50"
+                >
+                  {columns.map((column) => (
+                    <TableCell key={column} className="text-gray-300">
+                      <div className="max-w-xs truncate" title={String(row[column] || "")}>
+                        {row[column] !== null && row[column] !== undefined
+                          ? String(row[column])
+                          : <span className="text-gray-500">-</span>
+                        }
+                      </div>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-400">
+            Showing {startIndex + 1}-{Math.min(endIndex, sortedData.length)} of {sortedData.length} results
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+            >
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              Previous
+            </Button>
+            
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handlePageChange(pageNum)}
+                    className={
+                      currentPage === pageNum
+                        ? "bg-blue-600 text-white"
+                        : "border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+                    }
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+            >
+              Next
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function AIResultsPage() {
   const router = useRouter();
@@ -49,8 +311,8 @@ export default function AIResultsPage() {
     
     setPdfGenerating(true);
     try {
-      // Generate and download PDF
-      generateAndDownloadPDF(reportResults, `AI_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+      // Generate and download PDF using Playwright
+      await generateAndDownloadPDF(reportResults, `AI_Report_${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (error) {
       console.error('Failed to generate PDF:', error);
       alert('Failed to generate PDF. Please try again.');
@@ -64,8 +326,8 @@ export default function AIResultsPage() {
     
     setPdfGenerating(true);
     try {
-      // Generate PDF blob and open in new tab
-      const blob = generatePDFBlob(reportResults);
+      // Generate PDF blob and open in new tab using Playwright
+      const blob = await generatePDFBlob(reportResults);
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
       URL.revokeObjectURL(url);
@@ -244,7 +506,7 @@ export default function AIResultsPage() {
                   Back to Database Query
                 </Button>
               </div>
-                      </div>
+            </div>
 
             {/* Report Summary */}
             <Card className="bg-gray-900/50 border-purple-400/30 mb-6">
@@ -259,28 +521,28 @@ export default function AIResultsPage() {
                   <div className="text-center">
                     <div className="text-2xl font-bold text-white">{reportResults.total_queries}</div>
                     <div className="text-sm text-gray-400">Total Queries</div>
-                      </div>
+                  </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-400">
                       {reportResults.successful_queries}
                     </div>
                     <div className="text-sm text-gray-400">Successful</div>
-                      </div>
+                  </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-red-400">
                       {reportResults.failed_queries}
                     </div>
                     <div className="text-sm text-gray-400">Failed</div>
-                      </div>
+                  </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-400">
                       {reportResults.database_id}
                     </div>
                     <div className="text-sm text-gray-400">Database ID</div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Report Sections */}
             {reportResults.results && reportResults.results.length > 0 && (
@@ -289,20 +551,20 @@ export default function AIResultsPage() {
                 
                 {reportResults.results.map((section, index) => (
                   <Card key={index} className="bg-gray-900/50 border-blue-400/30">
-                  <CardHeader>
+                    <CardHeader>
                       <CardTitle className="text-blue-400 flex items-center gap-2">
                         <BarChart3 className="w-5 h-5" />
                         Section {section.section_number}: {section.section_name}
-                    </CardTitle>
-                  </CardHeader>
+                      </CardTitle>
+                    </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
                         <Badge variant={section.success ? "default" : "destructive"}>
                           {section.success ? "Success" : "Failed"}
                         </Badge>
                         <span className="text-sm text-gray-400">
                           Query {section.query_number}
-                          </span>
+                        </span>
                       </div>
 
                       <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
@@ -328,10 +590,10 @@ export default function AIResultsPage() {
                             <span className="text-gray-400">Path:</span>
                             <div className="text-white text-xs break-all mt-1">
                               {section.graph_and_analysis.image_url}
-                                      </div>
-                                      </div>
-                                    </div>
-                            )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Additional Analysis */}
                       {section.analysis && (
@@ -343,7 +605,7 @@ export default function AIResultsPage() {
                               : JSON.stringify(section.analysis, null, 2)
                             }
                           </div>
-                                      </div>
+                        </div>
                       )}
 
                       {/* LLM Analysis */}
@@ -357,8 +619,8 @@ export default function AIResultsPage() {
                               <div className="text-xs text-blue-200 mb-2 font-medium">Executive Summary:</div>
                               <div className="text-white text-sm leading-relaxed whitespace-pre-line">
                                 {section.llm_analysis.analysis}
-                                      </div>
-                                    </div>
+                              </div>
+                            </div>
                           )}
                           
                           {/* Display metadata */}
@@ -367,7 +629,7 @@ export default function AIResultsPage() {
                               <div>
                                 <span className="text-blue-200">Subject:</span>
                                 <span className="text-white ml-2">{section.llm_analysis.analysis_subject}</span>
-                                </div>
+                              </div>
                             )}
                             {section.llm_analysis.data_coverage && (
                               <div>
@@ -379,49 +641,24 @@ export default function AIResultsPage() {
                         </div>
                       )}
 
-                      {/* Data Table Preview */}
+                      {/* Enhanced Data Table with Pagination */}
                       {section.table && section.table.data && section.table.data.length > 0 && (
-                        <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-                          <div className="text-sm text-gray-300 mb-3 font-medium">
-                            Data Preview ({section.table.total_rows} rows, {section.table.columns.length} columns):
+                        <div className="space-y-4">
+                          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+                            <div className="text-sm text-gray-300 mb-3 font-medium">
+                              Data Preview ({section.table.total_rows} rows, {section.table.columns.length} columns):
+                            </div>
                           </div>
                           
-                          {/* Show first few rows */}
-                            <div className="overflow-x-auto">
-                            <table className="w-full text-xs">
-                                <thead>
-                                <tr className="border-b border-gray-600">
-                                  {section.table.columns.map((col, colIndex) => (
-                                    <th key={colIndex} className="text-left p-2 text-gray-300 font-medium">
-                                      {col}
-                                      </th>
-                                    ))}
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                {section.table.data.slice(0, 5).map((row, rowIndex) => (
-                                  <tr key={rowIndex} className="border-b border-gray-700">
-                                    {section.table.columns.map((col, colIndex) => (
-                                      <td key={colIndex} className="p-2 text-white">
-                                        {String(row[col] || 'N/A').substring(0, 50)}
-                                        {String(row[col] || 'N/A').length > 50 ? '...' : ''}
-                                        </td>
-                                      ))}
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          
-                          {section.table.data.length > 5 && (
-                            <div className="text-xs text-gray-400 mt-2 text-center">
-                              Showing first 5 rows of {section.table.data.length} total rows
-                            </div>
-                          )}
+                          {/* Use Enhanced Table Component */}
+                          <EnhancedResultsTable 
+                            data={section.table.data}
+                            columns={section.table.columns}
+                          />
                         </div>
                       )}
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             )}
@@ -429,21 +666,21 @@ export default function AIResultsPage() {
             {/* No Sections Message */}
             {(!reportResults.results || reportResults.results.length === 0) && (
               <Card className="bg-gray-900/50 border-gray-400/30">
-                  <CardContent className="pt-12 pb-12 text-center">
+                <CardContent className="pt-12 pb-12 text-center">
                   <div className="w-16 h-16 bg-gray-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <FileText className="w-8 h-8 text-gray-400" />
-                    </div>
-                    <h3 className="text-white text-lg font-medium mb-2">
+                  </div>
+                  <h3 className="text-white text-lg font-medium mb-2">
                     Report Generated Successfully
-                    </h3>
+                  </h3>
                   <p className="text-gray-400">
                     The report has been generated with {reportResults.total_queries} queries.
                     {reportResults.successful_queries > 0 && (
                       <span className="text-green-400"> {reportResults.successful_queries} queries were successful.</span>
                     )}
                   </p>
-                  </CardContent>
-                </Card>
+                </CardContent>
+              </Card>
             )}
 
             {/* Processing Details */}
@@ -490,7 +727,7 @@ export default function AIResultsPage() {
                     <Badge variant="outline" className="border-green-400/30 text-green-400">
                       {reportResults.summary.processing_method}
                     </Badge>
-              </div>
+                  </div>
                 </CardContent>
               </Card>
             )}
