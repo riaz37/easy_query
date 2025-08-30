@@ -11,6 +11,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Menu from "@/components/Menu";
+import { FloatingVoiceButton } from "@/components/voice-agent";
 import { useUIStore } from "@/store/uiStore";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -61,6 +62,7 @@ export default function RootLayout({
                   <AppContent>
                     {children}
                   </AppContent>
+                  <FloatingVoiceButton />
                   <Toaster />
                 </BusinessRulesContextProvider>
               </DatabaseContextProvider>

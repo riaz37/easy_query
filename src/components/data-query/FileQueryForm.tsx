@@ -98,6 +98,19 @@ export function FileQueryForm({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Query Input */}
         <div className="space-y-2">
+          <Label htmlFor="file-query" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Query your files
+          </Label>
+          <Textarea
+            id="file-query"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Ask a question about your uploaded files..."
+            className="min-h-[100px] resize-none"
+            disabled={disabled || isLoading}
+            data-element="search"
+            data-voice-target="file-search-input"
+          />
           <Label htmlFor="query-input" className="text-white">Enter your query in natural language</Label>
           <Textarea
             id="query-input"
@@ -258,6 +271,8 @@ export function FileQueryForm({
             type="submit"
             disabled={disabled || isLoading || !query.trim()}
             className="flex-1 bg-green-600 hover:bg-green-700"
+            data-element="search"
+            data-voice-target="file-search-button"
           >
             {isLoading ? (
               <>
