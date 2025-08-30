@@ -33,3 +33,4 @@ export { useThemeTransition } from "./useThemeTransition";
 
 // Context hooks
 export { useUserContext } from "./use-user-context";
+export { useUserTasks } from './use-user-tasks';

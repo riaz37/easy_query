@@ -157,3 +157,38 @@ export interface ReportFilterOptions {
   date_to?: string;
   user_id?: string;
 } 
+
+/**
+ * User Tasks Types
+ */
+export interface UserTask {
+  task_id: string;
+  user_id: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  progress: string;
+  current_step: string;
+  total_queries: number;
+  processed_queries: number;
+  successful_queries: number;
+  failed_queries: number;
+  created_at: string;
+  started_at: string;
+  completed_at?: string;
+  processing_time_seconds?: number;
+  progress_percentage: number;
+  error?: string | null;
+  results?: ReportResults;
+}
+
+export interface UserTasksResponse {
+  user_id: string;
+  total_tasks: number;
+  tasks: UserTask[];
+}
+
+export interface GetUserTasksRequest {
+  userId: string;
+  limit?: number;
+  offset?: number;
+  status?: UserTask['status'];
+} 
