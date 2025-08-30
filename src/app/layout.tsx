@@ -11,7 +11,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Menu from "@/components/Menu";
-import { FloatingVoiceButton } from "@/components/voice-agent";
+import { FloatingVoiceButton, VoiceNavigationHandler, CurrentPageIndicator, NavigationTester } from "@/components/voice-agent";
 import { useUIStore } from "@/store/uiStore";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -59,10 +59,14 @@ export default function RootLayout({
             <AuthContextProvider>
               <DatabaseContextProvider>
                 <BusinessRulesContextProvider>
-                  <AppContent>
-                    {children}
-                  </AppContent>
+                  <VoiceNavigationHandler>
+                    <AppContent>
+                      {children}
+                    </AppContent>
+                  </VoiceNavigationHandler>
                   <FloatingVoiceButton />
+                  <CurrentPageIndicator />
+                  <NavigationTester />
                   <Toaster />
                 </BusinessRulesContextProvider>
               </DatabaseContextProvider>

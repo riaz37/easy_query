@@ -12,11 +12,11 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.0))
       '@pipecat-ai/client-js':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^0.4.1
+        version: 0.4.1
       '@pipecat-ai/websocket-transport':
-        specifier: ^1.2.1
-        version: 1.2.1(@pipecat-ai/client-js@1.2.0)
+        specifier: ^0.4.2
+        version: 0.4.2(@pipecat-ai/client-js@0.4.1)
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.14
         version: 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -234,8 +234,8 @@ packages:
   '@bufbuild/protoplugin@2.7.0':
     resolution: {integrity: sha512-yUdg8hXzFGR6K8ren7aXly2hT9BxClId814VB142YeZPatY0wqD3c0D8KfIz5nIeMdoPt0/Pm/RycFJCNGMD6w==}
 
-  '@daily-co/daily-js@0.83.1':
-    resolution: {integrity: sha512-KXA3zrSnNPZONwhip4TI6ayD3huumI1QBD/xPAjFArvHuFFB7t0QTOS2oxH1bXvdOBJ6XnY08vdlJslTVi2/2w==}
+  '@daily-co/daily-js@0.79.0':
+    resolution: {integrity: sha512-Ii/Zi6cfTl2EZBpX8msRPNkkCHcajA+ErXpbN2Xe2KySd1Nb4IzC/QWJlSl9VA9pIlYPQicRTDoZnoym/0uEAw==}
     engines: {node: '>=10.0.0'}
 
   '@dimforge/rapier3d-compat@0.12.0':
@@ -491,13 +491,13 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@pipecat-ai/client-js@1.2.0':
-    resolution: {integrity: sha512-T1RQE7bBD35vq6RHA8Oc1NyBOCOR7FqvpTGH1+e24n4TbXspz9jK4kuj1CoBK02BTKZ+UHJlkHnG9DRLtxpf+A==}
+  '@pipecat-ai/client-js@0.4.1':
+    resolution: {integrity: sha512-3jLKRzeryqLxtkqvr4Bvxe2OxoI7mdOFecm6iolZizXnk/BE480SEg2oAKyov3b5oT6+jmPlT+1HRBlTzEtL7A==}
 
-  '@pipecat-ai/websocket-transport@1.2.1':
-    resolution: {integrity: sha512-MdA/L2hOTKC8tFOY20Apht9u/PTtPi24Tvb2KjQebfW8EiPSXIbOR6UBIqzxcQkFcbQwiUhinmu+8ewWNnjFvg==}
+  '@pipecat-ai/websocket-transport@0.4.2':
+    resolution: {integrity: sha512-mOYnw9n60usODrE35D+uhFbJXl0DqXV32pAqSHu1of049s128mex6Qv+W49DBMVr8h5W6pLGrXhm+XDAtN5leg==}
     peerDependencies:
-      '@pipecat-ai/client-js': ~1.2.0
+      '@pipecat-ai/client-js': ~0.4.0
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
@@ -2867,7 +2867,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@daily-co/daily-js@0.83.1':
+  '@daily-co/daily-js@0.79.0':
     dependencies:
       '@babel/runtime': 7.27.6
       '@sentry/browser': 8.55.0
@@ -3082,19 +3082,18 @@ snapshots:
   '@next/swc-win32-x64-msvc@15.3.3':
     optional: true
 
-  '@pipecat-ai/client-js@1.2.0':
+  '@pipecat-ai/client-js@0.4.1':
     dependencies:
       '@types/events': 3.0.3
-      bowser: 2.12.1
       clone-deep: 4.0.1
       events: 3.3.0
       typed-emitter: 2.1.0
       uuid: 10.0.0
 
-  '@pipecat-ai/websocket-transport@1.2.1(@pipecat-ai/client-js@1.2.0)':
+  '@pipecat-ai/websocket-transport@0.4.2(@pipecat-ai/client-js@0.4.1)':
     dependencies:
-      '@daily-co/daily-js': 0.83.1
-      '@pipecat-ai/client-js': 1.2.0
+      '@daily-co/daily-js': 0.79.0
+      '@pipecat-ai/client-js': 0.4.1
       '@protobuf-ts/plugin': 2.11.1
       '@protobuf-ts/runtime': 2.11.1
       x-law: 0.3.1

@@ -1,2 +1,5 @@
 export { VoiceAgent } from './VoiceAgent'
-export { FloatingVoiceButton } from './FloatingVoiceButton' 
+export { FloatingVoiceButton } from './FloatingVoiceButton'
+export { VoiceNavigationHandler } from './VoiceNavigationHandler'
+export { CurrentPageIndicator } from './CurrentPageIndicator'
+export { NavigationTester } from './NavigationTester' 
