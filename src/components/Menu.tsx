@@ -20,6 +20,7 @@ import {
   Building2,
   Plane,
   Users,
+  Mic,
 } from "lucide-react";
 
 import { useUIStore } from "@/store/uiStore";
@@ -79,6 +80,12 @@ export default function Menu() {
       path: "/users",
       isActive: pathname === "/users",
     },
+    {
+      icon: Mic,
+      name: "Voice Agent",
+      path: "/voice-agent",
+      isActive: pathname === "/voice-agent",
+    },
   ];
 
   const handleMenuItemClick = () => {
@@ -101,6 +108,9 @@ export default function Menu() {
               ? "bg-green-500/20 text-green-400 border border-green-500/30 shadow-lg"
               : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
           )}
+          data-menu-item={item.path}
+          data-element="navigation"
+          data-voice-target={`menu-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
         >
           <IconComponent
             className={cn(

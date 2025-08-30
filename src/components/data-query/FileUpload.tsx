@@ -406,6 +406,8 @@ export function FileUpload({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={() => !disabled && fileInputRef.current?.click()}
+          data-element="upload"
+          data-voice-target="file-upload-area"
         >
           <input
             ref={fileInputRef}
@@ -450,6 +452,8 @@ export function FileUpload({
             }}
             disabled={disabled || uploadedFiles.filter(f => f.status === 'pending').length === 0 || !user?.user_id}
             className="w-full bg-blue-600 hover:bg-blue-700"
+            data-element="upload"
+            data-voice-target="file-upload-button"
           >
             <Upload className="w-4 h-4 mr-2" />
             Upload {uploadedFiles.filter(f => f.status === 'pending').length} Files

@@ -109,6 +109,7 @@ export const API_ENDPOINTS = {
   UPDATE_REPORT_STRUCTURE: (id: number) => `${baseUrl}/mssql-config/mssql-config/${id}/report-structure`,
   GET_REPORT_HISTORY: `${baseUrl}/reports/history`,
   DELETE_REPORT_TASK: (taskId: string) => `${baseUrl}/reports/task/${taskId}`,
+  GET_USER_TASKS: (userId: string) => `${baseUrl}/reports/user-tasks/${encodeURIComponent(userId)}`,
 };
 
 /**

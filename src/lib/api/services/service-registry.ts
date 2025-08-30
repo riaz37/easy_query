@@ -14,6 +14,7 @@ import { subCompanyService } from './sub-company-service';
 import { UserConfigService } from './user-config-service';
 import { DatabaseConfigService } from './database-config-service';
 import { ReportService } from './report-service';
+import { userTasksService } from './user-tasks-service';
 
 /**
  * Central registry for all API services
@@ -53,6 +54,7 @@ export const ServiceRegistry = {
   userConfig: UserConfigService,
   databaseConfig: DatabaseConfigService,
   reports: new ReportService(),
+  userTasks: userTasksService,
 } as const;
 
 /**
@@ -76,6 +78,7 @@ export interface ServiceRegistryInterface {
   userConfig: typeof UserConfigService;
   databaseConfig: typeof DatabaseConfigService;
   reports: ReportService;
+  userTasks: typeof userTasksService;
 }
 
 /**
