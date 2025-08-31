@@ -25,6 +25,8 @@ export function ReportActionButtons({
         onClick={onGenerateReport}
         disabled={!userQuery.trim() || isGenerating}
         className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2 min-w-[160px]"
+        data-voice-action="report generation"
+        data-voice-element="report generation"
       >
         {isGenerating ? (
           <>

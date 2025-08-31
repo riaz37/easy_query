@@ -1,6 +1,9 @@
 export const VOICE_AGENT_CONFIG = {
-  // Backend configuration
-  BACKEND_URL: process.env.NEXT_PUBLIC_PROD_BACKEND_URL || 'https://176.9.16.194:8200',
+  // Backend configuration - use environment variables with fallbacks
+  BACKEND_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 
+                process.env.NEXT_PUBLIC_PROD_BACKEND_URL || 
+                process.env.NEXT_PUBLIC_DEV_BACKEND_URL || 
+                'https://176.9.16.194:8200',
   
   // WebSocket endpoints
   WEBSOCKET_ENDPOINTS: {
@@ -60,4 +63,19 @@ export const getWebSocketUrl = (baseUrl: string, endpoint: string): string => {
 
 export const getHealthCheckUrl = (baseUrl: string): string => {
   return baseUrl + VOICE_AGENT_CONFIG.WEBSOCKET_ENDPOINTS.HEALTH_CHECK
+}
+
+// Helper function to get the RTVI config with current page
+export const getRTVIConfig = (currentPage?: string) => {
+  const baseUrl = VOICE_AGENT_CONFIG.BACKEND_URL
+  const connectEndpoint = currentPage 
+    ? `${VOICE_AGENT_CONFIG.WEBSOCKET_ENDPOINTS.VOICE_CONNECT}?current_page=${encodeURIComponent(currentPage)}` 
+    : VOICE_AGENT_CONFIG.WEBSOCKET_ENDPOINTS.VOICE_CONNECT
+  
+  return {
+    baseUrl,
+    endpoints: { 
+      connect: connectEndpoint 
+    },
+  }
 } 

@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useVoiceClient } from '@/lib/hooks/use-voice-client'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Mic, MicOff, Play, Square, MessageSquare, Trash2, Navigation, Search, Upload, FileText, BarChart3 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { useVoiceAgent } from '@/components/providers/VoiceAgentContextProvider'
+import { Mic, MicOff, Play, Square, Navigation, Search, Upload, FileText, Trash2, MessageSquare } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
 export function VoiceAgent() {
@@ -14,20 +14,29 @@ export function VoiceAgent() {
     isInConversation,
     connectionStatus,
     messages,
+    currentPage,
+    previousPage,
+    isReady,
+    isLoading,
     connect,
     disconnect,
     startConversation,
     stopConversation,
     clearMessages,
     sendMessage
-  } = useVoiceClient()
-
+  } = useVoiceAgent()
+  
   const [textInput, setTextInput] = useState('')
+  const [lastVoiceCommand, setLastVoiceCommand] = useState<string | null>(null)
   const [voiceNavigationStatus, setVoiceNavigationStatus] = useState('Ready')
-  const [lastVoiceCommand, setLastVoiceCommand] = useState('')
 
   // Listen for voice navigation events
   useEffect(() => {
+    // Only set up event listeners if service is ready
+    if (isLoading || !isReady) {
+      return
+    }
+
     const handleVoiceEvent = (event: CustomEvent) => {
       const { type, element_name, page, user_id } = event.detail
       setVoiceNavigationStatus(type)
@@ -48,7 +57,24 @@ export function VoiceAgent() {
       window.removeEventListener('voice-generate-report', handleVoiceEvent as EventListener)
       window.removeEventListener('voice-navigate', handleVoiceEvent as EventListener)
     }
-  }, [])
+  }, [isLoading, isReady])
+
+  // Only render voice client when service is ready
+  if (isLoading || !isReady) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">
+            {isLoading ? 'Loading voice agent...' : 'Voice agent not ready'}
+          </p>
+        </div>
+      </div>
+    )
+  }
+  
+  // Only show connection controls if user is authenticated and loaded
+  const canConnect = isReady && !!currentPage
 
   const handleSendMessage = () => {
     if (textInput.trim()) {
@@ -92,22 +118,28 @@ export function VoiceAgent() {
           </div>
 
           {/* Connection Controls */}
-          <div className="flex gap-2">
-            {!isConnected ? (
-              <Button onClick={connect} className="flex items-center gap-2">
-                <Mic className="w-4 h-4" />
-                Connect
-              </Button>
-            ) : (
-              <Button onClick={disconnect} variant="outline" className="flex items-center gap-2">
-                <MicOff className="w-4 h-4" />
-                Disconnect
-              </Button>
-            )}
-          </div>
+          {canConnect ? (
+            <div className="flex gap-2">
+              {!isConnected ? (
+                <Button onClick={connect} className="flex items-center gap-2">
+                  <Mic className="w-4 h-4" />
+                  Connect
+                </Button>
+              ) : (
+                <Button onClick={disconnect} variant="outline" className="flex items-center gap-2">
+                  <MicOff className="w-4 h-4" />
+                  Disconnect
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="text-sm text-muted-foreground">
+              Please log in to use the voice agent
+            </div>
+          )}
 
           {/* Conversation Controls */}
-          {isConnected && (
+          {canConnect && isConnected && (
             <div className="flex gap-2">
               {!isInConversation ? (
                 <Button onClick={startConversation} className="flex items-center gap-2">
@@ -124,7 +156,7 @@ export function VoiceAgent() {
           )}
 
           {/* Quick Voice Actions */}
-          {isConnected && (
+          {canConnect && isConnected && (
             <div className="space-y-2">
               <div className="text-sm font-medium">Quick Voice Actions:</div>
               <div className="flex flex-wrap gap-2">
@@ -143,7 +175,7 @@ export function VoiceAgent() {
                   onClick={() => window.dispatchEvent(new CustomEvent('voice-file-upload', { detail: { type: 'File Upload', element_name: 'File Upload Area' } }))}
                   className="flex items-center gap-2"
                 >
-                  <Upload className="w-3 h-3" />
+                  <Upload className="w-3 h-4" />
                   File Upload
                 </Button>
                 <Button
@@ -152,7 +184,7 @@ export function VoiceAgent() {
                   onClick={() => window.dispatchEvent(new CustomEvent('voice-generate-report', { detail: { type: 'Generate Report', element_name: 'Report Generator' } }))}
                   className="flex items-center gap-2"
                 >
-                  <FileText className="w-3 h-3" />
+                  <FileText className="w-4 h-4" />
                   Generate Report
                 </Button>
                 <Button
@@ -161,7 +193,7 @@ export function VoiceAgent() {
                   onClick={() => window.dispatchEvent(new CustomEvent('voice-navigate', { detail: { type: 'Navigate', page: 'Dashboard' } }))}
                   className="flex items-center gap-2"
                 >
-                  <Navigation className="w-3 h-3" />
+                  <Navigation className="w-4 h-4" />
                   Navigate
                 </Button>
               </div>

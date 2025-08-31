@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { useVoiceClient } from '../../lib/hooks/use-voice-client'
+import { useVoiceAgent } from '@/components/providers/VoiceAgentContextProvider'
 
 interface VoiceNavigationHandlerProps {
   children: React.ReactNode
@@ -10,10 +10,15 @@ interface VoiceNavigationHandlerProps {
 
 export function VoiceNavigationHandler({ children }: VoiceNavigationHandlerProps) {
   const router = useRouter()
-  const { currentPage, previousPage } = useVoiceClient()
+  const { currentPage, previousPage, isReady, isLoading } = useVoiceAgent()
   const eventListenersRef = useRef<(() => void)[]>([])
 
   useEffect(() => {
+    // Only set up event listeners if service is ready
+    if (isLoading || !isReady) {
+      return
+    }
+
     // Handle page navigation
     const handleNavigation = (event: CustomEvent) => {
       const { page, previousPage, type } = event.detail
@@ -120,7 +125,12 @@ export function VoiceNavigationHandler({ children }: VoiceNavigationHandlerProps
       // Cleanup event listeners
       eventListenersRef.current.forEach(cleanup => cleanup())
     }
-  }, [router])
+  }, [router, isReady, isLoading])
+
+  // Don't initialize if service is not ready
+  if (isLoading || !isReady) {
+    return <>{children}</>
+  }
 
   // Helper functions for actual UI interactions
   const clickElementByName = (elementName: string) => {
@@ -251,4 +261,4 @@ export function VoiceNavigationHandler({ children }: VoiceNavigationHandlerProps
   }
 
   return <>{children}</>
-} 
+}

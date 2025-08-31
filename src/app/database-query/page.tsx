@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext, useDatabaseContext } from "@/components/providers";
 import { useDatabaseOperations } from "@/lib/hooks/use-database-operations";
+
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -64,6 +65,35 @@ export default function DatabaseQueryPage() {
       fetchQueryHistory();
     }
   }, [user?.user_id, fetchQueryHistory]);
+
+  // Voice agent event handling
+  useEffect(() => {
+    const handleVoiceAgentGenerateReport = (event: CustomEvent) => {
+      console.log('🎤 Voice agent generate report event:', event.detail)
+      if (event.detail.action === 'generate_report') {
+        // Switch to reports mode and trigger report generation
+        setQueryMode('reports')
+        // The ReportGenerator component will handle the actual generation
+      }
+    }
+
+    const handleVoiceAgentShowMessage = (event: CustomEvent) => {
+      console.log('🎤 Voice agent show message event:', event.detail)
+      if (event.detail.type === 'info') {
+        toast.info(event.detail.message)
+      }
+    }
+
+    // Add event listeners
+    window.addEventListener('voice-agent-generate-report', handleVoiceAgentGenerateReport as EventListener)
+    window.addEventListener('voice-agent-show-message', handleVoiceAgentShowMessage as EventListener)
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('voice-agent-generate-report', handleVoiceAgentGenerateReport as EventListener)
+      window.removeEventListener('voice-agent-show-message', handleVoiceAgentShowMessage as EventListener)
+    }
+  }, [])
 
   // Simulate progress when loading
   useEffect(() => {
@@ -355,6 +385,8 @@ export default function DatabaseQueryPage() {
                     size="sm"
                     onClick={() => router.push('/ai-results')}
                     className="border-purple-400/30 text-purple-400 hover:bg-purple-400/10"
+                    data-voice-action="view report"
+                    data-voice-element="view report"
                   >
                     <BarChart3 className="w-4 h-4 mr-2" />
                     {loading 

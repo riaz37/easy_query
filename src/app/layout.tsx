@@ -4,6 +4,7 @@ import { ThemeTransitionProvider } from "@/components/ThemeTransitionProvider";
 import { AuthContextProvider } from "@/components/providers/AuthContextProvider";
 import { DatabaseContextProvider } from "@/components/providers/DatabaseContextProvider";
 import { BusinessRulesContextProvider } from "@/components/providers/BusinessRulesContextProvider";
+import { VoiceAgentProvider } from "@/components/providers/VoiceAgentContextProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -11,7 +12,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Menu from "@/components/Menu";
-import { FloatingVoiceButton, VoiceNavigationHandler, CurrentPageIndicator, NavigationTester } from "@/components/voice-agent";
+import { FloatingVoiceButton, VoiceNavigationHandler, CurrentPageIndicator } from "@/components/voice-agent";
 import { useUIStore } from "@/store/uiStore";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -59,15 +60,16 @@ export default function RootLayout({
             <AuthContextProvider>
               <DatabaseContextProvider>
                 <BusinessRulesContextProvider>
-                  <VoiceNavigationHandler>
-                    <AppContent>
-                      {children}
-                    </AppContent>
-                  </VoiceNavigationHandler>
-                  <FloatingVoiceButton />
-                  <CurrentPageIndicator />
-                  <NavigationTester />
-                  <Toaster />
+                  <VoiceAgentProvider>
+                    <VoiceNavigationHandler>
+                      <AppContent>
+                        {children}
+                      </AppContent>
+                    </VoiceNavigationHandler>
+                    <FloatingVoiceButton />
+                    <CurrentPageIndicator />
+                    <Toaster />
+                  </VoiceAgentProvider>
                 </BusinessRulesContextProvider>
               </DatabaseContextProvider>
             </AuthContextProvider>
