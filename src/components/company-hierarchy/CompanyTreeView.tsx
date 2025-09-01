@@ -114,7 +114,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
           children: safeSubCompanies
             .filter(
               (sub: SubCompanyData) =>
-                sub.parent_company_id === parent.parent_company_id,
+                sub.parent_company_id === parent.parent_company_id
             )
             .map((sub: SubCompanyData) => ({
               id: `sub-${sub.sub_company_id}`,
@@ -125,7 +125,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
               dbId: sub.db_id,
               parentId: `parent-${sub.parent_company_id}`,
             })),
-        }),
+        })
       );
 
       setCompanies(transformedCompanies);
@@ -133,7 +133,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
       // Show success message if we have data
       if (transformedCompanies.length > 0) {
         toast.success(
-          `Loaded ${transformedCompanies.length} companies successfully`,
+          `Loaded ${transformedCompanies.length} companies successfully`
         );
       }
     } catch (error) {
@@ -174,7 +174,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
     const createCompanyNode = (
       company: Company,
       position: { x: number; y: number },
-      level: number,
+      level: number
     ) => {
       const node = {
         id: company.id,
@@ -185,7 +185,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
           level,
           onSelect: (companyId: string) => {
             setSelectedCompany(
-              companyId === selectedCompany ? null : companyId,
+              companyId === selectedCompany ? null : companyId
             );
           },
           onAddSubCompany: (parentId: string) => {
@@ -248,27 +248,38 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
     // Add child nodes and edges if they exist
     if (displayCompany.children && displayCompany.children.length > 0) {
       const childY = 350;
-      const maxSpacing = 350; // Maximum spacing between child nodes
-      const minSpacing = 250; // Minimum spacing between child nodes
       const childCount = displayCompany.children.length;
+      const childCardWidth = 320; // Actual sub-company card width (w-80)
+      const parentCenterX = parentPosition.x + 200; // Parent card center (w-96 / 2)
 
-      // Calculate spacing based on number of children and available width
-      let spacing = Math.max(
-        minSpacing,
-        Math.min(maxSpacing, containerWidth / (childCount + 1)),
-      );
+      // For consistent positioning, use fixed spacing based on child count
+      let childPositions: { x: number; y: number }[] = [];
 
-      // Calculate total width needed for all children
-      const totalChildrenWidth = (childCount - 1) * spacing;
+      if (childCount === 1) {
+        // Single child: center directly under parent
+        childPositions = [{ x: parentCenterX - childCardWidth / 2, y: childY }];
+      } else if (childCount === 2) {
+        // Two children: ensure adequate spacing to prevent overlap
+        const minSpacing = childCardWidth + 40; // Card width + 40px gap
+        childPositions = [
+          { x: parentCenterX - minSpacing / 2 - childCardWidth / 2, y: childY },
+          { x: parentCenterX + minSpacing / 2 - childCardWidth / 2, y: childY },
+        ];
+      } else {
+        // Multiple children: distribute evenly with minimum spacing
+        const minSpacing = childCardWidth + 30; // Card width + 30px gap
+        const totalWidth = (childCount - 1) * minSpacing;
+        const startX = parentCenterX - totalWidth / 2 - childCardWidth / 2;
 
-      // Center the children as a group under the parent
-      const startX = parentPosition.x + 200 - totalChildrenWidth / 2; // Adjust for parent center
+        childPositions = displayCompany.children.map((_, index) => ({
+          x: startX + index * minSpacing,
+          y: childY,
+        }));
+      }
 
       displayCompany.children.forEach((child, index) => {
-        const childPosition = { x: startX + index * spacing, y: childY };
-
-        // Add child node
-        flowNodes.push(createCompanyNode(child, childPosition, 1));
+        // Add child node with calculated position
+        flowNodes.push(createCompanyNode(child, childPositions[index], 1));
 
         // Add edge from parent to child
         flowEdges.push(createEdge(displayCompany.id, child.id));
@@ -296,7 +307,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
+    [setEdges]
   );
 
   // Handle company creation using hooks consistently
@@ -316,12 +327,12 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
         }
 
         toast.success(
-          `Parent company "${companyData.name}" created successfully`,
+          `Parent company "${companyData.name}" created successfully`
         );
       } else {
         if (!parentCompanyId) {
           throw new Error(
-            "Parent company ID is required for sub-company creation",
+            "Parent company ID is required for sub-company creation"
           );
         }
 
@@ -348,7 +359,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
     } catch (error) {
       console.error("Error creating company:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create company",
+        error instanceof Error ? error.message : "Failed to create company"
       );
       throw error; // Re-throw to let modal handle the error
     }

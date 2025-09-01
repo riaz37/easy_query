@@ -103,21 +103,25 @@ export class WebSocketService {
         this.executeDirectNavigation(targetPage, data.data)
         
       } else if (data.action === 'click' && data.data?.element_name) {
-        // Click command - check if it should navigate
+        // Click command - execute the button action
+        console.log('🖱️ Executing click action:', data.data.element_name)
+        this.executeButtonAction(data.data.element_name, data.data)
+        
+        // Check if it should also navigate
         if (data.data.page && data.data.page !== this.currentPage) {
           console.log('🧭 Click action includes navigation to:', data.data.page)
           this.executeDirectNavigation(data.data.page, data.data)
-        } else {
-          console.log('🧭 Click action executed:', data.data.element_name)
         }
         
       } else if (data.data?.Action_type === 'clicked' && data.data?.element_name) {
-        // Fallback click command - check if it should navigate
+        // Fallback click command - execute the button action
+        console.log('🖱️ Executing fallback click action:', data.data.element_name)
+        this.executeButtonAction(data.data.element_name, data.data)
+        
+        // Check if it should also navigate
         if (data.data.page && data.data.page !== this.currentPage) {
           console.log('🧭 Fallback click action includes navigation to:', data.data.page)
           this.executeDirectNavigation(data.data.page, data.data)
-        } else {
-          console.log('🧭 Fallback click action executed:', data.data.element_name)
         }
         
       } else {
@@ -217,8 +221,36 @@ export class WebSocketService {
   }
 
   /**
+   * Notify backend about page change without reconnecting
+   */
+  notifyPageChange(newPage: string): void {
+    this.currentPage = newPage
+    const payload = {
+      type: 'page_change',
+      user_id: this.userId,
+      page: newPage,
+      timestamp: new Date().toISOString()
+    }
+    this.sendMessage(payload)
+  }
+
+  /**
+   * Execute button actions using ButtonActionManager
+   * This method handles button clicks and other interactive actions
+   */
+  private executeButtonAction(elementName: string, context: any): void {
+    console.log('🖱️ Executing button action:', elementName, 'with context:', context)
+    try {
+      // Use ButtonActionManager for button actions
+      ButtonActionManager.executeButtonAction(elementName, context)
+    } catch (error) {
+      console.error('🖱️ Error executing button action:', error)
+    }
+  }
+
+  /**
    * Execute direct navigation based on backend response
-   * This method handles navigation directly without going through the event system
+   * This method dispatches a SPA event instead of reloading the page
    */
   private executeDirectNavigation(targetPage: string, result: any): void {
     console.log('🧭 Executing direct navigation to:', targetPage)
@@ -227,60 +259,22 @@ export class WebSocketService {
       // Update current page tracking
       this.currentPage = targetPage
       
-      // Direct navigation using window.location for immediate effect
+      // Dispatch event for SPA navigation handled by VoiceNavigationHandler
       if (typeof window !== 'undefined') {
-        // Construct the navigation URL based on the target page
-        let navigationUrl = '/'
-        
-        // Map backend page names to frontend routes
-        switch (targetPage.toLowerCase()) {
-          case 'dashboard':
-            navigationUrl = '/'
-            break
-          case 'users':
-            navigationUrl = '/users'
-            break
-          case 'tables':
-            navigationUrl = '/tables'
-            break
-          case 'database-query':
-            navigationUrl = '/database-query'
-            break
-          case 'file-query':
-            navigationUrl = '/file-query'
-            break
-          case 'ai-results':
-            navigationUrl = '/ai-results'
-            break
-          case 'voice-agent':
-            navigationUrl = '/voice-agent'
-            break
-          case 'company-structure':
-            navigationUrl = '/company-structure'
-            break
-          case 'business-rules':
-            navigationUrl = '/business-rules'
-            break
-          case 'user-configuration':
-            navigationUrl = '/user-configuration'
-            break
-          case 'auth':
-            navigationUrl = '/auth'
-            break
-          default:
-            // For unknown pages, try to construct a URL
-            navigationUrl = `/${targetPage.toLowerCase().replace(/\s+/g, '-')}`
-            console.log('🧭 Using fallback navigation URL:', navigationUrl)
-        }
-        
-        console.log('🧭 Navigating to URL:', navigationUrl)
-        
-        // Use window.location.href for immediate navigation
-        window.location.href = navigationUrl
+        const event = new CustomEvent('voice-navigation', {
+          detail: {
+            page: targetPage,
+            previousPage: null,
+            type: 'page_navigation',
+            context: result || {},
+            timestamp: new Date().toISOString()
+          }
+        })
+        window.dispatchEvent(event)
       }
     } catch (error) {
       console.error('🧭 Error during direct navigation:', error)
-      // Fallback to window.location.href
+      // As a last resort, fallback to full reload
       if (typeof window !== 'undefined') {
         window.location.href = `/${targetPage.toLowerCase().replace(/\s+/g, '-')}`
       }

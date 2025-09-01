@@ -6,6 +6,19 @@ import { ButtonActionService } from './services/ButtonActionService'
 import { NavigationActionManager } from './services/NavigationActionManager'
 import { VoiceMessage, VoiceClientState, VoiceClientActions, VoiceClientHook } from './types'
 
+// Global context storage keys
+const CONTEXT_KEYS = {
+  MESSAGES: 'voice_agent_messages',
+  CONVERSATION_STATE: 'voice_agent_conversation_state',
+  USER_PREFERENCES: 'voice_agent_user_preferences',
+  SESSION_DATA: 'voice_agent_session_data',
+  LAST_PAGE: 'voice_agent_last_page',
+  CONNECTION_STATE: 'voice_agent_connection_state'
+} as const
+
+// Singleton instance
+let globalVoiceAgentService: VoiceAgentService | null = null
+
 export class VoiceAgentService {
   private webSocketService: WebSocketService
   private rtviService: RTVIService
@@ -22,6 +35,11 @@ export class VoiceAgentService {
   // State change callbacks
   private onStateChange?: (state: VoiceClientState) => void
   private onMessage?: (message: VoiceMessage) => void
+
+  // Context persistence
+  private contextPersistenceEnabled = true
+  private autoReconnectEnabled = true
+  private reconnectInterval: NodeJS.Timeout | null = null
 
   constructor(
     userId: string,
@@ -52,10 +70,122 @@ export class VoiceAgentService {
       this.handleRTVIError.bind(this)
     )
 
+    // Load persisted context
+    this.loadPersistedContext()
+
     // Initialize page detection
     this.initializePageDetection()
+
+    // Set up auto-reconnection
+    this.setupAutoReconnection()
   }
 
+  // Singleton pattern
+  static getInstance(userId: string, onStateChange?: (state: VoiceClientState) => void, onMessage?: (message: VoiceMessage) => void): VoiceAgentService {
+    if (!globalVoiceAgentService || globalVoiceAgentService.userId !== userId) {
+      if (globalVoiceAgentService) {
+        globalVoiceAgentService.cleanup()
+      }
+      globalVoiceAgentService = new VoiceAgentService(userId, onStateChange, onMessage)
+    } else {
+      // Update callbacks for existing instance
+      globalVoiceAgentService.onStateChange = onStateChange
+      globalVoiceAgentService.onMessage = onMessage
+    }
+    return globalVoiceAgentService
+  }
+
+  // Context persistence methods
+  private loadPersistedContext(): void {
+    if (!this.contextPersistenceEnabled || typeof window === 'undefined') return
+
+    try {
+      // Load messages
+      const persistedMessages = sessionStorage.getItem(CONTEXT_KEYS.MESSAGES)
+      if (persistedMessages) {
+        const messages = JSON.parse(persistedMessages)
+        this.state.messages = messages.filter((msg: VoiceMessage) => {
+          // Only keep messages from the last 24 hours
+          const msgTime = new Date(msg.timestamp).getTime()
+          const now = Date.now()
+          return (now - msgTime) < 24 * 60 * 60 * 1000
+        })
+      }
+
+      // Load conversation state
+      const conversationState = sessionStorage.getItem(CONTEXT_KEYS.CONVERSATION_STATE)
+      if (conversationState) {
+        const state = JSON.parse(conversationState)
+        this.state.isInConversation = state.isInConversation || false
+      }
+
+      // Load last page
+      const lastPage = sessionStorage.getItem(CONTEXT_KEYS.LAST_PAGE)
+      if (lastPage) {
+        this.state.previousPage = lastPage
+      }
+
+      // Load connection state
+      const connectionState = sessionStorage.getItem(CONTEXT_KEYS.CONNECTION_STATE)
+      if (connectionState) {
+        const state = JSON.parse(connectionState)
+        this.state.connectionStatus = state.connectionStatus || 'Disconnected'
+        this.state.isConnected = state.isConnected || false
+      }
+
+      console.log('🎤 Loaded persisted context:', {
+        messagesCount: this.state.messages.length,
+        isInConversation: this.state.isInConversation,
+        previousPage: this.state.previousPage,
+        connectionStatus: this.state.connectionStatus
+      })
+    } catch (error) {
+      console.error('🎤 Failed to load persisted context:', error)
+    }
+  }
+
+  private savePersistedContext(): void {
+    if (!this.contextPersistenceEnabled || typeof window === 'undefined') return
+
+    try {
+      // Save messages (keep last 50 messages to avoid storage limits)
+      const messagesToSave = this.state.messages.slice(-50)
+      sessionStorage.setItem(CONTEXT_KEYS.MESSAGES, JSON.stringify(messagesToSave))
+
+      // Save conversation state
+      sessionStorage.setItem(CONTEXT_KEYS.CONVERSATION_STATE, JSON.stringify({
+        isInConversation: this.state.isInConversation
+      }))
+
+      // Save current page as previous page for next navigation
+      sessionStorage.setItem(CONTEXT_KEYS.LAST_PAGE, this.state.currentPage)
+
+      // Save connection state
+      sessionStorage.setItem(CONTEXT_KEYS.CONNECTION_STATE, JSON.stringify({
+        isConnected: this.state.isConnected,
+        connectionStatus: this.state.connectionStatus
+      }))
+    } catch (error) {
+      console.error('🎤 Failed to save persisted context:', error)
+    }
+  }
+
+  // Auto-reconnection setup
+  private setupAutoReconnection(): void {
+    if (!this.autoReconnectEnabled) return
+
+    // Check connection every 30 seconds
+    this.reconnectInterval = setInterval(() => {
+      if (this.state.isConnected && !this.webSocketService.isConnected()) {
+        console.log('🎤 Auto-reconnecting due to lost connection...')
+        this.reconnectWithCurrentPage().catch(error => {
+          console.error('🎤 Auto-reconnection failed:', error)
+        })
+      }
+    }, 30000) // 30 seconds
+  }
+
+  // Enhanced page detection with context preservation
   private initializePageDetection(): void {
     // Detect initial page using centralized detection
     this.state.currentPage = this.detectCurrentPage()
@@ -74,13 +204,24 @@ export class VoiceAgentService {
         this.updatePageState(newPage, 'hash_change')
       }
       
-      // Listen for beforeunload to capture page changes
+      // Listen for SPA voice-navigation events
+      const handleVoiceNavigation = (event: Event) => {
+        try {
+          const detail = (event as CustomEvent).detail
+          if (detail?.page) {
+            this.updatePageState(detail.page, 'voice_navigation')
+          }
+        } catch (_) {}
+      }
+      
+      // Listen for beforeunload to capture page changes and save context
       const handleBeforeUnload = () => {
-        // Store current page before unload
+        // Save current context before page unload
+        this.savePersistedContext()
         sessionStorage.setItem('voice_agent_last_page', this.state.currentPage)
       }
       
-      // Listen for load to detect page changes
+      // Listen for load to detect page changes and restore context
       const handleLoad = () => {
         const newPage = this.detectCurrentPage()
         const lastPage = sessionStorage.getItem('voice_agent_last_page')
@@ -88,15 +229,35 @@ export class VoiceAgentService {
         if (lastPage && lastPage !== newPage) {
           this.updatePageState(newPage, 'page_load')
         }
+        
+        // Restore connection if it was previously connected
+        this.restoreConnectionIfNeeded()
       }
       
       // Add event listeners
       window.addEventListener('popstate', handlePopState)
       window.addEventListener('hashchange', handleHashChange)
+      window.addEventListener('voice-navigation', handleVoiceNavigation as EventListener)
       window.addEventListener('beforeunload', handleBeforeUnload)
       window.addEventListener('load', handleLoad)
       
       // Cleanup will be handled by the hook
+    }
+  }
+
+  // Restore connection if it was previously connected
+  private async restoreConnectionIfNeeded(): Promise<void> {
+    const connectionState = sessionStorage.getItem(CONTEXT_KEYS.CONNECTION_STATE)
+    if (connectionState) {
+      try {
+        const state = JSON.parse(connectionState)
+        if (state.isConnected && !this.state.isConnected) {
+          console.log('🎤 Restoring previous connection...')
+          await this.connect()
+        }
+      } catch (error) {
+        console.error('🎤 Failed to restore connection:', error)
+      }
     }
   }
 
@@ -110,10 +271,14 @@ export class VoiceAgentService {
     return 'dashboard'
   }
 
-  // Centralized page state update
+  // Enhanced page state update with context preservation
   private updatePageState(newPage: string, source: string = 'unknown'): void {
     if (newPage !== this.state.currentPage) {
-      this.state.previousPage = this.state.currentPage
+      // Save context before page change
+      this.savePersistedContext()
+      
+      const previousPage = this.state.currentPage
+      this.state.previousPage = previousPage
       this.state.currentPage = newPage
       
       // Update NavigationActionManager state to keep it in sync
@@ -122,19 +287,18 @@ export class VoiceAgentService {
       // Update ButtonActionService state to keep it in sync
       ButtonActionService.setCurrentPage(newPage)
       
-      // Check if we should reconnect with the new page
-      // Only reconnect for major page changes, not for sub-navigation
-      if (this.shouldReconnectForPageChange(this.state.previousPage, newPage)) {
-        // Reconnect asynchronously to avoid blocking the UI
-        setTimeout(() => {
-          this.reconnectWithCurrentPage().catch(error => {
-            console.error('🧭 Failed to reconnect after page change:', error)
-          })
-        }, 1000) // Small delay to ensure page is fully loaded
+      // Notify backend of page change without reconnecting
+      try {
+        this.webSocketService.notifyPageChange(newPage)
+      } catch (err) {
+        console.warn('🎤 Failed to notify backend of page change:', err)
       }
       
       // Notify state change
       this.notifyStateChange()
+      
+      // Save context after page change
+      this.savePersistedContext()
     }
   }
 
@@ -154,6 +318,8 @@ export class VoiceAgentService {
 
   private notifyStateChange(): void {
     this.onStateChange?.({ ...this.state })
+    // Save context whenever state changes
+    this.savePersistedContext()
   }
 
   private addMessage(message: Omit<VoiceMessage, 'id' | 'timestamp'>): void {
@@ -394,6 +560,27 @@ export class VoiceAgentService {
     this.navigateToPage(page)
   }
 
+  // Context management methods
+  getContext(): VoiceClientState {
+    return { ...this.state }
+  }
+
+  setContext(context: Partial<VoiceClientState>): void {
+    this.state = { ...this.state, ...context }
+    this.notifyStateChange()
+  }
+
+  clearContext(): void {
+    if (typeof window !== 'undefined') {
+      Object.values(CONTEXT_KEYS).forEach(key => {
+        sessionStorage.removeItem(key)
+      })
+    }
+    this.state.messages = []
+    this.state.isInConversation = false
+    this.notifyStateChange()
+  }
+
   // Getters
   getState(): VoiceClientState {
     return { ...this.state }
@@ -401,7 +588,22 @@ export class VoiceAgentService {
 
   // Cleanup
   cleanup(): void {
+    // Clear auto-reconnection interval
+    if (this.reconnectInterval) {
+      clearInterval(this.reconnectInterval)
+      this.reconnectInterval = null
+    }
+
+    // Save context before cleanup
+    this.savePersistedContext()
+
+    // Disconnect services
     this.disconnect()
     this.rtviService.cleanup()
+
+    // Clear global instance if this is the global instance
+    if (globalVoiceAgentService === this) {
+      globalVoiceAgentService = null
+    }
   }
 } 

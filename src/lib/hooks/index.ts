@@ -38,3 +38,4 @@ export { useUserTasks } from './use-user-tasks';
 // Voice agent hooks
 export { useButtonActionManager } from './use-button-action-manager';
 export { useNavigationActionManager } from './use-navigation-action-manager';
+export { useVoiceAgentConnection } from './use-voice-agent-connection';

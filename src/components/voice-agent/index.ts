@@ -1,4 +1,4 @@
-export { VoiceAgent } from './VoiceAgent'
 export { FloatingVoiceButton } from './FloatingVoiceButton'
 export { VoiceNavigationHandler } from './VoiceNavigationHandler'
-export { CurrentPageIndicator } from './CurrentPageIndicator' 
+export { CurrentPageIndicator } from './CurrentPageIndicator'
+export { PersistentVoiceAgent } from './PersistentVoiceAgent' 

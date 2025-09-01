@@ -40,6 +40,11 @@ interface VoiceAgentContextType {
   // Debug methods
   refreshPageState: () => void
   getCurrentPageState: () => { currentPage: string; previousPage: string | null }
+  
+  // Context management
+  getContext: () => any
+  setContext: (context: any) => void
+  clearContext: () => void
 }
 
 const VoiceAgentContext = createContext<VoiceAgentContextType | undefined>(undefined)
@@ -86,11 +91,11 @@ export function VoiceAgentProvider({ children }: VoiceAgentProviderProps) {
       return
     }
 
-    // Create new service for authenticated user
+    // Use singleton pattern to get or create service
     setIsLoading(true)
     
     try {
-      const newService = new VoiceAgentService(
+      const newService = VoiceAgentService.getInstance(
         user.user_id,
         // State change handler
         (state) => {
@@ -116,9 +121,8 @@ export function VoiceAgentProvider({ children }: VoiceAgentProviderProps) {
 
     // Cleanup on unmount or when user changes
     return () => {
-      if (voiceAgentService) {
-        voiceAgentService.cleanup()
-      }
+      // Don't cleanup the service here as it's now a singleton
+      // The service will be cleaned up when the user changes or the app unmounts
     }
   }, [isAuthenticated, user?.user_id, authLoading])
 
@@ -269,6 +273,34 @@ export function VoiceAgentProvider({ children }: VoiceAgentProviderProps) {
     return voiceAgentService.getCurrentPageState() || { currentPage: 'unknown', previousPage: null }
   }
 
+  // Context management methods
+  const getContext = () => {
+    if (!voiceAgentService || !isReady) {
+      console.log('🎤 Cannot get context: Service not ready')
+      return null
+    }
+    
+    return voiceAgentService.getContext()
+  }
+
+  const setContext = (context: any) => {
+    if (!voiceAgentService || !isReady) {
+      console.log('🎤 Cannot set context: Service not ready')
+      return
+    }
+    
+    voiceAgentService.setContext(context)
+  }
+
+  const clearContext = () => {
+    if (!voiceAgentService || !isReady) {
+      console.log('🎤 Cannot clear context: Service not ready')
+      return
+    }
+    
+    voiceAgentService.clearContext()
+  }
+
   // Computed values
   const isReady = !!voiceAgentService && isAuthenticated && !!user?.user_id
 
@@ -305,6 +337,11 @@ export function VoiceAgentProvider({ children }: VoiceAgentProviderProps) {
     // Debug
     refreshPageState,
     getCurrentPageState,
+    
+    // Context management
+    getContext,
+    setContext,
+    clearContext,
   }
 
   return (
