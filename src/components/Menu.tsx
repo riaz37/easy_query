@@ -106,18 +106,18 @@ export default function Menu() {
             "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group relative",
             isActive
               ? "bg-green-500/20 text-green-400 border border-green-500/30 shadow-lg"
-              : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
+              : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10",
           )}
           data-menu-item={item.path}
           data-element="navigation"
-          data-voice-target={`menu-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+          data-voice-target={`menu-${item.name.toLowerCase().replace(/\s+/g, "-")}`}
         >
           <IconComponent
             className={cn(
               "h-5 w-5 transition-all duration-200",
               isActive
                 ? "text-green-400"
-                : "text-gray-400 group-hover:text-white"
+                : "text-gray-400 group-hover:text-white",
             )}
           />
           <span className="flex-1">{item.name}</span>
@@ -125,7 +125,7 @@ export default function Menu() {
             <div
               className={cn(
                 "w-2 h-2 rounded-full transition-all duration-200",
-                isActive ? "bg-green-400" : "bg-gray-500 group-hover:bg-white"
+                isActive ? "bg-green-400" : "bg-gray-500 group-hover:bg-white",
               )}
             />
           )}
@@ -145,7 +145,7 @@ export default function Menu() {
                     "flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                     pathname === child.path
                       ? "bg-green-500/10 text-green-300 border border-green-500/20"
-                      : "text-gray-400 hover:text-gray-200 hover:bg-white/5 border border-transparent hover:border-white/5"
+                      : "text-gray-400 hover:text-gray-200 hover:bg-white/5 border border-transparent hover:border-white/5",
                   )}
                 >
                   <ChildIconComponent
@@ -153,7 +153,7 @@ export default function Menu() {
                       "h-4 w-4 transition-all duration-200",
                       pathname === child.path
                         ? "text-green-300"
-                        : "text-gray-500 group-hover:text-gray-300"
+                        : "text-gray-500 group-hover:text-gray-300",
                     )}
                   />
                   <span className="flex-1">{child.name}</span>
