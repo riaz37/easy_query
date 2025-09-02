@@ -1,4 +1,6 @@
 import { VOICE_AGENT_CONFIG } from "../config";
+import { buttonRegistry, ButtonExecutionContext } from "./ButtonRegistry";
+import { buttonRegistrationService } from "./ButtonRegistrationService";
 
 export interface TextMessage {
   id: string;
@@ -41,6 +43,9 @@ export class TextConversationService {
 
   constructor(userId: string) {
     this.userId = userId;
+
+    // Initialize button registration service
+    this.initializeButtonRegistration();
   }
 
   connect(): Promise<void> {
@@ -302,9 +307,13 @@ export class TextConversationService {
         console.log("💬 Executing navigation to:", data.data.page);
         this.executeDirectNavigation(data.data.page, data.data);
       } else if (data.action === "click" && data.result?.element_name) {
-        // Click command - execute the button action
+        // Click command - execute using ButtonRegistry
         console.log("💬 Executing click action:", data.result.element_name);
-        this.executeButtonAction(data.result.element_name, data.result);
+        this.executeRegisteredButtonAction(
+          data.result.element_name,
+          data.result,
+          "text",
+        );
 
         // Check if it should also navigate
         if (data.result.page && data.result.page !== this.currentPage) {
@@ -315,9 +324,13 @@ export class TextConversationService {
           this.executeDirectNavigation(data.result.page, data.result);
         }
       } else if (data.action === "click" && data.data?.element_name) {
-        // Fallback: Click command - execute the button action
+        // Fallback: Click command - execute using ButtonRegistry
         console.log("💬 Executing click action:", data.data.element_name);
-        this.executeButtonAction(data.data.element_name, data.data);
+        this.executeRegisteredButtonAction(
+          data.data.element_name,
+          data.data,
+          "text",
+        );
 
         // Check if it should also navigate
         if (data.data.page && data.data.page !== this.currentPage) {
@@ -355,8 +368,8 @@ export class TextConversationService {
         const context = data.result.context || {};
         console.log("💬 Executing button action:", elementName);
 
-        // Use ButtonActionService for button actions
-        this.executeButtonAction(elementName, context);
+        // Execute using ButtonRegistry
+        this.executeRegisteredButtonAction(elementName, context, "text");
       } else {
         console.warn("💬 No element name specified in button action result");
       }
@@ -367,25 +380,62 @@ export class TextConversationService {
   }
 
   /**
-   * Execute button actions using ButtonActionService
-   * This method handles button clicks and other interactive actions
+   * Execute registered button action using ButtonRegistry
+   * This method uses the scalable button registry system
    */
-  private executeButtonAction(elementName: string, context: any): void {
+  private async executeRegisteredButtonAction(
+    elementName: string,
+    context: any,
+    source: "voice" | "text",
+  ): Promise<void> {
     console.log(
-      "💬 Executing button action:",
+      "💬 Executing registered button action:",
       elementName,
       "with context:",
       context,
     );
+
     try {
-      // Use ButtonActionService for button actions
-      ButtonActionService.executeButtonAction(elementName, context);
+      const executionContext: ButtonExecutionContext = {
+        elementName,
+        page: context.page,
+        previousPage: context.previous_page,
+        context,
+        source,
+        timestamp: new Date().toISOString(),
+      };
+
+      const result = await buttonRegistry.execute(
+        elementName,
+        executionContext,
+      );
+
+      if (result.success) {
+        console.log(`💬 Successfully executed button action: ${elementName}`);
+        this.addMessage({
+          id: this.generateMessageId(),
+          type: "system",
+          content: `Executed action: ${elementName}`,
+          timestamp: new Date(),
+        });
+      } else {
+        console.warn(
+          `💬 Failed to execute button action: ${elementName}`,
+          result.error,
+        );
+        this.addMessage({
+          id: this.generateMessageId(),
+          type: "system",
+          content: `Failed to execute action: ${elementName} - ${result.error}`,
+          timestamp: new Date(),
+        });
+      }
     } catch (error) {
-      console.error("💬 Error executing button action:", error);
+      console.error("💬 Error executing registered button action:", error);
       this.addMessage({
         id: this.generateMessageId(),
         type: "system",
-        content: `Failed to execute action: ${elementName}`,
+        content: `Error executing action: ${elementName}`,
         timestamp: new Date(),
       });
     }
@@ -625,5 +675,19 @@ export class TextConversationService {
     }
 
     console.log(`💬 Page changed from ${previousPage} to ${page}`);
+  }
+
+  // Initialize button registration service
+  private async initializeButtonRegistration(): Promise<void> {
+    try {
+      console.log("💬 Initializing button registration service...");
+      await buttonRegistrationService.initialize();
+      console.log("💬 Button registration service initialized successfully");
+    } catch (error) {
+      console.error(
+        "💬 Failed to initialize button registration service:",
+        error,
+      );
+    }
   }
 }

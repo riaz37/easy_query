@@ -1,7 +1,8 @@
-import { VOICE_AGENT_CONFIG } from '../config'
-import { MessageService } from './MessageService'
-import { ButtonActionManager } from './ButtonActionManager'
-import { VoiceMessage, InteractionType } from '../types'
+import { VOICE_AGENT_CONFIG } from "../config";
+import { MessageService } from "./MessageService";
+import { ButtonActionManager } from "./ButtonActionManager";
+import { VoiceMessage, InteractionType } from "../types";
+import { buttonRegistry, ButtonExecutionContext } from "./ButtonRegistry";
 
 export class WebSocketService {
   private ws: WebSocket | null = null;
@@ -106,9 +107,13 @@ export class WebSocketService {
         console.log("🧭 Executing navigation to:", targetPage);
         this.executeDirectNavigation(targetPage, data.data);
       } else if (data.action === "click" && data.data?.element_name) {
-        // Click command - execute the button action
+        // Click command - execute using ButtonRegistry
         console.log("🖱️ Executing click action:", data.data.element_name);
-        this.executeButtonAction(data.data.element_name, data.data);
+        this.executeRegisteredButtonAction(
+          data.data.element_name,
+          data.data,
+          "voice",
+        );
 
         // Check if it should also navigate
         if (data.data.page && data.data.page !== this.currentPage) {
@@ -122,12 +127,16 @@ export class WebSocketService {
         data.data?.Action_type === "clicked" &&
         data.data?.element_name
       ) {
-        // Fallback click command - execute the button action
+        // Fallback click command - execute using ButtonRegistry
         console.log(
           "🖱️ Executing fallback click action:",
           data.data.element_name,
         );
-        this.executeButtonAction(data.data.element_name, data.data);
+        this.executeRegisteredButtonAction(
+          data.data.element_name,
+          data.data,
+          "voice",
+        );
 
         // Check if it should also navigate
         if (data.data.page && data.data.page !== this.currentPage) {
@@ -142,6 +151,7 @@ export class WebSocketService {
           "🧭 Backend command processed:",
           data.action || data.data?.Action_type,
         );
+        console.log("🧭 Full data received:", JSON.stringify(data, null, 2));
       }
     } catch (error) {
       this.handleError(error as Error);
@@ -158,8 +168,8 @@ export class WebSocketService {
         const context = data.result.context || {};
         console.log("🖱️ Executing button action:", elementName);
 
-        // Use ButtonActionManager for button actions
-        ButtonActionManager.executeButtonAction(elementName, context)
+        // Execute using ButtonRegistry
+        this.executeRegisteredButtonAction(elementName, context, "voice");
       } else {
         console.warn("🖱️ No element name specified in button action result");
       }
@@ -249,21 +259,46 @@ export class WebSocketService {
   }
 
   /**
-   * Execute button actions using ButtonActionManager
-   * This method handles button clicks and other interactive actions
+   * Execute registered button action using ButtonRegistry
+   * This method uses the scalable button registry system
    */
-  private executeButtonAction(elementName: string, context: any): void {
+  private async executeRegisteredButtonAction(
+    elementName: string,
+    context: any,
+    source: "voice" | "text",
+  ): Promise<void> {
     console.log(
-      "🖱️ Executing button action:",
+      "🖱️ Executing registered button action:",
       elementName,
       "with context:",
       context,
     );
+
     try {
-      // Use ButtonActionManager for button actions
-      ButtonActionManager.executeButtonAction(elementName, context)
+      const executionContext: ButtonExecutionContext = {
+        elementName,
+        page: context.page,
+        previousPage: context.previous_page,
+        context,
+        source,
+        timestamp: new Date().toISOString(),
+      };
+
+      const result = await buttonRegistry.execute(
+        elementName,
+        executionContext,
+      );
+
+      if (result.success) {
+        console.log(`🖱️ Successfully executed button action: ${elementName}`);
+      } else {
+        console.warn(
+          `🖱️ Failed to execute button action: ${elementName}`,
+          result.error,
+        );
+      }
     } catch (error) {
-      console.error("🖱️ Error executing button action:", error);
+      console.error("🖱️ Error executing registered button action:", error);
     }
   }
 

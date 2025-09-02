@@ -16,7 +16,6 @@ import Menu from "@/components/Menu";
 import {
   FloatingVoiceButton,
   VoiceNavigationHandler,
-  CurrentPageIndicator,
 } from "@/components/voice-agent";
 import {
   FloatingTextButton,
@@ -75,7 +74,6 @@ export default function RootLayout({
                       <FloatingVoiceButton />
                       <FloatingTextButton />
                       <TextConversationPageTracker />
-                      <CurrentPageIndicator />
                       <Toaster />
                     </TextConversationProvider>
                   </VoiceAgentProvider>
