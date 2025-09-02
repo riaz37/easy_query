@@ -1,11 +1,16 @@
 'use client'
 
-import { useVoiceClient } from '../../lib/hooks/use-voice-client'
+import React from 'react'
+import { Badge } from '@/components/ui/badge'
+import { useVoiceAgent } from '@/components/providers/VoiceAgentContextProvider'
 
 export function CurrentPageIndicator() {
-  const { currentPage, previousPage, isConnected } = useVoiceClient()
+  const { currentPage, previousPage, isConnected, isReady, isLoading } = useVoiceAgent()
 
-  if (!isConnected) return null
+  // Don't render if service is not ready
+  if (isLoading || !isReady) {
+    return null
+  }
 
   return (
     <div className="fixed bottom-4 left-4 bg-black/80 text-white px-3 py-2 rounded-lg text-sm font-mono z-50">

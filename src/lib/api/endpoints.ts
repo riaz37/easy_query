@@ -84,7 +84,7 @@ export const API_ENDPOINTS = {
 
   // User Current Database endpoints (authenticated)
   SET_USER_CURRENT_DB: (userId: string) => `${baseUrl}/mssql-config/user-current-db/${encodeURIComponent(userId)}`, // PUT endpoint for authenticated user
-  GET_USER_CURRENT_DB: (userId: string) => `${baseUrl}/mssql-config/user-current-db/${encodeURIComponent(userId)}`, // GET endpoint for authenticated user
+  GET_USER_CURRENT_DB: (userId: string) => `${baseUrl}/mssql-config/user-current-db/${encodeURIComponent(userId)}/lite`, // GET endpoint for authenticated user
 
   // MSSQL Config Advanced Operations
   GENERATE_TABLE_INFO: `${baseUrl}/mssql-config/generate-table-info`,

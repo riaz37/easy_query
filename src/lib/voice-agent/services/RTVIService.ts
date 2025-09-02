@@ -1,10 +1,10 @@
-import { VOICE_AGENT_CONFIG } from '../config'
+import { VOICE_AGENT_CONFIG, getRTVIConfig } from '../config'
 import { MessageService } from './MessageService'
-import { NavigationService } from './NavigationService'
 
 export class RTVIService {
   private rtviClient: any = null
   private isInitialized = false
+  private userId: string
 
   // Event handlers
   private onConnected?: () => void
@@ -15,6 +15,7 @@ export class RTVIService {
   private onError?: (error: Error) => void
 
   constructor(
+    userId: string,
     onConnected?: () => void,
     onDisconnected?: () => void,
     onBotReady?: (data: any) => void,
@@ -22,6 +23,7 @@ export class RTVIService {
     onBotTranscript?: (data: any) => void,
     onError?: (error: Error) => void
   ) {
+    this.userId = userId
     this.onConnected = onConnected
     this.onDisconnected = onDisconnected
     this.onBotReady = onBotReady
@@ -30,7 +32,7 @@ export class RTVIService {
     this.onError = onError
   }
 
-  async initialize(): Promise<void> {
+  async initialize(currentPage?: string): Promise<void> {
     if (this.isInitialized) {
       console.log('🎤 RTVI client already initialized')
       return
@@ -38,6 +40,9 @@ export class RTVIService {
 
     try {
       console.log('🎤 Initializing RTVI client for audio...')
+      if (currentPage) {
+        console.log('🎤 Initializing with current page:', currentPage)
+      }
       
       // Import RTVI client dynamically
       const { RTVIClient } = await import('@pipecat-ai/client-js')
@@ -45,12 +50,12 @@ export class RTVIService {
       
       const transport = new WebSocketTransport()
       
-      const rtviConfig = {
+      // Get RTVI config with current page if provided
+      const rtviConfig = this.buildRTVIConfig(currentPage)
+      
+      const config = {
         transport,
-        params: {
-          baseUrl: VOICE_AGENT_CONFIG.BACKEND_URL,
-          endpoints: { connect: VOICE_AGENT_CONFIG.WEBSOCKET_ENDPOINTS.VOICE_CONNECT }
-        },
+        params: rtviConfig,
         enableMic: VOICE_AGENT_CONFIG.RTVI.ENABLE_MIC,
         enableCam: VOICE_AGENT_CONFIG.RTVI.ENABLE_CAM,
         callbacks: {
@@ -85,7 +90,7 @@ export class RTVIService {
         },
       }
 
-      this.rtviClient = new RTVIClient(rtviConfig)
+      this.rtviClient = new RTVIClient(config)
       
       console.log('🎤 Initializing audio devices...')
       await this.rtviClient.initDevices()
@@ -100,19 +105,54 @@ export class RTVIService {
     }
   }
 
-  async connect(): Promise<void> {
-    if (!this.isInitialized || !this.rtviClient) {
-      throw new Error('RTVI client not initialized')
+  private buildRTVIConfig(currentPage?: string) {
+    if (currentPage) {
+      // Use the imported config function with user ID
+      const config = getRTVIConfig(currentPage)
+      // Add user ID to the connect endpoint
+      const connectEndpoint = config.endpoints.connect.includes('?') 
+        ? `${config.endpoints.connect}&user_id=${encodeURIComponent(this.userId)}`
+        : `${config.endpoints.connect}?user_id=${encodeURIComponent(this.userId)}`
+      
+      return {
+        ...config,
+        endpoints: { 
+          connect: connectEndpoint 
+        }
+      }
+    }
+    
+    // Fallback to default config with user ID
+    const connectEndpoint = `${VOICE_AGENT_CONFIG.WEBSOCKET_ENDPOINTS.VOICE_CONNECT}?user_id=${encodeURIComponent(this.userId)}`
+    return {
+      baseUrl: VOICE_AGENT_CONFIG.BACKEND_URL,
+      endpoints: { connect: connectEndpoint }
+    }
+  }
+
+  async connect(currentPage?: string): Promise<void> {
+    if (!this.userId || this.userId === 'frontend_user') {
+      throw new Error('Cannot connect: Invalid or missing user ID')
+    }
+    
+    if (!this.isInitialized) {
+      throw new Error('RTVI client not initialized. Call initialize() first.')
     }
 
     try {
       console.log('🎤 Connecting to voice bot...')
-      await this.rtviClient.connect()
-      console.log('✅ RTVI client connected to voice bot')
+      if (currentPage) {
+        console.log('🎤 Connecting with current page:', currentPage)
+      }
+      
+      // Get RTVI config with current page if provided
+      const rtviConfig = this.buildRTVIConfig(currentPage)
+      
+      await this.rtviClient.connect(rtviConfig)
+      console.log('✅ RTVI client connected successfully')
       
     } catch (error) {
       console.error('Failed to connect RTVI client:', error)
-      this.onError?.(new Error(`Failed to connect to voice bot: ${error instanceof Error ? error.message : 'Unknown error'}`))
       throw error
     }
   }

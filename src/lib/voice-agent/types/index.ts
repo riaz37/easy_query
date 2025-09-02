@@ -39,6 +39,7 @@ export interface VoiceClientState {
   messages: VoiceMessage[]
   currentPage: string
   previousPage: string | null
+  isReady: boolean
 }
 
 export interface VoiceClientActions {

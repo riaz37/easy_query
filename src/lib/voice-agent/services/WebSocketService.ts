@@ -1,385 +1,302 @@
-import { VOICE_AGENT_CONFIG, getWebSocketUrl, getHealthCheckUrl } from '../config'
+import { VOICE_AGENT_CONFIG } from '../config'
 import { MessageService } from './MessageService'
-import { NavigationData } from '../types'
+import { ButtonActionManager } from './ButtonActionManager'
+import { VoiceMessage, InteractionType } from '../types'
 
 export class WebSocketService {
-  private ws: WebSocket | null = null
-  private reconnectAttempts = 0
-  private maxReconnectAttempts = VOICE_AGENT_CONFIG.RTVI.RECONNECTION_ATTEMPTS
-  private reconnectTimeout: NodeJS.Timeout | null = null
+  private ws: WebSocket | null = null;
+  private reconnectTimeout: NodeJS.Timeout | null = null;
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 5;
+  private reconnectDelay = 1000;
+  private currentPage = "dashboard";
+  private userId: string;
 
   // Event handlers
-  private onMessageHandler?: (data: any) => void
-  private onConnectionChange?: (isConnected: boolean) => void
-  private onError?: (error: Error) => void
+  onMessage?: (message: VoiceMessage) => void;
+  onConnectionChange?: (isConnected: boolean) => void;
+  onError?: (error: Error) => void;
 
-  constructor(
-    onMessage?: (data: any) => void,
-    onConnectionChange?: (isConnected: boolean) => void,
-    onError?: (error: Error) => void
-  ) {
-    this.onMessageHandler = onMessage
-    this.onConnectionChange = onConnectionChange
-    this.onError = onError
+  constructor(userId: string) {
+    this.userId = userId;
   }
 
-  async connect(): Promise<void> {
-    if (this.ws?.readyState === WebSocket.OPEN) {
-      console.log('🎤 WebSocket already connected')
-      return
-    }
+  connect(currentPage: string, userId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.currentPage = currentPage;
+        this.userId = userId;
 
+        // Construct the full WebSocket URL with the base backend URL
+        const baseUrl = VOICE_AGENT_CONFIG.BACKEND_URL;
+        const wsBaseUrl = baseUrl.replace(
+          /^https?:\/\//,
+          baseUrl.startsWith("https") ? "wss://" : "ws://",
+        );
+        const wsUrl = `${wsBaseUrl}${VOICE_AGENT_CONFIG.WEBSOCKET_ENDPOINTS.VOICE_WS}?user_id=${userId}&current_page=${currentPage}`;
+
+        this.ws = new WebSocket(wsUrl);
+
+        this.ws.onopen = () => {
+          this.reconnectAttempts = 0;
+          this.onConnectionChange?.(true);
+          resolve();
+        };
+
+        this.ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            this.handleMessage(data);
+          } catch (error) {
+            this.handleError(error as Error);
+          }
+        };
+
+        this.ws.onclose = (event) => {
+          this.onConnectionChange?.(false);
+
+          if (event.code !== 1000) {
+            this.handleReconnection();
+          }
+        };
+
+        this.ws.onerror = (error) => {
+          this.handleError(new Error("WebSocket connection error"));
+          reject(new Error("WebSocket connection error"));
+        };
+      } catch (error) {
+        this.handleError(error as Error);
+      }
+    });
+  }
+
+  private handleMessage(data: any): void {
     try {
-      // Health check first
-      await this.performHealthCheck()
-      
-      // Connect to WebSocket with user_id parameter
-      const baseWsUrl = getWebSocketUrl(VOICE_AGENT_CONFIG.BACKEND_URL, VOICE_AGENT_CONFIG.WEBSOCKET_ENDPOINTS.VOICE_WS)
-      const wsUrl = `${baseWsUrl}?user_id=${VOICE_AGENT_CONFIG.DEFAULTS.USER_ID}`
-      console.log('🎤 Connecting to WebSocket:', wsUrl)
-      
-      this.ws = new WebSocket(wsUrl)
-      this.setupWebSocketHandlers()
-      
-    } catch (error) {
-      console.error('❌ WebSocket connection failed:', error)
-      this.handleError(error as Error)
-    }
-  }
+      console.log("🎤 WebSocket message received:", data);
 
-  private async performHealthCheck(): Promise<void> {
-    try {
-      const healthUrl = getHealthCheckUrl(VOICE_AGENT_CONFIG.BACKEND_URL)
-      const response = await fetch(healthUrl)
-      
-      if (!response.ok) {
-        throw new Error(`Health check failed: ${response.status}`)
-      }
-      
-      console.log('✅ Backend health check passed')
-    } catch (error) {
-      console.error('❌ Backend health check failed:', error)
-      throw new Error('Cannot reach backend - please ensure it is running')
-    }
-  }
-
-  private setupWebSocketHandlers(): void {
-    if (!this.ws) return
-
-    this.ws.onopen = () => {
-      console.log('✅ Voice WebSocket connected successfully')
-      console.log('🎤 WebSocket URL:', this.ws?.url)
-      console.log('🎤 WebSocket readyState:', this.ws?.readyState)
-      this.reconnectAttempts = 0
-      this.onConnectionChange?.(true)
-      
-      if (this.onMessageHandler) {
-        this.onMessageHandler({
-          type: 'system',
-          message: 'WebSocket connected for tool communication'
-        })
-      }
-    }
-
-    this.ws.onmessage = (event) => {
-      this.handleWebSocketMessage(event)
-    }
-
-    this.ws.onclose = (event) => {
-      console.log('🔌 Voice WebSocket disconnected:', event.code, event.reason)
-      this.onConnectionChange?.(false)
-      
-      if (this.onMessageHandler) {
-        this.onMessageHandler({
-          type: 'system',
-          message: 'WebSocket disconnected'
-        })
-      }
-
-      // Attempt reconnection if not manually closed
-      if (event.code !== 1000) {
-        this.scheduleReconnection()
-      }
-    }
-
-    this.ws.onerror = (error) => {
-      console.error('❌ Voice WebSocket error:', error)
-      this.handleError(new Error('WebSocket connection error'))
-    }
-  }
-
-  private handleWebSocketMessage(event: MessageEvent): void {
-    try {
-      console.log('🎤 WebSocket message received:', event.data)
-      
-      let data: any
-      
-      if (event.data instanceof Blob) {
-        // Skip binary data for WebSocket - this will be handled by RTVI
-        console.log('🎤 Binary message received on WebSocket, skipping (handled by RTVI)')
-        return
-      } else if (typeof event.data === 'string') {
-        data = JSON.parse(event.data)
-        console.log('🎤 Parsed WebSocket data:', data)
+      if (data.type === "navigation_result") {
+        this.handleNavigationResult(data);
+      } else if (data.type === "button_action_result") {
+        this.handleButtonActionResult(data);
+      } else if (data.type === "system") {
+        this.onMessage?.(
+          MessageService.createSystemMessage(data.message || "System message"),
+        );
       } else {
-        data = event.data
-        console.log('🎤 WebSocket data (non-string):', data)
+        console.log("🎤 Unknown message type:", data.type);
       }
-      
-      // Log the message structure for debugging
-      if (data.type === 'navigation_result') {
-        console.log('🧭 Navigation result message structure:', {
-          type: data.type,
-          action: data.action,
-          hasData: !!data.data,
-          dataType: data.data?.Action_type,
-          targetPage: data.data?.page,
-          interactionType: data.data?.interaction_type
-        })
-      }
-      
-      // Handle different message types
-      this.processWebSocketMessage(data)
-      
     } catch (error) {
-      console.error('Error handling WebSocket message:', error)
-      this.handleError(new Error('Error processing message from backend'))
+      this.handleError(error as Error);
     }
   }
 
-  private processWebSocketMessage(data: any): void {
-    console.log('🎤 Processing WebSocket message:', data)
-    
-    // Handle navigation_result type (new format)
-    if (data.type === 'navigation_result' && data.data?.Action_type === 'navigation') {
-      console.log('🧭 ✅ Navigation result received from backend:', data.data)
-      console.log('🧭 📋 Message details:', {
-        id: data.id,
-        timestamp: data.timestamp,
-        toolName: data.toolName,
-        action: data.action,
-        success: data.success
-      })
-      
-      // Execute the navigation command using the data field
-      console.log('🧭 🚀 About to execute navigation command...')
-      this.executeNavigationCommand(data.data)
-      
-      // Notify message handler for logging
-      this.onMessageHandler?.({
-        type: 'navigation',
-        content: `🧭 ${data.data.interaction_type}: ${data.data.page}`,
-        navigationData: data.data
-      })
-      
-    } else if (data.Action_type === 'navigation') {
-      // Legacy format - Navigation command from backend - execute immediately
-      console.log('🧭 Navigation command received from backend (legacy format):', data)
-      
-      // Execute the navigation command
-      this.executeNavigationCommand(data)
-      
-      // Notify message handler for logging
-      this.onMessageHandler?.({
-        type: 'navigation',
-        content: `🧭 ${data.interaction_type}: ${data.page}`,
-        navigationData: data
-      })
-      
-    } else if (data.type === 'system') {
-      this.onMessageHandler?.({
-        type: 'system',
-        message: data.message || 'System message received'
-      })
-      
-    } else if (data.interaction_type) {
-      this.onMessageHandler?.({
-        type: 'system',
-        content: `Voice interaction: ${data.interaction_type}`
-      })
-      
-    } else if (data.type === 'tool_call' || data.type === 'tool_result') {
-      this.onMessageHandler?.({
-        type: data.type,
-        content: data.content || 'Tool interaction'
-      })
-      
-    } else {
-      this.onMessageHandler?.({
-        type: 'system',
-        content: 'Message received from backend'
-      })
-    }
-  }
-
-  sendMessage(message: string): void {
-    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      console.warn('🎤 Cannot send message: WebSocket not connected')
-      return
-    }
-
+  private handleNavigationResult(data: any): void {
     try {
-      const payload = {
-        type: 'text_message',
-        text: message,
-        timestamp: new Date().toISOString()
+      console.log("🧭 Backend command received:", {
+        action: data.action,
+        type: data.type,
+        data: data.data,
+        result: data.result,
+      });
+
+      // Execute backend command directly
+      if (data.action === "navigate" && data.data?.page) {
+        // Navigation command - page is in data.data
+        const targetPage = data.data.page;
+        console.log("🧭 Executing navigation to:", targetPage);
+        this.executeDirectNavigation(targetPage, data.data);
+      } else if (data.action === "click" && data.data?.element_name) {
+        // Click command - execute the button action
+        console.log("🖱️ Executing click action:", data.data.element_name);
+        this.executeButtonAction(data.data.element_name, data.data);
+
+        // Check if it should also navigate
+        if (data.data.page && data.data.page !== this.currentPage) {
+          console.log(
+            "🧭 Click action includes navigation to:",
+            data.data.page,
+          );
+          this.executeDirectNavigation(data.data.page, data.data);
+        }
+      } else if (
+        data.data?.Action_type === "clicked" &&
+        data.data?.element_name
+      ) {
+        // Fallback click command - execute the button action
+        console.log(
+          "🖱️ Executing fallback click action:",
+          data.data.element_name,
+        );
+        this.executeButtonAction(data.data.element_name, data.data);
+
+        // Check if it should also navigate
+        if (data.data.page && data.data.page !== this.currentPage) {
+          console.log(
+            "🧭 Fallback click action includes navigation to:",
+            data.data.page,
+          );
+          this.executeDirectNavigation(data.data.page, data.data);
+        }
+      } else {
+        console.log(
+          "🧭 Backend command processed:",
+          data.action || data.data?.Action_type,
+        );
       }
-      
-      this.ws.send(JSON.stringify(payload))
-      console.log('🎤 Text message sent via WebSocket')
-      
     } catch (error) {
-      console.error('Error sending message:', error)
-      this.handleError(new Error('Failed to send message'))
+      this.handleError(error as Error);
     }
   }
 
-  private scheduleReconnection(): void {
+  private handleButtonActionResult(data: any): void {
+    try {
+      console.log("🖱️ Handling button action result:", data);
+
+      if (data.result?.element_name) {
+        // Extract element name from the result object
+        const elementName = data.result.element_name;
+        const context = data.result.context || {};
+        console.log("🖱️ Executing button action:", elementName);
+
+        // Use ButtonActionManager for button actions
+        ButtonActionManager.executeButtonAction(elementName, context)
+      } else {
+        console.warn("🖱️ No element name specified in button action result");
+      }
+    } catch (error) {
+      this.handleError(error as Error);
+    }
+  }
+
+  private handleReconnection(): void {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.log('🎤 Max reconnection attempts reached')
-      return
+      this.onError?.(new Error("Max reconnection attempts reached"));
+      return;
     }
 
-    this.reconnectAttempts++
-    const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 10000) // Exponential backoff, max 10s
-    
-    console.log(`🎤 Scheduling reconnection attempt ${this.reconnectAttempts} in ${delay}ms`)
-    
+    this.reconnectAttempts++;
+    const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
+
     this.reconnectTimeout = setTimeout(() => {
-      console.log(`🎤 Attempting reconnection ${this.reconnectAttempts}`)
-      this.connect()
-    }, delay)
+      this.connect(this.currentPage, this.userId).catch((error) => {
+        this.handleError(error);
+      });
+    }, delay);
   }
 
   private handleError(error: Error): void {
-    console.error('🎤 WebSocket service error:', error)
-    this.onError?.(error)
-  }
-
-  // Execute navigation commands from backend
-  private executeNavigationCommand(data: any): void {
-    try {
-      console.log('🧭 Executing navigation command from backend:', data)
-      
-      // Import NavigationService dynamically to avoid circular dependencies
-      import('./NavigationService').then(({ NavigationService }) => {
-        console.log('🧭 NavigationService imported successfully')
-        
-        switch (data.interaction_type) {
-          case 'page_navigation':
-            if (data.page) {
-              // Check if we're already on the target page to prevent unnecessary navigation
-              const currentPage = NavigationService.getCurrentPage()
-              console.log('🧭 Current page from NavigationService:', currentPage)
-              console.log('🧭 Target page from backend:', data.page)
-              
-              if (data.page === currentPage) {
-                console.log('🧭 Already on target page:', data.page, '- but executing anyway for backend sync')
-                // Execute navigation even if same page to ensure backend state sync
-              }
-              
-              console.log('🧭 Executing page navigation to:', data.page, 'from:', currentPage)
-              NavigationService.executeNavigation(data.page)
-              
-              // Log successful navigation execution
-              console.log('🧭 ✅ Navigation command executed successfully')
-            } else {
-              console.warn('🧭 No page specified in navigation command')
-            }
-            break
-            
-          case 'button_click':
-            if (data.element_name) {
-              console.log('🧭 Executing button click on:', data.element_name)
-              NavigationService.executeElementClick(data.element_name)
-            }
-            break
-            
-          case 'database_search':
-            if (data.search_query) {
-              console.log('🧭 Executing database search for:', data.search_query)
-              NavigationService.executeSearch(data.search_query, 'database')
-            }
-            break
-            
-          case 'file_search':
-            if (data.search_query) {
-              console.log('🧭 Executing file search for:', data.search_query)
-              NavigationService.executeSearch(data.search_query, 'file')
-            }
-            break
-            
-          case 'file_upload':
-            if (data.file_descriptions && data.table_names) {
-              console.log('🧭 Executing file upload:', data.file_descriptions, data.table_names)
-              NavigationService.executeFileUpload(data.file_descriptions, data.table_names)
-            }
-            break
-            
-          case 'view_report':
-            if (data.report_request) {
-              console.log('🧭 Executing view report:', data.report_request)
-              NavigationService.executeViewReport(data.report_request)
-            }
-            break
-            
-          case 'generate_report':
-            if (data.report_query) {
-              console.log('🧭 Executing generate report:', data.report_query)
-              NavigationService.executeGenerateReport(data.report_query)
-            }
-            break
-            
-          default:
-            console.warn('🧭 Unknown interaction type from backend:', data.interaction_type)
-        }
-      }).catch(error => {
-        console.error('🧭 Failed to import NavigationService:', error)
-      })
-      
-    } catch (error) {
-      console.error('🧭 Error executing navigation command:', error)
-      this.handleError(error as Error)
-    }
+    this.onError?.(error);
   }
 
   disconnect(): void {
-    console.log('🎤 Disconnecting WebSocket...')
-    
     // Clear reconnection timeout
     if (this.reconnectTimeout) {
-      clearTimeout(this.reconnectTimeout)
-      this.reconnectTimeout = null
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
     }
-    
+
     // Close WebSocket
     if (this.ws) {
-      this.ws.close(1000, 'Manual disconnect')
-      this.ws = null
+      this.ws.close(1000, "Manual disconnect");
+      this.ws = null;
     }
-    
-    this.reconnectAttempts = 0
-    this.onConnectionChange?.(false)
+
+    this.reconnectAttempts = 0;
+    this.onConnectionChange?.(false);
   }
 
   isConnected(): boolean {
-    return this.ws?.readyState === WebSocket.OPEN
+    return this.ws?.readyState === WebSocket.OPEN;
   }
 
   getConnectionState(): string {
-    if (!this.ws) return 'Disconnected'
-    
+    if (!this.ws) return "Disconnected";
+
     switch (this.ws.readyState) {
       case WebSocket.CONNECTING:
-        return 'Connecting...'
+        return "Connecting...";
       case WebSocket.OPEN:
-        return 'Connected'
+        return "Connected";
       case WebSocket.CLOSING:
-        return 'Disconnecting...'
+        return "Closing...";
       case WebSocket.CLOSED:
-        return 'Disconnected'
+        return "Disconnected";
       default:
-        return 'Unknown'
+        return "Unknown";
     }
   }
-} 
+
+  sendMessage(message: any): void {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify(message));
+    } else {
+      // console.warn('🎤 Cannot send message: WebSocket not connected')
+    }
+  }
+
+  /**
+   * Notify backend about page change without reconnecting
+   */
+  notifyPageChange(newPage: string): void {
+    this.currentPage = newPage;
+    const payload = {
+      type: "page_change",
+      user_id: this.userId,
+      page: newPage,
+      timestamp: new Date().toISOString(),
+    };
+    this.sendMessage(payload);
+  }
+
+  /**
+   * Execute button actions using ButtonActionManager
+   * This method handles button clicks and other interactive actions
+   */
+  private executeButtonAction(elementName: string, context: any): void {
+    console.log(
+      "🖱️ Executing button action:",
+      elementName,
+      "with context:",
+      context,
+    );
+    try {
+      // Use ButtonActionManager for button actions
+      ButtonActionManager.executeButtonAction(elementName, context)
+    } catch (error) {
+      console.error("🖱️ Error executing button action:", error);
+    }
+  }
+
+  /**
+   * Execute direct navigation based on backend response
+   * This method dispatches a SPA event instead of reloading the page
+   */
+  private executeDirectNavigation(targetPage: string, result: any): void {
+    console.log("🧭 Executing direct navigation to:", targetPage);
+
+    try {
+      // Update current page tracking
+      this.currentPage = targetPage;
+
+      // Dispatch event for SPA navigation handled by VoiceNavigationHandler
+      if (typeof window !== "undefined") {
+        const event = new CustomEvent("voice-navigation", {
+          detail: {
+            page: targetPage,
+            previousPage: null,
+            type: "page_navigation",
+            context: result || {},
+            timestamp: new Date().toISOString(),
+          },
+        });
+        window.dispatchEvent(event);
+      }
+    } catch (error) {
+      console.error("🧭 Error during direct navigation:", error);
+      // As a last resort, fallback to full reload
+      if (typeof window !== "undefined") {
+        window.location.href = `/${targetPage.toLowerCase().replace(/\s+/g, "-")}`;
+      }
+    }
+  }
+}

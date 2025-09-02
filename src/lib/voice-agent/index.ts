@@ -12,4 +12,4 @@ export { VoiceAgentService } from './VoiceAgentService'
 
 // Re-export commonly used items
 export { VOICE_AGENT_CONFIG } from './config'
-export { MessageService, NavigationService, WebSocketService, RTVIService } from './services' 
+export { MessageService, WebSocketService, RTVIService } from './services' 

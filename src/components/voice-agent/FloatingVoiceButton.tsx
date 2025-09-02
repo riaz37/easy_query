@@ -1,30 +1,37 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useVoiceClient } from '@/lib/hooks/use-voice-client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Mic, MicOff, Play, Square, Navigation, Search, Upload, FileText } from 'lucide-react'
+import { Mic, MicOff, Play, Navigation, Search, Upload, FileText } from 'lucide-react'
+import { useVoiceAgent } from '@/components/providers/VoiceAgentContextProvider'
 
 export function FloatingVoiceButton() {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [voiceNavigationStatus, setVoiceNavigationStatus] = useState('Ready')
-  const [lastVoiceCommand, setLastVoiceCommand] = useState('')
-  
   const {
     isConnected,
     isInConversation,
     connectionStatus,
     messages,
+    isReady,
+    isLoading,
     connect,
     disconnect,
     startConversation,
     stopConversation,
     clearMessages
-  } = useVoiceClient()
+  } = useVoiceAgent()
+  
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [voiceNavigationStatus, setVoiceNavigationStatus] = useState('Ready')
+  const [lastVoiceCommand, setLastVoiceCommand] = useState<string | null>(null)
 
   // Listen for voice navigation events
   useEffect(() => {
+    // Only set up event listeners if service is ready
+    if (isLoading || !isReady) {
+      return
+    }
+
     const handleVoiceEvent = (event: CustomEvent) => {
       const { type, element_name, page, user_id } = event.detail
       setVoiceNavigationStatus(type)
@@ -45,7 +52,12 @@ export function FloatingVoiceButton() {
       window.removeEventListener('voice-generate-report', handleVoiceEvent as EventListener)
       window.removeEventListener('voice-navigate', handleVoiceEvent as EventListener)
     }
-  }, [])
+  }, [isLoading, isReady])
+
+  // Don't render if service is not ready
+  if (isLoading || !isReady) {
+    return null
+  }
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded)

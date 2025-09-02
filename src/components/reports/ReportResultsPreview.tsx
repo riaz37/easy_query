@@ -92,6 +92,8 @@ export function ReportResultsPreview({
                   window.open("/ai-results", "_blank");
                 }}
                 className="bg-green-600 hover:bg-green-700 text-white"
+                data-voice-action="view report"
+                data-voice-element="view report"
               >
                 <FileText className="w-4 h-4 mr-2" />
                 View Full Report
