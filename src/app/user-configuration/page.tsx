@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -10,9 +16,9 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 
 import { toast } from "sonner";
-import { 
-  Settings, 
-  User, 
+import {
+  Settings,
+  User,
   CheckCircle,
   AlertCircle,
   Loader2,
@@ -26,7 +32,7 @@ import {
   Edit3,
   Save,
   X,
-  RotateCcw
+  RotateCcw,
 } from "lucide-react";
 
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
@@ -45,24 +51,24 @@ interface DatabaseInfo {
 
 export default function UserConfigurationPage() {
   const { user, isAuthenticated } = useAuthContext();
-  const { 
-    currentDatabaseId, 
-    currentDatabaseName, 
-    setCurrentDatabase, 
+  const {
+    currentDatabaseId,
+    currentDatabaseName,
+    setCurrentDatabase,
     loadDatabasesFromConfig,
     setLoading: setDatabaseLoading,
     setError: setDatabaseError,
-    availableDatabases
+    availableDatabases,
   } = useDatabaseContext();
-  const { 
-    businessRules, 
-    loadBusinessRulesFromConfig, 
-    updateBusinessRules, 
+  const {
+    businessRules,
+    loadBusinessRulesFromConfig,
+    updateBusinessRules,
     refreshBusinessRules,
     hasBusinessRules,
     businessRulesCount,
     setLoading: setBusinessRulesLoading,
-    setError: setBusinessRulesError
+    setError: setBusinessRulesError,
   } = useBusinessRulesContext();
 
   // State
@@ -75,12 +81,18 @@ export default function UserConfigurationPage() {
   const [isEditingRules, setIsEditingRules] = useState(false);
   const [editedRulesContent, setEditedRulesContent] = useState("");
   const [hasUnsavedRulesChanges, setHasUnsavedRulesChanges] = useState(false);
-  const [rulesContentError, setRulesContentError] = useState<string | null>(null);
+  const [rulesContentError, setRulesContentError] = useState<string | null>(
+    null,
+  );
 
   // Load user configuration
   const loadUserConfiguration = useCallback(async () => {
     // Check if we already have configuration loaded from storage
-    if (currentDatabaseId && availableDatabases && availableDatabases.length > 0) {
+    if (
+      currentDatabaseId &&
+      availableDatabases &&
+      availableDatabases.length > 0
+    ) {
       return;
     }
 
@@ -89,26 +101,27 @@ export default function UserConfigurationPage() {
     setBusinessRulesLoading(true);
     setDatabaseError(null);
     setBusinessRulesError(null);
-    
+
     try {
       // Load accessible databases
-      const databasesResponse = await ServiceRegistry.database.getAllDatabases();
-      
+      const databasesResponse =
+        await ServiceRegistry.database.getAllDatabases();
+
       if (databasesResponse.success) {
-        const dbList = databasesResponse.data.map(db => ({
+        const dbList = databasesResponse.data.map((db) => ({
           db_id: db.id,
           db_name: db.name,
           db_url: db.url,
           db_type: db.type,
           is_current: db.id === currentDatabaseId,
-          business_rule: db.metadata?.businessRule || ""
+          business_rule: db.metadata?.businessRule || "",
         }));
-        
+
         // Update local state
         setDatabases(dbList);
-        
+
         // Update database context provider
-        const dbConfigs = dbList.map(db => ({
+        const dbConfigs = dbList.map((db) => ({
           db_id: db.db_id,
           db_name: db.db_name,
           db_url: db.db_url,
@@ -119,40 +132,62 @@ export default function UserConfigurationPage() {
           updated_at: new Date().toISOString(),
         }));
         loadDatabasesFromConfig(dbConfigs);
-        
+
         // Get current database from backend and load business rules
-        const currentDBInfo = await ServiceRegistry.userCurrentDB.getUserCurrentDB(user?.user_id);
-        if (currentDBInfo.success && currentDBInfo.data && currentDBInfo.data.db_id) {
+        const currentDBInfo =
+          await ServiceRegistry.userCurrentDB.getUserCurrentDB(user?.user_id);
+        if (
+          currentDBInfo.success &&
+          currentDBInfo.data &&
+          currentDBInfo.data.db_id
+        ) {
           // Update the current database in context
-          setCurrentDatabase(currentDBInfo.data.db_id, currentDBInfo.data.db_name || 'Unknown');
-          
+          setCurrentDatabase(
+            currentDBInfo.data.db_id,
+            currentDBInfo.data.db_name || "Unknown",
+          );
+
           // Update local state to mark the current database
-          setDatabases(prev => prev.map(db => ({
-            ...db,
-            is_current: db.db_id === currentDBInfo.data.db_id
-          })));
-          
+          setDatabases((prev) =>
+            prev.map((db) => ({
+              ...db,
+              is_current: db.db_id === currentDBInfo.data.db_id,
+            })),
+          );
+
           // Extract business rules from the response and update the context
-          const businessRules = currentDBInfo.data.business_rule || '';
+          const businessRules = currentDBInfo.data.business_rule || "";
           loadBusinessRulesFromConfig(businessRules);
         } else {
           // No current database set
-          loadBusinessRulesFromConfig('');
+          loadBusinessRulesFromConfig("");
         }
       } else {
-        throw new Error(databasesResponse.error || 'Failed to load databases');
+        throw new Error(databasesResponse.error || "Failed to load databases");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to load configuration';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to load configuration";
       setDatabaseError(errorMessage);
       setBusinessRulesError(errorMessage);
-      toast.error('Failed to load configuration');
+      toast.error("Failed to load configuration");
     } finally {
       setLoading(false);
       setDatabaseLoading(false);
       setBusinessRulesLoading(false);
     }
-  }, [user?.user_id, setCurrentDatabase, loadBusinessRulesFromConfig, loadDatabasesFromConfig, setDatabaseLoading, setBusinessRulesLoading, setDatabaseError, setBusinessRulesError, currentDatabaseId, availableDatabases]);
+  }, [
+    user?.user_id,
+    setCurrentDatabase,
+    loadBusinessRulesFromConfig,
+    loadDatabasesFromConfig,
+    setDatabaseLoading,
+    setBusinessRulesLoading,
+    setDatabaseError,
+    setBusinessRulesError,
+    currentDatabaseId,
+    availableDatabases,
+  ]);
 
   // Load user configuration on mount
   useEffect(() => {
@@ -178,73 +213,103 @@ export default function UserConfigurationPage() {
   }, [loadUserConfiguration]);
 
   // Load business rules for a specific database
-  const loadBusinessRulesForDatabase = useCallback(async (databaseId: number) => {
-    try {
-      setBusinessRulesLoading(true);
-      setBusinessRulesError(null);
-      
-      const response = await ServiceRegistry.businessRules.getBusinessRules(databaseId);
-      if (response.success && response.data) {
-        loadBusinessRulesFromConfig(response.data.content || '');
-      } else {
-        loadBusinessRulesFromConfig('');
+  const loadBusinessRulesForDatabase = useCallback(
+    async (databaseId: number) => {
+      try {
+        setBusinessRulesLoading(true);
+        setBusinessRulesError(null);
+
+        const response =
+          await ServiceRegistry.businessRules.getBusinessRules(databaseId);
+        if (response.success && response.data) {
+          loadBusinessRulesFromConfig(response.data.content || "");
+        } else {
+          loadBusinessRulesFromConfig("");
+        }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Failed to load business rules";
+        setBusinessRulesError(errorMessage);
+        loadBusinessRulesFromConfig("");
+      } finally {
+        setBusinessRulesLoading(false);
       }
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to load business rules';
-      setBusinessRulesError(errorMessage);
-      loadBusinessRulesFromConfig('');
-    } finally {
-      setBusinessRulesLoading(false);
-    }
-  }, [loadBusinessRulesFromConfig, setBusinessRulesLoading, setBusinessRulesError]);
+    },
+    [
+      loadBusinessRulesFromConfig,
+      setBusinessRulesLoading,
+      setBusinessRulesError,
+    ],
+  );
 
   // Handle database selection
-  const handleDatabaseChange = useCallback(async (databaseId: number) => {
-    try {
-      setDatabaseLoading(true);
-      setDatabaseError(null);
-      
-      const selectedDB = databases.find(db => db.db_id === databaseId);
-      if (selectedDB) {
-        // Set the current database in backend
-        const response = await ServiceRegistry.userCurrentDB.setUserCurrentDB({
-          db_id: databaseId
-        }, user?.user_id);
+  const handleDatabaseChange = useCallback(
+    async (databaseId: number) => {
+      try {
+        setDatabaseLoading(true);
+        setDatabaseError(null);
 
-        if (response.success) {
-          // Update database context provider
-          setCurrentDatabase(databaseId, selectedDB.db_name);
-          
-          // Update local state
-          setDatabases(prev => prev.map(db => ({
-            ...db,
-            is_current: db.db_id === databaseId
-          })));
+        const selectedDB = databases.find((db) => db.db_id === databaseId);
+        if (selectedDB) {
+          // Set the current database in backend
+          const response = await ServiceRegistry.userCurrentDB.setUserCurrentDB(
+            {
+              db_id: databaseId,
+            },
+            user?.user_id,
+          );
 
-          // Get the current database info which includes business rules
-          const currentDBInfo = await ServiceRegistry.userCurrentDB.getUserCurrentDB(user?.user_id);
-          if (currentDBInfo.success && currentDBInfo.data) {
-            const businessRules = currentDBInfo.data.business_rule || '';
-            loadBusinessRulesFromConfig(businessRules);
+          if (response.success) {
+            // Update database context provider
+            setCurrentDatabase(databaseId, selectedDB.db_name);
+
+            // Update local state
+            setDatabases((prev) =>
+              prev.map((db) => ({
+                ...db,
+                is_current: db.db_id === databaseId,
+              })),
+            );
+
+            // Get the current database info which includes business rules
+            const currentDBInfo =
+              await ServiceRegistry.userCurrentDB.getUserCurrentDB(
+                user?.user_id,
+              );
+            if (currentDBInfo.success && currentDBInfo.data) {
+              const businessRules = currentDBInfo.data.business_rule || "";
+              loadBusinessRulesFromConfig(businessRules);
+            } else {
+              loadBusinessRulesFromConfig("");
+            }
+
+            toast.success(`Switched to database: ${selectedDB.db_name}`);
           } else {
-            loadBusinessRulesFromConfig('');
+            throw new Error(response.error || "Failed to set current database");
           }
-
-          toast.success(`Switched to database: ${selectedDB.db_name}`);
         } else {
-          throw new Error(response.error || 'Failed to set current database');
+          throw new Error("Selected database not found");
         }
-      } else {
-        throw new Error('Selected database not found');
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to switch database";
+        setDatabaseError(errorMessage);
+        toast.error("Failed to switch database");
+      } finally {
+        setDatabaseLoading(false);
       }
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to switch database';
-      setDatabaseError(errorMessage);
-      toast.error('Failed to switch database');
-    } finally {
-      setDatabaseLoading(false);
-    }
-  }, [databases, user?.user_id, setCurrentDatabase, loadBusinessRulesFromConfig, setDatabaseLoading, setDatabaseError]);
+    },
+    [
+      databases,
+      user?.user_id,
+      setCurrentDatabase,
+      loadBusinessRulesFromConfig,
+      setDatabaseLoading,
+      setDatabaseError,
+    ],
+  );
 
   // Handle business rules refresh
   const handleBusinessRulesRefresh = async () => {
@@ -252,23 +317,27 @@ export default function UserConfigurationPage() {
       if (currentDatabaseId) {
         setBusinessRulesLoading(true);
         setBusinessRulesError(null);
-        
-        const currentDBInfo = await ServiceRegistry.userCurrentDB.getUserCurrentDB(user?.user_id);
+
+        const currentDBInfo =
+          await ServiceRegistry.userCurrentDB.getUserCurrentDB(user?.user_id);
         if (currentDBInfo.success && currentDBInfo.data) {
-          const businessRules = currentDBInfo.data.business_rule || '';
+          const businessRules = currentDBInfo.data.business_rule || "";
           loadBusinessRulesFromConfig(businessRules);
-          toast.success('Business rules refreshed successfully');
+          toast.success("Business rules refreshed successfully");
         } else {
-          loadBusinessRulesFromConfig('');
-          toast.success('Business rules refreshed (no rules found)');
+          loadBusinessRulesFromConfig("");
+          toast.success("Business rules refreshed (no rules found)");
         }
       } else {
-        toast.error('No database selected');
+        toast.error("No database selected");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to refresh business rules';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to refresh business rules";
       setBusinessRulesError(errorMessage);
-      toast.error('Failed to refresh business rules');
+      toast.error("Failed to refresh business rules");
     } finally {
       setBusinessRulesLoading(false);
     }
@@ -284,23 +353,27 @@ export default function UserConfigurationPage() {
 
   const handleRulesSave = useCallback(async () => {
     if (!currentDatabaseId) {
-      toast.error('No database selected');
+      toast.error("No database selected");
       return;
     }
 
     // Validate content
     if (!editedRulesContent.trim()) {
-      setRulesContentError('Business rules content cannot be empty');
+      setRulesContentError("Business rules content cannot be empty");
       return;
     }
 
     if (editedRulesContent.length < 10) {
-      setRulesContentError('Business rules content is too short (minimum 10 characters)');
+      setRulesContentError(
+        "Business rules content is too short (minimum 10 characters)",
+      );
       return;
     }
 
     if (editedRulesContent.length > 50000) {
-      setRulesContentError('Business rules content is too long (maximum 50,000 characters)');
+      setRulesContentError(
+        "Business rules content is too long (maximum 50,000 characters)",
+      );
       return;
     }
 
@@ -311,27 +384,27 @@ export default function UserConfigurationPage() {
     try {
       const response = await ServiceRegistry.businessRules.updateBusinessRules(
         editedRulesContent,
-        currentDatabaseId
+        currentDatabaseId,
       );
 
       if (response.success) {
         // Update business rules context
         updateBusinessRules(editedRulesContent);
-        
+
         // Reset editing state
         setIsEditingRules(false);
         setHasUnsavedRulesChanges(false);
         setEditedRulesContent("");
-        
-        toast.success('Business rules updated successfully');
-        
+
+        toast.success("Business rules updated successfully");
+
         // Refresh the configuration to get updated data
         await loadUserConfiguration();
       } else {
-        throw new Error(response.error || 'Failed to update business rules');
+        throw new Error(response.error || "Failed to update business rules");
       }
     } catch (error: any) {
-      const errorMessage = error.message || 'Failed to update business rules';
+      const errorMessage = error.message || "Failed to update business rules";
       setRulesContentError(errorMessage);
       setBusinessRulesError(errorMessage);
       toast.error(errorMessage);
@@ -339,7 +412,14 @@ export default function UserConfigurationPage() {
       setLoading(false);
       setBusinessRulesLoading(false);
     }
-  }, [currentDatabaseId, editedRulesContent, updateBusinessRules, loadUserConfiguration, setBusinessRulesLoading, setBusinessRulesError]);
+  }, [
+    currentDatabaseId,
+    editedRulesContent,
+    updateBusinessRules,
+    loadUserConfiguration,
+    setBusinessRulesLoading,
+    setBusinessRulesError,
+  ]);
 
   const handleRulesCancel = useCallback(() => {
     setIsEditingRules(false);
@@ -354,11 +434,14 @@ export default function UserConfigurationPage() {
     setRulesContentError(null);
   }, [businessRules.content]);
 
-  const handleRulesContentChange = useCallback((content: string) => {
-    setEditedRulesContent(content);
-    setHasUnsavedRulesChanges(content !== businessRules.content);
-    setRulesContentError(null);
-  }, [businessRules.content]);
+  const handleRulesContentChange = useCallback(
+    (content: string) => {
+      setEditedRulesContent(content);
+      setHasUnsavedRulesChanges(content !== businessRules.content);
+      setRulesContentError(null);
+    },
+    [businessRules.content],
+  );
 
   if (!isAuthenticated) {
     return (
@@ -367,8 +450,12 @@ export default function UserConfigurationPage() {
           <CardContent className="pt-6">
             <div className="text-center">
               <AlertCircle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">Authentication Required</h2>
-              <p className="text-gray-600">Please log in to access your configuration.</p>
+              <h2 className="text-xl font-semibold mb-2">
+                Authentication Required
+              </h2>
+              <p className="text-gray-600">
+                Please log in to access your configuration.
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -401,7 +488,10 @@ export default function UserConfigurationPage() {
               <Database className="w-4 h-4" />
               Database Settings
             </TabsTrigger>
-            <TabsTrigger value="business-rules" className="flex items-center gap-2">
+            <TabsTrigger
+              value="business-rules"
+              className="flex items-center gap-2"
+            >
               <Shield className="w-4 h-4" />
               Business Rules
             </TabsTrigger>
@@ -421,11 +511,15 @@ export default function UserConfigurationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-gray-400">User ID</Label>
-                    <div className="text-white font-medium">{user?.user_id}</div>
+                    <div className="text-white font-medium">
+                      {user?.user_id}
+                    </div>
                   </div>
                   <div>
                     <Label className="text-gray-400">Email</Label>
-                    <div className="text-white font-medium">{user?.email || 'Not provided'}</div>
+                    <div className="text-white font-medium">
+                      {user?.email || "Not provided"}
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -445,21 +539,33 @@ export default function UserConfigurationPage() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Database className="w-5 h-5 text-blue-400" />
-                      <span className="text-white font-medium">Database Context</span>
+                      <span className="text-white font-medium">
+                        Database Context
+                      </span>
                     </div>
                     <div className="ml-7">
                       {currentDatabaseName ? (
                         <div className="space-y-2">
-                          <div className="text-white">{currentDatabaseName}</div>
-                          <Badge variant="outline" className="text-green-400 border-green-400">
+                          <div className="text-white">
+                            {currentDatabaseName}
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className="text-green-400 border-green-400"
+                          >
                             <CheckCircle className="w-3 h-3 mr-1" />
                             Active
                           </Badge>
                         </div>
                       ) : (
                         <div className="space-y-2">
-                          <div className="text-gray-400">No database selected</div>
-                          <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+                          <div className="text-gray-400">
+                            No database selected
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className="text-yellow-400 border-yellow-400"
+                          >
                             <AlertCircle className="w-3 h-3 mr-1" />
                             Not Configured
                           </Badge>
@@ -472,21 +578,33 @@ export default function UserConfigurationPage() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Shield className="w-5 h-5 text-emerald-400" />
-                      <span className="text-white font-medium">Business Rules</span>
+                      <span className="text-white font-medium">
+                        Business Rules
+                      </span>
                     </div>
                     <div className="ml-7">
-                      {businessRules.status === 'loaded' && hasBusinessRules ? (
+                      {businessRules.status === "loaded" && hasBusinessRules ? (
                         <div className="space-y-2">
-                          <div className="text-white">{businessRulesCount} rules active</div>
-                          <Badge variant="outline" className="text-green-400 border-green-400">
+                          <div className="text-white">
+                            {businessRulesCount} rules active
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className="text-green-400 border-green-400"
+                          >
                             <CheckCircle className="w-3 h-3 mr-1" />
                             Active
                           </Badge>
                         </div>
                       ) : (
                         <div className="space-y-2">
-                          <div className="text-gray-400">No rules configured</div>
-                          <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+                          <div className="text-gray-400">
+                            No rules configured
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className="text-yellow-400 border-yellow-400"
+                          >
                             <AlertCircle className="w-3 h-3 mr-1" />
                             Not Configured
                           </Badge>
@@ -516,7 +634,7 @@ export default function UserConfigurationPage() {
                     <Database className="w-4 h-4 mr-2" />
                     Configure Database
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     onClick={() => setActiveTab("business-rules")}
@@ -544,7 +662,9 @@ export default function UserConfigurationPage() {
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
-                    <span className="ml-2 text-gray-400">Loading databases...</span>
+                    <span className="ml-2 text-gray-400">
+                      Loading databases...
+                    </span>
                   </div>
                 ) : (
                   <>
@@ -554,14 +674,16 @@ export default function UserConfigurationPage() {
                           key={db.db_id}
                           className={`cursor-pointer transition-all hover:scale-105 ${
                             db.is_current
-                              ? 'bg-emerald-900/30 border-emerald-500'
-                              : 'bg-slate-700/50 border-slate-600 hover:border-slate-500'
+                              ? "bg-emerald-900/30 border-emerald-500"
+                              : "bg-slate-700/50 border-slate-600 hover:border-slate-500"
                           }`}
                           onClick={() => handleDatabaseChange(db.db_id)}
                         >
                           <CardContent className="p-4">
                             <div className="flex items-center justify-between mb-2">
-                              <h3 className="font-semibold text-white">{db.db_name}</h3>
+                              <h3 className="font-semibold text-white">
+                                {db.db_name}
+                              </h3>
                               {db.is_current && (
                                 <CheckCircle className="w-5 h-5 text-emerald-400" />
                               )}
@@ -569,41 +691,46 @@ export default function UserConfigurationPage() {
                             <div className="text-sm text-gray-400 space-y-1">
                               <div>Type: {db.db_type}</div>
                               <div className="truncate">URL: {db.db_url}</div>
-                              <div>Rules: {
-                                db.is_current && businessRules.status === 'loaded' 
-                                  ? `${businessRules.content.length} chars` 
-                                  : db.business_rule 
-                                    ? `${db.business_rule.length} chars` 
-                                    : 'None'
-                              }</div>
+                              <div>
+                                Rules:{" "}
+                                {db.is_current &&
+                                businessRules.status === "loaded"
+                                  ? `${businessRules.content.length} chars`
+                                  : db.business_rule
+                                    ? `${db.business_rule.length} chars`
+                                    : "None"}
+                              </div>
                             </div>
                             <Badge
                               variant={db.is_current ? "default" : "secondary"}
                               className={`mt-2 ${
                                 db.is_current
-                                  ? 'bg-emerald-600 text-white'
-                                  : 'bg-slate-600 text-gray-300'
+                                  ? "bg-emerald-600 text-white"
+                                  : "bg-slate-600 text-gray-300"
                               }`}
                             >
-                              {db.is_current ? 'Current' : 'Select'}
+                              {db.is_current ? "Current" : "Select"}
                             </Badge>
                           </CardContent>
                         </Card>
                       ))}
                     </div>
-                    
+
                     <div className="flex justify-between items-center pt-4">
                       <Button
                         variant="outline"
                         onClick={handleManualRefresh}
                         disabled={loading}
                       >
-                        <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                        <RefreshCw
+                          className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                        />
                         Refresh
                       </Button>
-                      
+
                       <div className="text-sm text-gray-400">
-                        {databases.length} database{databases.length !== 1 ? 's' : ''} available
+                        {databases.length} database
+                        {databases.length !== 1 ? "s" : ""} available
                       </div>
                     </div>
                   </>
@@ -622,7 +749,8 @@ export default function UserConfigurationPage() {
                   Business Rules Status
                 </CardTitle>
                 <CardDescription className="text-gray-400">
-                  Current business rules configuration for {currentDatabaseName || 'selected database'}
+                  Current business rules configuration for{" "}
+                  {currentDatabaseName || "selected database"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -630,31 +758,41 @@ export default function UserConfigurationPage() {
                   <div>
                     <Label className="text-gray-400">Status</Label>
                     <div className="flex items-center gap-2 mt-1">
-                      {businessRules.status === 'loaded' && hasBusinessRules ? (
-                        <Badge variant="outline" className="text-green-400 border-green-400">
+                      {businessRules.status === "loaded" && hasBusinessRules ? (
+                        <Badge
+                          variant="outline"
+                          className="text-green-400 border-green-400"
+                        >
                           <CheckCircle className="w-3 h-3 mr-1" />
                           Active
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+                        <Badge
+                          variant="outline"
+                          className="text-yellow-400 border-yellow-400"
+                        >
                           <AlertCircle className="w-3 h-3 mr-1" />
                           Not Configured
                         </Badge>
                       )}
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label className="text-gray-400">Rules Count</Label>
                     <div className="text-white font-medium mt-1">
-                      {businessRules.status === 'loaded' ? businessRulesCount : '0'}
+                      {businessRules.status === "loaded"
+                        ? businessRulesCount
+                        : "0"}
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label className="text-gray-400">Content Length</Label>
                     <div className="text-white font-medium mt-1">
-                      {businessRules.content ? `${businessRules.content.length} characters` : '0 characters'}
+                      {businessRules.content
+                        ? `${businessRules.content.length} characters`
+                        : "0 characters"}
                     </div>
                   </div>
                 </div>
@@ -663,20 +801,25 @@ export default function UserConfigurationPage() {
 
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-400">
-                    Last updated: {businessRules.lastUpdated ? new Date(businessRules.lastUpdated).toLocaleString() : 'Never'}
+                    Last updated:{" "}
+                    {businessRules.lastUpdated
+                      ? new Date(businessRules.lastUpdated).toLocaleString()
+                      : "Never"}
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
                       onClick={handleBusinessRulesRefresh}
-                      disabled={businessRules.status === 'loading'}
+                      disabled={businessRules.status === "loading"}
                       className="border-slate-600 text-slate-300 hover:bg-slate-700"
                     >
-                      <RefreshCw className={`w-4 h-4 mr-2 ${businessRules.status === 'loading' ? 'animate-spin' : ''}`} />
+                      <RefreshCw
+                        className={`w-4 h-4 mr-2 ${businessRules.status === "loading" ? "animate-spin" : ""}`}
+                      />
                       Refresh Status
                     </Button>
-                    
+
                     {!isEditingRules ? (
                       <Button
                         onClick={handleRulesEdit}
@@ -729,47 +872,69 @@ export default function UserConfigurationPage() {
                     Business Rules Editor
                   </CardTitle>
                   <CardDescription className="text-gray-400">
-                    {isEditingRules ? 'Edit business rules for the current database' : 'View and edit business rules'}
+                    {isEditingRules
+                      ? "Edit business rules for the current database"
+                      : "View and edit business rules"}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {isEditingRules ? (
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="businessRules" className="text-gray-400">
+                        <Label
+                          htmlFor="businessRules"
+                          className="text-gray-400"
+                        >
                           Business Rules Content
                         </Label>
                         <Textarea
                           id="businessRules"
                           value={editedRulesContent}
-                          onChange={(e) => handleRulesContentChange(e.target.value)}
+                          onChange={(e) =>
+                            handleRulesContentChange(e.target.value)
+                          }
                           placeholder="Enter your business rules here..."
                           className="mt-2 bg-slate-700/50 border-slate-600 text-white min-h-[200px] resize-y"
                         />
                         {rulesContentError && (
-                          <p className="text-red-400 text-sm mt-2">{rulesContentError}</p>
+                          <p className="text-red-400 text-sm mt-2">
+                            {rulesContentError}
+                          </p>
                         )}
                         <div className="flex justify-between text-sm text-gray-400 mt-2">
                           <span>{editedRulesContent.length} characters</span>
-                          <span>{editedRulesContent.split('\n').filter(line => line.trim().length > 0).length} rules</span>
+                          <span>
+                            {
+                              editedRulesContent
+                                .split("\n")
+                                .filter((line) => line.trim().length > 0).length
+                            }{" "}
+                            rules
+                          </span>
                         </div>
                       </div>
                     </div>
                   ) : (
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-gray-400">Current Business Rules</Label>
+                        <Label className="text-gray-400">
+                          Current Business Rules
+                        </Label>
                         <div className="mt-2 p-4 bg-slate-700/50 border border-slate-600 rounded-md min-h-[200px] max-h-[400px] overflow-y-auto">
                           {businessRules.content ? (
                             <pre className="text-white whitespace-pre-wrap text-sm font-mono">
                               {businessRules.content}
                             </pre>
                           ) : (
-                            <p className="text-gray-400 italic">No business rules configured for this database.</p>
+                            <p className="text-gray-400 italic">
+                              No business rules configured for this database.
+                            </p>
                           )}
                         </div>
                         <div className="flex justify-between text-sm text-gray-400 mt-2">
-                          <span>{businessRules.content?.length || 0} characters</span>
+                          <span>
+                            {businessRules.content?.length || 0} characters
+                          </span>
                           <span>{businessRulesCount} rules</span>
                         </div>
                       </div>
@@ -782,7 +947,9 @@ export default function UserConfigurationPage() {
             {/* Business Rules Context Info */}
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
-                <CardTitle className="text-white">Context Information</CardTitle>
+                <CardTitle className="text-white">
+                  Context Information
+                </CardTitle>
                 <CardDescription className="text-gray-400">
                   How business rules are applied in your system
                 </CardDescription>
@@ -791,15 +958,24 @@ export default function UserConfigurationPage() {
                 <div className="space-y-3 text-sm text-gray-300">
                   <div className="flex items-start gap-2">
                     <Globe className="w-4 h-4 text-blue-400 mt-0.5" />
-                    <span>Business rules are automatically applied to all database queries</span>
+                    <span>
+                      Business rules are automatically applied to all database
+                      queries
+                    </span>
                   </div>
                   <div className="flex items-start gap-2">
                     <Key className="w-4 h-4 text-emerald-400 mt-0.5" />
-                    <span>Rules ensure data integrity and compliance across your system</span>
+                    <span>
+                      Rules ensure data integrity and compliance across your
+                      system
+                    </span>
                   </div>
                   <div className="flex items-start gap-2">
                     <Database className="w-4 h-4 text-purple-400 mt-0.5" />
-                    <span>Rules are database-specific and automatically loaded when switching databases</span>
+                    <span>
+                      Rules are database-specific and automatically loaded when
+                      switching databases
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -809,4 +985,4 @@ export default function UserConfigurationPage() {
       </div>
     </div>
   );
-} 
+}
