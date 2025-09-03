@@ -43,7 +43,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div
-      className="relative w-full h-screen overflow-hidden pt-[124px]"
+      className="relative w-full h-screen overflow-hidden pt-28"
       style={{
         background:
           theme === "dark"

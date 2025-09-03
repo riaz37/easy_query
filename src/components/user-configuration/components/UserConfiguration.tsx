@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AlertCircle } from 'lucide-react';
 import { useUserConfiguration } from '../hooks/useUserConfiguration';
 import { useBusinessRulesEditor } from '../hooks/useBusinessRulesEditor';
+import { PageLayout } from '@/components/layout/PageLayout';
 import type { UserConfigurationProps } from '../types';
 
 // Lazy load tab components for code splitting
@@ -57,7 +58,7 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
 
   if (!isAuthenticated) {
     return (
-      <div className={`container mx-auto p-6 ${className || ''}`}>
+      <PageLayout background="default" maxWidth="4xl">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
@@ -71,13 +72,13 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
             </div>
           </CardContent>
         </Card>
-      </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className={`w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 pt-20 ${className || ''}`}>
-      <div className="container mx-auto p-6 space-y-6">
+    <PageLayout background="gradient" className={className}>
+      <div className="space-y-6">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
@@ -163,7 +164,7 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </PageLayout>
   );
 });
 

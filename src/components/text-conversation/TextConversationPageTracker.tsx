@@ -19,7 +19,7 @@ export function TextConversationPageTracker() {
       // Remove leading slash and convert to page name
       const path = pathname.replace(/^\//, "").toLowerCase();
 
-      // Map common paths to page names
+      // Map common paths to page names (matching the service's pageMap)
       const pageMap: Record<string, string> = {
         "": "dashboard",
         dashboard: "dashboard",
@@ -30,6 +30,7 @@ export function TextConversationPageTracker() {
         "ai-results": "ai-results",
         "company-structure": "company-structure",
         "voice-control": "voice-control",
+        "user-configuration": "user-configuration",
       };
 
       currentPage = pageMap[path] || path || "dashboard";
