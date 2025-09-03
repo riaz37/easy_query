@@ -80,12 +80,7 @@ export default function Menu() {
       path: "/users",
       isActive: pathname === "/users",
     },
-    {
-      icon: Mic,
-      name: "Voice Agent",
-      path: "/voice-agent",
-      isActive: pathname === "/voice-agent",
-    },
+
   ];
 
   const handleMenuItemClick = () => {

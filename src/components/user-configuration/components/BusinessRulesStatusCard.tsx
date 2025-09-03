@@ -1,0 +1,160 @@
+import React from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import {
+  Shield,
+  CheckCircle,
+  AlertCircle,
+  RefreshCw,
+  Edit3,
+  Save,
+  X,
+  RotateCcw,
+} from 'lucide-react';
+import type { BusinessRulesStatusCardProps } from '../types';
+
+export const BusinessRulesStatusCard = React.memo<BusinessRulesStatusCardProps>(({
+  currentDatabaseName,
+  businessRules,
+  businessRulesCount,
+  hasBusinessRules,
+  editorState,
+  onRefresh,
+  onEdit,
+  onSave,
+  onCancel,
+  onReset,
+}) => {
+  return (
+    <Card className="bg-slate-800/50 border-slate-700">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-white">
+          <Shield className="h-5 w-5 text-emerald-400" />
+          Business Rules Status
+        </CardTitle>
+        <CardDescription className="text-gray-400">
+          Current business rules configuration for{' '}
+          {currentDatabaseName || 'selected database'}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <Label className="text-gray-400">Status</Label>
+            <div className="flex items-center gap-2 mt-1">
+              {businessRules.status === 'loaded' && hasBusinessRules ? (
+                <Badge
+                  variant="outline"
+                  className="text-green-400 border-green-400"
+                >
+                  <CheckCircle className="w-3 h-3 mr-1" />
+                  Active
+                </Badge>
+              ) : (
+                <Badge
+                  variant="outline"
+                  className="text-yellow-400 border-yellow-400"
+                >
+                  <AlertCircle className="w-3 h-3 mr-1" />
+                  Not Configured
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-gray-400">Rules Count</Label>
+            <div className="text-white font-medium mt-1">
+              {businessRules.status === 'loaded'
+                ? businessRulesCount
+                : '0'}
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-gray-400">Content Length</Label>
+            <div className="text-white font-medium mt-1">
+              {businessRules.content
+                ? `${businessRules.content.length} characters`
+                : '0 characters'}
+            </div>
+          </div>
+        </div>
+
+        <Separator className="bg-slate-600" />
+
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-400">
+            Last updated:{' '}
+            {businessRules.lastUpdated
+              ? new Date(businessRules.lastUpdated).toLocaleString()
+              : 'Never'}
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={onRefresh}
+              disabled={businessRules.status === 'loading'}
+              className="border-slate-600 text-slate-300 hover:bg-slate-700"
+            >
+              <RefreshCw
+                className={`w-4 h-4 mr-2 ${businessRules.status === 'loading' ? 'animate-spin' : ''}`}
+              />
+              Refresh Status
+            </Button>
+
+            {!editorState.isEditing ? (
+              <Button
+                onClick={onEdit}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                <Edit3 className="w-4 h-4 mr-2" />
+                Edit Rules
+              </Button>
+            ) : (
+              <div className="flex gap-2">
+                <Button
+                  onClick={onSave}
+                  disabled={!editorState.hasUnsavedChanges}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save
+                </Button>
+                <Button
+                  onClick={onCancel}
+                  variant="outline"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Cancel
+                </Button>
+                <Button
+                  onClick={onReset}
+                  variant="outline"
+                  disabled={!editorState.hasUnsavedChanges}
+                  className="border-blue-600 text-blue-300 hover:bg-blue-700"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Reset
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+});
+
+BusinessRulesStatusCard.displayName = 'BusinessRulesStatusCard';
