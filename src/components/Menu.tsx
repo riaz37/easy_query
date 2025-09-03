@@ -110,7 +110,6 @@ export default function Menu() {
           )}
           data-menu-item={item.path}
           data-element="navigation"
-          data-voice-target={`menu-${item.name.toLowerCase().replace(/\s+/g, "-")}`}
         >
           <IconComponent
             className={cn(

@@ -1,75 +1,72 @@
-import { useEffect, useCallback } from 'react'
-import { ButtonActionManager } from '@/lib/voice-agent/services/ButtonActionManager'
-import { ButtonActionDefinition } from '@/lib/voice-agent/config/button-actions'
+import { useCallback } from 'react'
+import { BUTTON_MAPPING_CONFIG, getButtonMapping, getButtonMappingsForPage } from '@/lib/voice-agent/config/default-button-actions'
 
 export function useButtonActionManager() {
-  // Initialize the ButtonActionManager on mount
-  useEffect(() => {
-    console.log('🖱️ Initializing ButtonActionManager in useButtonActionManager hook')
-    ButtonActionManager.initialize()
-
-    // Cleanup on unmount
-    return () => {
-      ButtonActionManager.cleanup()
-    }
+  // Get all available button mappings
+  const getAvailableActions = useCallback(() => {
+    return Object.entries(BUTTON_MAPPING_CONFIG).map(([key, mapping]) => ({
+      id: mapping.id,
+      name: mapping.name,
+      elementName: key,
+      description: mapping.description,
+      page: mapping.page,
+      selectors: mapping.selectors,
+      aliases: mapping.aliases,
+      category: 'mapped'
+    }))
   }, [])
 
-  // Get all available button actions
-  const getAvailableActions = useCallback((): ButtonActionDefinition[] => {
-    return ButtonActionManager.getAvailableActions()
-  }, [])
-
-  // Get button actions by category
-  const getActionsByCategory = useCallback((categoryName: string): ButtonActionDefinition[] => {
-    return ButtonActionManager.getActionsByCategory(categoryName)
+  // Get button actions by page
+  const getActionsByPage = useCallback((pageName: string) => {
+    return getButtonMappingsForPage(pageName)
   }, [])
 
   // Check if a button action is available
-  const isActionAvailable = useCallback((actionName: string): boolean => {
-    return ButtonActionManager.isActionAvailable(actionName)
+  const isActionAvailable = useCallback((elementName: string): boolean => {
+    return !!getButtonMapping(elementName)
   }, [])
 
   // Get action information
-  const getActionInfo = useCallback((actionName: string): ButtonActionDefinition | undefined => {
-    return ButtonActionManager.getActionInfo(actionName)
+  const getActionInfo = useCallback((elementName: string) => {
+    return getButtonMapping(elementName)
   }, [])
 
-  // Get actions by action type
-  const getActionsByType = useCallback((actionType: string): ButtonActionDefinition[] => {
-    const allActions = getAvailableActions()
-    return allActions.filter(action => action.actionType === actionType)
-  }, [getAvailableActions])
+  // Get actions by page
+  const getActionsByType = useCallback((pageName: string) => {
+    return getButtonMappingsForPage(pageName)
+  }, [])
 
   // Search actions by text
-  const searchActions = useCallback((searchTerm: string): ButtonActionDefinition[] => {
+  const searchActions = useCallback((searchTerm: string) => {
     const allActions = getAvailableActions()
     const normalizedSearch = searchTerm.toLowerCase()
     
     return allActions.filter(action => 
-      action.elementName.toLowerCase().includes(normalizedSearch) ||
-      action.description.toLowerCase().includes(normalizedSearch) ||
-      action.aliases?.some(alias => alias.toLowerCase().includes(normalizedSearch))
+      action.name.toLowerCase().includes(normalizedSearch) ||
+      action.description?.toLowerCase().includes(normalizedSearch) ||
+      action.aliases?.some(alias => alias.toLowerCase().includes(normalizedSearch)) ||
+      action.elementName.toLowerCase().includes(normalizedSearch)
     )
   }, [getAvailableActions])
 
-  // Get action categories
+  // Get available pages
   const getActionCategories = useCallback(() => {
-    const allActions = getAvailableActions()
-    const categories = new Set<string>()
-    
-    allActions.forEach(action => {
-      if (action.context) {
-        categories.add(action.context)
-      }
+    const pages = new Set<string>()
+    Object.values(BUTTON_MAPPING_CONFIG).forEach(mapping => {
+      pages.add(mapping.page)
     })
-    
-    return Array.from(categories)
-  }, [getAvailableActions])
+    return Array.from(pages)
+  }, [])
+
+  // Get mapping configuration
+  const getMappingConfig = useCallback(() => {
+    return BUTTON_MAPPING_CONFIG
+  }, [])
 
   return {
     // Core functionality
     getAvailableActions,
-    getActionsByCategory,
+    getActionsByPage,
     isActionAvailable,
     getActionInfo,
     
@@ -77,9 +74,11 @@ export function useButtonActionManager() {
     getActionsByType,
     searchActions,
     getActionCategories,
+    getMappingConfig,
     
     // Utility functions
     getTotalActionCount: () => getAvailableActions().length,
-    getCategoryCount: () => getActionCategories().length
+    getCategoryCount: () => getActionCategories().length,
+    getPageCount: () => getActionCategories().length
   }
 } 

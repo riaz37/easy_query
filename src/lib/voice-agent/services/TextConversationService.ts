@@ -1,6 +1,7 @@
 import { VOICE_AGENT_CONFIG } from "../config";
-import { buttonRegistry, ButtonExecutionContext } from "./ButtonRegistry";
-import { buttonRegistrationService } from "./ButtonRegistrationService";
+// Removed old ButtonRegistry - using mapping system only
+// Removed old ButtonRegistrationService - using mapping system only
+import { getButtonMapping, ButtonMappingConfig, BUTTON_MAPPING_CONFIG } from "../config/default-button-actions";
 
 export interface TextMessage {
   id: string;
@@ -44,8 +45,7 @@ export class TextConversationService {
   constructor(userId: string) {
     this.userId = userId;
 
-    // Initialize button registration service
-    this.initializeButtonRegistration();
+    // Button registration service removed - using mapping system instead
   }
 
   connect(): Promise<void> {
@@ -380,8 +380,8 @@ export class TextConversationService {
   }
 
   /**
-   * Execute registered button action using ButtonRegistry
-   * This method uses the scalable button registry system
+   * Execute registered button action using robust mapping system
+   * This method uses the new mapping configuration for reliable button targeting
    */
   private async executeRegisteredButtonAction(
     elementName: string,
@@ -389,49 +389,52 @@ export class TextConversationService {
     source: "voice" | "text",
   ): Promise<void> {
     console.log(
-      "💬 Executing registered button action:",
+      "💬 Executing mapped button action:",
       elementName,
       "with context:",
       context,
     );
 
     try {
-      const executionContext: ButtonExecutionContext = {
-        elementName,
-        page: context.page,
-        previousPage: context.previous_page,
-        context,
-        source,
-        timestamp: new Date().toISOString(),
-      };
-
-      const result = await buttonRegistry.execute(
-        elementName,
-        executionContext,
-      );
-
-      if (result.success) {
-        console.log(`💬 Successfully executed button action: ${elementName}`);
+      // Get button mapping configuration
+      const mapping = getButtonMapping(elementName);
+      
+      if (!mapping) {
+        console.error(`💬 No mapping found for element: ${elementName}`);
+        console.error(`💬 Available mappings:`, Object.keys(BUTTON_MAPPING_CONFIG));
+        console.error(`💬 Please add mapping for: "${elementName}"`);
+        
         this.addMessage({
           id: this.generateMessageId(),
           type: "system",
-          content: `Executed action: ${elementName}`,
+          content: `No mapping found for action: ${elementName}`,
+          timestamp: new Date(),
+        });
+        return;
+      }
+
+      // Execute using mapping system
+      const success = await this.executeMappedButtonAction(mapping, context, source);
+      
+      if (success) {
+        console.log(`💬 Successfully executed mapped button action: ${elementName}`);
+        this.addMessage({
+          id: this.generateMessageId(),
+          type: "system",
+          content: `Executed action: ${mapping.name}`,
           timestamp: new Date(),
         });
       } else {
-        console.warn(
-          `💬 Failed to execute button action: ${elementName}`,
-          result.error,
-        );
+        console.warn(`💬 Failed to execute mapped button action: ${elementName}`);
         this.addMessage({
           id: this.generateMessageId(),
           type: "system",
-          content: `Failed to execute action: ${elementName} - ${result.error}`,
+          content: `Failed to execute action: ${mapping.name}`,
           timestamp: new Date(),
         });
       }
     } catch (error) {
-      console.error("💬 Error executing registered button action:", error);
+      console.error("💬 Error executing mapped button action:", error);
       this.addMessage({
         id: this.generateMessageId(),
         type: "system",
@@ -439,6 +442,185 @@ export class TextConversationService {
         timestamp: new Date(),
       });
     }
+  }
+
+  /**
+   * Execute button action using mapping configuration
+   */
+  private async executeMappedButtonAction(
+    mapping: ButtonMappingConfig,
+    context: any,
+    source: "voice" | "text"
+  ): Promise<boolean> {
+    console.log(`🎯 Executing mapped button action: ${mapping.name}`);
+    
+    // Handle workflow: fill textarea first if needed
+    if (mapping.workflow?.fillTextarea && context?.search_query) {
+      const textareaFilled = await this.fillTextarea(mapping, context.search_query);
+      if (!textareaFilled) {
+        console.warn(`🎯 Failed to fill textarea for: ${mapping.name}`);
+        return false;
+      }
+      
+      // Small delay to allow React to process the state change
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    // Try each selector in order
+    for (let i = 0; i < mapping.selectors.length; i++) {
+      const selector = mapping.selectors[i];
+      console.log(`🎯 Trying selector ${i + 1}/${mapping.selectors.length}: ${selector}`);
+      
+      try {
+        const button = document.querySelector(selector) as HTMLElement;
+        
+        if (button) {
+          // Validate button if validation rules exist
+          if (mapping.validation && !this.validateButton(button, mapping.validation)) {
+            console.warn(`🎯 Button found but validation failed for selector: ${selector}`);
+            continue;
+          }
+          
+          // Click the button
+          button.click();
+          console.log(`✅ Successfully clicked button: ${mapping.name}`);
+          return true;
+        }
+      } catch (error) {
+        console.warn(`🎯 Error with selector ${selector}:`, error);
+      }
+    }
+    
+    // If all selectors fail, try fuzzy matching
+    console.warn(`🎯 All selectors failed for: ${mapping.name}`);
+    return await this.tryFuzzyMatching(mapping);
+  }
+
+  /**
+   * Fill textarea with search query
+   */
+  private async fillTextarea(mapping: ButtonMappingConfig, searchQuery: string): Promise<boolean> {
+    if (!mapping.workflow?.textareaSelectors) {
+      console.warn(`🎯 No textarea selectors defined for: ${mapping.name}`);
+      return false;
+    }
+    
+    console.log(`🎯 Filling textarea with query: "${searchQuery}"`);
+    
+    // Try each textarea selector
+    for (let i = 0; i < mapping.workflow.textareaSelectors.length; i++) {
+      const selector = mapping.workflow.textareaSelectors[i];
+      console.log(`🎯 Trying textarea selector ${i + 1}/${mapping.workflow.textareaSelectors.length}: ${selector}`);
+      
+      try {
+        const textarea = document.querySelector(selector) as HTMLTextAreaElement;
+        
+        if (textarea) {
+          console.log(`🎯 Textarea found with selector: ${selector}`);
+          
+          // Set the value using React's synthetic event system
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set;
+          if (nativeInputValueSetter) {
+            nativeInputValueSetter.call(textarea, searchQuery);
+          }
+          
+          // Create and dispatch a proper React synthetic event
+          const inputEvent = new Event('input', { bubbles: true });
+          Object.defineProperty(inputEvent, 'target', {
+            writable: false,
+            value: textarea
+          });
+          Object.defineProperty(inputEvent, 'currentTarget', {
+            writable: false,
+            value: textarea
+          });
+          
+          // Dispatch the event
+          textarea.dispatchEvent(inputEvent);
+          
+          console.log(`✅ Successfully filled textarea with: "${searchQuery}"`);
+          return true;
+        }
+      } catch (error) {
+        console.warn(`🎯 Error with textarea selector ${selector}:`, error);
+      }
+    }
+    
+    console.warn(`🎯 No textarea found for: ${mapping.name}`);
+    return false;
+  }
+
+  /**
+   * Validate button matches expected criteria
+   */
+  private validateButton(button: HTMLElement, validation: ButtonMappingConfig['validation']): boolean {
+    if (!validation) return true;
+    
+    // Check expected text
+    if (validation.expectedText) {
+      const buttonText = button.textContent?.trim();
+      if (!buttonText?.includes(validation.expectedText)) {
+        console.warn(`🎯 Text validation failed. Expected: ${validation.expectedText}, Got: ${buttonText}`);
+        return false;
+      }
+    }
+    
+    // Check expected class
+    if (validation.expectedClass) {
+      if (!button.className.includes(validation.expectedClass)) {
+        console.warn(`🎯 Class validation failed. Expected: ${validation.expectedClass}, Got: ${button.className}`);
+        return false;
+      }
+    }
+    
+    // Check expected ID
+    if (validation.expectedId) {
+      if (button.id !== validation.expectedId) {
+        console.warn(`🎯 ID validation failed. Expected: ${validation.expectedId}, Got: ${button.id}`);
+        return false;
+      }
+    }
+    
+    // Check if button is visible and clickable
+    if (!button.offsetParent) {
+      console.warn(`🎯 Button is not visible`);
+      return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * Fallback fuzzy matching when all selectors fail
+   */
+  private async tryFuzzyMatching(mapping: ButtonMappingConfig): Promise<boolean> {
+    console.log(`🎯 Attempting fuzzy matching for: ${mapping.name}`);
+    
+    const allButtons = Array.from(document.querySelectorAll('button')) as HTMLElement[];
+    console.log(`🎯 Found ${allButtons.length} buttons on page`);
+    
+    // Try to find button by partial text match
+    if (mapping.validation?.expectedText) {
+      const expectedText = mapping.validation.expectedText.toLowerCase();
+      const matchingButton = allButtons.find(btn => {
+        const buttonText = btn.textContent?.toLowerCase().trim();
+        return buttonText && (
+          buttonText.includes(expectedText) || 
+          expectedText.includes(buttonText) ||
+          buttonText.split(' ').some(word => expectedText.includes(word))
+        );
+      });
+      
+      if (matchingButton) {
+        console.log(`🎯 Found button via fuzzy matching: ${matchingButton.textContent?.trim()}`);
+        matchingButton.click();
+        console.log(`✅ Successfully clicked button via fuzzy matching`);
+        return true;
+      }
+    }
+    
+    console.error(`🎯 Failed to find button: ${mapping.name}`);
+    return false;
   }
 
   /**
@@ -677,17 +859,5 @@ export class TextConversationService {
     console.log(`💬 Page changed from ${previousPage} to ${page}`);
   }
 
-  // Initialize button registration service
-  private async initializeButtonRegistration(): Promise<void> {
-    try {
-      console.log("💬 Initializing button registration service...");
-      await buttonRegistrationService.initialize();
-      console.log("💬 Button registration service initialized successfully");
-    } catch (error) {
-      console.error(
-        "💬 Failed to initialize button registration service:",
-        error,
-      );
-    }
-  }
+
 }
