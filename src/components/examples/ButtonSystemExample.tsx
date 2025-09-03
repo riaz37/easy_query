@@ -23,8 +23,7 @@ import {
   Trash2,
   RefreshCw
 } from 'lucide-react'
-import { buttonRegistrationService } from '@/lib/voice-agent/services/ButtonRegistrationService'
-import { buttonRegistry } from '@/lib/voice-agent/services/ButtonRegistry'
+import { BUTTON_MAPPING_CONFIG, getButtonMapping } from '@/lib/voice-agent/config/default-button-actions'
 
 export function ButtonSystemExample() {
   const [registeredActions, setRegisteredActions] = useState<any[]>([])

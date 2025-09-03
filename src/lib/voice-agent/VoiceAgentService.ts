@@ -2,9 +2,9 @@ import { VOICE_AGENT_CONFIG } from "./config";
 import { MessageService } from "./services/MessageService";
 import { WebSocketService } from "./services/WebSocketService";
 import { RTVIService } from "./services/RTVIService";
-import { ButtonActionService } from "./services/ButtonActionService";
+import { getButtonMapping, BUTTON_MAPPING_CONFIG } from "./config/default-button-actions";
 import { NavigationActionManager } from "./services/NavigationActionManager";
-import { buttonRegistrationService } from "./services/ButtonRegistrationService";
+// Removed old ButtonRegistrationService - using mapping system only
 import {
   VoiceMessage,
   VoiceClientState,
@@ -334,8 +334,7 @@ export class VoiceAgentService {
       // Update NavigationActionManager state to keep it in sync
       NavigationActionManager.setCurrentPage(newPage);
 
-      // Update ButtonActionService state to keep it in sync
-      ButtonActionService.setCurrentPage(newPage);
+      // Page change is handled by ButtonRegistry through backend responses
 
       // Notify backend of page change without reconnecting
       try {
@@ -608,30 +607,152 @@ export class VoiceAgentService {
   }
 
   clickElement(elementName: string): void {
-    // Use ButtonActionService for specific button actions
-    ButtonActionService.executeButtonAction(elementName);
+    // Use ButtonRegistry for button actions
+    this.executeButtonAction(elementName);
   }
 
-  executeButtonAction(elementName: string, context?: any): void {
-    ButtonActionService.executeButtonAction(elementName, context);
+  async executeButtonAction(elementName: string, context?: any): Promise<void> {
+    try {
+      console.log(`🎯 VoiceAgent executing button action: ${elementName}`);
+      
+      const mapping = getButtonMapping(elementName);
+      
+      if (!mapping) {
+        console.error(`🎯 No mapping found for element: ${elementName}`);
+        console.error(`🎯 Available mappings:`, Object.keys(BUTTON_MAPPING_CONFIG));
+        return;
+      }
+      
+      // Execute using mapping system
+      const success = await this.executeMappedButtonAction(mapping, context);
+      
+      if (success) {
+        console.log(`🎯 Successfully executed button action: ${elementName}`);
+      } else {
+        console.warn(`🎯 Failed to execute button action: ${elementName}`);
+      }
+    } catch (error) {
+      console.error(`🎯 Error executing button action: ${elementName}`, error);
+    }
+  }
+
+  /**
+   * Execute button action using mapping configuration
+   */
+  private async executeMappedButtonAction(mapping: any, context?: any): Promise<boolean> {
+    console.log(`🎯 Executing mapped button action: ${mapping.name}`);
+    
+    // Try each selector in order
+    for (let i = 0; i < mapping.selectors.length; i++) {
+      const selector = mapping.selectors[i];
+      console.log(`🎯 Trying selector ${i + 1}/${mapping.selectors.length}: ${selector}`);
+      
+      try {
+        const button = document.querySelector(selector) as HTMLElement;
+        
+        if (button) {
+          // Validate button if validation rules exist
+          if (mapping.validation && !this.validateButton(button, mapping.validation)) {
+            console.warn(`🎯 Button found but validation failed for selector: ${selector}`);
+            continue;
+          }
+          
+          // Click the button
+          button.click();
+          console.log(`✅ Successfully clicked button: ${mapping.name}`);
+          return true;
+        }
+      } catch (error) {
+        console.warn(`🎯 Error with selector ${selector}:`, error);
+      }
+    }
+    
+    // If all selectors fail, try fuzzy matching
+    console.warn(`🎯 All selectors failed for: ${mapping.name}`);
+    return await this.tryFuzzyMatching(mapping);
+  }
+
+  /**
+   * Validate button matches expected criteria
+   */
+  private validateButton(button: HTMLElement, validation: any): boolean {
+    if (!validation) return true;
+    
+    // Check expected text
+    if (validation.expectedText) {
+      const buttonText = button.textContent?.trim();
+      if (!buttonText?.includes(validation.expectedText)) {
+        console.warn(`🎯 Text validation failed. Expected: ${validation.expectedText}, Got: ${buttonText}`);
+        return false;
+      }
+    }
+    
+    // Check expected class
+    if (validation.expectedClass) {
+      if (!button.className.includes(validation.expectedClass)) {
+        console.warn(`🎯 Class validation failed. Expected: ${validation.expectedClass}, Got: ${button.className}`);
+        return false;
+      }
+    }
+    
+    // Check if button is visible and clickable
+    if (!button.offsetParent) {
+      console.warn(`🎯 Button is not visible`);
+      return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * Fallback fuzzy matching when all selectors fail
+   */
+  private async tryFuzzyMatching(mapping: any): Promise<boolean> {
+    console.log(`🎯 Attempting fuzzy matching for: ${mapping.name}`);
+    
+    const allButtons = Array.from(document.querySelectorAll('button')) as HTMLElement[];
+    console.log(`🎯 Found ${allButtons.length} buttons on page`);
+    
+    // Try to find button by partial text match
+    if (mapping.validation?.expectedText) {
+      const expectedText = mapping.validation.expectedText.toLowerCase();
+      const matchingButton = allButtons.find(btn => {
+        const buttonText = btn.textContent?.toLowerCase().trim();
+        return buttonText && (
+          buttonText.includes(expectedText) || 
+          expectedText.includes(buttonText) ||
+          buttonText.split(' ').some(word => expectedText.includes(word))
+        );
+      });
+      
+      if (matchingButton) {
+        console.log(`🎯 Found button via fuzzy matching: ${matchingButton.textContent?.trim()}`);
+        matchingButton.click();
+        console.log(`✅ Successfully clicked button via fuzzy matching`);
+        return true;
+      }
+    }
+    
+    console.error(`🎯 Failed to find button: ${mapping.name}`);
+    return false;
   }
 
   handleFileUpload(descriptions: string[], tableNames: string[]): void {
-    // Use ButtonActionService for file upload actions
-    ButtonActionService.executeButtonAction("upload", {
+    // Use ButtonRegistry for file upload actions
+    this.executeButtonAction("upload", {
       descriptions,
       tableNames,
     });
   }
 
   viewReport(request: string): void {
-    // Use ButtonActionService for view report actions
-    ButtonActionService.executeButtonAction("view report", { request });
+    // Use ButtonRegistry for view report actions
+    this.executeButtonAction("view report", { request });
   }
 
   generateReport(query: string): void {
-    // Use ButtonActionService for generate report actions
-    ButtonActionService.executeButtonAction("report generation", { query });
+    // Use ButtonRegistry for generate report actions
+    this.executeButtonAction("report generation", { query });
   }
 
   testNavigation(page: string): void {
