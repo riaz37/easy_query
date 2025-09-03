@@ -308,6 +308,18 @@ export class WebSocketService {
   ): Promise<boolean> {
     console.log(`🎯 Executing mapped button action: ${mapping.name}`);
     
+    // Handle workflow: fill textarea first if needed
+    if (mapping.workflow?.fillTextarea && context?.search_query) {
+      const textareaFilled = await this.fillTextarea(mapping, context.search_query);
+      if (!textareaFilled) {
+        console.warn(`🎯 Failed to fill textarea for: ${mapping.name}`);
+        return false;
+      }
+      
+      // Small delay to allow React to process the state change
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
     // Try each selector in order
     for (let i = 0; i < mapping.selectors.length; i++) {
       const selector = mapping.selectors[i];
@@ -339,24 +351,94 @@ export class WebSocketService {
   }
 
   /**
+   * Fill textarea with search query
+   */
+  private async fillTextarea(mapping: ButtonMappingConfig, searchQuery: string): Promise<boolean> {
+    if (!mapping.workflow?.textareaSelectors) {
+      console.warn(`🎯 No textarea selectors defined for: ${mapping.name}`);
+      return false;
+    }
+    
+    console.log(`🎯 Filling textarea with query: "${searchQuery}"`);
+    
+    // Try each textarea selector
+    for (let i = 0; i < mapping.workflow.textareaSelectors.length; i++) {
+      const selector = mapping.workflow.textareaSelectors[i];
+      console.log(`🎯 Trying textarea selector ${i + 1}/${mapping.workflow.textareaSelectors.length}: ${selector}`);
+      
+      try {
+        const textarea = document.querySelector(selector) as HTMLTextAreaElement;
+        
+        if (textarea) {
+          console.log(`🎯 Textarea found with selector: ${selector}`);
+          
+          // Set the value using React's synthetic event system
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set;
+          if (nativeInputValueSetter) {
+            nativeInputValueSetter.call(textarea, searchQuery);
+          }
+          
+          // Create and dispatch a proper React synthetic event
+          const inputEvent = new Event('input', { bubbles: true });
+          Object.defineProperty(inputEvent, 'target', {
+            writable: false,
+            value: textarea
+          });
+          Object.defineProperty(inputEvent, 'currentTarget', {
+            writable: false,
+            value: textarea
+          });
+          
+          // Dispatch the event
+          textarea.dispatchEvent(inputEvent);
+          
+          console.log(`✅ Successfully filled textarea with: "${searchQuery}"`);
+          return true;
+        }
+      } catch (error) {
+        console.warn(`🎯 Error with textarea selector ${selector}:`, error);
+      }
+    }
+    
+    console.warn(`🎯 No textarea found for: ${mapping.name}`);
+    return false;
+  }
+
+  /**
    * Validate button matches expected criteria
    */
   private validateButton(button: HTMLElement, validation: ButtonMappingConfig['validation']): boolean {
     if (!validation) return true;
     
-    // Check expected text
+    // Check expected text (handle both string and array)
     if (validation.expectedText) {
       const buttonText = button.textContent?.trim();
-      if (!buttonText?.includes(validation.expectedText)) {
-        console.warn(`🎯 Text validation failed. Expected: ${validation.expectedText}, Got: ${buttonText}`);
+      const expectedTexts = Array.isArray(validation.expectedText) 
+        ? validation.expectedText 
+        : [validation.expectedText];
+      
+      const textMatches = expectedTexts.some(expectedText => 
+        buttonText?.includes(expectedText)
+      );
+      
+      if (!textMatches) {
+        console.warn(`🎯 Text validation failed. Expected one of: ${expectedTexts.join(', ')}, Got: ${buttonText}`);
         return false;
       }
     }
     
-    // Check expected class
+    // Check expected class (handle both string and array)
     if (validation.expectedClass) {
-      if (!button.className.includes(validation.expectedClass)) {
-        console.warn(`🎯 Class validation failed. Expected: ${validation.expectedClass}, Got: ${button.className}`);
+      const expectedClasses = Array.isArray(validation.expectedClass) 
+        ? validation.expectedClass 
+        : [validation.expectedClass];
+      
+      const classMatches = expectedClasses.some(expectedClass => 
+        button.className.includes(expectedClass)
+      );
+      
+      if (!classMatches) {
+        console.warn(`🎯 Class validation failed. Expected one of: ${expectedClasses.join(', ')}, Got: ${button.className}`);
         return false;
       }
     }

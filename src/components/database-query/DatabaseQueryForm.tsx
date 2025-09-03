@@ -90,8 +90,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
               placeholder="Ask your question in natural language... (e.g., 'Show me all users from last month')"
               className="min-h-[120px] bg-gray-800/50 border-blue-400/30 text-white placeholder:text-gray-400 resize-none"
               disabled={!hasDatabase || localLoading}
-              data-element="search"
-              data-voice-target="database-search-input"
+              data-element="query-input"
             />
             {!hasDatabase && (
               <div className="flex items-center gap-2 text-yellow-400 text-sm">
@@ -144,8 +143,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
                 type="submit"
                 disabled={!query.trim() || !hasDatabase || localLoading}
                 className="bg-blue-600 hover:bg-blue-700 text-white min-w-[140px]"
-                data-element="search"
-                data-voice-target="database-search-button"
+                data-element="query-submit"
               >
                 {localLoading ? (
                   <>

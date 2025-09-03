@@ -10,12 +10,16 @@ export interface ButtonMappingConfig {
   page: string
   selectors: string[]
   validation?: {
-    expectedText?: string
-    expectedClass?: string
+    expectedText?: string | string[]
+    expectedClass?: string | string[]
     expectedId?: string
   }
   aliases?: string[]
   description?: string
+  workflow?: {
+    fillTextarea?: boolean
+    textareaSelectors?: string[]
+  }
 }
 
 /**
@@ -29,7 +33,6 @@ export const BUTTON_MAPPING_CONFIG: Record<string, ButtonMappingConfig> = {
     name: "Add Vector DB Access",
     page: "users",
     selectors: [
-      "button:contains('Add Vector DB Access')",           // Primary text match
       "[data-action='vector-db-access']",                  // Data attribute
       "#add-vector-db-btn",                               // ID selector
       "button[aria-label*='vector']",                     // Aria label
@@ -49,7 +52,6 @@ export const BUTTON_MAPPING_CONFIG: Record<string, ButtonMappingConfig> = {
     name: "Add MSSQL Access", 
     page: "users",
     selectors: [
-      "button:contains('Add MSSQL Access')",              // Primary text match
       "[data-action='mssql-access']",                     // Data attribute
       "#add-mssql-btn",                                   // ID selector
       "button[aria-label*='mssql']",                      // Aria label
@@ -61,6 +63,77 @@ export const BUTTON_MAPPING_CONFIG: Record<string, ButtonMappingConfig> = {
     },
     aliases: ["add mssql", "mssql access", "create mssql access"],
     description: "Click add MSSQL access button"
+  },
+
+  // File Upload Area (to open file picker)
+  "upload": {
+    id: "file-upload-area",
+    name: "Open File Picker",
+    page: "file-query",
+    selectors: [
+      "[data-element='upload-area']",                     // Upload area (drag & drop)
+      "#upload-area",                                     // ID selector
+      "div[class*='border-dashed']",                      // Class-based
+      "div[class*='upload']"                              // Generic upload div
+    ],
+    validation: {
+      expectedText: "Click to upload files or drag and drop",
+      expectedClass: "border-dashed"
+    },
+    aliases: ["upload file", "select files", "choose files", "add files"],
+    description: "Click upload area to open file picker"
+  },
+
+  // File Upload Button (to actually upload selected files)
+  "upload files": {
+    id: "file-upload-button",
+    name: "Upload Selected Files",
+    page: "file-query",
+    selectors: [
+      "button[data-element='upload-button']",             // Upload button data-element
+      "#upload-button",                                   // ID selector
+      "button[aria-label*='upload']",                     // Aria label
+      "button.bg-blue-600"                                // Class-based
+    ],
+    validation: {
+      expectedText: "Upload",
+      expectedClass: "bg-blue-600"
+    },
+    aliases: ["upload selected files", "upload pending files", "process files"],
+    description: "Click upload button to upload selected files"
+  },
+
+  // Search Button (works for both file-query and database-query pages)
+  "search": {
+    id: "search-button",
+    name: "Search/Query",
+    page: "both", // Works on both pages
+    selectors: [
+      // File query page selectors
+      "button[data-element='file-query-submit']",         // File query submit button
+      "button[data-element='query-submit']",              // Database query submit button
+      "#search-button",                                   // ID selector
+      "button[aria-label*='search']",                     // Aria label
+      "button.bg-green-600",                              // File query button class
+      "button.bg-blue-600"                                // Database query button class
+    ],
+    validation: {
+      expectedText: ["Execute Query", "Ask Question"],    // Multiple valid texts
+      expectedClass: ["bg-green-600", "bg-blue-600"]     // Multiple valid classes
+    },
+    aliases: ["search", "search files", "file search", "database search", "query database", "ask question", "execute query"],
+    description: "Fill textarea with search query and click submit button (works on both file-query and database-query pages)",
+    // Enhanced workflow: fill textarea + click button
+    workflow: {
+      fillTextarea: true,
+      textareaSelectors: [
+        "textarea[data-element='file-query-input']",      // File query textarea
+        "textarea[data-element='query-input']",           // Database query textarea
+        "#query-input",                                   // ID selector
+        "textarea[placeholder*='query']",                 // Placeholder-based
+        "textarea[placeholder*='question']"               // Placeholder-based
+      ]
+    }
   }
 }
 

@@ -642,6 +642,18 @@ export class VoiceAgentService {
   private async executeMappedButtonAction(mapping: any, context?: any): Promise<boolean> {
     console.log(`🎯 Executing mapped button action: ${mapping.name}`);
     
+    // Handle workflow: fill textarea first if needed
+    if (mapping.workflow?.fillTextarea && context?.search_query) {
+      const textareaFilled = await this.fillTextarea(mapping, context.search_query);
+      if (!textareaFilled) {
+        console.warn(`🎯 Failed to fill textarea for: ${mapping.name}`);
+        return false;
+      }
+      
+      // Small delay to allow React to process the state change
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
     // Try each selector in order
     for (let i = 0; i < mapping.selectors.length; i++) {
       const selector = mapping.selectors[i];
@@ -670,6 +682,60 @@ export class VoiceAgentService {
     // If all selectors fail, try fuzzy matching
     console.warn(`🎯 All selectors failed for: ${mapping.name}`);
     return await this.tryFuzzyMatching(mapping);
+  }
+
+  /**
+   * Fill textarea with search query
+   */
+  private async fillTextarea(mapping: any, searchQuery: string): Promise<boolean> {
+    if (!mapping.workflow?.textareaSelectors) {
+      console.warn(`🎯 No textarea selectors defined for: ${mapping.name}`);
+      return false;
+    }
+    
+    console.log(`🎯 Filling textarea with query: "${searchQuery}"`);
+    
+    // Try each textarea selector
+    for (let i = 0; i < mapping.workflow.textareaSelectors.length; i++) {
+      const selector = mapping.workflow.textareaSelectors[i];
+      console.log(`🎯 Trying textarea selector ${i + 1}/${mapping.workflow.textareaSelectors.length}: ${selector}`);
+      
+      try {
+        const textarea = document.querySelector(selector) as HTMLTextAreaElement;
+        
+        if (textarea) {
+          console.log(`🎯 Textarea found with selector: ${selector}`);
+          
+          // Set the value using React's synthetic event system
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set;
+          if (nativeInputValueSetter) {
+            nativeInputValueSetter.call(textarea, searchQuery);
+          }
+          
+          // Create and dispatch a proper React synthetic event
+          const inputEvent = new Event('input', { bubbles: true });
+          Object.defineProperty(inputEvent, 'target', {
+            writable: false,
+            value: textarea
+          });
+          Object.defineProperty(inputEvent, 'currentTarget', {
+            writable: false,
+            value: textarea
+          });
+          
+          // Dispatch the event
+          textarea.dispatchEvent(inputEvent);
+          
+          console.log(`✅ Successfully filled textarea with: "${searchQuery}"`);
+          return true;
+        }
+      } catch (error) {
+        console.warn(`🎯 Error with textarea selector ${selector}:`, error);
+      }
+    }
+    
+    console.warn(`🎯 No textarea found for: ${mapping.name}`);
+    return false;
   }
 
   /**
