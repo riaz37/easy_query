@@ -28,6 +28,7 @@ import { DatabaseQueryForm } from "@/components/database-query/DatabaseQueryForm
 import { QueryHistoryPanel } from "@/components/database-query/QueryHistoryPanel";
 import { QueryModeToggle } from "@/components/database-query/QueryModeToggle";
 import { ReportGenerator } from "@/components/reports";
+import { QueryResultOverlay } from "@/components/ui/query-result-overlay";
 
 export default function DatabaseQueryPage() {
   const router = useRouter();
@@ -49,6 +50,8 @@ export default function DatabaseQueryPage() {
   const [queryProgress, setQueryProgress] = useState(0);
   const [processingSteps, setProcessingSteps] = useState<string[]>([]);
   const [isReportGenerating, setIsReportGenerating] = useState(false);
+  const [showResultOverlay, setShowResultOverlay] = useState(false);
+  const [completedQuery, setCompletedQuery] = useState<string>("");
 
   // Memoize the processing steps to prevent recreation
   const defaultProcessingSteps = useMemo(() => [
@@ -134,6 +137,15 @@ export default function DatabaseQueryPage() {
     router.push("/");
   }, [router]);
 
+  const handleViewResults = useCallback(() => {
+    setShowResultOverlay(false);
+    router.push('/database-query-results');
+  }, [router]);
+
+  const handleDismissOverlay = useCallback(() => {
+    setShowResultOverlay(false);
+  }, []);
+
   const handleQuerySubmit = useCallback(async (query: string) => {
     if (!query.trim()) {
       toast.error("Please enter a query");
@@ -174,8 +186,9 @@ export default function DatabaseQueryPage() {
         };
         sessionStorage.setItem('databaseQueryResult', JSON.stringify(queryResult));
         
-        // Redirect to results page
-        router.push('/database-query-results');
+        // Show overlay instead of immediate redirect
+        setCompletedQuery(query);
+        setShowResultOverlay(true);
       }
     } catch (error) {
       console.error("Query submission failed:", error);
@@ -496,6 +509,13 @@ export default function DatabaseQueryPage() {
           }}
         />
       )}
+
+      {/* Query Result Overlay */}
+      <QueryResultOverlay
+        isVisible={showResultOverlay}
+        onViewResults={handleViewResults}
+        queryText={completedQuery}
+      />
     </div>
   );
 }
