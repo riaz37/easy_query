@@ -208,104 +208,106 @@ export function CreateDatabaseAccessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-800 border-blue-500/30">
-        <DialogHeader>
-          <DialogTitle className="text-white flex items-center gap-2">
-            <Database className="h-5 w-5 text-blue-400" />
-            {editingUser ? "Edit Database Access" : "Create Database Access"}
-          </DialogTitle>
-          <p className="text-gray-400 text-sm">
-            {editingUser 
-              ? "Update user access to MSSQL databases" 
-              : "Grant user access to MSSQL databases for data operations"
-            }
-          </p>
-        </DialogHeader>
+      <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent">
+        <div className="modal-enhanced">
+          <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="modal-header-enhanced">
+              <DialogTitle className="modal-title-enhanced flex items-center gap-2">
+                <Database className="h-5 w-5 text-green-400" />
+                {editingUser ? "Edit Database Access" : "Create Database Access"}
+              </DialogTitle>
+              <p className="modal-description-enhanced">
+                {editingUser 
+                  ? "Update user access to MSSQL databases" 
+                  : "Grant user access to MSSQL databases for data operations"
+                }
+              </p>
+            </DialogHeader>
 
-        <div className="space-y-6">
-          {/* User ID Input */}
-          <div className="space-y-3">
-            <Label className="text-white font-medium">User ID *</Label>
-            <Input
-              placeholder="Enter user ID (email)"
-              value={selectedUserId}
-              onChange={(e) => setSelectedUserId(e.target.value)}
-              className="bg-slate-700 border-slate-600 text-white"
-            />
-            <div className="text-sm text-gray-400">
-              Enter the email address of the user you want to grant database access to
-            </div>
-          </div>
+            <div className="modal-form-content">
+              {/* User ID Input */}
+              <div className="modal-form-group">
+                <Label className="modal-form-label">User ID *</Label>
+                <Input
+                  placeholder="Enter user ID (email)"
+                  value={selectedUserId}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
+                  className="modal-input-enhanced"
+                />
+                <div className="modal-form-description">
+                  Enter the email address of the user you want to grant database access to
+                </div>
+              </div>
 
-          {/* Company Selection */}
-          <div className="space-y-4">
-            {/* Parent Company - Required */}
-            <div className="space-y-3">
-              <Label className="text-white font-medium flex items-center">
-                <Building2 className="w-4 h-4 mr-2 text-blue-400" />
-                Parent Company *
-              </Label>
-              <Select value={selectedParentCompany} onValueChange={handleParentCompanyChange}>
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                  <SelectValue placeholder={isLoadingParentCompanies ? "Loading..." : "Select parent company"} />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-700 border-slate-600">
-                  {parentCompanies.map((company) => (
-                    <SelectItem key={company.parent_company_id} value={company.parent_company_id.toString()}>
-                      {company.company_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Sub Company - Optional */}
-            {selectedParentCompany && (
-              <div className="space-y-3">
-                <Label className="text-white font-medium flex items-center">
-                  <Building2 className="w-4 h-4 mr-2 text-green-400" />
-                  Sub Company (Optional)
+              {/* Company Selection */}
+              <div className="modal-form-group">
+                <Label className="modal-form-label flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Parent Company *
                 </Label>
-                <Select value={selectedSubCompany} onValueChange={handleSubCompanyChange}>
-                  <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                    <SelectValue placeholder="Select sub company (optional)" />
+                <Select value={selectedParentCompany} onValueChange={handleParentCompanyChange}>
+                  <SelectTrigger className="modal-select-enhanced">
+                    <SelectValue placeholder={isLoadingParentCompanies ? "Loading..." : "Select parent company"} />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-700 border-slate-600">
-                    <SelectItem value="none">None</SelectItem>
-                    {getAvailableSubCompanies().map((company) => (
-                      <SelectItem key={company.sub_company_id} value={company.sub_company_id.toString()}>
+                  <SelectContent className="modal-select-content-enhanced">
+                    {parentCompanies.map((company) => (
+                      <SelectItem key={company.parent_company_id} value={company.parent_company_id.toString()}>
                         {company.company_name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <div className="text-sm text-gray-400">
-                  Only sub companies belonging to {parentCompanies.find(c => c.parent_company_id === parseInt(selectedParentCompany))?.company_name} are shown
+                <div className="modal-form-description">
+                  Select the parent company for this database access
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Database Display (Auto-populated) */}
-          {selectedDatabase && (
-            <div className="space-y-3">
-              <Label className="text-white font-medium flex items-center">
-                <Database className="w-4 h-4 mr-2 text-purple-400" />
-                Selected Database
-              </Label>
-              <div className="p-3 bg-slate-700 border border-slate-600 rounded-lg">
-                <div className="text-white font-medium">
-                  Database {selectedDatabase}
+              {/* Sub Company - Optional */}
+              {selectedParentCompany && (
+                <div className="modal-form-group">
+                  <Label className="modal-form-label flex items-center gap-2">
+                    <Building2 className="w-4 h-4" />
+                    Sub Company (Optional)
+                  </Label>
+                  <Select value={selectedSubCompany} onValueChange={handleSubCompanyChange}>
+                    <SelectTrigger className="modal-select-enhanced">
+                      <SelectValue placeholder="Select sub company (optional)" />
+                    </SelectTrigger>
+                    <SelectContent className="modal-select-content-enhanced">
+                      <SelectItem value="none">None</SelectItem>
+                      {getAvailableSubCompanies().map((company) => (
+                        <SelectItem key={company.sub_company_id} value={company.sub_company_id.toString()}>
+                          {company.company_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="modal-form-description">
+                    Only sub companies belonging to {parentCompanies.find(c => c.parent_company_id === parseInt(selectedParentCompany))?.company_name} are shown
+                  </div>
                 </div>
-                <div className="text-sm text-gray-400 mt-1">
-                  {selectedParentCompany 
-                    ? `Parent Company Database` 
-                    : `Sub Company Database`
-                  }
+              )}
+
+              {/* Database Display (Auto-populated) */}
+              {selectedDatabase && (
+                <div className="modal-form-group">
+                  <Label className="modal-form-label flex items-center gap-2">
+                    <Database className="w-4 h-4" />
+                    Selected Database
+                  </Label>
+                  <div className="p-3 modal-input-enhanced rounded-lg">
+                    <div className="text-white font-medium">
+                      Database {selectedDatabase}
+                    </div>
+                    <div className="modal-form-description mt-1">
+                      {selectedParentCompany 
+                        ? `Parent Company Database` 
+                        : `Sub Company Database`
+                      }
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )}
 
           {/* Debug Info - Show when no database is selected */}
           {(selectedParentCompany || selectedSubCompany) && !selectedDatabase && (
@@ -334,11 +336,12 @@ export function CreateDatabaseAccessModal({
 
           {/* Access Summary */}
           {selectedDatabase && (
-            <Card className="bg-slate-700/50 border-slate-600">
-              <CardHeader>
-                <CardTitle className="text-white text-lg">Access Summary</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+            <div className="modal-form-group">
+              <Card className="modal-input-enhanced">
+                <CardHeader>
+                  <CardTitle className="modal-title-enhanced text-lg">Access Summary</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-gray-400">User:</span>
@@ -373,35 +376,40 @@ export function CreateDatabaseAccessModal({
                     </span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Error Display */}
-          {error && (
-            <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-              <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
-              <span className="text-red-400 text-sm">{error}</span>
+                </CardContent>
+              </Card>
             </div>
           )}
-        </div>
 
-        {/* Action Buttons */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-600">
+              {/* Error Display */}
+              {error && (
+                <div className="modal-form-group">
+                  <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
+                    <span className="text-red-400 text-sm">{error}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="modal-footer-enhanced">
           <Button
             variant="outline"
             onClick={handleClose}
-            className="border-slate-600 text-gray-300 hover:bg-slate-700"
+            className="modal-button-secondary"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={isLoading || !selectedUserId || !selectedParentCompany || !selectedDatabase}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+            className="modal-button-primary"
           >
             {isLoading ? "Creating..." : "Create Access"}
           </Button>
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -54,20 +54,22 @@ export function CompanyCreationModal({
   const [address, setAddress] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [selectedDbId, setSelectedDbId] = useState<number | null>(null);
-  const [selectedUserConfigId, setSelectedUserConfigId] = useState<number | null>(null);
+  const [selectedUserConfigId, setSelectedUserConfigId] = useState<
+    number | null
+  >(null);
 
   // Data states
   const [databases, setDatabases] = useState<MSSQLConfigData[]>([]);
   const [userConfigs, setUserConfigs] = useState<DatabaseConfigData[]>([]);
   const [creatingCompany, setCreatingCompany] = useState(false);
   const [databaseCreationData, setDatabaseCreationData] = useState<any>(null);
-  
+
   // Loading states
   const [isLoadingDatabases, setIsLoadingDatabases] = useState(false);
   const [isLoadingUserConfigs, setIsLoadingUserConfigs] = useState(false);
   const [databaseError, setDatabaseError] = useState<string | null>(null);
   const [userConfigError, setUserConfigError] = useState<string | null>(null);
-  
+
   // Add cache flags to prevent unnecessary reloading
   const [databasesLoaded, setDatabasesLoaded] = useState(false);
   const [userConfigsLoaded, setUserConfigsLoaded] = useState(false);
@@ -80,13 +82,9 @@ export function CompanyCreationModal({
       setUserConfigError(null);
 
       // Load both databases and user configs in parallel
-      await Promise.all([
-        loadDatabases(),
-        loadUserConfigs()
-      ]);
-
+      await Promise.all([loadDatabases(), loadUserConfigs()]);
     } catch (error) {
-      console.error('Error loading initial data:', error);
+      console.error("Error loading initial data:", error);
       setDatabases([]);
       setUserConfigs([]);
       setDatabaseError("Failed to load databases");
@@ -102,20 +100,23 @@ export function CompanyCreationModal({
       setDatabaseError(null);
 
       // Load databases using API call
-      const databasesResponse = await ServiceRegistry.database.getAllDatabases();
+      const databasesResponse =
+        await ServiceRegistry.database.getAllDatabases();
       if (databasesResponse.success && databasesResponse.data) {
         // Transform DatabaseInfo to MSSQLConfigData format
-        const mssqlDatabases: MSSQLConfigData[] = databasesResponse.data.map(db => ({
-          db_id: db.id,
-          db_name: db.name,
-          db_url: db.url,
-          business_rule: db.metadata?.businessRule || "",
-          table_info: db.metadata?.tableInfo || {},
-          db_schema: db.metadata?.dbSchema || {},
-          dbpath: "",
-          created_at: db.metadata?.createdAt || new Date().toISOString(),
-          updated_at: db.lastUpdated || new Date().toISOString(),
-        }));
+        const mssqlDatabases: MSSQLConfigData[] = databasesResponse.data.map(
+          (db) => ({
+            db_id: db.id,
+            db_name: db.name,
+            db_url: db.url,
+            business_rule: db.metadata?.businessRule || "",
+            table_info: db.metadata?.tableInfo || {},
+            db_schema: db.metadata?.dbSchema || {},
+            dbpath: "",
+            created_at: db.metadata?.createdAt || new Date().toISOString(),
+            updated_at: db.lastUpdated || new Date().toISOString(),
+          })
+        );
         setDatabases(mssqlDatabases);
         setDatabasesLoaded(true);
       } else {
@@ -124,7 +125,7 @@ export function CompanyCreationModal({
         setDatabasesLoaded(false);
       }
     } catch (error) {
-      console.error('Error loading databases:', error);
+      console.error("Error loading databases:", error);
       setDatabases([]);
       setDatabaseError("Failed to load databases");
       setDatabasesLoaded(false);
@@ -139,7 +140,8 @@ export function CompanyCreationModal({
       setUserConfigError(null);
 
       // Load user configs using API call (vector databases)
-      const userConfigsResponse = await ServiceRegistry.databaseConfig.getDatabaseConfigs();
+      const userConfigsResponse =
+        await ServiceRegistry.databaseConfig.getDatabaseConfigs();
       if (userConfigsResponse && userConfigsResponse.configs) {
         setUserConfigs(userConfigsResponse.configs);
         setUserConfigsLoaded(true);
@@ -148,7 +150,7 @@ export function CompanyCreationModal({
         setUserConfigsLoaded(false);
       }
     } catch (error) {
-      console.error('Error loading vector database configs:', error);
+      console.error("Error loading vector database configs:", error);
       setUserConfigs([]);
       setUserConfigError("Failed to load vector database configurations");
       setUserConfigsLoaded(false);
@@ -189,10 +191,10 @@ export function CompanyCreationModal({
     if (success) {
       // Reload databases to get the newly created one
       await loadInitialData();
-      
+
       // Try to find and select the newly created database
       let newDbId = null;
-      
+
       if (result?.db_id) {
         newDbId = result.db_id;
       } else if (result?.database_id) {
@@ -216,7 +218,7 @@ export function CompanyCreationModal({
     } else {
       setCurrentStep("database-config");
     }
-    
+
     setCurrentTaskId(null);
   };
 
@@ -293,7 +295,9 @@ export function CompanyCreationModal({
     userConfigLoading: isLoadingUserConfigs,
     setConfig: async (dbConfig: any) => {
       // Use MSSQLConfigService to create database
-      const { MSSQLConfigService } = await import('@/lib/api/services/mssql-config-service');
+      const { MSSQLConfigService } = await import(
+        "@/lib/api/services/mssql-config-service"
+      );
       return await MSSQLConfigService.setMSSQLConfig(dbConfig);
     },
     loadDatabases: loadDatabases,
@@ -307,32 +311,26 @@ export function CompanyCreationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[95vh] w-[95vw] p-0 bg-gray-900 border-gray-700 flex flex-col">
+      <DialogContent className="modal-enhanced max-w-4xl max-h-[95vh] w-[95vw] p-0 flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700 flex-shrink-0">
+        <div className="flex items-center justify-between p-6 border-b border-gray-700/30 flex-shrink-0 bg-gradient-to-r from-green-500/10 to-green-500/5">
           <div className="flex items-center gap-3 min-w-0">
-            <Building2 className="w-6 h-6 text-green-400 flex-shrink-0" />
+            <div className="modal-icon-container w-12 h-12">
+              <Building2 className="w-6 h-6 text-green-400" />
+            </div>
             <div className="min-w-0">
-              <DialogTitle className="text-xl font-semibold text-white truncate">
+              <DialogTitle className="modal-title-enhanced text-xl font-semibold truncate">
                 Create {type === "parent" ? "Parent" : "Sub"} Company
               </DialogTitle>
-              <DialogDescription className="text-gray-400 text-sm">
+              <DialogDescription className="modal-description-enhanced text-sm">
                 Set up your company with database and vector configurations
               </DialogDescription>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleClose}
-            className="text-gray-400 hover:text-white hover:bg-gray-800 flex-shrink-0"
-          >
-          
-          </Button>
         </div>
 
         {/* Step Indicator */}
-        <div className="px-6 py-4 border-b border-gray-700 flex-shrink-0">
+        <div className="px-6 py-4 border-b border-gray-700/30 flex-shrink-0">
           <StepIndicator currentStep={currentStep} />
         </div>
 
@@ -355,7 +353,7 @@ export function CompanyCreationModal({
               <VectorConfigStep {...stepProps} />
             )}
             {currentStep === "final-creation" && (
-              <FinalCreationStep 
+              <FinalCreationStep
                 {...stepProps}
                 address={address}
                 contactEmail={contactEmail}

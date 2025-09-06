@@ -42,7 +42,7 @@ export function CompanyInfoStep({
         <div className="space-y-2">
           <Label
             htmlFor="companyName"
-            className="text-sm font-medium text-gray-300"
+            className="modal-label-enhanced"
           >
             Company Name <span className="text-red-500">*</span>
           </Label>
@@ -51,7 +51,7 @@ export function CompanyInfoStep({
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             placeholder="Acme Inc."
-            className="h-11 bg-gray-800/70 border-gray-600/50 hover:border-green-400/50 focus:border-green-400 text-white placeholder:text-gray-500 transition-colors focus-visible:ring-2 focus-visible:ring-green-400/30 cursor-text"
+            className="modal-input-enhanced h-11"
             required
           />
         </div>
@@ -60,7 +60,7 @@ export function CompanyInfoStep({
         <div className="space-y-2">
           <Label
             htmlFor="contactEmail"
-            className="text-sm font-medium text-gray-300"
+            className="modal-label-enhanced"
           >
             Contact Email
           </Label>
@@ -70,7 +70,7 @@ export function CompanyInfoStep({
             value={contactEmail}
             onChange={(e) => setContactEmail(e.target.value)}
             placeholder="contact@company.com"
-            className="h-11 bg-gray-800/70 border-gray-600/50 hover:border-green-400/50 focus:border-green-400 text-white placeholder:text-gray-500 transition-colors focus-visible:ring-2 focus-visible:ring-green-400/30 cursor-text"
+            className="modal-input-enhanced h-11"
           />
         </div>
 
@@ -78,7 +78,7 @@ export function CompanyInfoStep({
         <div className="md:col-span-2 space-y-2">
           <Label
             htmlFor="address"
-            className="text-sm font-medium text-gray-300"
+            className="modal-label-enhanced"
           >
             Company Address
           </Label>
@@ -87,7 +87,7 @@ export function CompanyInfoStep({
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="123 Business St, City, Country"
-            className="h-11 bg-gray-800/70 border-gray-600/50 hover:border-green-400/50 focus:border-green-400 text-white placeholder:text-gray-500 transition-colors focus-visible:ring-2 focus-visible:ring-green-400/30 cursor-text"
+            className="modal-input-enhanced h-11"
           />
         </div>
 
@@ -96,7 +96,7 @@ export function CompanyInfoStep({
           <div className="flex justify-between items-center">
             <Label
               htmlFor="description"
-              className="text-sm font-medium text-gray-300"
+              className="modal-label-enhanced"
             >
               About the Company
             </Label>
@@ -109,15 +109,15 @@ export function CompanyInfoStep({
             value={description}
             onChange={(e) => setDescription(e.target.value.slice(0, 500))}
             placeholder="Tell us about your company's mission, values, and what makes it unique..."
-            className="min-h-[100px] bg-gray-800/70 border-gray-600/50 hover:border-green-400/50 focus:border-green-400 text-white placeholder:text-gray-500 transition-colors focus-visible:ring-2 focus-visible:ring-green-400/30 cursor-text resize-none"
+            className="modal-textarea-enhanced min-h-[100px] resize-none"
           />
         </div>
       </div>
 
-      <div className="flex justify-end pt-4">
+      <div className="modal-footer-enhanced">
         <Button
           onClick={handleNext}
-          className="bg-green-600 hover:bg-green-700 text-white cursor-pointer transition-colors active:scale-95 w-full sm:w-auto"
+          className="modal-button-primary w-full sm:w-auto"
         >
           Next: Configure Database
         </Button>

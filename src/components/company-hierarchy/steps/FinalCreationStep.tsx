@@ -58,7 +58,7 @@ export function FinalCreationStep({
         <Button
           variant="outline"
           onClick={handlePrevious}
-          className="border-gray-600 text-gray-300 hover:bg-gray-700"
+          className="modal-button-secondary"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back
@@ -173,11 +173,11 @@ export function FinalCreationStep({
         )}
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-between gap-3">
+        <div className="modal-footer-enhanced">
           <Button
             variant="outline"
             onClick={handlePrevious}
-            className="border-gray-600 text-gray-300 hover:bg-gray-700 w-full sm:w-auto"
+            className="modal-button-secondary w-full sm:w-auto"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
@@ -186,7 +186,7 @@ export function FinalCreationStep({
           <Button
             onClick={handleSubmit}
             disabled={!selectedDbId || creatingCompany}
-            className="bg-green-600 hover:bg-green-700 text-white min-w-[140px] w-full sm:w-auto"
+            className="modal-button-primary min-w-[140px] w-full sm:w-auto"
           >
             {creatingCompany ? (
               <>

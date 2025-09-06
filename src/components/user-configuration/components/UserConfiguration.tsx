@@ -78,7 +78,7 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
   }
 
   return (
-    <PageLayout background="gradient" className={className}>
+    <PageLayout background="default" className={className}>
       <div className="space-y-6">
         {/* Header */}
         <div className="text-center mb-8">
