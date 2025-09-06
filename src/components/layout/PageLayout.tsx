@@ -1,5 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/store/theme-store";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -26,9 +27,14 @@ export function PageLayout({
   container = true,
   maxWidth = "7xl",
 }: PageLayoutProps) {
+  const theme = useTheme();
+  const isDark = theme === 'dark';
+  
   const backgroundClasses = {
-    default: "bg-background",
-    gradient: "bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900",
+    default: isDark ? "bg-background" : "bg-gray-50",
+    gradient: isDark 
+      ? "bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900" 
+      : "bg-gradient-to-br from-gray-50 via-blue-50 to-emerald-50",
     none: "",
   };
 
@@ -81,21 +87,28 @@ export function PageHeader({
   actions,
   className,
 }: PageHeaderProps) {
+  const theme = useTheme();
+  const isDark = theme === 'dark';
+  
   return (
     <div className={cn("mb-8", className)}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           {icon && (
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-blue-600/20 rounded-xl flex items-center justify-center border border-blue-500/40">
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+              isDark 
+                ? 'bg-gradient-to-br from-blue-500/30 to-blue-600/20 border-blue-500/40' 
+                : 'bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300'
+            }`}>
               {icon}
             </div>
           )}
           <div>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
               {title}
             </h1>
             {description && (
-              <p className="text-gray-400">
+              <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
                 {description}
               </p>
             )}

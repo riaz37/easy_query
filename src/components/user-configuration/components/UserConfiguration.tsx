@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertCircle } from 'lucide-react';
+import { Spinner } from '@/components/ui/loading';
 import { useUserConfiguration } from '../hooks/useUserConfiguration';
 import { useBusinessRulesEditor } from '../hooks/useBusinessRulesEditor';
 import { PageLayout } from '@/components/layout/PageLayout';
@@ -20,7 +21,7 @@ const BusinessRulesTab = lazy(() => import('./BusinessRulesTab').then(module => 
 // Loading component for Suspense fallback
 const TabLoadingFallback = () => (
   <div className="flex items-center justify-center py-8">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+    <Spinner size="md" variant="primary" />
     <span className="ml-2 text-gray-400">Loading...</span>
   </div>
 );

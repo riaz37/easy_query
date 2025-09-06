@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3 } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 
 interface ReportStructureSelectorProps {
   reportStructure: any;
@@ -38,7 +39,7 @@ export function ReportStructureSelector({
       return (
         <Card className="bg-gray-900/50 border-purple-400/30">
           <CardContent className="pt-12 pb-12 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400 mx-auto mb-4"></div>
+            <Spinner size="md" variant="accent-purple" className="mx-auto mb-4" />
             <p className="text-gray-400">Loading report templates...</p>
           </CardContent>
         </Card>

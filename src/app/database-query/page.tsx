@@ -20,10 +20,11 @@ import {
   Clock,
   User,
   FileText,
-  Loader2,
+  // Loader2,
   Brain,
   Zap,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 import { DatabaseQueryForm } from "@/components/database-query/DatabaseQueryForm";
 import { QueryHistoryPanel } from "@/components/database-query/QueryHistoryPanel";
 import { QueryModeToggle } from "@/components/database-query/QueryModeToggle";
@@ -445,7 +446,7 @@ export default function DatabaseQueryPage() {
                       : 'bg-blue-500/20'
                   }`}>
                     {currentStatus !== 'ready' ? (
-                      <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+                      <Spinner size="lg" variant="accent-blue" />
                     ) : (
                       <Database className="w-8 h-8 text-blue-400" />
                     )}
@@ -464,7 +465,7 @@ export default function DatabaseQueryPage() {
                   {currentStatus !== 'ready' && (
                     <div className="mb-4">
                       <div className="flex items-center justify-center gap-2 text-blue-400 text-sm">
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Spinner size="sm" variant="accent-blue" />
                         <span>{currentStatus === 'generating_report' ? 'Generating Report...' : 'Processing...'}</span>
                       </div>
                       <Progress value={queryProgress} className="h-1 mt-2 max-w-xs mx-auto" />

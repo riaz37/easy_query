@@ -28,6 +28,7 @@ import {
   Plus,
   Search,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 import { useAuthContext } from "@/components/providers";
 import { useVectorDB } from "@/lib/hooks/use-vector-db";
 import { UserConfigCreateRequest } from "@/types/api";
@@ -288,7 +289,7 @@ export function CreateVectorDBAccessModal({
             
             {isLoadingDatabases ? (
               <div className="flex items-center space-x-2 p-3 bg-slate-700/50 rounded-lg">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400"></div>
+                <Spinner size="sm" variant="accent-purple" />
                 <span className="text-gray-400 text-sm">Loading available databases...</span>
               </div>
             ) : vectorDBConfigs.length === 0 ? (

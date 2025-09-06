@@ -109,11 +109,15 @@ export const BUTTON_MAPPING_CONFIG: Record<string, ButtonMappingConfig> = {
     name: "Search/Query",
     page: "both", // Works on both pages
     selectors: [
-      // File query page selectors
+      // Prioritize data-element selectors (most specific)
       "button[data-element='file-query-submit']",         // File query submit button
       "button[data-element='query-submit']",              // Database query submit button
       "#search-button",                                   // ID selector
       "button[aria-label*='search']",                     // Aria label
+      // More specific class selectors to avoid mode toggle conflicts
+      "button.bg-green-600[type='submit']",               // File query button with type
+      "button.bg-blue-600[type='submit']",                // Database query button with type
+      // Fallback selectors (less specific, but should work)
       "button.bg-green-600",                              // File query button class
       "button.bg-blue-600"                                // Database query button class
     ],

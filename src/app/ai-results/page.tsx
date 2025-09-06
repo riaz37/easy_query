@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, FileText } from "lucide-react";
+import { ESAPBrandLoader } from "@/components/ui/loading";
 import { ReportResults } from "@/types/reports";
 import { generateAndDownloadPDF, generatePDFBlob } from "@/lib/utils/smart-pdf-generator";
 import {
@@ -134,7 +135,7 @@ export default function AIResultsPage() {
     return (
       <PageLayout background="gradient">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-400 mx-auto"></div>
+          <ESAPBrandLoader size="xl" className="mx-auto" />
           <p className="text-white mt-4">Loading report results...</p>
         </div>
       </PageLayout>

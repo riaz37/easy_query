@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { FileText, Play, Save, Loader2, Sparkles } from 'lucide-react';
+import { FileText, Play, Save, Sparkles } from 'lucide-react';
+import { ButtonLoader } from '@/components/ui/loading';
 import { toast } from 'sonner';
 
 interface FileQueryFormProps {
@@ -257,24 +258,19 @@ export function FileQueryForm({
 
         {/* Action Buttons */}
         <div className="flex gap-2">
-          <Button
+          <ButtonLoader
             type="submit"
             disabled={disabled || isLoading || !query.trim()}
-            className="flex-1 bg-green-600 hover:bg-green-700"
+            loading={isLoading}
+            text="Processing..."
+            size="md"
+            variant="success"
+            className="flex-1"
             data-element="file-query-submit"
           >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <Play className="w-4 h-4 mr-2" />
-                Execute Query
-              </>
-            )}
-          </Button>
+            <Play className="w-4 h-4 mr-2" />
+            Execute Query
+          </ButtonLoader>
           
           {onSave && (
             <Button

@@ -481,14 +481,20 @@ export class WebSocketService {
     
     // Try to find button by partial text match
     if (mapping.validation?.expectedText) {
-      const expectedText = mapping.validation.expectedText.toLowerCase();
+      const expectedTexts = Array.isArray(mapping.validation.expectedText) 
+        ? mapping.validation.expectedText 
+        : [mapping.validation.expectedText];
+      
       const matchingButton = allButtons.find(btn => {
         const buttonText = btn.textContent?.toLowerCase().trim();
-        return buttonText && (
-          buttonText.includes(expectedText) || 
-          expectedText.includes(buttonText) ||
-          buttonText.split(' ').some(word => expectedText.includes(word))
-        );
+        return buttonText && expectedTexts.some(expectedText => {
+          const lowerExpectedText = expectedText.toLowerCase();
+          return (
+            buttonText.includes(lowerExpectedText) || 
+            lowerExpectedText.includes(buttonText) ||
+            buttonText.split(' ').some(word => lowerExpectedText.includes(word))
+          );
+        });
       });
       
       if (matchingButton) {

@@ -1,0 +1,54 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import { PageLoadingProps } from "./types";
+import { ESAPBrandLoader } from "./ESAPBrandLoader";
+import { ProgressLoader } from "./ProgressLoader";
+
+export function PageLoader({ 
+  size = "lg", 
+  variant = "primary", 
+  message = "Loading...",
+  description,
+  showProgress = false,
+  progress = 0,
+  className 
+}: PageLoadingProps) {
+  return (
+    <div className={cn(
+      "min-h-screen w-full flex flex-col items-center justify-center p-4",
+      className
+    )}>
+      <div className="text-center space-y-6 max-w-md">
+        {/* Main loader */}
+        <div className="flex justify-center">
+          <ESAPBrandLoader size={size} />
+        </div>
+        
+        {/* Message */}
+        <div className="space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">
+            {message}
+          </h2>
+          {description && (
+            <p className="text-muted-foreground">
+              {description}
+            </p>
+          )}
+        </div>
+        
+        {/* Progress bar */}
+        {showProgress && (
+          <div className="w-full">
+            <ProgressLoader 
+              size="md"
+              variant={variant}
+              progress={progress}
+              showPercentage={true}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -18,13 +18,19 @@ import {
   UserCheck,
   AlertCircle,
   RefreshCw,
-  Loader2
+  // Loader2
 } from "lucide-react";
+import { PageLoader, InlineLoader } from "@/components/ui/loading";
 import { useUsersManager } from "./hooks/useUsersManager";
 import { CreateDatabaseAccessModal } from "./modals/CreateDatabaseAccessModal";
 import { CreateVectorDBAccessModal } from "./modals/CreateVectorDBAccessModal";
+import { useTheme } from "@/store/theme-store";
 
 export function UsersManager() {
+  // Theme
+  const theme = useTheme();
+  const isDark = theme === 'dark';
+  
   // Local state for modals
   const [activeTab, setActiveTab] = useState("mssql");
   const [isDatabaseModalOpen, setIsDatabaseModalOpen] = useState(false);
@@ -153,44 +159,41 @@ export function UsersManager() {
 
   if (userConfigLoading || !activeTab) {
     return (
-      <div className="w-full min-h-screen pt-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center py-12">
-            <Loader2 className="w-8 h-8 text-blue-400 mx-auto mb-4 animate-spin" />
-            <h2 className="text-xl font-semibold text-white mb-2">Loading Users</h2>
-            <p className="text-gray-400">Please wait while we load user access configurations...</p>
-          </div>
-        </div>
-      </div>
+      <PageLoader
+        size="lg"
+        variant="primary"
+        message="Loading Users"
+        description="Please wait while we load user access configurations..."
+        showProgress={false}
+      />
     );
   }
 
   return (
-    <div className="w-full min-h-screen pt-24">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="mb-8">
+    <div>
+      {/* Header */}
+      <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-                <Users className="h-8 w-8 text-blue-400" />
+              <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center gap-3`}>
+                <Users className="h-8 w-8 text-emerald-400" />
                 User Access Management
               </h1>
-              <p className="text-gray-400 mt-2">
+              <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mt-2`}>
                 Manage user access to MSSQL databases and vector databases
               </p>
             </div>
             <div className="flex gap-3">
               <Button
                 onClick={handleCreateMSSQLAccess}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add MSSQL Access
               </Button>
               <Button
                 onClick={handleCreateVectorDBAccess}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
+                className="bg-purple-500 hover:bg-purple-600 text-white shadow-lg hover:shadow-purple-500/25 transition-all duration-200"
               >
                 <Brain className="w-4 h-4 mr-2" />
                 Add Vector DB Access
@@ -200,51 +203,71 @@ export function UsersManager() {
 
           {/* Search */}
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
             <Input
               placeholder="Search users by email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-slate-800/50 border-slate-600 text-white"
+              className={`pl-10 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 ${
+                isDark 
+                  ? 'bg-slate-800/70 border-slate-600 text-white hover:border-slate-500' 
+                  : 'bg-white border-gray-300 text-gray-900 hover:border-gray-400'
+              } placeholder:${isDark ? 'text-gray-400' : 'text-gray-500'}`}
             />
           </div>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className={`transition-all duration-200 hover:scale-105 hover:shadow-lg ${
+            isDark 
+              ? "bg-gradient-to-br from-slate-800/80 to-slate-700/80 border-slate-600 hover:border-slate-500" 
+              : "bg-gradient-to-br from-white to-gray-50 border-gray-200 shadow-sm hover:shadow-md"
+          }`}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-400">Total Users</CardTitle>
+              <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Total Users</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{filteredUserAccess.length}</div>
+              <div className={`text-2xl font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{filteredUserAccess.length}</div>
             </CardContent>
           </Card>
           
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className={`transition-all duration-200 hover:scale-105 hover:shadow-lg ${
+            isDark 
+              ? "bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-blue-600/50 hover:border-blue-500" 
+              : "bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 shadow-sm hover:shadow-md"
+          }`}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-400">MSSQL Access</CardTitle>
+              <CardTitle className={`text-sm font-medium ${isDark ? 'text-blue-300' : 'text-blue-600'}`}>MSSQL Access</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-400">{mssqlUsers.length}</div>
+              <div className="text-2xl font-bold text-blue-500">{mssqlUsers.length}</div>
             </CardContent>
           </Card>
           
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className={`transition-all duration-200 hover:scale-105 hover:shadow-lg ${
+            isDark 
+              ? "bg-gradient-to-br from-purple-900/30 to-purple-800/20 border-purple-600/50 hover:border-purple-500" 
+              : "bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 shadow-sm hover:shadow-md"
+          }`}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-400">Vector DB Access</CardTitle>
+              <CardTitle className={`text-sm font-medium ${isDark ? 'text-purple-300' : 'text-purple-600'}`}>Vector DB Access</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-400">{vectorDBUsers.length}</div>
+              <div className="text-2xl font-bold text-purple-500">{vectorDBUsers.length}</div>
             </CardContent>
           </Card>
           
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className={`transition-all duration-200 hover:scale-105 hover:shadow-lg ${
+            isDark 
+              ? "bg-gradient-to-br from-emerald-900/30 to-emerald-800/20 border-emerald-600/50 hover:border-emerald-500" 
+              : "bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 shadow-sm hover:shadow-md"
+          }`}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-400">Full Access</CardTitle>
+              <CardTitle className={`text-sm font-medium ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>Full Access</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-400">
+              <div className="text-2xl font-bold text-emerald-500">
                 {filteredUserAccess.filter(config => 
                   (config.database_access?.parent_databases?.length > 0 || 
                    config.database_access?.sub_databases?.some((sub: any) => sub.databases?.length > 0)) &&
@@ -257,17 +280,29 @@ export function UsersManager() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab || "mssql"} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
+          <TabsList className={`grid w-full grid-cols-2 transition-all duration-200 ${
+            isDark 
+              ? 'bg-slate-800/70 border border-slate-600' 
+              : 'bg-gray-100 border border-gray-200'
+          }`}>
             <TabsTrigger
               value="mssql"
-              className="flex items-center gap-2 data-[state=active]:bg-slate-700"
+              className={`flex items-center gap-2 transition-all duration-200 ${
+                isDark 
+                  ? 'text-gray-300 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/25 hover:bg-slate-700 hover:text-white' 
+                  : 'text-gray-700 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/25 hover:bg-gray-200 hover:text-gray-900'
+              }`}
             >
               <Database className="h-4 w-4" />
               MSSQL Database Access
             </TabsTrigger>
             <TabsTrigger
               value="vector"
-              className="flex items-center gap-2 data-[state=active]:bg-slate-700"
+              className={`flex items-center gap-2 transition-all duration-200 ${
+                isDark 
+                  ? 'text-gray-300 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/25 hover:bg-slate-700 hover:text-white' 
+                  : 'text-gray-700 data-[state=active]:bg-purple-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/25 hover:bg-gray-200 hover:text-gray-900'
+              }`}
             >
               <Brain className="h-4 w-4" />
               Vector Database Access
@@ -276,25 +311,29 @@ export function UsersManager() {
 
           {/* MSSQL Database Access Tab */}
           <TabsContent value="mssql" className="mt-6">
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className={`transition-all duration-200 ${
+              isDark 
+                ? "bg-gradient-to-br from-slate-800/80 to-slate-700/60 border-slate-600 hover:border-slate-500" 
+                : "bg-gradient-to-br from-white to-gray-50 border-gray-200 shadow-sm hover:shadow-md"
+            }`}>
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Database className="h-5 w-5 text-blue-400" />
+                <CardTitle className={`${isDark ? 'text-white' : 'text-gray-900'} flex items-center gap-2`}>
+                  <Database className="h-5 w-5 text-blue-500" />
                   MSSQL Database Access Users
                 </CardTitle>
-                <p className="text-gray-400 text-sm">
+                <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-sm`}>
                   Users with access to MSSQL databases for data operations
                 </p>
               </CardHeader>
               <CardContent>
                 {mssqlUsers.length === 0 ? (
                   <div className="text-center py-12">
-                    <Database className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-2">No MSSQL Access Users</h3>
-                    <p className="text-gray-400 mb-4">
+                    <Database className={`h-12 w-12 ${isDark ? 'text-blue-400' : 'text-blue-500'} mx-auto mb-4`} />
+                    <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}>No MSSQL Access Users</h3>
+                    <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
                       No users have been granted access to MSSQL databases yet.
                     </p>
-                    <Button onClick={handleCreateMSSQLAccess} className="bg-blue-600 hover:bg-blue-700">
+                    <Button onClick={handleCreateMSSQLAccess} className="bg-blue-500 hover:bg-blue-600 shadow-lg hover:shadow-blue-500/25 transition-all duration-200">
                       <Plus className="w-4 h-4 mr-2" />
                       Grant First Access
                     </Button>
@@ -304,21 +343,25 @@ export function UsersManager() {
                     {mssqlUsers.map((config) => (
                       <div
                         key={config.user_id}
-                        className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg border border-slate-600"
+                        className={`flex items-center justify-between p-4 rounded-lg border transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${
+                          isDark 
+                            ? 'bg-gradient-to-r from-slate-700/40 to-slate-600/30 border-slate-600 hover:border-blue-500/50 hover:shadow-blue-500/10' 
+                            : 'bg-gradient-to-r from-gray-50 to-white border-gray-200 hover:border-blue-300 hover:shadow-blue-500/10'
+                        }`}
                       >
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
                             <UserCheck className="w-5 h-5 text-white" />
                           </div>
                           <div>
                             <div className="flex items-center gap-3 mb-1">
-                              <h4 className="font-medium text-white">
+                              <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 {extractNameFromEmail(config.user_id)}
                               </h4>
                               {getAccessLevelBadge(config)}
                             </div>
-                            <p className="text-sm text-gray-400">{config.user_id}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                            <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{config.user_id}</p>
+                            <div className={`flex items-center gap-4 mt-2 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                               <span>Databases: {getDatabaseCount(config)}</span>
                               <span>Sub-companies: {config.sub_company_ids?.length || 0}</span>
                             </div>
@@ -329,7 +372,11 @@ export function UsersManager() {
                             onClick={() => handleEditUser(config.user_id, 'mssql')}
                             variant="outline"
                             size="sm"
-                            className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                            className={`transition-all duration-200 ${
+                              isDark 
+                                ? "border-blue-500/50 text-blue-300 hover:bg-blue-500/20 hover:border-blue-400" 
+                                : "border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400"
+                            }`}
                           >
                             <Edit className="w-4 h-4 mr-2" />
                             Edit
@@ -345,13 +392,17 @@ export function UsersManager() {
 
           {/* Vector Database Access Tab */}
           <TabsContent value="vector" className="mt-6">
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className={`transition-all duration-200 ${
+              isDark 
+                ? "bg-gradient-to-br from-slate-800/80 to-slate-700/60 border-slate-600 hover:border-slate-500" 
+                : "bg-gradient-to-br from-white to-gray-50 border-gray-200 shadow-sm hover:shadow-md"
+            }`}>
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-purple-400" />
+                <CardTitle className={`${isDark ? 'text-white' : 'text-gray-900'} flex items-center gap-2`}>
+                  <Brain className="h-5 w-5 text-purple-500" />
                   Vector Database Access Users
                 </CardTitle>
-                <p className="text-gray-400 text-sm">
+                <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-sm`}>
                   Users with access to vector databases for AI and ML operations
                 </p>
                 <div className="flex justify-end mt-2">
@@ -359,11 +410,15 @@ export function UsersManager() {
                     onClick={loadUserConfigs}
                     variant="outline"
                     size="sm"
-                    className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                    className={`transition-all duration-200 ${
+                      isDark 
+                        ? "border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400" 
+                        : "border-purple-300 text-purple-600 hover:bg-purple-50 hover:border-purple-400"
+                    }`}
                     disabled={userConfigLoading}
                   >
                     {userConfigLoading ? (
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      <InlineLoader size="sm" variant="primary" className="mr-2" />
                     ) : (
                       <RefreshCw className="h-4 w-4 mr-2" />
                     )}
@@ -374,20 +429,22 @@ export function UsersManager() {
               <CardContent>
                 {userConfigLoading ? (
                   <div className="text-center py-12">
-                    <Loader2 className="h-12 w-12 text-purple-400 mx-auto mb-4 animate-spin" />
-                    <h3 className="text-lg font-medium text-white mb-2">Loading Vector DB Access Users</h3>
-                    <p className="text-gray-400">
-                      Fetching user configurations from the server...
-                    </p>
+                    <PageLoader
+                      size="lg"
+                      variant="primary"
+                      message="Loading Vector DB Access Users"
+                      description="Fetching user configurations from the server..."
+                      showProgress={false}
+                    />
                   </div>
                 ) : vectorDBUsers.length === 0 ? (
                   <div className="text-center py-12">
-                    <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-2">No Vector DB Access Users</h3>
-                    <p className="text-gray-400 mb-4">
+                    <Brain className={`h-12 w-12 ${isDark ? 'text-purple-400' : 'text-purple-500'} mx-auto mb-4`} />
+                    <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}>No Vector DB Access Users</h3>
+                    <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
                       No users have been granted access to vector databases yet.
                     </p>
-                    <Button onClick={handleCreateVectorDBAccess} className="bg-purple-600 hover:bg-purple-700">
+                    <Button onClick={handleCreateVectorDBAccess} className="bg-purple-500 hover:bg-purple-600 shadow-lg hover:shadow-purple-500/25 transition-all duration-200">
                       <Plus className="w-4 h-4 mr-2" />
                       Grant First Access
                     </Button>
@@ -397,32 +454,36 @@ export function UsersManager() {
                     {vectorDBUsers.map((config) => (
                       <div
                         key={config.user_id}
-                        className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg border border-slate-600"
+                        className={`flex items-center justify-between p-4 rounded-lg border transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${
+                          isDark 
+                            ? 'bg-gradient-to-r from-slate-700/40 to-slate-600/30 border-slate-600 hover:border-purple-500/50 hover:shadow-purple-500/10' 
+                            : 'bg-gradient-to-r from-gray-50 to-white border-gray-200 hover:border-purple-300 hover:shadow-purple-500/10'
+                        }`}
                       >
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                             <Brain className="w-5 h-5 text-white" />
                           </div>
                           <div>
                             <div className="flex items-center gap-3 mb-1">
-                              <h4 className="font-medium text-white">
+                              <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 {extractNameFromEmail(config.user_id)}
                               </h4>
                               {getAccessLevelBadge(config)}
                             </div>
-                            <p className="text-sm text-gray-400">{config.user_id}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                            <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{config.user_id}</p>
+                            <div className={`flex items-center gap-4 mt-2 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                               <span>Access Level: {config.access_level}</span>
                               <span>Database: {getDatabaseName(config.db_id)}</span>
                               <span>Tables: {formatTableNames(config.table_names)}</span>
                             </div>
                             {config.table_names && config.table_names.length > 3 && (
-                              <div className="mt-2 text-xs text-gray-400">
+                              <div className={`mt-2 text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                 <details className="cursor-pointer">
-                                  <summary className="hover:text-gray-300">Show all tables</summary>
+                                  <summary className={isDark ? 'hover:text-gray-300' : 'hover:text-gray-800'}>Show all tables</summary>
                                   <div className="mt-2 pl-4">
                                     {config.table_names.map((table, index) => (
-                                      <div key={index} className="text-gray-400">
+                                      <div key={index} className={isDark ? 'text-gray-400' : 'text-gray-600'}>
                                         • {table}
                                       </div>
                                     ))}
@@ -437,7 +498,11 @@ export function UsersManager() {
                             onClick={() => handleEditUser(config.user_id, 'vector')}
                             variant="outline"
                             size="sm"
-                            className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                            className={`transition-all duration-200 ${
+                              isDark 
+                                ? "border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400" 
+                                : "border-purple-300 text-purple-600 hover:bg-purple-50 hover:border-purple-400"
+                            }`}
                           >
                             <Edit className="w-4 h-4 mr-2" />
                             Edit
@@ -468,7 +533,6 @@ export function UsersManager() {
           selectedUser={selectedUser}
           editingUser={editingUser}
         />
-      </div>
     </div>
   );
 }

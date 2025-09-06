@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Upload, File, X, CheckCircle, AlertCircle, Loader2, Database } from 'lucide-react';
+import { Upload, File, X, CheckCircle, AlertCircle, Database } from 'lucide-react';
+import { Spinner } from '@/components/ui/loading';
 import { toast } from 'sonner';
 import { ServiceRegistry } from '@/lib/api/services/service-registry';
 import { useAuthContext } from '@/components/providers/AuthContextProvider';
@@ -314,9 +315,9 @@ export function FileUpload({
       case 'failed':
         return <AlertCircle className="w-4 h-4 text-red-600" />;
       case 'processing':
-        return <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />;
+        return <Spinner size="sm" variant="accent-blue" />;
       case 'uploading':
-        return <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />;
+        return <Spinner size="sm" variant="accent-blue" />;
       default:
         return <File className="w-4 h-4 text-gray-600" />;
     }
@@ -420,7 +421,7 @@ export function FileUpload({
           
           {isUploading ? (
             <>
-              <Loader2 className="w-12 h-12 text-blue-400 mx-auto mb-4 animate-spin" />
+              <Spinner size="lg" variant="accent-blue" className="mx-auto mb-4" />
               <p className="text-lg font-medium text-white">
                 Uploading files...
               </p>
