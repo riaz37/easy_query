@@ -122,7 +122,7 @@ export function VectorConfigStep({
         <Button
           variant="outline"
           onClick={handlePrevious}
-          className="border-gray-600 text-gray-300 hover:bg-gray-700"
+          className="modal-button-secondary"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back
@@ -151,7 +151,7 @@ export function VectorConfigStep({
 
         <TabsContent value="existing" className="space-y-4">
           <div className="space-y-3">
-            <Label className="text-gray-300">Select Vector Database Configuration</Label>
+            <Label className="modal-label-enhanced">Select Vector Database Configuration</Label>
             {userConfigLoading ? (
               <div className="flex items-center gap-2 p-4 bg-gray-800/50 rounded-lg">
                 <Loader2 className="w-4 h-4 animate-spin text-green-400" />
@@ -162,10 +162,10 @@ export function VectorConfigStep({
                 value={selectedUserConfigId?.toString() || ""}
                 onValueChange={(value) => setSelectedUserConfigId(parseInt(value))}
               >
-                <SelectTrigger className="bg-gray-800/50 border-green-400/30 text-white">
+                <SelectTrigger className="modal-select-enhanced">
                   <SelectValue placeholder="Choose a vector database configuration" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-800 border-green-400/30">
+                <SelectContent className="modal-select-content-enhanced">
                   {userConfigs.map((config) => (
                     <SelectItem
                       key={config.db_id}
@@ -196,7 +196,7 @@ export function VectorConfigStep({
         <TabsContent value="new" className="space-y-4">
           {/* User Information Display */}
           <div className="space-y-3">
-            <Label className="text-gray-300">User</Label>
+            <Label className="modal-label-enhanced">User</Label>
             <div className="p-3 bg-gray-800/50 border border-green-400/30 rounded-lg">
               <div className="text-green-400 font-medium">{user?.username || 'Not authenticated'}</div>
               <div className="text-xs text-gray-400 mt-1">User ID: {user?.user_id || 'N/A'}</div>
@@ -206,61 +206,61 @@ export function VectorConfigStep({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="newConfigHost">Host *</Label>
+              <Label htmlFor="newConfigHost" className="modal-label-enhanced">Host *</Label>
               <Input
                 id="newConfigHost"
                 value={newConfigHost}
                 onChange={(e) => setNewConfigHost(e.target.value)}
                 placeholder="localhost"
-                className="bg-gray-800/50 border-green-400/30 text-white"
+                className="modal-input-enhanced"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newConfigPort">Port *</Label>
+              <Label htmlFor="newConfigPort" className="modal-label-enhanced">Port *</Label>
               <Input
                 id="newConfigPort"
                 type="number"
                 value={newConfigPort}
                 onChange={(e) => setNewConfigPort(parseInt(e.target.value) || 5432)}
                 placeholder="5432"
-                className="bg-gray-800/50 border-green-400/30 text-white"
+                className="modal-input-enhanced"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newConfigDatabase">Database Name *</Label>
+              <Label htmlFor="newConfigDatabase" className="modal-label-enhanced">Database Name *</Label>
               <Input
                 id="newConfigDatabase"
                 value={newConfigDatabase}
                 onChange={(e) => setNewConfigDatabase(e.target.value)}
                 placeholder="vectordb"
-                className="bg-gray-800/50 border-green-400/30 text-white"
+                className="modal-input-enhanced"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="newConfigUsername">Username *</Label>
+              <Label htmlFor="newConfigUsername" className="modal-label-enhanced">Username *</Label>
               <Input
                 id="newConfigUsername"
                 value={newConfigUsername}
                 onChange={(e) => setNewConfigUsername(e.target.value)}
                 placeholder="admin"
-                className="bg-gray-800/50 border-green-400/30 text-white"
+                className="modal-input-enhanced"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newConfigPassword">Password *</Label>
+              <Label htmlFor="newConfigPassword" className="modal-label-enhanced">Password *</Label>
               <Input
                 id="newConfigPassword"
                 type="password"
                 value={newConfigPassword}
                 onChange={(e) => setNewConfigPassword(e.target.value)}
                 placeholder="Enter password"
-                className="bg-gray-800/50 border-green-400/30 text-white"
+                className="modal-input-enhanced"
               />
             </div>
           </div>
@@ -276,7 +276,7 @@ export function VectorConfigStep({
                 !user?.user_id ||
                 creatingConfig
               }
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              className="modal-button-primary flex-1"
             >
               {creatingConfig ? (
                 <>
@@ -294,7 +294,7 @@ export function VectorConfigStep({
               type="button"
               variant="outline"
               onClick={resetForm}
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 w-full sm:w-auto"
+              className="modal-button-secondary w-full sm:w-auto"
             >
               Reset
             </Button>
@@ -303,11 +303,11 @@ export function VectorConfigStep({
       </Tabs>
 
       {/* Navigation */}
-      <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 border-t border-gray-700">
+      <div className="modal-footer-enhanced">
         <Button
           variant="outline"
           onClick={handlePrevious}
-          className="border-gray-600 text-gray-300 hover:bg-gray-700 w-full sm:w-auto"
+          className="modal-button-secondary w-full sm:w-auto"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back
@@ -316,7 +316,7 @@ export function VectorConfigStep({
         {selectedUserConfigId && (
           <Button
             onClick={handleNext}
-            className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+            className="modal-button-primary w-full sm:w-auto"
           >
             Continue to Final Step
             <ArrowRight className="w-4 h-4 ml-2" />
@@ -325,7 +325,7 @@ export function VectorConfigStep({
       </div>
 
       {/* Skip option */}
-      <div className="border-t border-gray-700 pt-4">
+      <div className="border-t border-gray-700/30 pt-4">
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-400">
             Vector configuration is optional. You can configure it later.
@@ -333,7 +333,7 @@ export function VectorConfigStep({
           <Button
             variant="outline"
             onClick={() => setCurrentStep("final-creation")}
-            className="border-gray-600 text-gray-300 hover:bg-gray-700"
+            className="modal-button-secondary"
           >
             Skip for Now
           </Button>

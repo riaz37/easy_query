@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Loader2,
+  // Loader2,
   Database,
   Search,
   RefreshCw,
@@ -17,6 +17,7 @@ import {
   Table,
   Eye,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 import { TableFlowVisualization } from "./TableFlowVisualization";
 import { ExcelToDBManager } from "./ExcelToDBManager";
 import { TableManagementSection } from "./TableManagementSection";
@@ -245,7 +246,7 @@ export function TablesManager() {
       {authLoading ? (
         <Alert>
           <AlertDescription className="flex items-center gap-2">
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Spinner size="sm" variant="accent-blue" />
             Checking authentication...
           </AlertDescription>
         </Alert>
@@ -322,7 +323,7 @@ export function TablesManager() {
                 variant="outline"
               >
                 {settingDB ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Spinner size="sm" variant="accent-blue" />
                 ) : (
                   <Settings className="h-4 w-4" />
                 )}
@@ -330,7 +331,7 @@ export function TablesManager() {
               </Button>
               <Button onClick={fetchTableData} disabled={loading || !user?.user_id}>
                 {loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Spinner size="sm" variant="accent-blue" />
                 ) : (
                   <RefreshCw className="h-4 w-4" />
                 )}
@@ -342,7 +343,7 @@ export function TablesManager() {
                 variant="secondary"
               >
                 {generatingTables ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Spinner size="sm" variant="accent-blue" />
                 ) : (
                   <Database className="h-4 w-4" />
                 )}

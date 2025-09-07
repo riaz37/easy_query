@@ -10,7 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { ButtonLoader } from '@/components/ui/loading';
 
 // Validation schema for change password form
 const changePasswordSchema = z.object({
@@ -191,20 +192,16 @@ export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormPr
             >
               Cancel
             </Button>
-            <Button
+            <ButtonLoader
               type="submit"
-              className="flex-1 bg-emerald-600 hover:bg-emerald-700"
-              disabled={isLoading}
+              loading={isLoading}
+              text="Changing..."
+              size="md"
+              variant="primary"
+              className="flex-1"
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Changing...
-                </>
-              ) : (
-                'Change Password'
-              )}
-            </Button>
+              Change Password
+            </ButtonLoader>
           </div>
         </form>
       </CardContent>

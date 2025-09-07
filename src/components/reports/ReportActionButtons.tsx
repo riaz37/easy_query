@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Clock, Loader2, Square } from "lucide-react";
+import { Play, Clock, Square } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 
 interface ReportActionButtonsProps {
   userQuery: string;
@@ -30,7 +31,7 @@ export function ReportActionButtons({
       >
         {isGenerating ? (
           <>
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Spinner size="sm" variant="primary" />
             Generating...
           </>
         ) : (
@@ -57,7 +58,7 @@ export function ReportActionButtons({
           variant="outline"
           className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10 flex items-center gap-2"
         >
-          <Loader2 className="h-4 w-4" />
+          <Spinner size="sm" variant="primary" />
           Refresh Status
         </Button>
       )}

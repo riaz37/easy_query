@@ -126,7 +126,7 @@ export function DatabaseConfigStep({
         <Button
           variant="outline"
           onClick={handlePrevious}
-          className="border-gray-600 text-gray-300 hover:bg-gray-700"
+          className="modal-button-secondary"
         >
           Back
         </Button>
@@ -151,12 +151,12 @@ export function DatabaseConfigStep({
         <TabsContent value="existing" className="space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="text-gray-300">Select Database</Label>
+              <Label className="modal-label-enhanced">Select Database</Label>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={refreshUserConfigs}
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                className="modal-button-secondary"
               >
                 <Loader2 className="w-4 h-4 mr-2" />
                 Refresh
@@ -172,10 +172,10 @@ export function DatabaseConfigStep({
                 value={selectedDbId?.toString() || ""}
                 onValueChange={(value) => setSelectedDbId(parseInt(value))}
               >
-                <SelectTrigger className="bg-gray-800/50 border-green-400/30 text-white">
+                <SelectTrigger className="modal-select-enhanced">
                   <SelectValue placeholder="Choose a database" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-800 border-green-400/30">
+                <SelectContent className="modal-select-content-enhanced">
                   {databases.map((db) => (
                     <SelectItem key={db.db_id} value={db.db_id.toString()}>
                       <div className="flex items-center gap-2">
@@ -207,18 +207,18 @@ export function DatabaseConfigStep({
         <TabsContent value="new" className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="newDbName">Database Name *</Label>
+              <Label htmlFor="newDbName" className="modal-label-enhanced">Database Name *</Label>
               <Input
                 id="newDbName"
                 value={newDbName}
                 onChange={(e) => setNewDbName(e.target.value)}
                 placeholder="MyDatabase"
-                className="bg-gray-800/50 border-green-400/30 text-white"
+                className="modal-input-enhanced"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-gray-300">User ID</Label>
+              <Label className="modal-label-enhanced">User ID</Label>
               <div className="p-3 bg-gray-800/50 border border-green-400/30 rounded-lg">
                 <div className="text-green-400 font-medium">{user?.user_id || 'Not authenticated'}</div>
                 <div className="text-xs text-gray-400 mt-1">Automatically set from your account</div>
@@ -227,30 +227,30 @@ export function DatabaseConfigStep({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="newDbUrl">Database URL *</Label>
+            <Label htmlFor="newDbUrl" className="modal-label-enhanced">Database URL *</Label>
             <Input
               id="newDbUrl"
               value={newDbUrl}
               onChange={(e) => setNewDbUrl(e.target.value)}
               placeholder="mssql+pyodbc://sa:password@server:1433/database..."
-              className="bg-gray-800/50 border-green-400/30 text-white"
+              className="modal-input-enhanced"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="newDbBusinessRule">Business Rules (Optional)</Label>
+              <Label htmlFor="newDbBusinessRule" className="modal-label-enhanced">Business Rules (Optional)</Label>
               <Textarea
                 id="newDbBusinessRule"
                 value={newDbBusinessRule}
                 onChange={(e) => setNewDbBusinessRule(e.target.value)}
                 placeholder="Enter business rules for this database"
-                className="bg-gray-800/50 border-green-400/30 text-white min-h-[80px]"
+                className="modal-textarea-enhanced min-h-[80px]"
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Database File (Optional)</Label>
+              <Label className="modal-label-enhanced">Database File (Optional)</Label>
               <div className="space-y-2">
                 <div className="text-sm text-gray-400">
                   Supported: .bak, .sql, .mdf, .ldf, .trn, .dmp, .dump
@@ -260,7 +260,7 @@ export function DatabaseConfigStep({
                     type="file"
                     accept=".bak,.sql,.mdf,.ldf,.trn,.dmp,.dump"
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    className="bg-gray-800 border-green-400/30 text-white file:bg-green-600 file:text-white file:border-0 file:rounded file:px-3 file:py-1"
+                    className="modal-input-enhanced file:bg-green-600 file:text-white file:border-0 file:rounded file:px-3 file:py-1"
                   />
                   {selectedFile && (
                     <Button
@@ -268,7 +268,7 @@ export function DatabaseConfigStep({
                       variant="outline"
                       size="sm"
                       onClick={() => setSelectedFile(null)}
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                      className="modal-button-secondary"
                     >
                       <X className="w-4 h-4" />
                     </Button>
@@ -288,7 +288,7 @@ export function DatabaseConfigStep({
               type="button"
               onClick={handleCreateDatabase}
               disabled={!newDbUrl.trim() || !newDbName.trim() || !user?.user_id}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              className="modal-button-primary flex-1"
             >
               <Plus className="w-4 h-4 mr-2" />
               Create Database
@@ -297,7 +297,7 @@ export function DatabaseConfigStep({
               type="button"
               variant="outline"
               onClick={resetNewDbForm}
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 w-full sm:w-auto"
+              className="modal-button-secondary w-full sm:w-auto"
             >
               Reset
             </Button>
@@ -306,11 +306,11 @@ export function DatabaseConfigStep({
       </Tabs>
 
       {/* Navigation */}
-      <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 border-t border-gray-700">
+      <div className="modal-footer-enhanced">
         <Button
           variant="outline"
           onClick={handlePrevious}
-          className="border-gray-600 text-gray-300 hover:bg-gray-700 w-full sm:w-auto"
+          className="modal-button-secondary w-full sm:w-auto"
         >
           Back
         </Button>
@@ -318,7 +318,7 @@ export function DatabaseConfigStep({
         {selectedDbId && (
           <Button
             onClick={handleNext}
-            className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+            className="modal-button-primary w-full sm:w-auto"
           >
             Continue to Vector Config
           </Button>

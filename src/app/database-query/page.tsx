@@ -20,15 +20,17 @@ import {
   Clock,
   User,
   FileText,
-  Loader2,
+  // Loader2,
   Brain,
   Zap,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 import { DatabaseQueryForm } from "@/components/database-query/DatabaseQueryForm";
 import { QueryHistoryPanel } from "@/components/database-query/QueryHistoryPanel";
 import { QueryModeToggle } from "@/components/database-query/QueryModeToggle";
 import { ReportGenerator } from "@/components/reports";
 import { QueryResultOverlay } from "@/components/ui/query-result-overlay";
+import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 
 export default function DatabaseQueryPage() {
   const router = useRouter();
@@ -257,44 +259,29 @@ export default function DatabaseQueryPage() {
   }, [currentStatus, queryMode]);
 
   return (
-    <div className="w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-      {/* Add top padding to account for fixed navbar */}
-      <div className="pt-24 pb-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-blue-600/20 rounded-xl flex items-center justify-center border border-blue-500/40">
-                    <Database className="w-6 h-6 text-blue-400" />
-                  </div>
-                  <div>
-                    <h1 className="text-3xl font-bold text-white">
-                      Database Query & AI Reports
-                    </h1>
-                    <p className="text-gray-400">
-                      Run quick queries or generate comprehensive AI-powered reports
-                    </p>
-                  </div>
-                </div>
-
-                {/* Status Badges */}
-                <div className="flex items-center gap-3">
-                  {user?.user_id && (
-                    <Badge variant="outline" className="border-green-400/30 text-green-400">
-                      <User className="w-4 h-4 mr-2" />
-                      User: {user.user_id}
-                    </Badge>
-                  )}
-                  {currentDatabase && (
-                    <Badge variant="outline" className="border-blue-400/30 text-blue-400">
-                      <Database className="w-4 h-4 mr-2" />
-                      DB: {currentDatabase.database_name}
-                    </Badge>
-                  )}
-                </div>
-              </div>
+    <PageLayout background="gradient" maxWidth="7xl">
+      <PageHeader
+        title="Database Query & AI Reports"
+        description="Run quick queries or generate comprehensive AI-powered reports"
+        icon={<Database className="w-6 h-6 text-blue-400" />}
+        actions={
+          <>
+            {/* Status Badges */}
+            {user?.user_id && (
+              <Badge variant="outline" className="border-green-400/30 text-green-400">
+                <User className="w-4 h-4 mr-2" />
+                User: {user.user_id}
+              </Badge>
+            )}
+            {currentDatabase && (
+              <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+                <Database className="w-4 h-4 mr-2" />
+                DB: {currentDatabase.database_name}
+              </Badge>
+            )}
+          </>
+        }
+      />
 
               {/* Feature Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -370,7 +357,6 @@ export default function DatabaseQueryPage() {
                   </CardContent>
                 </Card>
               </div>
-            </div>
 
             {/* Mode Toggle */}
             <div className="mb-6">
@@ -460,7 +446,7 @@ export default function DatabaseQueryPage() {
                       : 'bg-blue-500/20'
                   }`}>
                     {currentStatus !== 'ready' ? (
-                      <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+                      <Spinner size="lg" variant="accent-blue" />
                     ) : (
                       <Database className="w-8 h-8 text-blue-400" />
                     )}
@@ -479,7 +465,7 @@ export default function DatabaseQueryPage() {
                   {currentStatus !== 'ready' && (
                     <div className="mb-4">
                       <div className="flex items-center justify-center gap-2 text-blue-400 text-sm">
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Spinner size="sm" variant="accent-blue" />
                         <span>{currentStatus === 'generating_report' ? 'Generating Report...' : 'Processing...'}</span>
                       </div>
                       <Progress value={queryProgress} className="h-1 mt-2 max-w-xs mx-auto" />
@@ -493,9 +479,6 @@ export default function DatabaseQueryPage() {
                 </CardContent>
               </Card>
             </div>
-          </div>
-        </div>
-      </div>
 
       {/* Query History Panel - Fixed positioning */}
       {showHistory && (
@@ -516,6 +499,6 @@ export default function DatabaseQueryPage() {
         onViewResults={handleViewResults}
         queryText={completedQuery}
       />
-    </div>
+    </PageLayout>
   );
 }

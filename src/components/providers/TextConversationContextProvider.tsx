@@ -102,7 +102,7 @@ export function TextConversationProvider({ children }: TextConversationProviderP
     // Cleanup on unmount or when user changes
     return () => {
       if (textService) {
-        textService.disconnect()
+        textService.cleanup()
       }
     }
   }, [isAuthenticated, user?.user_id, authLoading])

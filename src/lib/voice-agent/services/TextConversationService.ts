@@ -28,6 +28,8 @@ export class TextConversationService {
   private currentPage = "voice-control";
   private userId: string;
   private messageIdCounter = 0;
+  private autoReconnectEnabled = true;
+  private reconnectInterval: NodeJS.Timeout | null = null;
 
   // Event handlers
   onStateChange?: (state: TextConversationState) => void;
@@ -45,7 +47,12 @@ export class TextConversationService {
   constructor(userId: string) {
     this.userId = userId;
 
-    // Button registration service removed - using mapping system instead
+    // Initialize page detection and persistence
+    this.initializePageDetection();
+    this.setupAutoReconnection();
+    
+    // Restore connection if it was previously connected
+    this.restoreConnectionIfNeeded();
   }
 
   connect(): Promise<void> {
@@ -859,5 +866,198 @@ export class TextConversationService {
     console.log(`💬 Page changed from ${previousPage} to ${page}`);
   }
 
+  // Context persistence methods (similar to VoiceAgentService)
+  private savePersistedContext(): void {
+    try {
+      const contextData = {
+        messages: this.state.messages,
+        currentPage: this.currentPage,
+        userId: this.userId,
+        timestamp: new Date().toISOString(),
+      };
 
+      sessionStorage.setItem('text_conversation_context', JSON.stringify(contextData));
+      sessionStorage.setItem('text_conversation_last_page', this.currentPage);
+      
+      // Save connection state
+      sessionStorage.setItem(
+        'text_conversation_connection_state',
+        JSON.stringify({
+          isConnected: this.state.isConnected,
+          connectionStatus: this.state.connectionStatus,
+        }),
+      );
+    } catch (error) {
+      console.error('💬 Failed to save persisted context:', error);
+    }
+  }
+
+  private restorePersistedContext(): boolean {
+    try {
+      const contextData = sessionStorage.getItem('text_conversation_context');
+      if (!contextData) return false;
+
+      const parsed = JSON.parse(contextData);
+      
+      // Restore messages if they exist and are recent (within 1 hour)
+      if (parsed.messages && Array.isArray(parsed.messages)) {
+        const messageAge = Date.now() - new Date(parsed.timestamp).getTime();
+        if (messageAge < 3600000) { // 1 hour
+          this.state.messages = parsed.messages;
+          this.updateState({ messages: this.state.messages });
+          console.log('💬 Restored persisted messages:', parsed.messages.length);
+        }
+      }
+
+      // Restore current page
+      if (parsed.currentPage) {
+        this.currentPage = parsed.currentPage;
+        console.log('💬 Restored current page:', this.currentPage);
+      }
+
+      return true;
+    } catch (error) {
+      console.error('💬 Failed to restore persisted context:', error);
+      return false;
+    }
+  }
+
+  private async restoreConnectionIfNeeded(): Promise<void> {
+    const connectionState = sessionStorage.getItem('text_conversation_connection_state');
+    if (!connectionState) return;
+
+    try {
+      const parsed = JSON.parse(connectionState);
+      if (parsed.isConnected) {
+        console.log('💬 Restoring text conversation connection...');
+        await this.connect();
+      }
+    } catch (error) {
+      console.error('💬 Failed to restore connection:', error);
+    }
+  }
+
+  private setupAutoReconnection(): void {
+    if (!this.autoReconnectEnabled) return;
+
+    // Check connection every 30 seconds
+    this.reconnectInterval = setInterval(() => {
+      if (this.state.isConnected && !this.isConnected()) {
+        console.log('💬 Auto-reconnecting due to lost connection...');
+        this.handleReconnection();
+      }
+    }, 30000); // 30 seconds
+  }
+
+  private initializePageDetection(): void {
+    // Detect initial page
+    this.currentPage = this.detectCurrentPage();
+
+    // Listen for route changes
+    if (typeof window !== 'undefined') {
+      // Listen for popstate (browser back/forward buttons)
+      const handlePopState = () => {
+        const newPage = this.detectCurrentPage();
+        this.updatePageState(newPage, 'browser_navigation');
+      };
+
+      // Listen for hash changes
+      const handleHashChange = () => {
+        const newPage = this.detectCurrentPage();
+        this.updatePageState(newPage, 'hash_change');
+      };
+
+      // Listen for SPA navigation events
+      const handleNavigation = (event: Event) => {
+        try {
+          const detail = (event as CustomEvent).detail;
+          if (detail?.page) {
+            this.updatePageState(detail.page, 'spa_navigation');
+          }
+        } catch (_) {}
+      };
+
+      // Listen for beforeunload to save context
+      const handleBeforeUnload = () => {
+        this.savePersistedContext();
+        sessionStorage.setItem('text_conversation_last_page', this.currentPage);
+      };
+
+      // Listen for load to detect page changes and restore context
+      const handleLoad = () => {
+        const newPage = this.detectCurrentPage();
+        const lastPage = sessionStorage.getItem('text_conversation_last_page');
+
+        if (lastPage && lastPage !== newPage) {
+          this.updatePageState(newPage, 'page_load');
+        }
+
+        // Restore context and connection if needed
+        this.restorePersistedContext();
+        this.restoreConnectionIfNeeded();
+      };
+
+      // Add event listeners
+      window.addEventListener('popstate', handlePopState);
+      window.addEventListener('hashchange', handleHashChange);
+      window.addEventListener('voice-navigation', handleNavigation as EventListener);
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      window.addEventListener('load', handleLoad);
+    }
+  }
+
+  private detectCurrentPage(): string {
+    if (typeof window === 'undefined') return 'dashboard';
+
+    const pathname = window.location.pathname;
+    const path = pathname.replace(/^\//, '').toLowerCase();
+
+    const pageMap: Record<string, string> = {
+      '': 'dashboard',
+      dashboard: 'dashboard',
+      'file-query': 'file-query',
+      'database-query': 'database-query',
+      tables: 'tables',
+      users: 'users',
+      'ai-results': 'ai-results',
+      'company-structure': 'company-structure',
+      'voice-control': 'voice-control',
+      'user-configuration': 'user-configuration',
+    };
+
+    return pageMap[path] || path || 'dashboard';
+  }
+
+  private updatePageState(newPage: string, source: string): void {
+    if (newPage === this.currentPage) return;
+
+    const previousPage = this.currentPage;
+    this.currentPage = newPage;
+
+    console.log(`💬 Page state updated from ${previousPage} to ${newPage} (source: ${source})`);
+
+    // Update page context on server if connected
+    this.updateCurrentPage(newPage);
+
+    // Save context after page change
+    this.savePersistedContext();
+  }
+
+  // Cleanup method
+  cleanup(): void {
+    // Clear intervals
+    if (this.reconnectInterval) {
+      clearInterval(this.reconnectInterval);
+      this.reconnectInterval = null;
+    }
+
+    // Clear timeouts
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+
+    // Disconnect WebSockets
+    this.disconnect();
+  }
 }

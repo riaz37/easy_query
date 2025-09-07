@@ -18,13 +18,14 @@ import {
   ArrowLeft,
   Clock,
   User,
-  Code,
   CheckCircle,
-  Loader2,
+  // Loader2,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 import { toast } from "sonner";
 import { QueryResultsTable } from "@/components/database-query/QueryResultsTable";
 import { QueryCharts } from "@/components/database-query/QueryCharts";
+import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 
 export default function DatabaseQueryResultsPage() {
   const [currentQuery, setCurrentQuery] = useState<any>(null);
@@ -61,76 +62,56 @@ export default function DatabaseQueryResultsPage() {
 
   if (!currentQuery) {
     return (
-      <div className="w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-        <div className="pt-24 pb-8">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto text-center">
-              <Loader2 className="w-12 h-12 text-blue-400 animate-spin mx-auto mb-4" />
-              <p className="text-gray-400 text-lg">Loading query results...</p>
-            </div>
-          </div>
+      <PageLayout background="gradient" maxWidth="6xl">
+        <div className="text-center">
+          <Spinner size="lg" variant="accent-blue" className="mx-auto mb-4" />
+          <p className="text-gray-400 text-lg">Loading query results...</p>
         </div>
-      </div>
+      </PageLayout>
     );
   }
 
   // Extract data for display
   const queryData = currentQuery.result?.payload?.data || [];
   const columns = queryData.length > 0 ? Object.keys(queryData[0]) : [];
-  const sqlQuery = currentQuery.result?.payload?.sql || "";
 
   return (
-    <div className="w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-      {/* Add top padding to account for fixed navbar */}
-      <div className="pt-24 pb-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
-            {/* Header with Back Buttons */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-blue-600/20 rounded-xl flex items-center justify-center border border-blue-500/40">
-                    <Database className="w-6 h-6 text-blue-400" />
-                  </div>
-                  <div>
-                    <h1 className="text-3xl font-bold text-white">
-                      Query Results
-                    </h1>
-                    <p className="text-gray-400">
-                      Your natural language query results with interactive visualization
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Button
-                    onClick={handleBackToQuery}
-                    variant="outline"
-                    className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Back to Query
-                  </Button>
-                  <Button
-                    onClick={handleBackToDashboard}
-                    variant="outline"
-                    className="border-gray-400/30 text-gray-400 hover:bg-gray-400/10"
-                  >
-                    Dashboard
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      sessionStorage.removeItem("databaseQueryResult");
-                      toast.success("Results cleared");
-                      router.push("/database-query");
-                    }}
-                    variant="outline"
-                    className="border-red-400/30 text-red-400 hover:bg-red-400/10"
-                  >
-                    Clear Results
-                  </Button>
-                </div>
-              </div>
-            </div>
+    <PageLayout background="gradient" maxWidth="7xl">
+      <PageHeader
+        title="Query Results"
+        description="Your natural language query results with interactive visualization"
+        icon={<Database className="w-6 h-6 text-blue-400" />}
+        actions={
+          <>
+            <Button
+              onClick={handleBackToQuery}
+              variant="outline"
+              className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Query
+            </Button>
+            <Button
+              onClick={handleBackToDashboard}
+              variant="outline"
+              className="border-gray-400/30 text-gray-400 hover:bg-gray-400/10"
+            >
+              Dashboard
+            </Button>
+            <Button
+              onClick={() => {
+                sessionStorage.removeItem("databaseQueryResult");
+                toast.success("Results cleared");
+                router.push("/database-query");
+              }}
+              variant="outline"
+              className="border-red-400/30 text-red-400 hover:bg-red-400/10"
+            >
+              Clear Results
+            </Button>
+          </>
+        }
+      />
 
             {/* Query Information */}
             <div className="mb-8">
@@ -181,20 +162,6 @@ export default function DatabaseQueryResultsPage() {
                     <p className="text-white">{currentQuery.query}</p>
                   </div>
 
-                  {/* Generated SQL */}
-                  {sqlQuery && (
-                    <div className="p-3 bg-green-900/20 border border-green-400/30 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Code className="w-4 h-4 text-green-400" />
-                        <span className="text-green-400 font-medium">
-                          Generated SQL:
-                        </span>
-                      </div>
-                      <code className="text-white text-sm bg-gray-800/50 p-2 rounded block overflow-x-auto">
-                        {sqlQuery}
-                      </code>
-                    </div>
-                  )}
 
                   {/* Results Summary */}
                   <div className="p-3 bg-purple-900/20 border border-purple-400/30 rounded-lg">
@@ -277,9 +244,6 @@ export default function DatabaseQueryResultsPage() {
                 />
               )}
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </PageLayout>
   );
 } 

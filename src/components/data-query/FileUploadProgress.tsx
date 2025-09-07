@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { 
   CheckCircle, 
   XCircle, 
-  Loader2, 
   Clock, 
   FileText,
   Upload,
   AlertCircle
 } from "lucide-react";
+import { Spinner, ProgressLoader } from "@/components/ui/loading";
 import { 
   SmartFileSystemResponse, 
   BundleTaskStatusResponse,
@@ -58,7 +58,7 @@ export function FileUploadProgress({
   const getStatusIcon = () => {
     if (error) return <XCircle className="h-6 w-6 text-red-500" />;
     if (bundleStatus?.status === "COMPLETED") return <CheckCircle className="h-6 w-6 text-green-500" />;
-    if (bundleStatus?.status === "PROCESSING") return <Loader2 className="h-6 w-6 text-blue-500 animate-spin" />;
+    if (bundleStatus?.status === "PROCESSING") return <Spinner size="md" variant="accent-blue" />;
     return <Clock className="h-6 w-6 text-yellow-500" />;
   };
 
@@ -140,9 +140,11 @@ export function FileUploadProgress({
                 <span className="text-gray-600 dark:text-gray-400">Overall Progress</span>
                 <span className="text-gray-900 dark:text-white">{bundleStatus.progress_percentage}%</span>
               </div>
-              <Progress 
-                value={bundleStatus.progress_percentage} 
-                className="h-3 bg-gray-200 dark:bg-gray-700"
+              <ProgressLoader 
+                progress={bundleStatus.progress_percentage} 
+                size="sm"
+                variant="accent-blue"
+                showPercentage={false}
               />
             </div>
 
@@ -188,7 +190,7 @@ export function FileUploadProgress({
                         <XCircle className="h-4 w-4 text-red-500" />
                       )}
                       {task.status === 'processing' && (
-                        <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />
+                        <Spinner size="sm" variant="accent-blue" />
                       )}
                       <Badge 
                         variant={task.status === 'completed' ? 'default' : task.status === 'failed' ? 'destructive' : 'secondary'}
@@ -237,7 +239,7 @@ export function FileUploadProgress({
               disabled={isLoading}
             >
               {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Spinner size="sm" variant="accent-blue" />
               ) : (
                 <Clock className="h-4 w-4" />
               )}

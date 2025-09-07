@@ -10,7 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
+import { ButtonLoader } from '@/components/ui/loading';
 
 // Validation schema for signup form
 const signupSchema = z.object({
@@ -165,20 +166,16 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
             )}
           </div>
 
-          <Button
+          <ButtonLoader
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700"
-            disabled={isLoading}
+            loading={isLoading}
+            text="Creating account..."
+            size="md"
+            variant="primary"
+            className="w-full"
           >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating account...
-              </>
-            ) : (
-              'Create account'
-            )}
-          </Button>
+            Create account
+          </ButtonLoader>
         </form>
 
         <div className="text-center">

@@ -2,14 +2,12 @@
 
 import React from "react";
 import { UsersManager } from "@/components/users/UsersManager";
-import { EnhancedBackground } from "@/components/ui/enhanced-background";
+import { PageLayout } from "@/components/layout/PageLayout";
 
 export default function UsersPage() {
   return (
-    <div className="w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-  
-        <UsersManager />
-  
-    </div>
+    <PageLayout background="default">
+      <UsersManager />
+    </PageLayout>
   );
 }

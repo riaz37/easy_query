@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, CheckCircle, Download, Eye, Loader2 } from "lucide-react";
+import { FileText, CheckCircle, Download, Eye } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 import { generateAndDownloadPDF, generatePDFBlob } from "@/lib/utils/smart-pdf-generator";
 
 interface ReportResultsPreviewProps {
@@ -106,7 +107,7 @@ export function ReportResultsPreview({
                 className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
               >
                 {pdfGenerating ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Spinner size="sm" variant="primary" className="mr-2" />
                 ) : (
                   <Eye className="w-4 h-4 mr-2" />
                 )}
@@ -119,7 +120,7 @@ export function ReportResultsPreview({
                 className="bg-purple-600 hover:bg-purple-700 text-white"
               >
                 {pdfGenerating ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Spinner size="sm" variant="primary" className="mr-2" />
                 ) : (
                   <Download className="w-4 h-4 mr-2" />
                 )}

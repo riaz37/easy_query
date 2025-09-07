@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Play, Database, AlertCircle, Loader2, Sparkles, Brain, Zap, Clock } from "lucide-react";
+import { Play, Database, AlertCircle, Sparkles, Brain, Zap, Clock } from "lucide-react";
+import { ButtonLoader, ProgressLoader, InlineLoader } from "@/components/ui/loading";
 
 interface DatabaseQueryFormProps {
   onSubmit: (query: string) => void;
@@ -105,8 +106,9 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
             <div className="space-y-3 p-4 bg-blue-900/20 border border-blue-400/30 rounded-lg">
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2 text-blue-400">
-                  <Brain className="w-4 h-4 animate-pulse" />
-                  <span>AI Processing Your Query</span>
+                  <InlineLoader size="sm" variant="accent-blue">
+                    AI Processing Your Query
+                  </InlineLoader>
                 </div>
                 <div className="flex items-center gap-2 text-gray-400">
                   <Clock className="w-4 h-4" />
@@ -114,7 +116,12 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
                 </div>
               </div>
               
-              <Progress value={Math.min((processingTime / 30) * 100, 90)} className="h-2" />
+              <ProgressLoader 
+                progress={Math.min((processingTime / 30) * 100, 90)} 
+                size="sm"
+                variant="accent-blue"
+                showPercentage={false}
+              />
               
               <div className="grid grid-cols-2 gap-2 text-xs text-gray-400">
                 <div className="flex items-center gap-1">
@@ -139,24 +146,19 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Button
+              <ButtonLoader
                 type="submit"
                 disabled={!query.trim() || !hasDatabase || localLoading}
-                className="bg-blue-600 hover:bg-blue-700 text-white min-w-[140px]"
+                loading={localLoading}
+                text="Processing..."
+                size="md"
+                variant="accent-blue"
+                className="min-w-[140px]"
                 data-element="query-submit"
               >
-                {localLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-4 h-4 mr-2" />
-                    Ask Question
-                  </>
-                )}
-              </Button>
+                <Play className="w-4 h-4 mr-2" />
+                Ask Question
+              </ButtonLoader>
               
               {query && !localLoading && (
                 <Button

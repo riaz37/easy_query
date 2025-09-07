@@ -4,6 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Eye, FileText } from "lucide-react";
+import { Spinner } from "@/components/ui/loading";
 
 interface ExportControlsProps {
   reportResults: any;
@@ -74,7 +75,7 @@ export function ExportControls({
           {pdfGenerating && (
             <div className="bg-green-900/20 p-4 rounded-lg border border-green-400/30">
               <div className="flex items-center gap-3">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-400"></div>
+                <Spinner size="sm" variant="success" />
                 <span className="text-green-400 text-sm">
                   Generating professional PDF report...
                 </span>

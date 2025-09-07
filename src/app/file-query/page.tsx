@@ -24,6 +24,7 @@ import {
   Brain,
   Settings,
 } from "lucide-react";
+import { Spinner } from '@/components/ui/loading';
 import {
   FileUpload,
   FileResults,
@@ -32,6 +33,7 @@ import {
   TableSelector,
   AdvancedQueryParams,
 } from "@/components/data-query";
+import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 import { fileService } from "@/lib/api/services/file-service";
 import type {
   UploadedFile,
@@ -283,7 +285,7 @@ export default function FileQueryPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <Spinner size="lg" variant="accent-blue" className="mx-auto mb-4" />
           <p className="text-gray-600">Loading user data...</p>
         </div>
       </div>
@@ -319,50 +321,35 @@ export default function FileQueryPage() {
   }
 
   return (
-    <div className="w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-      {/* Add top padding to account for fixed navbar */}
-      <div className="pt-24 pb-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-blue-600/20 rounded-xl flex items-center justify-center border border-blue-500/40">
-                    <FileText className="w-6 h-6 text-blue-400" />
-                  </div>
-                  <div>
-                    <h1 className="text-3xl font-bold text-white">
-                      File Query
-                    </h1>
-                    <p className="text-gray-400">
-                      Upload files and query them using natural language
-                    </p>
-                  </div>
-                </div>
-
-                {/* Status Badges */}
-                <div className="flex items-center gap-3">
-                  {user?.user_id && (
-                    <Badge variant="outline" className="border-green-400/30 text-green-400">
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      User: {user.user_id}
-                    </Badge>
-                  )}
-                  {currentDatabaseId && (
-                    <Badge variant="outline" className="border-blue-400/30 text-blue-400">
-                      <File className="w-4 h-4 mr-2" />
-                      DB: {currentDatabaseName || currentDatabaseId}
-                    </Badge>
-                  )}
-                  {businessRules.status === "loaded" && (
-                    <Badge variant="outline" className="border-green-400/30 text-green-400">
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      Rules Active
-                    </Badge>
-                  )}
-                </div>
-              </div>
+    <PageLayout background="gradient" maxWidth="7xl">
+      <PageHeader
+        title="File Query"
+        description="Upload files and query them using natural language"
+        icon={<FileText className="w-6 h-6 text-blue-400" />}
+        actions={
+          <>
+            {/* Status Badges */}
+            {user?.user_id && (
+              <Badge variant="outline" className="border-green-400/30 text-green-400">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                User: {user.user_id}
+              </Badge>
+            )}
+            {currentDatabaseId && (
+              <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+                <File className="w-4 h-4 mr-2" />
+                DB: {currentDatabaseName || currentDatabaseId}
+              </Badge>
+            )}
+            {businessRules.status === "loaded" && (
+              <Badge variant="outline" className="border-green-400/30 text-green-400">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Rules Active
+              </Badge>
+            )}
+          </>
+        }
+      />
 
               {/* Feature Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -420,7 +407,6 @@ export default function FileQueryPage() {
                   </CardContent>
                 </Card>
               </div>
-            </div>
 
             {/* Main Content */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -650,9 +636,6 @@ export default function FileQueryPage() {
                 </Card>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </PageLayout>
   );
 }

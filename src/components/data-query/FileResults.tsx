@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { File, Download, Copy, ChevronLeft, ChevronRight, FileText, Brain } from 'lucide-react';
+import { Spinner } from '@/components/ui/loading';
 import { toast } from 'sonner';
 
 export interface FileQueryResult {
@@ -186,7 +187,7 @@ export function FileResults({ results, query, isLoading = false, className = "" 
   if (isLoading) {
     return (
       <div className={`${className} text-center py-8`}>
-        <Loader2 className="h-8 w-8 mx-auto text-purple-400 animate-spin mb-4" />
+        <Spinner size="lg" variant="accent-purple" className="mx-auto mb-4" />
         <p className="text-white font-medium">Processing your query...</p>
         <p className="text-gray-400 text-sm">This may take a few moments</p>
       </div>
