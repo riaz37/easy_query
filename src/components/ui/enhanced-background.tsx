@@ -30,7 +30,7 @@ export const EnhancedBackground = ({
   const gridSize = intensity === "high" ? 60 : intensity === "low" ? 80 : 70; // Larger grid for less clutter
 
   return (
-    <div className={cn("relative w-full h-full overflow-hidden", className)}>
+    <div className={cn("relative w-full h-full min-h-screen overflow-hidden", className)}>
       {/* Theme-aware gradient background with smooth transitions */}
       <div
         className="absolute inset-0 bg-gradient-to-br transition-colors duration-700 ease-in-out"

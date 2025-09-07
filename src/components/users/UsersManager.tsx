@@ -163,20 +163,28 @@ export function UsersManager() {
 
     if (hasMSSQL && hasVectorDB) {
       return (
-        <Badge className="bg-green-600 hover:bg-green-700">Full Access</Badge>
+        <Badge className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-emerald-400/30 shadow-lg shadow-emerald-500/25">
+          Full Access
+        </Badge>
       );
     } else if (hasMSSQL) {
       return (
-        <Badge className="bg-blue-600 hover:bg-blue-700">MSSQL Only</Badge>
+        <Badge className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-emerald-400/30 shadow-lg shadow-emerald-500/25">
+          MSSQL Access
+        </Badge>
       );
     } else if (hasVectorDB) {
       return (
-        <Badge className="bg-purple-600 hover:bg-purple-700">
-          Vector DB Only
+        <Badge className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white border-teal-400/30 shadow-lg shadow-teal-500/25">
+          Vector DB Access
         </Badge>
       );
     } else {
-      return <Badge variant="secondary">No Access</Badge>;
+      return (
+        <Badge className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white border-gray-400/30">
+          No Access
+        </Badge>
+      );
     }
   };
 

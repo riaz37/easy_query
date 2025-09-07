@@ -22,19 +22,20 @@ export const CurrentStatusCard = React.memo<CurrentStatusCardProps>(({
   hasBusinessRules,
 }) => {
   return (
-    <Card className="bg-slate-800/50 border-slate-700">
-      <CardHeader>
-        <CardTitle className="text-white">Current Status</CardTitle>
-        <CardDescription className="text-gray-400">
-          Overview of your current configuration
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced">Current Status</div>
+          <p className="card-description-enhanced">
+            Overview of your current configuration
+          </p>
+        </div>
+        <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Database Status */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Database className="w-5 h-5 text-blue-400" />
+              <Database className="w-5 h-5 text-emerald-400" />
               <span className="text-white font-medium">
                 Database Context
               </span>
@@ -47,7 +48,7 @@ export const CurrentStatusCard = React.memo<CurrentStatusCardProps>(({
                   </div>
                   <Badge
                     variant="outline"
-                    className="text-green-400 border-green-400"
+                    className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-emerald-400/30 shadow-lg shadow-emerald-500/25"
                   >
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Active
@@ -60,7 +61,7 @@ export const CurrentStatusCard = React.memo<CurrentStatusCardProps>(({
                   </div>
                   <Badge
                     variant="outline"
-                    className="text-yellow-400 border-yellow-400"
+                    className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white border-yellow-400/30 shadow-lg shadow-yellow-500/25"
                   >
                     <AlertCircle className="w-3 h-3 mr-1" />
                     Not Configured
@@ -86,7 +87,7 @@ export const CurrentStatusCard = React.memo<CurrentStatusCardProps>(({
                   </div>
                   <Badge
                     variant="outline"
-                    className="text-green-400 border-green-400"
+                    className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-emerald-400/30 shadow-lg shadow-emerald-500/25"
                   >
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Active
@@ -99,7 +100,7 @@ export const CurrentStatusCard = React.memo<CurrentStatusCardProps>(({
                   </div>
                   <Badge
                     variant="outline"
-                    className="text-yellow-400 border-yellow-400"
+                    className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white border-yellow-400/30 shadow-lg shadow-yellow-500/25"
                   >
                     <AlertCircle className="w-3 h-3 mr-1" />
                     Not Configured
@@ -109,8 +110,9 @@ export const CurrentStatusCard = React.memo<CurrentStatusCardProps>(({
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 });
 

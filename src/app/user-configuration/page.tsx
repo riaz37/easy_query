@@ -2,7 +2,12 @@
 
 import React from "react";
 import { UserConfiguration } from "@/components/user-configuration";
+import { PageLayout } from "@/components/layout/PageLayout";
 
 export default function UserConfigurationPage() {
-  return <UserConfiguration />;
+  return (
+    <PageLayout background="enhanced" backgroundIntensity="medium">
+      <UserConfiguration />
+    </PageLayout>
+  );
 }

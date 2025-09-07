@@ -2,11 +2,12 @@
 
 import React from "react";
 import { TablesManager } from "@/components/tables/TablesManager";
+import { PageLayout } from "@/components/layout/PageLayout";
 
 export default function TablesPage() {
   return (
-    <div className="w-full min-h-screen relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 pt-20">
+    <PageLayout background="enhanced" backgroundIntensity="medium">
       <TablesManager />
-    </div>
+    </PageLayout>
   );
 }

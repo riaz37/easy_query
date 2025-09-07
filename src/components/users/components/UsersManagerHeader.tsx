@@ -14,25 +14,28 @@ export function UsersManagerHeader({
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center gap-3`}>
-            <Users className="h-8 w-8 text-emerald-400" />
+          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+            <div className="relative">
+              <Users className="h-8 w-8 text-emerald-400" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
+            </div>
             User Access Management
           </h1>
-          <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mt-2`}>
+          <p className="text-gray-300 mt-2">
             Manage user access to MSSQL databases and vector databases
           </p>
         </div>
         <div className="flex gap-3">
           <Button
             onClick={onCreateMSSQLAccess}
-            className="bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
+            className="card-button-enhanced"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add MSSQL Access
           </Button>
           <Button
             onClick={onCreateVectorDBAccess}
-            className="bg-purple-500 hover:bg-purple-600 text-white shadow-lg hover:shadow-purple-500/25 transition-all duration-200"
+            className="card-button-enhanced"
           >
             <Brain className="w-4 h-4 mr-2" />
             Add Vector DB Access

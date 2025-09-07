@@ -51,21 +51,18 @@ export function UserStatsCards({ stats, isDark }: UserStatsCardsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
       {cards.map((card) => (
-        <Card 
-          key={card.title}
-          className={`transition-all duration-200 hover:scale-105 hover:shadow-lg bg-gradient-to-br ${card.gradient}`}
-        >
-          <CardHeader className="pb-3">
-            <CardTitle className={`text-sm font-medium ${card.textColor}`}>
-              {card.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${card.valueColor}`}>
+        <div key={card.title} className="card-enhanced">
+          <div className="card-content-enhanced">
+            <div className="card-header-enhanced">
+              <div className="card-title-enhanced text-sm font-medium">
+                {card.title}
+              </div>
+            </div>
+            <div className="text-2xl font-bold text-emerald-400">
               {card.value}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ))}
     </div>
   );

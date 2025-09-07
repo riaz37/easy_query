@@ -1,13 +1,15 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/store/theme-store";
+import { EnhancedBackground } from "@/components/ui/enhanced-background";
 
 interface PageLayoutProps {
   children: React.ReactNode;
   className?: string;
-  background?: "default" | "gradient" | "none";
+  background?: "default" | "gradient" | "enhanced" | "none";
   container?: boolean;
   maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "4xl" | "6xl" | "7xl" | "full";
+  backgroundIntensity?: "low" | "medium" | "high";
 }
 
 /**
@@ -16,7 +18,9 @@ interface PageLayoutProps {
  * 
  * Features:
  * - Consistent top padding to account for fixed navbar (112px total: 64px height + 24px margin + 24px clearance)
- * - Optional background gradients
+ * - Multiple background options: default, gradient, enhanced (animated), or none
+ * - Enhanced background includes floating particles, animated grids, and glowing effects
+ * - Configurable background intensity (low, medium, high)
  * - Responsive container with configurable max-width
  * - Proper bottom padding for content
  */
@@ -26,6 +30,7 @@ export function PageLayout({
   background = "default",
   container = true,
   maxWidth = "7xl",
+  backgroundIntensity = "medium",
 }: PageLayoutProps) {
   const theme = useTheme();
   const isDark = theme === 'dark';
@@ -35,6 +40,7 @@ export function PageLayout({
     gradient: isDark 
       ? "bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900" 
       : "bg-gradient-to-br from-gray-50 via-blue-50 to-emerald-50",
+    enhanced: "", // Enhanced background handles its own styling
     none: "",
   };
 
@@ -50,21 +56,37 @@ export function PageLayout({
     full: "max-w-full",
   };
 
-  return (
-    <div className={cn("w-full min-h-screen relative", backgroundClasses[background])}>
-      <div className="pt-28 pb-8">
-        {container ? (
-          <div className="container mx-auto px-4">
-            <div className={cn("mx-auto", maxWidthClasses[maxWidth])}>
-              {children}
-            </div>
-          </div>
-        ) : (
-          <div className={cn("mx-auto px-4", maxWidthClasses[maxWidth])}>
+  const content = (
+    <div className="pt-28 pb-8">
+      {container ? (
+        <div className="container mx-auto px-4">
+          <div className={cn("mx-auto", maxWidthClasses[maxWidth])}>
             {children}
           </div>
-        )}
+        </div>
+      ) : (
+        <div className={cn("mx-auto px-4", maxWidthClasses[maxWidth])}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+
+  // If enhanced background is requested, wrap content with EnhancedBackground
+  if (background === "enhanced") {
+    return (
+      <div className={cn("w-full min-h-screen relative", className)}>
+        <EnhancedBackground intensity={backgroundIntensity}>
+          {content}
+        </EnhancedBackground>
       </div>
+    );
+  }
+
+  // For other background types, use the standard layout
+  return (
+    <div className={cn("w-full min-h-screen relative", backgroundClasses[background], className)}>
+      {content}
     </div>
   );
 }
