@@ -731,14 +731,10 @@ nav {
 /* Enhanced modal with corner border effect */
 .modal-enhanced {
   position: relative;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
-              linear-gradient(230.27deg, rgba(19, 245, 132, 0) 71.59%, rgba(19, 245, 132, 0.2) 98.91%),
-              linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 100%);
+  background: transparent;
   border-radius: 20px;
   padding: 4px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 
-              0 0 30px rgba(19, 245, 132, 0.3),
-              0 0 60px rgba(19, 245, 132, 0.1);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(25px) saturate(1.2);
 }
 
@@ -768,7 +764,9 @@ nav {
 .modal-content-enhanced {
   position: relative;
   z-index: 2;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+              linear-gradient(230.27deg, rgba(19, 245, 132, 0) 71.59%, rgba(19, 245, 132, 0.2) 98.91%),
+              linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 100%);
   border-radius: 16px;
   padding: 0;
   color: white;
@@ -777,18 +775,18 @@ nav {
   flex-direction: column;
   min-height: 400px;
   backdrop-filter: blur(20px) saturate(1.3);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: none;
+  box-shadow: none;
 }
 
 /* Modal header with gradient background */
 .modal-header-enhanced {
-  background: linear-gradient(135deg, rgba(19, 245, 132, 0.1) 0%, rgba(19, 245, 132, 0.05) 100%);
-  border-bottom: 1px solid rgba(19, 245, 132, 0.2);
-  padding: 1.5rem;
+  background: transparent;
+  border-bottom: none;
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
   margin: 0;
-  border-radius: 14px 14px 0 0;
-  backdrop-filter: blur(10px);
+  border-radius: 0;
+  backdrop-filter: none;
 }
 
 /* Modal title with gradient text effect */
@@ -950,15 +948,15 @@ nav {
 
 /* Modal footer with border */
 .modal-footer-enhanced {
-  background: linear-gradient(135deg, rgba(19, 245, 132, 0.1) 0%, rgba(19, 245, 132, 0.05) 100%);
-  border-top: 1px solid rgba(19, 245, 132, 0.3);
+  background: transparent;
+  border-top: none;
   padding: 1.5rem 1.5rem 1.5rem 1.5rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
   margin: 0;
   margin-top: auto;
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
 }
 
 /* Modal form content area */
@@ -1031,6 +1029,167 @@ nav {
   .modal-title-enhanced {
     font-size: 1.125rem;
   }
+}
+
+/* ============================================
+   ENHANCED CARD STYLES (USING MODAL THEME)
+   ============================================ */
+
+/* Enhanced card with corner border effect */
+.card-enhanced {
+  position: relative;
+  background: transparent;
+  border-radius: 16px;
+  padding: 4px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(25px) saturate(1.2);
+}
+
+/* The gradient corner border effect for enhanced cards */
+.card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 18px;
+  padding: 2px;
+  background: linear-gradient(132.56deg, rgba(19, 245, 132, 1) 0.71%, rgba(255, 255, 255, 0) 16.71%),
+              linear-gradient(132.98deg, rgba(255, 255, 255, 0) 84.76%, rgba(19, 245, 132, 1) 99.35%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  z-index: 1;
+  box-shadow: 0 0 20px rgba(19, 245, 132, 0.4), 
+              0 0 40px rgba(19, 245, 132, 0.2),
+              0 0 60px rgba(19, 245, 132, 0.1);
+}
+
+/* Card content wrapper */
+.card-content-enhanced {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+              linear-gradient(230.27deg, rgba(19, 245, 132, 0) 71.59%, rgba(19, 245, 132, 0.2) 98.91%),
+              linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Card header with gradient background */
+.card-header-enhanced {
+  background: transparent;
+  border-bottom: none;
+  padding: 0 0 1rem 0;
+  margin: 0;
+  border-radius: 0;
+  backdrop-filter: none;
+}
+
+/* Card title with gradient text effect */
+.card-title-enhanced {
+  background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(19, 245, 132, 0.3);
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+/* Card description with gradient text */
+.card-description-enhanced {
+  background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Enhanced button styles for cards */
+.card-button-enhanced {
+  background: linear-gradient(135deg, rgba(19, 245, 132, 0.1) 0%, rgba(19, 245, 132, 0.05) 100%);
+  border: 1px solid rgba(19, 245, 132, 0.3);
+  color: #10b981;
+  backdrop-filter: blur(20px) saturate(1.2);
+  box-shadow: inset 0 1px 0 rgba(19, 245, 132, 0.1), 
+              0 0 0 1px rgba(19, 245, 132, 0.15),
+              0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-button-enhanced:hover {
+  background: linear-gradient(135deg, rgba(19, 245, 132, 0.2) 0%, rgba(19, 245, 132, 0.1) 100%);
+  border-color: rgba(19, 245, 132, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 
+              0 0 0 1px rgba(19, 245, 132, 0.2),
+              0 0 0 3px rgba(19, 245, 132, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Enhanced user card styles */
+.user-card-enhanced {
+  position: relative;
+  background: transparent;
+  border-radius: 12px;
+  padding: 3px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px) saturate(1.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.user-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border-radius: 13px;
+  padding: 1px;
+  background: linear-gradient(132.56deg, rgba(19, 245, 132, 0.8) 0.71%, rgba(255, 255, 255, 0) 16.71%),
+              linear-gradient(132.98deg, rgba(255, 255, 255, 0) 84.76%, rgba(19, 245, 132, 0.8) 99.35%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.user-card-enhanced:hover::before {
+  opacity: 1;
+}
+
+.user-card-enhanced:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4), 
+              0 0 20px rgba(19, 245, 132, 0.3);
+}
+
+.user-card-content-enhanced {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.02)),
+              linear-gradient(230.27deg, rgba(19, 245, 132, 0) 71.59%, rgba(19, 245, 132, 0.1) 98.91%),
+              linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.1) 100%);
+  border-radius: 9px;
+  padding: 1.25rem;
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
 }
 
 /* ============================================

@@ -11,14 +11,14 @@ import type { UserInfoCardProps } from '../types';
 
 export const UserInfoCard = React.memo<UserInfoCardProps>(({ user }) => {
   return (
-    <Card className="bg-slate-800/50 border-slate-700">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
-          <User className="h-5 w-5 text-blue-400" />
-          User Information
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <User className="h-5 w-5 text-emerald-400" />
+            User Information
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label className="text-gray-400">User ID</Label>
@@ -33,8 +33,8 @@ export const UserInfoCard = React.memo<UserInfoCardProps>(({ user }) => {
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 });
 

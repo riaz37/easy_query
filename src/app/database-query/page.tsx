@@ -31,11 +31,15 @@ import { QueryModeToggle } from "@/components/database-query/QueryModeToggle";
 import { ReportGenerator } from "@/components/reports";
 import { QueryResultOverlay } from "@/components/ui/query-result-overlay";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
+import { useTheme } from "@/store/theme-store";
+import { DatabaseQueryStatsCards, DatabaseQueryHeader } from "@/components/database-query/components";
 
 export default function DatabaseQueryPage() {
   const router = useRouter();
   const { user } = useAuthContext();
   const { currentDatabase, hasCurrentDatabase } = useDatabaseContext();
+  const theme = useTheme();
+  const isDark = theme === "dark";
   const {
     loading,
     error,
@@ -259,104 +263,16 @@ export default function DatabaseQueryPage() {
   }, [currentStatus, queryMode]);
 
   return (
-    <PageLayout background="gradient" maxWidth="7xl">
-      <PageHeader
-        title="Database Query & AI Reports"
-        description="Run quick queries or generate comprehensive AI-powered reports"
-        icon={<Database className="w-6 h-6 text-blue-400" />}
-        actions={
-          <>
-            {/* Status Badges */}
-            {user?.user_id && (
-              <Badge variant="outline" className="border-green-400/30 text-green-400">
-                <User className="w-4 h-4 mr-2" />
-                User: {user.user_id}
-              </Badge>
-            )}
-            {currentDatabase && (
-              <Badge variant="outline" className="border-blue-400/30 text-blue-400">
-                <Database className="w-4 h-4 mr-2" />
-                DB: {currentDatabase.database_name}
-              </Badge>
-            )}
-          </>
-        }
+    <PageLayout background="enhanced" backgroundIntensity="medium" maxWidth="7xl">
+      {/* Header */}
+      <DatabaseQueryHeader
+        user={user}
+        currentDatabase={currentDatabase}
+        isDark={isDark}
       />
 
-              {/* Feature Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <Card className="bg-gray-900/50 border-blue-400/30">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                        <Play className="w-4 h-4 text-blue-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">
-                          Quick Queries
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                          Instant results for simple questions
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gray-900/50 border-purple-400/30">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                        <FileText className="w-4 h-4 text-purple-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">
-                          AI Reports
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                          Comprehensive analysis & insights
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gray-900/50 border-green-400/30">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                        <BarChart3 className="w-4 h-4 text-green-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">
-                          Smart Results
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                          AI-powered data insights
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gray-900/50 border-blue-400/30">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                        <History className="w-4 h-4 text-blue-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">
-                          Query History
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                          Track and reuse past queries
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+      {/* Stats Cards */}
+      <DatabaseQueryStatsCards isDark={isDark} />
 
             {/* Mode Toggle */}
             <div className="mb-6">
@@ -373,7 +289,7 @@ export default function DatabaseQueryPage() {
                     variant="outline"
                     size="sm"
                     onClick={handleToggleHistory}
-                    className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+                    className="card-button-enhanced"
                   >
                     <History className="w-4 h-4 mr-2" />
                     {showHistory ? 'Hide History' : 'Show History'}
@@ -383,7 +299,7 @@ export default function DatabaseQueryPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => router.push('/ai-results')}
-                    className="border-purple-400/30 text-purple-400 hover:bg-purple-400/10"
+                    className="card-button-enhanced"
                     data-voice-action="view report"
                     data-voice-element="view report"
                   >
@@ -420,8 +336,8 @@ export default function DatabaseQueryPage() {
 
               {/* Error Display */}
               {error && (
-                <Card className="bg-red-900/20 border-red-500/30">
-                  <CardContent className="pt-6">
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
                     <div className="flex items-center gap-3">
                       <AlertCircle className="w-5 h-5 text-red-400" />
                       <div>
@@ -431,53 +347,55 @@ export default function DatabaseQueryPage() {
                         <p className="text-red-300 text-sm">{error}</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               )}
 
               {/* Empty State */}
-              <Card className={`bg-gray-900/50 border-blue-400/30 transition-all duration-300 ${
-                currentStatus !== 'ready' ? 'border-blue-500/60 bg-blue-900/20' : ''
+              <div className={`card-enhanced transition-all duration-300 ${
+                currentStatus !== 'ready' ? 'border-blue-500/60' : ''
               }`}>
-                <CardContent className="pt-12 pb-12 text-center">
-                  <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 ${
-                    currentStatus !== 'ready'
-                      ? 'bg-blue-500/40 border border-blue-400/60 scale-110' 
-                      : 'bg-blue-500/20'
-                  }`}>
-                    {currentStatus !== 'ready' ? (
-                      <Spinner size="lg" variant="accent-blue" />
-                    ) : (
-                      <Database className="w-8 h-8 text-blue-400" />
-                    )}
-                  </div>
-                  <h3 className="text-white text-lg font-medium mb-2">
-                    {statusMessage}
-                  </h3>
-                  <p className="text-gray-400 mb-4">
-                    {statusDescription}
-                  </p>
-                  {!hasCurrentDatabase && currentStatus === 'ready' && (
-                    <p className="text-yellow-400 text-sm mb-4">
-                      Please select a database first
-                    </p>
-                  )}
-                  {currentStatus !== 'ready' && (
-                    <div className="mb-4">
-                      <div className="flex items-center justify-center gap-2 text-blue-400 text-sm">
-                        <Spinner size="sm" variant="accent-blue" />
-                        <span>{currentStatus === 'generating_report' ? 'Generating Report...' : 'Processing...'}</span>
-                      </div>
-                      <Progress value={queryProgress} className="h-1 mt-2 max-w-xs mx-auto" />
+                <div className="card-content-enhanced">
+                  <div className="text-center py-12">
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 ${
+                      currentStatus !== 'ready'
+                        ? 'bg-blue-500/40 border border-blue-400/60 scale-110' 
+                        : 'bg-blue-500/20'
+                    }`}>
+                      {currentStatus !== 'ready' ? (
+                        <Spinner size="lg" variant="accent-blue" />
+                      ) : (
+                        <Database className="w-8 h-8 text-blue-400" />
+                      )}
                     </div>
-                  )}
-                  <div className="flex justify-center gap-2 mt-4">
-                    <Badge variant="outline" className="border-blue-400/30 text-blue-400">
-                      {statusBadge}
-                    </Badge>
+                    <h3 className="text-white text-lg font-medium mb-2">
+                      {statusMessage}
+                    </h3>
+                    <p className="text-gray-400 mb-4">
+                      {statusDescription}
+                    </p>
+                    {!hasCurrentDatabase && currentStatus === 'ready' && (
+                      <p className="text-yellow-400 text-sm mb-4">
+                        Please select a database first
+                      </p>
+                    )}
+                    {currentStatus !== 'ready' && (
+                      <div className="mb-4">
+                        <div className="flex items-center justify-center gap-2 text-blue-400 text-sm">
+                          <Spinner size="sm" variant="accent-blue" />
+                          <span>{currentStatus === 'generating_report' ? 'Generating Report...' : 'Processing...'}</span>
+                        </div>
+                        <Progress value={queryProgress} className="h-1 mt-2 max-w-xs mx-auto" />
+                      </div>
+                    )}
+                    <div className="flex justify-center gap-2 mt-4">
+                      <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+                        {statusBadge}
+                      </Badge>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
 
       {/* Query History Panel - Fixed positioning */}

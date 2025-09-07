@@ -14,19 +14,19 @@ export const QuickActionsCard = React.memo<QuickActionsCardProps>(({
   onNavigateToTab,
 }) => {
   return (
-    <Card className="bg-slate-800/50 border-slate-700">
-      <CardHeader>
-        <CardTitle className="text-white">Quick Actions</CardTitle>
-        <CardDescription className="text-gray-400">
-          Common configuration tasks
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced">Quick Actions</div>
+          <p className="card-description-enhanced">
+            Common configuration tasks
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Button
             variant="outline"
             onClick={() => onNavigateToTab('database')}
-            className="w-full bg-slate-700 border-slate-600 text-white hover:bg-slate-600"
+            className="card-button-enhanced w-full"
           >
             <Database className="w-4 h-4 mr-2" />
             Configure Database
@@ -35,14 +35,14 @@ export const QuickActionsCard = React.memo<QuickActionsCardProps>(({
           <Button
             variant="outline"
             onClick={() => onNavigateToTab('business-rules')}
-            className="w-full bg-slate-700 border-slate-600 text-white hover:bg-slate-600"
+            className="card-button-enhanced w-full"
           >
             <Shield className="w-4 h-4 mr-2" />
             Manage Business Rules
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 });
 

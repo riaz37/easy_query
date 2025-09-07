@@ -15,18 +15,18 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="text-center py-12">
-      <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mx-auto mb-4`}>
+      <div className="text-emerald-400 mx-auto mb-4">
         {icon}
       </div>
-      <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}>
+      <h3 className="text-lg font-medium text-white mb-2">
         {title}
       </h3>
-      <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
+      <p className="text-gray-300 mb-4">
         {description}
       </p>
       <Button 
         onClick={onAction} 
-        className="bg-blue-500 hover:bg-blue-600 shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
+        className="card-button-enhanced"
       >
         <Plus className="w-4 h-4 mr-2" />
         {actionLabel}

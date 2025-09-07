@@ -24,12 +24,16 @@ import { TableManagementSection } from "./TableManagementSection";
 import { ServiceRegistry } from "@/lib/api/services/service-registry";
 import { UserCurrentDBTableData } from "@/types/api";
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
+import { useTheme } from "@/store/theme-store";
+import { TableStatsCards, TablesManagerHeader } from "./components";
 
 export function TablesManager() {
   const { user, isLoading: authLoading } = useAuthContext();
-  
+  const theme = useTheme();
+  const isDark = theme === "dark";
+
   const [tableData, setTableData] = useState<UserCurrentDBTableData | null>(
-    null,
+    null
   );
   const [loading, setLoading] = useState(false);
   const [settingDB, setSettingDB] = useState(false);
@@ -58,17 +62,20 @@ export function TablesManager() {
     setSuccess(null);
 
     try {
-      await ServiceRegistry.userCurrentDB.setUserCurrentDB({ db_id: dbId }, user.user_id);
-      setSuccess(`Successfully set database ID ${dbId} for user ${user.user_id}`);
+      await ServiceRegistry.userCurrentDB.setUserCurrentDB(
+        { db_id: dbId },
+        user.user_id
+      );
+      setSuccess(
+        `Successfully set database ID ${dbId} for user ${user.user_id}`
+      );
       // Auto-fetch table data after setting the database
       setTimeout(() => {
         fetchTableData();
       }, 1000);
     } catch (err) {
       console.error("Error setting current database:", err);
-      setError(
-        "Failed to set current database. Please check the database ID.",
-      );
+      setError("Failed to set current database. Please check the database ID.");
     } finally {
       setSettingDB(false);
     }
@@ -85,81 +92,103 @@ export function TablesManager() {
     setSuccess(null);
 
     try {
-      const response = await ServiceRegistry.userCurrentDB.getUserCurrentDB(user.user_id);
+      const response = await ServiceRegistry.userCurrentDB.getUserCurrentDB(
+        user.user_id
+      );
 
       // The API client already extracts the data portion, so we need to access response.data
       const responseData = response.data || response;
 
       // Check if db_schema has the table data (primary structure)
-      if (responseData.db_schema && responseData.db_schema.matched_tables_details && Array.isArray(responseData.db_schema.matched_tables_details)) {
+      if (
+        responseData.db_schema &&
+        responseData.db_schema.matched_tables_details &&
+        Array.isArray(responseData.db_schema.matched_tables_details)
+      ) {
         // Transform the matched_tables_details to the expected format
         const transformedTableInfo = {
-          tables: responseData.db_schema.matched_tables_details.map((table: any) => ({
-            table_name: table.table_name || table.name || "Unknown",
-            full_name: table.full_name || `dbo.${table.table_name || table.name || "unknown"}`,
-            schema: table.schema || "dbo",
-            columns: table.columns || [],
-            relationships: table.relationships || [],
-            primary_keys: table.primary_keys || [],
-            sample_data: table.sample_data || [],
-            row_count_sample: table.row_count_sample || 0,
-          })),
+          tables: responseData.db_schema.matched_tables_details.map(
+            (table: any) => ({
+              table_name: table.table_name || table.name || "Unknown",
+              full_name:
+                table.full_name ||
+                `dbo.${table.table_name || table.name || "unknown"}`,
+              schema: table.schema || "dbo",
+              columns: table.columns || [],
+              relationships: table.relationships || [],
+              primary_keys: table.primary_keys || [],
+              sample_data: table.sample_data || [],
+              row_count_sample: table.row_count_sample || 0,
+            })
+          ),
           metadata: {
-            total_tables: responseData.db_schema.metadata?.total_schema_tables || responseData.db_schema.schema_tables?.length || 0,
-            processed_tables: responseData.db_schema.matched_tables_details.length,
+            total_tables:
+              responseData.db_schema.metadata?.total_schema_tables ||
+              responseData.db_schema.schema_tables?.length ||
+              0,
+            processed_tables:
+              responseData.db_schema.matched_tables_details.length,
             failed_tables: 0,
             extraction_date: new Date().toISOString(),
             sample_row_count: 0,
             database_url: responseData.db_url || "",
           },
-          unmatched_business_rules: responseData.db_schema.unmatched_business_rules || []
+          unmatched_business_rules:
+            responseData.db_schema.unmatched_business_rules || [],
         };
 
         const structuredData: UserCurrentDBTableData = {
           ...responseData,
           table_info: transformedTableInfo,
           // Also add the db_schema for the visualization parser
-          db_schema: responseData.db_schema
+          db_schema: responseData.db_schema,
         };
-        
+
         setTableData(structuredData);
-      } 
+      }
       // Fallback: Check if db_schema has schema_tables (just table names)
-      else if (responseData.db_schema && responseData.db_schema.schema_tables && Array.isArray(responseData.db_schema.schema_tables)) {
+      else if (
+        responseData.db_schema &&
+        responseData.db_schema.schema_tables &&
+        Array.isArray(responseData.db_schema.schema_tables)
+      ) {
         // Transform the schema_tables to the expected format with minimal data
         const transformedTableInfo = {
-          tables: responseData.db_schema.schema_tables.map((tableName: string) => ({
-            table_name: tableName,
-            full_name: `dbo.${tableName}`,
-            schema: "dbo",
-            columns: [],
-            relationships: [],
-            primary_keys: [],
-            sample_data: [],
-            row_count_sample: 0,
-          })),
+          tables: responseData.db_schema.schema_tables.map(
+            (tableName: string) => ({
+              table_name: tableName,
+              full_name: `dbo.${tableName}`,
+              schema: "dbo",
+              columns: [],
+              relationships: [],
+              primary_keys: [],
+              sample_data: [],
+              row_count_sample: 0,
+            })
+          ),
           metadata: {
             total_tables: responseData.db_schema.schema_tables.length,
-            processed_tables: responseData.db_schema.matched_tables?.length || 0,
+            processed_tables:
+              responseData.db_schema.matched_tables?.length || 0,
             failed_tables: 0,
             extraction_date: new Date().toISOString(),
             sample_row_count: 0,
             database_url: responseData.db_url || "",
           },
-          unmatched_business_rules: responseData.db_schema.unmatched_business_rules || []
+          unmatched_business_rules:
+            responseData.db_schema.unmatched_business_rules || [],
         };
 
         const structuredData: UserCurrentDBTableData = {
           ...responseData,
           table_info: transformedTableInfo,
-          db_schema: responseData.db_schema
+          db_schema: responseData.db_schema,
         };
-        
+
         setTableData(structuredData);
-      } 
-      else {
+      } else {
         setError(
-          "Table information is not available. Please generate table info first.",
+          "Table information is not available. Please generate table info first."
         );
         setTableData(null);
       }
@@ -169,7 +198,7 @@ export function TablesManager() {
     } catch (err) {
       console.error("Error fetching table data:", err);
       setError(
-        "Failed to fetch table data. Please check the user ID and try again.",
+        "Failed to fetch table data. Please check the user ID and try again."
       );
     } finally {
       setLoading(false);
@@ -190,7 +219,7 @@ export function TablesManager() {
       // For now, let's just reload the database to refresh table info
       const response = await ServiceRegistry.database.reloadDatabase();
       setSuccess(
-        `Database reloaded successfully. Please try loading tables again.`,
+        `Database reloaded successfully. Please try loading tables again.`
       );
 
       // Auto-fetch table data after reloading
@@ -215,7 +244,7 @@ export function TablesManager() {
     tableData?.table_info?.tables?.filter(
       (table) =>
         table.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        table.table_name.toLowerCase().includes(searchTerm.toLowerCase()),
+        table.table_name.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
   // Prepare available tables for Excel to DB
@@ -231,275 +260,216 @@ export function TablesManager() {
     })) || [];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-white">Database Tables</h1>
-          <p className="text-slate-400 mt-2">
-            Manage table relationships and import data
-          </p>
-        </div>
-      </div>
+      <TablesManagerHeader isDark={isDark} />
+
+      {/* Stats Cards */}
+      {user?.user_id && tableData && (
+        <TableStatsCards tableData={tableData} isDark={isDark} />
+      )}
 
       {/* Authentication Check */}
       {authLoading ? (
-        <Alert>
-          <AlertDescription className="flex items-center gap-2">
-            <Spinner size="sm" variant="accent-blue" />
-            Checking authentication...
-          </AlertDescription>
-        </Alert>
+        <div className="card-enhanced">
+          <div className="card-content-enhanced">
+            <div className="flex items-center gap-2 text-emerald-400">
+              <Spinner size="sm" variant="accent-blue" />
+              Checking authentication...
+            </div>
+          </div>
+        </div>
       ) : !user?.user_id ? (
-        <Alert>
-          <AlertDescription>
-            Please log in to access database table management features.
-          </AlertDescription>
-        </Alert>
+        <div className="card-enhanced">
+          <div className="card-content-enhanced">
+            <div className="text-gray-300">
+              Please log in to access database table management features.
+            </div>
+          </div>
+        </div>
       ) : null}
 
       {/* Error Alert */}
       {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <div className="card-enhanced">
+          <div className="card-content-enhanced">
+            <div className="text-red-400">{error}</div>
+          </div>
+        </div>
       )}
 
       {/* Success Alert */}
       {success && (
-        <Alert className="border-emerald-500/50 bg-emerald-500/10">
-          <AlertDescription className="text-emerald-400">
-            {success}
-          </AlertDescription>
-        </Alert>
+        <div className="card-enhanced">
+          <div className="card-content-enhanced">
+            <div className="text-emerald-400">{success}</div>
+          </div>
+        </div>
       )}
 
       {/* Database Configuration */}
       {user?.user_id && (
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Settings className="h-5 w-5" />
-              Database Configuration
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <label className="text-sm text-slate-400 whitespace-nowrap">
-                  User ID:
-                </label>
-                <div className="w-40 px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white text-sm">
-                  {user?.user_id || "Not authenticated"}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <label className="text-sm text-slate-400 whitespace-nowrap">
-                  Database ID:
-                </label>
-                <Input
-                  type="number"
-                  placeholder="Enter DB ID"
-                  value={dbId || ""}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    if (value > 0) {
-                      setDbId(value);
-                    } else {
-                      setDbId(0); // Set to 0 to indicate invalid state
-                    }
-                  }}
-                  className={`w-32 ${dbId <= 0 ? 'border-red-500 focus:border-red-500' : ''}`}
-                  min="1"
-                  required
-                />
-                {dbId <= 0 && (
-                  <span className="text-red-400 text-xs">Invalid ID</span>
-                )}
-              </div>
-              <Button
-                onClick={setCurrentDatabase}
-                disabled={settingDB || !dbId || dbId <= 0 || !user?.user_id}
-                variant="outline"
-              >
-                {settingDB ? (
-                  <Spinner size="sm" variant="accent-blue" />
-                ) : (
-                  <Settings className="h-4 w-4" />
-                )}
-                Set Database
-              </Button>
-              <Button onClick={fetchTableData} disabled={loading || !user?.user_id}>
-                {loading ? (
-                  <Spinner size="sm" variant="accent-blue" />
-                ) : (
-                  <RefreshCw className="h-4 w-4" />
-                )}
-                Load Tables
-              </Button>
-              <Button
-                onClick={generateTableInfo}
-                disabled={generatingTables || !user?.user_id}
-                variant="secondary"
-              >
-                {generatingTables ? (
-                  <Spinner size="sm" variant="accent-blue" />
-                ) : (
-                  <Database className="h-4 w-4" />
-                )}
-                Reload Database
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Database Info */}
-      {user?.user_id && tableData && (
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Database className="h-5 w-5" />
-              Database Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <p className="text-sm text-slate-400">Database ID</p>
-                <p className="text-white font-medium">{tableData.db_id}</p>
-              </div>
-              <div>
-                <p className="text-sm text-slate-400">Total Tables</p>
-                <p className="text-white font-medium">
-                  {tableData.table_info?.metadata?.total_tables || 0}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-slate-400">Processed Tables</p>
-                <p className="text-white font-medium">
-                  {tableData.table_info?.metadata?.processed_tables || 0}
-                </p>
+        <div className="card-enhanced">
+          <div className="card-content-enhanced">
+            <div className="card-header-enhanced">
+              <div className="card-title-enhanced flex items-center gap-2">
+                <Settings className="h-5 w-5" />
+                Database Configuration
               </div>
             </div>
-
-            {tableData.table_info?.unmatched_business_rules?.length > 0 && (
-              <div>
-                <p className="text-sm text-slate-400 mb-2">
-                  Unmatched Business Rules
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {tableData.table_info.unmatched_business_rules.map(
-                    (rule, index) => (
-                      <Badge
-                        key={`rule-${index}-${rule.substring(0, 20)}`}
-                        variant="secondary"
-                        className="bg-yellow-900/20 text-yellow-400"
-                      >
-                        {rule}
-                      </Badge>
-                    ),
+            <div className="mt-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-slate-400 whitespace-nowrap">
+                    Database ID:
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder="Enter DB ID"
+                    value={dbId || ""}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (value > 0) {
+                        setDbId(value);
+                      } else {
+                        setDbId(0); // Set to 0 to indicate invalid state
+                      }
+                    }}
+                    className={`w-32 ${
+                      dbId <= 0 ? "border-red-500 focus:border-red-500" : ""
+                    }`}
+                    min="1"
+                    required
+                  />
+                  {dbId <= 0 && (
+                    <span className="text-red-400 text-xs">Invalid ID</span>
                   )}
                 </div>
+                <Button
+                  onClick={setCurrentDatabase}
+                  disabled={settingDB || !dbId || dbId <= 0 || !user?.user_id}
+                  className="card-button-enhanced"
+                >
+                  {settingDB ? (
+                    <Spinner size="sm" variant="accent-blue" />
+                  ) : (
+                    <Settings className="h-4 w-4" />
+                  )}
+                  Set Database
+                </Button>
+                <Button
+                  onClick={fetchTableData}
+                  disabled={loading || !user?.user_id}
+                  className="card-button-enhanced"
+                >
+                  {loading ? (
+                    <Spinner size="sm" variant="accent-blue" />
+                  ) : (
+                    <RefreshCw className="h-4 w-4" />
+                  )}
+                  Load Tables
+                </Button>
+                <Button
+                  onClick={generateTableInfo}
+                  disabled={generatingTables || !user?.user_id}
+                  className="card-button-enhanced"
+                >
+                  {generatingTables ? (
+                    <Spinner size="sm" variant="accent-blue" />
+                  ) : (
+                    <Database className="h-4 w-4" />
+                  )}
+                  Reload Database
+                </Button>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Main Content Tabs */}
       {user?.user_id && (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
-          <TabsTrigger
-            value="visualization"
-            className="flex items-center gap-2 data-[state=active]:bg-slate-700"
-          >
-            <Table className="h-4 w-4" />
-            Table Visualization
-          </TabsTrigger>
-          <TabsTrigger
-            value="table-management"
-            className="flex items-center gap-2 data-[state=active]:bg-slate-700"
-          >
-            <Settings className="h-4 w-4" />
-            Table Management
-          </TabsTrigger>
-          <TabsTrigger
-            value="excel-import"
-            className="flex items-center gap-2 data-[state=active]:bg-slate-700"
-          >
-            <FileSpreadsheet className="h-4 w-4" />
-            Excel Import
-          </TabsTrigger>
-        </TabsList>
+          <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 border-slate-600">
+            <TabsTrigger
+              value="visualization"
+              className="flex items-center gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white"
+            >
+              <Table className="h-4 w-4" />
+              Table Visualization
+            </TabsTrigger>
+            <TabsTrigger
+              value="table-management"
+              className="flex items-center gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white"
+            >
+              <Settings className="h-4 w-4" />
+              Table Management
+            </TabsTrigger>
+            <TabsTrigger
+              value="excel-import"
+              className="flex items-center gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white"
+            >
+              <FileSpreadsheet className="h-4 w-4" />
+              Excel Import
+            </TabsTrigger>
+          </TabsList>
 
           {/* Table Visualization Tab */}
           <TabsContent value="visualization" className="space-y-6 mt-6">
-            {/* Search */}
-            {tableData && (
-              <Card className="bg-slate-800/50 border-slate-700">
-                <CardContent className="pt-6">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input
-                      placeholder="Search tables..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Table Flow Visualization */}
             {tableData && (
-              <Card className="bg-slate-800/50 border-slate-700">
-                <CardHeader>
-                  <CardTitle className="text-white">
-                    Table Relationships
-                  </CardTitle>
-                  <p className="text-slate-400 text-sm">
-                    Interactive visualization of table relationships and structure
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[600px] w-full">
-                    <TableFlowVisualization rawData={tableData} />
+              <div className="card-enhanced">
+                <div className="card-content-enhanced">
+                  <div className="card-header-enhanced">
+                    <div className="card-title-enhanced">
+                      Table Relationships
+                    </div>
+                    <p className="card-description-enhanced">
+                      Interactive visualization of table relationships and
+                      structure
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="mt-4">
+                    <div className="h-[600px] w-full">
+                      <TableFlowVisualization rawData={tableData} />
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
 
             {/* No Data State */}
             {!loading && !tableData && (
-              <Card className="bg-slate-800/50 border-slate-700">
-                <CardContent className="text-center py-12">
-                  <Database className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    No Table Data
-                  </h3>
-                  <p className="text-slate-400 mb-4">
-                    Enter a user ID and click Load to fetch table information
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="card-enhanced">
+                <div className="card-content-enhanced">
+                  <div className="text-center py-12">
+                    <Database className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No Table Data
+                    </h3>
+                    <p className="text-slate-400 mb-4">
+                      Enter a user ID and click Load to fetch table information
+                    </p>
+                  </div>
+                </div>
+              </div>
             )}
 
             {/* No Results State */}
             {tableData && filteredTables.length === 0 && searchTerm && (
-              <Card className="bg-slate-800/50 border-slate-700">
-                <CardContent className="text-center py-12">
-                  <Search className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    No Tables Found
-                  </h3>
-                  <p className="text-slate-400">
-                    No tables match your search criteria: "{searchTerm}"
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="card-enhanced">
+                <div className="card-content-enhanced">
+                  <div className="text-center py-12">
+                    <Search className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No Tables Found
+                    </h3>
+                    <p className="text-slate-400">
+                      No tables match your search criteria: "{searchTerm}"
+                    </p>
+                  </div>
+                </div>
+              </div>
             )}
           </TabsContent>
 

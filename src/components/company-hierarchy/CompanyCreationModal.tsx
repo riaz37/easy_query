@@ -5,6 +5,7 @@ import { Building2, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -311,56 +312,52 @@ export function CompanyCreationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="modal-enhanced max-w-4xl max-h-[95vh] w-[95vw] p-0 flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700/30 flex-shrink-0 bg-gradient-to-r from-green-500/10 to-green-500/5">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="modal-icon-container w-12 h-12">
-              <Building2 className="w-6 h-6 text-green-400" />
-            </div>
-            <div className="min-w-0">
-              <DialogTitle className="modal-title-enhanced text-xl font-semibold truncate">
+      <DialogContent className="max-w-4xl max-h-[95vh] w-[95vw] p-0 border-0 bg-transparent">
+        <div className="modal-enhanced">
+          <div className="modal-content-enhanced max-h-[95vh] overflow-y-auto">
+            {/* Header */}
+            <DialogHeader className="modal-header-enhanced">
+              <DialogTitle className="modal-title-enhanced flex items-center gap-3">
+                <Building2 className="w-6 h-6 text-green-400" />
                 Create {type === "parent" ? "Parent" : "Sub"} Company
               </DialogTitle>
-              <DialogDescription className="modal-description-enhanced text-sm">
+              <DialogDescription className="modal-description-enhanced">
                 Set up your company with database and vector configurations
               </DialogDescription>
+            </DialogHeader>
+
+            {/* Step Indicator */}
+            <div className="modal-form-group">
+              <StepIndicator currentStep={currentStep} />
             </div>
-          </div>
-        </div>
 
-        {/* Step Indicator */}
-        <div className="px-6 py-4 border-b border-gray-700/30 flex-shrink-0">
-          <StepIndicator currentStep={currentStep} />
-        </div>
-
-        {/* Content Area */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
-          <div className="p-6 pb-8">
-            {currentStep === "company-info" && (
-              <CompanyInfoStep {...stepProps} />
-            )}
-            {currentStep === "database-config" && (
-              <DatabaseConfigStep {...stepProps} />
-            )}
-            {currentStep === "database-creation" && (
-              <DatabaseCreationStep
-                currentTaskId={currentTaskId}
-                onTaskComplete={handleTaskComplete}
-              />
-            )}
-            {currentStep === "vector-config" && (
-              <VectorConfigStep {...stepProps} />
-            )}
-            {currentStep === "final-creation" && (
-              <FinalCreationStep
-                {...stepProps}
-                address={address}
-                contactEmail={contactEmail}
-                selectedUserConfigId={selectedUserConfigId}
-                userConfigs={userConfigs}
-              />
-            )}
+            {/* Content Area */}
+            <div className="modal-form-content">
+              {currentStep === "company-info" && (
+                <CompanyInfoStep {...stepProps} />
+              )}
+              {currentStep === "database-config" && (
+                <DatabaseConfigStep {...stepProps} />
+              )}
+              {currentStep === "database-creation" && (
+                <DatabaseCreationStep
+                  currentTaskId={currentTaskId}
+                  onTaskComplete={handleTaskComplete}
+                />
+              )}
+              {currentStep === "vector-config" && (
+                <VectorConfigStep {...stepProps} />
+              )}
+              {currentStep === "final-creation" && (
+                <FinalCreationStep
+                  {...stepProps}
+                  address={address}
+                  contactEmail={contactEmail}
+                  selectedUserConfigId={selectedUserConfigId}
+                  userConfigs={userConfigs}
+                />
+              )}
+            </div>
           </div>
         </div>
       </DialogContent>

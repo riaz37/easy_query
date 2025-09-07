@@ -75,14 +75,15 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
   };
 
   return (
-    <Card className="bg-gray-900/50 border-blue-400/30">
-      <CardHeader>
-        <CardTitle className="text-blue-400 flex items-center gap-2">
-          <Sparkles className="w-5 h-5" />
-          Natural Language Query
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-blue-400" />
+            Natural Language Query
+          </div>
+        </div>
+        <div className="mt-4 space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Textarea
@@ -221,7 +222,8 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 } 
