@@ -75,7 +75,15 @@ export function PageLayout({
   // If enhanced background is requested, wrap content with EnhancedBackground
   if (background === "enhanced") {
     return (
-      <div className={cn("w-full min-h-screen relative", className)}>
+      <div 
+        className={cn("w-full min-h-screen relative", className)}
+        style={{
+          background:
+            isDark
+              ? "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f172a 100%)"
+              : "linear-gradient(135deg, #ffffff 0%, #f0f9f5 30%, #e6f7ff 70%, #f0f9f5 100%)",
+        }}
+      >
         <EnhancedBackground intensity={backgroundIntensity}>
           {content}
         </EnhancedBackground>
@@ -126,11 +134,11 @@ export function PageHeader({
             </div>
           )}
           <div>
-            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            <h1 className={`text-3xl font-bold font-barlow ${isDark ? 'text-white' : 'text-gray-900'}`}>
               {title}
             </h1>
             {description && (
-              <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+              <p className={`font-public-sans ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 {description}
               </p>
             )}

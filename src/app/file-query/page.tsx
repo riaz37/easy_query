@@ -321,28 +321,28 @@ export default function FileQueryPage() {
   }
 
   return (
-    <PageLayout background="gradient" maxWidth="7xl">
+    <PageLayout background="enhanced" backgroundIntensity="medium" maxWidth="7xl">
       <PageHeader
         title="File Query"
         description="Upload files and query them using natural language"
-        icon={<FileText className="w-6 h-6 text-blue-400" />}
+        icon={<FileText className="w-6 h-6 text-emerald-400" />}
         actions={
           <>
             {/* Status Badges */}
             {user?.user_id && (
-              <Badge variant="outline" className="border-green-400/30 text-green-400">
+              <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 User: {user.user_id}
               </Badge>
             )}
             {currentDatabaseId && (
-              <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+              <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
                 <File className="w-4 h-4 mr-2" />
                 DB: {currentDatabaseName || currentDatabaseId}
               </Badge>
             )}
             {businessRules.status === "loaded" && (
-              <Badge variant="outline" className="border-green-400/30 text-green-400">
+              <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Rules Active
               </Badge>
@@ -352,12 +352,12 @@ export default function FileQueryPage() {
       />
 
               {/* Feature Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <Card className="bg-gray-900/50 border-blue-400/30">
-                  <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                        <FileText className="w-4 h-4 text-blue-400" />
+                      <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                        <FileText className="w-4 h-4 text-emerald-400" />
                       </div>
                       <div>
                         <h3 className="text-white font-medium">
@@ -368,14 +368,14 @@ export default function FileQueryPage() {
                         </p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
-                <Card className="bg-gray-900/50 border-green-400/30">
-                  <CardContent className="pt-6">
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                        <Database className="w-4 h-4 text-green-400" />
+                      <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                        <Database className="w-4 h-4 text-emerald-400" />
                       </div>
                       <div>
                         <h3 className="text-white font-medium">
@@ -386,14 +386,14 @@ export default function FileQueryPage() {
                         </p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
-                <Card className="bg-gray-900/50 border-purple-400/30">
-                  <CardContent className="pt-6">
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                        <Brain className="w-4 h-4 text-purple-400" />
+                      <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                        <Brain className="w-4 h-4 text-emerald-400" />
                       </div>
                       <div>
                         <h3 className="text-white font-medium">
@@ -404,8 +404,8 @@ export default function FileQueryPage() {
                         </p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
 
             {/* Main Content */}
@@ -413,59 +413,65 @@ export default function FileQueryPage() {
               {/* Left Column - File Upload and Query */}
               <div className="lg:col-span-2 space-y-6">
                 {/* File Upload */}
-                <Card className="bg-gray-900/50 border-blue-400/30">
-                  <CardHeader>
-                    <CardTitle className="text-blue-400 flex items-center gap-2">
-                      <FileText className="w-5 h-5" />
-                      File Upload
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <FileUpload
-                      onFilesUploaded={handleFilesUploaded}
-                      onUploadStatusChange={handleUploadStatusChange}
-                      onTableUsageChange={handleTableUsageChange}
-                      disabled={!isAuthenticated}
-                    />
-                  </CardContent>
-                </Card>
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
+                    <div className="card-header-enhanced">
+                      <div className="card-title-enhanced flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-emerald-400" />
+                        File Upload
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <FileUpload
+                        onFilesUploaded={handleFilesUploaded}
+                        onUploadStatusChange={handleUploadStatusChange}
+                        onTableUsageChange={handleTableUsageChange}
+                        disabled={!isAuthenticated}
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 {/* Query Form */}
-                <Card className="bg-gray-900/50 border-green-400/30">
-                  <CardHeader>
-                    <CardTitle className="text-green-400 flex items-center gap-2">
-                      <Database className="w-5 h-5" />
-                      Query Interface
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <FileQueryForm
-                      onSubmit={handleQuerySubmit}
-                      onSave={handleQuerySave}
-                      onClear={handleQueryClear}
-                      isLoading={isExecuting}
-                      disabled={!isAuthenticated}
-                    />
-                  </CardContent>
-                </Card>
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
+                    <div className="card-header-enhanced">
+                      <div className="card-title-enhanced flex items-center gap-2">
+                        <Database className="w-5 h-5 text-emerald-400" />
+                        Query Interface
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <FileQueryForm
+                        onSubmit={handleQuerySubmit}
+                        onSave={handleQuerySave}
+                        onClear={handleQueryClear}
+                        isLoading={isExecuting}
+                        disabled={!isAuthenticated}
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 {/* Query Results */}
                 {queryResults.length > 0 && (
-                  <Card className="bg-gray-900/50 border-purple-400/30">
-                    <CardHeader>
-                      <CardTitle className="text-purple-400 flex items-center gap-2">
-                        <FileText className="w-5 h-5" />
-                        Query Results
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <FileResults
-                        results={queryResults}
-                        query={query}
-                        isLoading={isExecuting}
-                      />
-                    </CardContent>
-                  </Card>
+                  <div className="card-enhanced">
+                    <div className="card-content-enhanced">
+                      <div className="card-header-enhanced">
+                        <div className="card-title-enhanced flex items-center gap-2">
+                          <FileText className="w-5 h-5 text-emerald-400" />
+                          Query Results
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <FileResults
+                          results={queryResults}
+                          query={query}
+                          isLoading={isExecuting}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 )}
 
                 {/* Query Error */}
@@ -489,14 +495,14 @@ export default function FileQueryPage() {
               {/* Right Column - Stats, History, and Info */}
               <div className="space-y-6">
                 {/* Table Usage Status */}
-                <Card className="bg-gray-900/50 border-blue-400/30">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2 text-blue-400">
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
+                    <div className="flex items-center gap-2 text-emerald-400">
                       <Database className="h-4 w-4" />
                       <span className="text-sm font-medium">
                         Table Usage: {useTable ? "Enabled" : "Disabled"}
                       </span>
-                      <Badge variant="outline" className="ml-auto text-xs border-blue-400/30 text-blue-400">
+                      <Badge variant="outline" className="ml-auto text-xs border-emerald-400/30 text-emerald-400">
                         {useTable ? "With Tables" : "No Tables"}
                       </Badge>
                     </div>
@@ -505,35 +511,37 @@ export default function FileQueryPage() {
                         ? "Files will be processed with table names for structured queries"
                         : "Files will be processed without table names for general content search"}
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
                 {/* Table Selector - for specifying which table to query */}
                 {useTable && (
-                  <Card className="bg-gray-900/50 border-green-400/30">
-                    <CardHeader>
-                      <CardTitle className="text-green-400 flex items-center gap-2">
-                        <Database className="w-5 h-5" />
-                        Table Selection
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <TableSelector
-                        databaseId={currentDatabaseId}
-                        onTableSelect={(tableName) => {
-                          setSelectedTable(tableName);
-                          toast.success(`Selected table: ${tableName}`);
-                        }}
-                      />
-                    </CardContent>
-                  </Card>
+                  <div className="card-enhanced">
+                    <div className="card-content-enhanced">
+                      <div className="card-header-enhanced">
+                        <div className="card-title-enhanced flex items-center gap-2">
+                          <Database className="w-5 h-5 text-emerald-400" />
+                          Table Selection
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <TableSelector
+                          databaseId={currentDatabaseId}
+                          onTableSelect={(tableName) => {
+                            setSelectedTable(tableName);
+                            toast.success(`Selected table: ${tableName}`);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 )}
 
                 {/* Selected Table Indicator */}
                 {useTable && selectedTable && (
-                  <Card className="bg-gray-900/50 border-green-400/30">
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 text-green-400">
+                  <div className="card-enhanced">
+                    <div className="card-content-enhanced">
+                      <div className="flex items-center gap-2 text-emerald-400">
                         <CheckCircle className="h-4 w-4" />
                         <span className="text-sm font-medium">
                           Querying table: {selectedTable}
@@ -542,98 +550,104 @@ export default function FileQueryPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedTable(null)}
-                          className="h-6 w-6 p-0 ml-auto text-green-400 hover:text-green-300"
+                          className="h-6 w-6 p-0 ml-auto text-emerald-400 hover:text-emerald-300"
                         >
                           <X className="h-4 w-4" />
                         </Button>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 )}
 
                 {/* Advanced Query Parameters */}
-                <Card className="bg-gray-900/50 border-purple-400/30">
-                  <CardHeader>
-                                          <CardTitle className="text-purple-400 flex items-center gap-2">
-                        <Settings className="w-5 h-5" />
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
+                    <div className="card-header-enhanced">
+                      <div className="card-title-enhanced flex items-center gap-2">
+                        <Settings className="w-5 h-5 text-emerald-400" />
                         Advanced Options
-                      </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <AdvancedQueryParams />
-                  </CardContent>
-                </Card>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <AdvancedQueryParams />
+                    </div>
+                  </div>
+                </div>
 
 
 
                 {/* Query History */}
-                <Card className="bg-gray-900/50 border-indigo-400/30">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-indigo-400">
-                      <History className="w-5 h-5" />
-                      Query History
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <QueryHistoryPanel
-                      history={fileQueryHistory}
-                      onSelect={handleHistorySelect}
-                      onClear={() => {
-                        /* Implement clear history */
-                      }}
-                      type="file"
-                    />
-                  </CardContent>
-                </Card>
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
+                    <div className="card-header-enhanced">
+                      <div className="card-title-enhanced flex items-center gap-2">
+                        <History className="w-5 h-5 text-emerald-400" />
+                        Query History
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <QueryHistoryPanel
+                        history={fileQueryHistory}
+                        onSelect={handleHistorySelect}
+                        onClear={() => {
+                          /* Implement clear history */
+                        }}
+                        type="file"
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 {/* Help Information */}
-                <Card className="bg-gray-900/50 border-cyan-400/30">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-cyan-400">
-                      <Info className="w-5 h-5" />
-                      How to Use
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm">
-                    <div>
-                      <h4 className="font-medium text-white mb-1">
-                        1. Upload Files
-                      </h4>
-                      <p className="text-gray-400">
-                        Upload your documents (PDF, Word, Excel, etc.) to query their
-                        content.
-                      </p>
+                <div className="card-enhanced">
+                  <div className="card-content-enhanced">
+                    <div className="card-header-enhanced">
+                      <div className="card-title-enhanced flex items-center gap-2">
+                        <Info className="w-5 h-5 text-emerald-400" />
+                        How to Use
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-white mb-1">
-                        2. Select Table {useTable ? "(Optional)" : "(Disabled)"}
-                      </h4>
-                      <p className="text-gray-400">
-                        {useTable
-                          ? "Choose a specific table to focus your query on, or leave unselected to search across all tables."
-                          : "Table selection is currently disabled. Files will be processed without table names."}
-                      </p>
+                    <div className="flex-1 space-y-3 text-sm">
+                      <div>
+                        <h4 className="font-medium text-white mb-1">
+                          1. Upload Files
+                        </h4>
+                        <p className="text-gray-400">
+                          Upload your documents (PDF, Word, Excel, etc.) to query their
+                          content.
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-white mb-1">
+                          2. Select Table {useTable ? "(Optional)" : "(Disabled)"}
+                        </h4>
+                        <p className="text-gray-400">
+                          {useTable
+                            ? "Choose a specific table to focus your query on, or leave unselected to search across all tables."
+                            : "Table selection is currently disabled. Files will be processed without table names."}
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-white mb-1">
+                          3. Ask Questions
+                        </h4>
+                        <p className="text-gray-400">
+                          Use natural language to ask questions about your uploaded
+                          files and selected table.
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-white mb-1">
+                          4. Get Results
+                        </h4>
+                        <p className="text-gray-400">
+                          Receive detailed answers with source references from your
+                          documents and table data.
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-white mb-1">
-                        3. Ask Questions
-                      </h4>
-                      <p className="text-gray-400">
-                        Use natural language to ask questions about your uploaded
-                        files and selected table.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-white mb-1">
-                        4. Get Results
-                      </h4>
-                      <p className="text-gray-400">
-                        Receive detailed answers with source references from your
-                        documents and table data.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
             </div>
     </PageLayout>

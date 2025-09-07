@@ -16,7 +16,8 @@ export function PageLoader({
 }: PageLoadingProps) {
   return (
     <div className={cn(
-      "min-h-screen w-full flex flex-col items-center justify-center p-4",
+      "w-full flex flex-col items-center justify-center p-4",
+      "min-h-[calc(100vh-112px)]", // Account for navbar height (64px + 24px margin + 24px clearance)
       className
     )}>
       <div className="text-center space-y-6 max-w-md">

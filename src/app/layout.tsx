@@ -9,7 +9,7 @@ import { TextConversationProvider } from "@/components/providers/TextConversatio
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Barlow, Public_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Menu from "@/components/Menu";
@@ -23,7 +23,19 @@ import {
 } from "@/components/text-conversation";
 import { useUIStore } from "@/store/uiStore";
 
-const inter = Inter({ subsets: ["latin"] });
+// Configure Barlow for titles
+const barlow = Barlow({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-barlow",
+});
+
+// Configure Public Sans for body text
+const publicSans = Public_Sans({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-public-sans",
+});
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const { showSidebar, setShowSidebar } = useUIStore();
@@ -60,7 +72,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased")}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", barlow.variable, publicSans.variable)}>
         <ThemeStoreProvider>
           <ThemeTransitionProvider>
             <AuthContextProvider>
