@@ -731,14 +731,10 @@ nav {
 /* Enhanced modal with corner border effect */
 .modal-enhanced {
   position: relative;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
-              linear-gradient(230.27deg, rgba(19, 245, 132, 0) 71.59%, rgba(19, 245, 132, 0.2) 98.91%),
-              linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 100%);
+  background: transparent;
   border-radius: 20px;
   padding: 4px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 
-              0 0 30px rgba(19, 245, 132, 0.3),
-              0 0 60px rgba(19, 245, 132, 0.1);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(25px) saturate(1.2);
 }
 
@@ -768,7 +764,9 @@ nav {
 .modal-content-enhanced {
   position: relative;
   z-index: 2;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+              linear-gradient(230.27deg, rgba(19, 245, 132, 0) 71.59%, rgba(19, 245, 132, 0.2) 98.91%),
+              linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 100%);
   border-radius: 16px;
   padding: 0;
   color: white;
@@ -777,18 +775,18 @@ nav {
   flex-direction: column;
   min-height: 400px;
   backdrop-filter: blur(20px) saturate(1.3);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: none;
+  box-shadow: none;
 }
 
 /* Modal header with gradient background */
 .modal-header-enhanced {
-  background: linear-gradient(135deg, rgba(19, 245, 132, 0.1) 0%, rgba(19, 245, 132, 0.05) 100%);
-  border-bottom: 1px solid rgba(19, 245, 132, 0.2);
-  padding: 1.5rem;
+  background: transparent;
+  border-bottom: none;
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
   margin: 0;
-  border-radius: 14px 14px 0 0;
-  backdrop-filter: blur(10px);
+  border-radius: 0;
+  backdrop-filter: none;
 }
 
 /* Modal title with gradient text effect */
@@ -950,15 +948,15 @@ nav {
 
 /* Modal footer with border */
 .modal-footer-enhanced {
-  background: linear-gradient(135deg, rgba(19, 245, 132, 0.1) 0%, rgba(19, 245, 132, 0.05) 100%);
-  border-top: 1px solid rgba(19, 245, 132, 0.3);
+  background: transparent;
+  border-top: none;
   padding: 1.5rem 1.5rem 1.5rem 1.5rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
   margin: 0;
   margin-top: auto;
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
 }
 
 /* Modal form content area */

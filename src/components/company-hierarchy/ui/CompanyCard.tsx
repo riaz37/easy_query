@@ -71,9 +71,6 @@ export function CompanyCard({
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                 {company.name}
               </h3>
-              <Badge variant="secondary" className="text-xs">
-                {companyType}
-              </Badge>
             </div>
             
             <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-2">

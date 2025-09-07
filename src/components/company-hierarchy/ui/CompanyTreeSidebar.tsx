@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import {
   Building2,
   ChevronRight,
@@ -98,7 +99,6 @@ function CompanyTreeItem({
 }: CompanyTreeItemProps) {
   const [isExpanded, setIsExpanded] = React.useState(true);
   const hasChildren = company.children && company.children.length > 0;
-  const companyType = company.id.startsWith("parent-") ? "parent" : "sub";
 
   return (
     <div className="space-y-1">
@@ -137,19 +137,24 @@ function CompanyTreeItem({
         )}
 
         {/* Company Icon */}
-        <div className="w-4 h-4 text-emerald-400">📁</div>
+        <div className="w-4 h-4 text-emerald-400">
+          <Image 
+            src="/filelogo.svg" 
+            alt="Company" 
+            width={16} 
+            height={16} 
+            className="w-4 h-4"
+          />
+        </div>
 
         {/* Status Dot */}
         <div className="w-2 h-2 rounded-full bg-emerald-400" />
 
-        {/* Company Name and Type */}
+        {/* Company Name */}
         <div className="flex-1 min-w-0 flex items-center gap-2">
           <span className="text-sm font-medium text-gray-900 dark:text-white truncate">
             {company.name}
           </span>
-          <Badge variant="secondary" className="text-xs">
-            {companyType}
-          </Badge>
         </div>
 
         {/* Action Buttons */}
@@ -176,7 +181,6 @@ function CompanyTreeItem({
         <div className="ml-4 space-y-1">
           {company.children!.map((child, index) => {
             const isLast = index === company.children!.length - 1;
-            const childType = child.id.startsWith("parent-") ? "parent" : "sub";
             
             return (
               <div key={child.id} className="relative">
@@ -200,19 +204,24 @@ function CompanyTreeItem({
                   onClick={() => onSelectCompany(child.id)}
                 >
                   {/* File Icon */}
-                  <div className="w-4 h-4 text-emerald-400/70">📄</div>
+                  <div className="w-4 h-4 text-emerald-400/70">
+                    <Image 
+                      src="/filelogo.svg" 
+                      alt="Sub-Company" 
+                      width={16} 
+                      height={16} 
+                      className="w-4 h-4"
+                    />
+                  </div>
 
                   {/* Status Dot */}
                   <div className="w-2 h-2 rounded-full bg-emerald-400/70" />
 
-                  {/* Company Name and Type */}
+                  {/* Company Name */}
                   <div className="flex-1 min-w-0 flex items-center gap-2">
                     <span className="text-sm text-gray-700 dark:text-gray-300 truncate">
                       {child.name}
                     </span>
-                    <Badge variant="outline" className="text-xs">
-                      {childType}
-                    </Badge>
                   </div>
                 </div>
               </div>
