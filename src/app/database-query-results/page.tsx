@@ -113,137 +113,95 @@ export default function DatabaseQueryResultsPage() {
         }
       />
 
-            {/* Query Information */}
-            <div className="mb-8">
-              <Card className="bg-gray-900/50 border-blue-400/30">
-                <CardHeader>
-                  <CardTitle className="text-blue-400 flex items-center gap-2">
-                    <FileText className="w-5 h-5" />
-                    Query Information
-                  </CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Details about your natural language query and generated SQL
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Query Info */}
-                  <div className="flex items-center gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-blue-400" />
-                      <span className="text-blue-400">User:</span>
-                      <span className="text-white">
-                        {currentQuery.userId}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-purple-400" />
-                      <span className="text-purple-400">Time:</span>
-                      <span className="text-white">
-                        {new Date(currentQuery.timestamp).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span className="text-green-400">Status:</span>
-                      <Badge variant="outline" className="border-green-400/30 text-green-400">
-                        Success
-                      </Badge>
-                    </div>
-                  </div>
-
-                  {/* Natural Language Query */}
-                  <div className="p-3 bg-blue-900/20 border border-blue-400/30 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <FileText className="w-4 h-4 text-blue-400" />
-                      <span className="text-blue-400 font-medium">
-                        Natural Language Query:
-                      </span>
-                    </div>
-                    <p className="text-white">{currentQuery.query}</p>
-                  </div>
-
-
-                  {/* Results Summary */}
-                  <div className="p-3 bg-purple-900/20 border border-purple-400/30 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Database className="w-4 h-4 text-purple-400" />
-                      <span className="text-purple-400 font-medium">
-                        Results Summary:
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-400">
-                          {queryData.length}
-                        </div>
-                        <div className="text-xs text-gray-400">Total Rows</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-400">
-                          {columns.length}
-                        </div>
-                        <div className="text-xs text-gray-400">Columns</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-400">
-                          {currentQuery.result?.payload?.status_code || "N/A"}
-                        </div>
-                        <div className="text-xs text-gray-400">Status Code</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-400">
-                          ✓
-                        </div>
-                        <div className="text-xs text-gray-400">Success</div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Results Tabs */}
-            <div className="mb-8">
-              <div className="flex items-center gap-2 mb-4">
-                <Button
-                  variant={activeTab === "table" ? "default" : "outline"}
-                  onClick={() => setActiveTab("table")}
-                  className={
-                    activeTab === "table"
-                      ? "bg-blue-600 text-white"
-                      : "border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
-                  }
-                >
-                  <Database className="w-4 h-4 mr-2" />
-                  Table View
-                </Button>
-                <Button
-                  variant={activeTab === "charts" ? "default" : "outline"}
-                  onClick={() => setActiveTab("charts")}
-                  className={
-                    activeTab === "charts"
-                      ? "bg-green-600 text-white"
-                      : "border-green-400/30 text-green-400 hover:bg-green-400/10"
-                  }
-                >
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Charts & Visualization
-                </Button>
+      {/* Query Information */}
+      <div className="mb-8">
+        <Card className="bg-gray-900/50 border-blue-400/30">
+          <CardHeader>
+            <CardTitle className="text-blue-400 flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Query Information
+            </CardTitle>
+            <CardDescription className="text-gray-400">
+              Details about your natural language query and generated SQL
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Query Info */}
+            <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4 text-blue-400" />
+                <span className="text-blue-400">User:</span>
+                <span className="text-white">{currentQuery.userId}</span>
               </div>
-
-              {/* Tab Content */}
-              {activeTab === "table" ? (
-                <QueryResultsTable 
-                  data={queryData}
-                  columns={columns}
-                />
-              ) : (
-                <QueryCharts 
-                  data={queryData}
-                  columns={columns}
-                />
-              )}
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-400">Time:</span>
+                <span className="text-white">
+                  {new Date(currentQuery.timestamp).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-green-400" />
+                <span className="text-green-400">Status:</span>
+                <Badge
+                  variant="outline"
+                  className="border-green-400/30 text-green-400"
+                >
+                  Success
+                </Badge>
+              </div>
             </div>
+
+            {/* Natural Language Query */}
+            <div className="p-3 bg-blue-900/20 border border-blue-400/30 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <FileText className="w-4 h-4 text-blue-400" />
+                <span className="text-blue-400 font-medium">
+                  Natural Language Query:
+                </span>
+              </div>
+              <p className="text-white">{currentQuery.query}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Results Tabs */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Button
+            variant={activeTab === "table" ? "default" : "outline"}
+            onClick={() => setActiveTab("table")}
+            className={
+              activeTab === "table"
+                ? "bg-blue-600 text-white"
+                : "border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+            }
+          >
+            <Database className="w-4 h-4 mr-2" />
+            Table View
+          </Button>
+          <Button
+            variant={activeTab === "charts" ? "default" : "outline"}
+            onClick={() => setActiveTab("charts")}
+            className={
+              activeTab === "charts"
+                ? "bg-green-600 text-white"
+                : "border-green-400/30 text-green-400 hover:bg-green-400/10"
+            }
+          >
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Charts & Visualization
+          </Button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === "table" ? (
+          <QueryResultsTable data={queryData} columns={columns} />
+        ) : (
+          <QueryCharts data={queryData} columns={columns} />
+        )}
+      </div>
     </PageLayout>
   );
-} 
+}

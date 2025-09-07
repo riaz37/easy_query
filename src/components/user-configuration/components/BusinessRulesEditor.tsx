@@ -22,19 +22,20 @@ export const BusinessRulesEditor = React.memo<BusinessRulesEditorProps>(({
   }
 
   return (
-    <Card className="bg-slate-800/50 border-slate-700">
-      <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
-          <FileText className="h-5 w-5 text-blue-400" />
-          Business Rules Editor
-        </CardTitle>
-        <CardDescription className="text-gray-400">
-          {editorState.isEditing
-            ? 'Edit business rules for the current database'
-            : 'View and edit business rules'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <FileText className="h-5 w-5 text-blue-400" />
+            Business Rules Editor
+          </div>
+          <p className="card-description-enhanced">
+            {editorState.isEditing
+              ? 'Edit business rules for the current database'
+              : 'View and edit business rules'}
+          </p>
+        </div>
+        <div className="mt-4 space-y-4">
         {editorState.isEditing ? (
           <div className="space-y-4">
             <div>
@@ -102,8 +103,9 @@ export const BusinessRulesEditor = React.memo<BusinessRulesEditorProps>(({
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 });
 
