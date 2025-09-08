@@ -132,14 +132,14 @@ export function EnhancedResultsTable({
       </div>
 
       {/* Results Table */}
-      <div className="rounded-lg border border-blue-400/30 overflow-hidden">
+      <div className="rounded-lg border border-emerald-400/30 overflow-hidden">
         <Table>
           <TableHeader className="bg-gray-800/50">
             <TableRow className="hover:bg-transparent">
               {columns.map((column) => (
                 <TableHead
                   key={column}
-                  className="text-blue-400 font-medium cursor-pointer hover:bg-gray-700/50 transition-colors"
+                  className="text-emerald-400 font-medium cursor-pointer hover:bg-gray-700/50 transition-colors"
                   onClick={() => handleSort(column)}
                 >
                   <div className="flex items-center gap-2">
@@ -219,7 +219,7 @@ export function EnhancedResultsTable({
                   onClick={() => handlePageChange(pageNum)}
                   className={
                     currentPage === pageNum
-                      ? "bg-blue-600 hover:bg-blue-700"
+                      ? "bg-emerald-600 hover:bg-emerald-700"
                       : "border-gray-600 text-gray-300 hover:bg-gray-700"
                   }
                 >

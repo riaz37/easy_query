@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Brain, TrendingUp, Lightbulb, Target, CheckCircle } from "lucide-react";
 
@@ -51,17 +50,18 @@ export function LLMAnalysisOverview({
   )];
 
   return (
-    <Card className="bg-gray-900/50 border-indigo-400/30">
-      <CardHeader>
-        <CardTitle className="text-indigo-400 flex items-center gap-2">
-          <Brain className="w-5 h-5" />
-          AI Analysis Overview
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <Brain className="w-5 h-5 text-emerald-400" />
+            AI Analysis Overview
+          </div>
+        </div>
+        <div className="mt-4">
         <div className="space-y-6">
           {/* Analysis Summary Card */}
-          <div className="bg-gradient-to-r from-indigo-900/30 to-purple-900/30 p-6 rounded-lg border border-indigo-400/30">
+          <div className="bg-gradient-to-r from-emerald-900/30 to-emerald-800/30 p-6 rounded-lg border border-emerald-400/30">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-semibold text-white mb-2">
@@ -72,7 +72,7 @@ export function LLMAnalysisOverview({
                 </p>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-indigo-400">
+                <div className="text-2xl font-bold text-emerald-400">
                   {analysisSections.length}
                 </div>
                 <div className="text-xs text-gray-400">Analyses</div>
@@ -82,13 +82,13 @@ export function LLMAnalysisOverview({
 
           {/* Quick Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-4 rounded-lg border border-blue-400/30">
+            <div className="bg-gradient-to-r from-emerald-900/30 to-emerald-800/30 p-4 rounded-lg border border-emerald-400/30">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
-                  <Lightbulb className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                  <Lightbulb className="w-5 h-5 text-emerald-400" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-blue-400">
+                  <div className="text-2xl font-bold text-emerald-400">
                     {analysisSections.filter((section: any) => 
                       section.graph_and_analysis?.llm_analysis?.analysis.includes("KEY INSIGHTS:")
                     ).length}
@@ -98,13 +98,13 @@ export function LLMAnalysisOverview({
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-purple-900/30 to-purple-800/30 p-4 rounded-lg border border-purple-400/30">
+            <div className="bg-gradient-to-r from-emerald-900/30 to-emerald-800/30 p-4 rounded-lg border border-emerald-400/30">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-purple-400" />
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-emerald-400" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-purple-400">
+                  <div className="text-2xl font-bold text-emerald-400">
                     {analysisSections.filter((section: any) => 
                       section.graph_and_analysis?.llm_analysis?.analysis.includes("TRENDS AND PATTERNS:")
                     ).length}
@@ -114,13 +114,13 @@ export function LLMAnalysisOverview({
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-amber-900/30 to-amber-800/30 p-4 rounded-lg border border-amber-400/30">
+            <div className="bg-gradient-to-r from-emerald-900/30 to-emerald-800/30 p-4 rounded-lg border border-emerald-400/30">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center">
-                  <Target className="w-5 h-5 text-amber-400" />
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                  <Target className="w-5 h-5 text-emerald-400" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-amber-400">
+                  <div className="text-2xl font-bold text-emerald-400">
                     {analysisSections.filter((section: any) => 
                       section.graph_and_analysis?.llm_analysis?.analysis.includes("BUSINESS IMPLICATIONS:")
                     ).length}
@@ -153,7 +153,7 @@ export function LLMAnalysisOverview({
               <h4 className="text-white font-medium mb-3">Analysis Subjects</h4>
               <div className="flex flex-wrap gap-2">
                 {analysisSubjects.map((subject: string, index: number) => (
-                  <Badge key={index} variant="secondary" className="bg-indigo-500/20 text-indigo-300 border-indigo-400/30">
+                  <Badge key={index} variant="secondary" className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30">
                     {subject}
                   </Badge>
                 ))}
@@ -173,7 +173,8 @@ export function LLMAnalysisOverview({
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 } 

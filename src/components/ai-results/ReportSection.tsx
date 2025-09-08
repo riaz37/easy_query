@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -25,14 +24,15 @@ export function ReportSection({
   const [showGraph, setShowGraph] = useState(true);
 
   return (
-    <Card className="bg-gray-900/50 border-blue-400/30">
-      <CardHeader>
-        <CardTitle className="text-blue-400 flex items-center gap-2">
-          <FileText className="w-5 h-5" />
-          Section {section.section_number}: {section.section_name}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <FileText className="w-5 h-5 text-emerald-400" />
+            Section {section.section_number}: {section.section_name}
+          </div>
+        </div>
+        <div className="mt-4 space-y-4">
         <div className="flex items-center gap-2">
           <Badge variant={section.success ? "default" : "destructive"}>
             {section.success ? "Success" : "Failed"}
@@ -50,8 +50,8 @@ export function ReportSection({
 
         {/* Graph and Analysis Info */}
         {section.graph_and_analysis && (
-          <div className="bg-purple-900/20 p-4 rounded-lg border border-purple-400/30">
-            <div className="text-sm text-purple-300 mb-2 font-medium">
+          <div className="bg-emerald-900/20 p-4 rounded-lg border border-emerald-400/30">
+            <div className="text-sm text-emerald-300 mb-2 font-medium">
               Generated Graph:
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
@@ -73,8 +73,8 @@ export function ReportSection({
 
         {/* Analysis Info */}
         {section.analysis && (
-          <div className="bg-green-900/20 p-4 rounded-lg border border-green-400/30">
-            <div className="text-sm text-green-300 mb-2 font-medium">
+          <div className="bg-emerald-900/20 p-4 rounded-lg border border-emerald-400/30">
+            <div className="text-sm text-emerald-300 mb-2 font-medium">
               Analysis:
             </div>
             <div className="text-white text-sm">
@@ -87,13 +87,13 @@ export function ReportSection({
 
         {/* LLM Analysis */}
         {section.graph_and_analysis?.llm_analysis && (
-          <div className="bg-gradient-to-r from-blue-900/30 to-indigo-900/30 p-4 rounded-lg border border-blue-400/30">
+          <div className="bg-gradient-to-r from-emerald-900/30 to-emerald-800/30 p-4 rounded-lg border border-emerald-400/30">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
-                  <span className="text-blue-400 text-sm">🤖</span>
+                <div className="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                  <span className="text-emerald-400 text-sm">🤖</span>
                 </div>
-                <div className="text-lg text-blue-300 font-semibold">
+                <div className="text-lg text-emerald-300 font-semibold">
                   AI-Powered Analysis
                 </div>
               </div>
@@ -102,7 +102,7 @@ export function ReportSection({
                 onClick={() => toggleAnalysis(index)}
                 variant="ghost"
                 size="sm"
-                className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10"
+                className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-400/10"
               >
                 {expandedAnalysis.has(index) ? "Collapse" : "Expand"} Analysis
               </Button>
@@ -112,7 +112,7 @@ export function ReportSection({
               <div className="space-y-4">
                 {/* Executive Summary */}
                 <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-                  <div className="text-sm text-blue-200 mb-2 font-medium">
+                  <div className="text-sm text-emerald-200 mb-2 font-medium">
                     Executive Summary:
                   </div>
                   <div className="text-white text-sm leading-relaxed whitespace-pre-line">
@@ -128,8 +128,8 @@ export function ReportSection({
                 {section.graph_and_analysis?.llm_analysis?.analysis.includes(
                   "KEY INSIGHTS:"
                 ) && (
-                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-400/30">
-                    <div className="text-sm text-blue-200 mb-2 font-medium">
+                  <div className="bg-emerald-900/30 p-4 rounded-lg border border-emerald-400/30">
+                    <div className="text-sm text-emerald-200 mb-2 font-medium">
                       Key Insights:
                     </div>
                     <div className="text-white text-sm leading-relaxed">
@@ -147,7 +147,7 @@ export function ReportSection({
                                 key={i}
                                 className="flex items-start gap-2 mb-2"
                               >
-                                <span className="text-blue-400 text-xs mt-1">
+                                <span className="text-emerald-400 text-xs mt-1">
                                   •
                                 </span>
                                 <span>
@@ -166,8 +166,8 @@ export function ReportSection({
                 {section.graph_and_analysis?.llm_analysis?.analysis.includes(
                   "TRENDS AND PATTERNS:"
                 ) && (
-                  <div className="bg-purple-900/30 p-4 rounded-lg border border-purple-400/30">
-                    <div className="text-sm text-purple-200 mb-2 font-medium">
+                  <div className="bg-emerald-900/30 p-4 rounded-lg border border-emerald-400/30">
+                    <div className="text-sm text-emerald-200 mb-2 font-medium">
                       Trends & Patterns:
                     </div>
                     <div className="text-white text-sm leading-relaxed">
@@ -185,7 +185,7 @@ export function ReportSection({
                                 key={i}
                                 className="flex items-start gap-2 mb-2"
                               >
-                                <span className="text-purple-400 text-xs mt-1">
+                                <span className="text-emerald-400 text-xs mt-1">
                                   •
                                 </span>
                                 <span>{trend.replace(/^•\s*/, "").trim()}</span>
@@ -202,8 +202,8 @@ export function ReportSection({
                 {section.graph_and_analysis?.llm_analysis?.analysis.includes(
                   "BUSINESS IMPLICATIONS:"
                 ) && (
-                  <div className="bg-amber-900/30 p-4 rounded-lg border border-amber-400/30">
-                    <div className="text-sm text-amber-200 mb-2 font-medium">
+                  <div className="bg-emerald-900/30 p-4 rounded-lg border border-emerald-400/30">
+                    <div className="text-sm text-emerald-200 mb-2 font-medium">
                       Business Implications:
                     </div>
                     <div className="text-white text-sm leading-relaxed">
@@ -221,7 +221,7 @@ export function ReportSection({
                                 key={i}
                                 className="flex items-start gap-2 mb-2"
                               >
-                                <span className="text-amber-400 text-xs mt-1">
+                                <span className="text-emerald-400 text-xs mt-1">
                                   •
                                 </span>
                                 <span>
@@ -303,8 +303,8 @@ export function ReportSection({
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-3 p-3 bg-blue-900/10 rounded-lg border border-blue-400/20">
-                <span className="text-blue-400 text-sm">
+              <div className="flex items-center gap-3 p-3 bg-emerald-900/10 rounded-lg border border-emerald-400/20">
+                <span className="text-emerald-400 text-sm">
                   Click to expand AI analysis...
                 </span>
               </div>
@@ -360,7 +360,8 @@ export function ReportSection({
             )}
           </div>
         )}
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 }
