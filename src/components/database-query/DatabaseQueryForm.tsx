@@ -150,14 +150,13 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
               <ButtonLoader
                 type="submit"
                 disabled={!query.trim() || !hasDatabase || localLoading}
-                loading={localLoading}
+                loading={false}
                 text="Processing..."
                 size="md"
                 variant="accent-green"
-                className="min-w-[140px]"
+                className="min-w-[120px]"
                 data-element="query-submit"
               >
-                <Play className="w-4 h-4 mr-2" />
                 Ask Question
               </ButtonLoader>
               

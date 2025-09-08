@@ -55,15 +55,15 @@ export function QueryHistoryPanel({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex justify-end">
-      <div className="w-96 h-full bg-gray-900/95 border-l border-emerald-400/30 shadow-2xl">
-        <Card className="h-full bg-transparent border-none rounded-none">
-          <CardHeader className="border-b border-emerald-400/30">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl max-h-[80vh] card-enhanced">
+        <div className="card-content-enhanced">
+          <div className="card-header-enhanced">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-emerald-400 flex items-center gap-2">
-                <Clock className="w-5 h-5" />
+              <div className="card-title-enhanced flex items-center gap-2">
+                <Clock className="w-5 h-5 text-emerald-400" />
                 Query History
-              </CardTitle>
+              </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
@@ -84,9 +84,9 @@ export function QueryHistoryPanel({
                 </Button>
               </div>
             </div>
-          </CardHeader>
+          </div>
           
-          <CardContent className="p-0 h-full">
+          <div className="flex-1 min-h-0 max-h-[60vh]">
             {loading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-center">
@@ -108,7 +108,7 @@ export function QueryHistoryPanel({
                   {history.map((item, index) => (
                     <div
                       key={index}
-                      className="p-3 bg-gray-800/30 border border-gray-700/50 rounded-lg hover:bg-gray-700/30 transition-colors cursor-pointer"
+                      className="p-3 bg-white/5 border border-emerald-500/20 rounded-lg hover:bg-white/10 hover:border-emerald-400/30 transition-all duration-200 cursor-pointer"
                       onClick={() => onQuerySelect(item.query)}
                     >
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -157,8 +157,8 @@ export function QueryHistoryPanel({
                 </div>
               </ScrollArea>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

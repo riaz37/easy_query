@@ -15,7 +15,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="text-center py-12">
-      <div className="text-emerald-400 mx-auto mb-4">
+      <div className="text-emerald-400 mx-auto mb-4 flex justify-center items-center">
         {icon}
       </div>
       <h3 className="text-lg font-medium text-white mb-2">

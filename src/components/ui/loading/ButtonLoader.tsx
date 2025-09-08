@@ -44,6 +44,7 @@ export function ButtonLoader({
         variant === "accent-blue" && "bg-[#3b82f6] text-white hover:bg-[#2563eb]",
         variant === "accent-purple" && "bg-[#8b5cf6] text-white hover:bg-[#7c3aed]",
         variant === "accent-orange" && "bg-[#f59e0b] text-white hover:bg-[#d97706]",
+        variant === "accent-green" && "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/25 border border-emerald-400/30",
         variant === "secondary" && "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         variant === "success" && "bg-green-600 text-white hover:bg-green-700",
         variant === "warning" && "bg-yellow-600 text-white hover:bg-yellow-700",

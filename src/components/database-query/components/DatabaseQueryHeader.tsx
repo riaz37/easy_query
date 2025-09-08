@@ -13,7 +13,7 @@ interface DatabaseQueryHeaderProps {
 export function DatabaseQueryHeader({
   user,
   currentDatabase,
-  isDark = true
+  isDark = true,
 }: DatabaseQueryHeaderProps) {
   return (
     <div className="mb-8">
@@ -31,19 +31,16 @@ export function DatabaseQueryHeader({
           </p>
         </div>
       </div>
-      
+
       {/* Status Badges */}
       <div className="flex justify-center gap-4">
         {user?.user_id && (
-          <Badge variant="outline" className="border-green-400/30 text-green-400">
+          <Badge
+            variant="outline"
+            className="border-green-400/30 text-green-400"
+          >
             <User className="w-4 h-4 mr-2" />
             User: {user.user_id}
-          </Badge>
-        )}
-        {currentDatabase && (
-          <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
-            <Database className="w-4 h-4 mr-2" />
-            DB: {currentDatabase.database_name}
           </Badge>
         )}
       </div>
