@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
-  const { showSidebar, setShowSidebar, showAIAssistant, setShowAIAssistant } = useUIStore();
+  const { showSidebar, setShowSidebar } = useUIStore();
   const { isAuthenticated, user, logout } = useAuthContext();
   const theme = useTheme();
 
@@ -98,31 +98,6 @@ export default function Navbar() {
           </span>
         </div>
 
-        {/* Robot Icon */}
-        <div
-          onClick={() => setShowAIAssistant(!showAIAssistant)}
-          className={cn(
-            "flex items-center justify-center transition-colors cursor-pointer rounded-full",
-            theme === "dark" 
-              ? "hover:bg-gray-600/30" 
-              : "hover:bg-gray-300/30"
-          )}
-          style={{
-            width: "40px",
-            height: "40px",
-            opacity: 1,
-            padding: "4.85px",
-            gap: "3.03px",
-          }}
-        >
-          <Image
-            src="/autopilot.svg"
-            alt="Robot"
-            width={36}
-            height={36}
-            className="w-full h-auto cursor-pointer"
-          />
-        </div>
       </div>
 
       {/* Right side - Notifications, Theme Toggle and User */}

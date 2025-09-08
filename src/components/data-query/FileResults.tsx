@@ -138,21 +138,21 @@ export function FileResults({ results, query, isLoading = false, className = "" 
     if (result.is_source) {
       return {
         type: 'source',
-        icon: <FileText className="w-4 h-4 text-blue-400" />,
+        icon: <FileText className="w-4 h-4 text-emerald-400" />,
         label: `Source ${result.document_number || 'Document'}`,
-        bgColor: 'bg-blue-900/20',
-        borderColor: 'border-blue-400/30',
-        textColor: 'text-blue-400'
+        bgColor: 'bg-emerald-900/20',
+        borderColor: 'border-emerald-400/30',
+        textColor: 'text-emerald-400'
       };
     }
     
     return {
       type: 'answer',
-      icon: <Brain className="w-4 h-4 text-purple-400" />,
+      icon: <Brain className="w-4 h-4 text-emerald-400" />,
       label: 'AI Answer',
-      bgColor: 'bg-purple-900/20',
-      borderColor: 'border-purple-400/30',
-      textColor: 'text-purple-400'
+      bgColor: 'bg-emerald-900/20',
+      borderColor: 'border-emerald-400/30',
+      textColor: 'text-emerald-400'
     };
   };
 
@@ -187,7 +187,7 @@ export function FileResults({ results, query, isLoading = false, className = "" 
   if (isLoading) {
     return (
       <div className={`${className} text-center py-8`}>
-        <Spinner size="lg" variant="accent-purple" className="mx-auto mb-4" />
+        <Spinner size="lg" variant="accent-green" className="mx-auto mb-4" />
         <p className="text-white font-medium">Processing your query...</p>
         <p className="text-gray-400 text-sm">This may take a few moments</p>
       </div>
@@ -226,7 +226,7 @@ export function FileResults({ results, query, isLoading = false, className = "" 
             return (
               <div
                 key={resultId}
-                className={`group ${resultType.bgColor} border ${resultType.borderColor} rounded-lg hover:bg-gray-700/30 hover:border-purple-400/30 transition-all duration-200`}
+                className={`group ${resultType.bgColor} border ${resultType.borderColor} rounded-lg hover:bg-gray-700/30 hover:border-emerald-400/30 transition-all duration-200`}
               >
                 <div className="p-4">
                   {/* Result Header */}
@@ -259,7 +259,7 @@ export function FileResults({ results, query, isLoading = false, className = "" 
                         variant="ghost"
                         size="sm"
                         onClick={() => copyToClipboard(content)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity text-purple-400 hover:bg-purple-400/10"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400 hover:bg-emerald-400/10"
                       >
                         <Copy className="w-4 h-4" />
                       </Button>
@@ -276,7 +276,7 @@ export function FileResults({ results, query, isLoading = false, className = "" 
                         variant="ghost"
                         size="sm"
                         onClick={() => toggleExpanded(resultId)}
-                        className="mt-2 text-purple-400 hover:bg-purple-400/10 p-0 h-auto"
+                        className="mt-2 text-emerald-400 hover:bg-emerald-400/10 p-0 h-auto"
                       >
                         {isExpanded ? 'Show less' : 'Show more'}
                       </Button>

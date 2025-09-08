@@ -80,7 +80,7 @@ export function QueryHistoryPanel({
               key={item.id}
               className={`p-3 bg-gray-800/30 border border-gray-600/30 rounded-lg transition-all duration-200 ${
                 onSelect 
-                  ? 'cursor-pointer hover:bg-indigo-900/20 hover:border-indigo-400/30' 
+                  ? 'cursor-pointer hover:bg-emerald-900/20 hover:border-emerald-400/30' 
                   : ''
               }`}
               onClick={() => onSelect && handleQueryClick(item)}
@@ -126,7 +126,7 @@ export function QueryHistoryPanel({
                   )}
                 </div>
                 {onSelect && (
-                  <span className="text-indigo-400">Click to reuse →</span>
+                  <span className="text-emerald-400">Click to reuse →</span>
                 )}
               </div>
             </div>

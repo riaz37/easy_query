@@ -34,8 +34,8 @@ export function FileQueryStats({
     <div className={`${className} bg-gray-900/50 border border-gray-600/30 rounded-lg p-6`}>
       {/* Header */}
       <div className="flex items-center gap-2 mb-6">
-        <div className="w-10 h-10 rounded-lg bg-purple-900/30 border border-purple-400/30 flex items-center justify-center">
-          <BarChart3 className="w-5 h-5 text-purple-400" />
+        <div className="w-10 h-10 rounded-lg bg-emerald-900/30 border border-emerald-400/30 flex items-center justify-center">
+          <BarChart3 className="w-5 h-5 text-emerald-400" />
         </div>
         <div>
           <h3 className="text-lg font-semibold text-white">Query Statistics</h3>
@@ -46,11 +46,11 @@ export function FileQueryStats({
       {/* Main Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {/* Query Length */}
-        <div className="text-center p-4 rounded-lg bg-blue-900/20 border border-blue-400/30">
-          <div className="text-2xl font-bold text-blue-400 mb-1">
+        <div className="text-center p-4 rounded-lg bg-emerald-900/20 border border-emerald-400/30">
+          <div className="text-2xl font-bold text-emerald-400 mb-1">
             {query.length}
           </div>
-          <div className="text-xs text-blue-300/70">Characters</div>
+          <div className="text-xs text-emerald-300/70">Characters</div>
         </div>
 
         {/* Results Count */}
@@ -62,11 +62,11 @@ export function FileQueryStats({
         </div>
 
         {/* Execution Time */}
-        <div className="text-center p-4 rounded-lg bg-purple-900/20 border border-purple-400/30">
-          <div className="text-2xl font-bold text-purple-400 mb-1">
+        <div className="text-center p-4 rounded-lg bg-emerald-900/20 border border-emerald-400/30">
+          <div className="text-2xl font-bold text-emerald-400 mb-1">
             {executionTime ? formatExecutionTime(executionTime) : 'N/A'}
           </div>
-          <div className="text-xs text-purple-300/70">Execution Time</div>
+          <div className="text-xs text-emerald-300/70">Execution Time</div>
         </div>
 
         {/* Success Rate */}
@@ -82,14 +82,14 @@ export function FileQueryStats({
       {uploadedFilesCount > 0 && (
         <div className="mb-6 p-4 rounded-lg bg-gray-800/30 border border-gray-600/30">
           <h4 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
-            <FileText className="w-4 h-4 text-blue-400" />
+            <FileText className="w-4 h-4 text-emerald-400" />
             File Processing Status
           </h4>
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+              <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
               <span className="text-sm text-gray-300">
-                Total: <span className="text-blue-400 font-medium">{uploadedFilesCount}</span>
+                Total: <span className="text-emerald-400 font-medium">{uploadedFilesCount}</span>
               </span>
             </div>
             
@@ -115,7 +115,7 @@ export function FileQueryStats({
       {/* Query Preview */}
       <div className="p-4 rounded-lg bg-gray-800/30 border border-gray-600/30">
         <h4 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
-          <Clock className="w-4 h-4 text-purple-400" />
+          <Clock className="w-4 h-4 text-emerald-400" />
           Query Preview
         </h4>
         <div className="p-3 bg-gray-900/50 border border-gray-600/30 rounded-lg">

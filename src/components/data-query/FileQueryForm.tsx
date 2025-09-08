@@ -18,23 +18,11 @@ interface FileQueryFormProps {
 }
 
 export interface QueryOptions {
-  useIntentReranker: boolean;
-  useChunkReranker: boolean;
-  useDualEmbeddings: boolean;
-  intentTopK: number;
-  chunkTopK: number;
-  maxChunksForAnswer: number;
   answerStyle: 'concise' | 'detailed';
   tableSpecific: boolean;
 }
 
 const defaultOptions: QueryOptions = {
-  useIntentReranker: false,
-  useChunkReranker: false,
-  useDualEmbeddings: true,
-  intentTopK: 20,
-  chunkTopK: 40,
-  maxChunksForAnswer: 40,
   answerStyle: 'detailed',
   tableSpecific: false,
 };
@@ -60,7 +48,6 @@ export function FileQueryForm({
 }: FileQueryFormProps) {
   const [query, setQuery] = useState('');
   const [options, setOptions] = useState<QueryOptions>(defaultOptions);
-  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,127 +121,8 @@ export function FileQueryForm({
           </div>
         </div>
 
-        {/* Advanced Options */}
-        {showAdvanced && (
-          <div className="space-y-4 p-4 bg-gray-800/50 rounded-lg border border-gray-600/30">
-            <Label className="text-white font-medium">Advanced Query Options</Label>
-            
-            <div className="grid grid-cols-2 gap-4">
-              {/* Reranker Options */}
-              <div className="space-y-3">
-                <Label className="text-sm text-gray-300">Reranker Settings</Label>
-                <div className="space-y-2">
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={options.useIntentReranker}
-                      onChange={(e) => setOptions(prev => ({ ...prev, useIntentReranker: e.target.checked }))}
-                      className="rounded bg-gray-800 border-gray-600"
-                    />
-                    <span className="text-sm text-gray-300">Use Intent Reranker</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={options.useChunkReranker}
-                      onChange={(e) => setOptions(prev => ({ ...prev, useChunkReranker: e.target.checked }))}
-                      className="rounded bg-gray-800 border-gray-600"
-                    />
-                    <span className="text-sm text-gray-300">Use Chunk Reranker</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={options.useDualEmbeddings}
-                      onChange={(e) => setOptions(prev => ({ ...prev, useDualEmbeddings: e.target.checked }))}
-                      className="rounded bg-gray-800 border-gray-600"
-                    />
-                    <span className="text-sm text-gray-300">Use Dual Embeddings</span>
-                  </label>
-                </div>
-              </div>
+        
 
-              {/* Numeric Parameters */}
-              <div className="space-y-3">
-                <Label className="text-sm text-gray-300">Retrieval Parameters</Label>
-                <div className="grid grid-cols-3 gap-2">
-                  <div>
-                    <Label className="text-xs text-gray-400">Intent Top K</Label>
-                    <input
-                      type="number"
-                      value={options.intentTopK}
-                      onChange={(e) => setOptions(prev => ({ ...prev, intentTopK: Number(e.target.value) }))}
-                      className="w-full px-2 py-1 text-sm border rounded bg-gray-800 border-gray-600 text-white"
-                      min="1"
-                      max="100"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-gray-400">Chunk Top K</Label>
-                    <input
-                      type="number"
-                      value={options.chunkTopK}
-                      onChange={(e) => setOptions(prev => ({ ...prev, chunkTopK: Number(e.target.value) }))}
-                      className="w-full px-2 py-1 text-sm border rounded bg-gray-800 border-gray-600 text-white"
-                      min="1"
-                      max="100"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-gray-400">Max Chunks</Label>
-                    <input
-                      type="number"
-                      value={options.maxChunksForAnswer}
-                      onChange={(e) => setOptions(prev => ({ ...prev, maxChunksForAnswer: Number(e.target.value) }))}
-                      className="w-full px-2 py-1 text-sm border rounded bg-gray-800 border-gray-600 text-white"
-                      min="1"
-                      max="100"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-span-2 space-y-2">
-                <Label className="text-sm font-medium text-gray-300">Answer Style</Label>
-                <div className="flex gap-2">
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="answerStyle"
-                      value="concise"
-                      checked={options.answerStyle === 'concise'}
-                      onChange={(e) => setOptions(prev => ({ ...prev, answerStyle: e.target.value as 'concise' | 'detailed' }))}
-                      className="rounded bg-gray-800 border-gray-600"
-                    />
-                    <span className="text-sm text-gray-300">Concise</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="answerStyle"
-                      value="detailed"
-                      checked={options.answerStyle === 'detailed'}
-                      onChange={(e) => setOptions(prev => ({ ...prev, answerStyle: e.target.value as 'concise' | 'detailed' }))}
-                      className="rounded bg-gray-800 border-gray-600"
-                    />
-                    <span className="text-sm text-gray-300">Detailed</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Show/Hide Advanced Options Toggle */}
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="border-purple-400/30 text-purple-400 hover:bg-purple-400/10"
-        >
-          {showAdvanced ? 'Hide Advanced Options' : 'Show Advanced Options'}
-        </Button>
 
         {/* Action Buttons */}
         <div className="flex gap-2">
@@ -278,7 +146,7 @@ export function FileQueryForm({
               variant="outline"
               onClick={handleSave}
               disabled={!query.trim()}
-              className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+              className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
             >
               <Save className="w-4 h-4 mr-2" />
               Save

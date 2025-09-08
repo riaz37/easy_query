@@ -315,9 +315,9 @@ export function FileUpload({
       case 'failed':
         return <AlertCircle className="w-4 h-4 text-red-600" />;
       case 'processing':
-        return <Spinner size="sm" variant="accent-blue" />;
+        return <Spinner size="sm" variant="accent-green" />;
       case 'uploading':
-        return <Spinner size="sm" variant="accent-blue" />;
+        return <Spinner size="sm" variant="accent-green" />;
       default:
         return <File className="w-4 h-4 text-gray-600" />;
     }
@@ -331,9 +331,9 @@ export function FileUpload({
       case 'failed':
         return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-200';
       case 'processing':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-200';
+        return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-200';
       case 'uploading':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-200';
+        return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-200';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-200';
     }
@@ -342,17 +342,17 @@ export function FileUpload({
   // Handle drag and drop
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    e.currentTarget.classList.add('border-blue-500', 'bg-blue-50');
+    e.currentTarget.classList.add('border-emerald-500', 'bg-emerald-50');
   }, []);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+    e.currentTarget.classList.remove('border-emerald-500', 'bg-emerald-50');
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+    e.currentTarget.classList.remove('border-emerald-500', 'bg-emerald-50');
     handleFileSelect(e.dataTransfer.files);
   }, [handleFileSelect]);
 
@@ -361,7 +361,7 @@ export function FileUpload({
       {/* Header with status */}
       {uploadedFiles.length > 0 && (
         <div className="flex items-center justify-between mb-4">
-          <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+          <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
             {uploadedFiles.filter(f => f.status === 'completed').length} / {uploadedFiles.length} Complete
           </Badge>
           <Button
@@ -380,7 +380,7 @@ export function FileUpload({
         {/* Table Usage Toggle */}
         <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg border border-gray-600/30">
           <div className="flex items-center gap-3">
-            <Database className="w-5 h-5 text-blue-400" />
+            <Database className="w-5 h-5 text-emerald-400" />
             <div>
               <Label htmlFor="use-table" className="text-sm font-medium text-white">
                 Use Table Names
@@ -401,7 +401,7 @@ export function FileUpload({
         {/* File Drop Zone */}
         <div
           className={`border-2 border-dashed border-gray-600/50 rounded-lg p-6 text-center transition-colors ${
-            disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-blue-400 hover:bg-blue-900/20'
+            disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-emerald-400 hover:bg-emerald-900/20'
           }`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -421,7 +421,7 @@ export function FileUpload({
           
           {isUploading ? (
             <>
-              <Spinner size="lg" variant="accent-blue" className="mx-auto mb-4" />
+              <Spinner size="lg" variant="accent-green" className="mx-auto mb-4" />
               <p className="text-lg font-medium text-white">
                 Uploading files...
               </p>
@@ -451,7 +451,7 @@ export function FileUpload({
               uploadFiles(pendingFiles);
             }}
             disabled={disabled || uploadedFiles.filter(f => f.status === 'pending').length === 0 || !user?.user_id}
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            className="w-full bg-emerald-600 hover:bg-emerald-700"
             data-element="upload-button"
           >
             <Upload className="w-4 h-4 mr-2" />

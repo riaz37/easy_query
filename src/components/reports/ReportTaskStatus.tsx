@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { BarChart3 } from "lucide-react";
@@ -30,14 +29,15 @@ export function ReportTaskStatus({
   };
 
   return (
-    <Card className="bg-gray-900/50 border-purple-400/30">
-      <CardHeader>
-        <CardTitle className="text-purple-400 flex items-center gap-2">
-          <BarChart3 className="w-5 h-5" />
-          Task Status
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-emerald-400" />
+            Task Status
+          </div>
+        </div>
+        <div className="mt-4">
         {/* Real-time Status Bar */}
         <div className="mb-4 p-3 bg-gray-800/30 rounded border border-gray-700">
           <div className="flex items-center justify-between mb-2">
@@ -76,7 +76,7 @@ export function ReportTaskStatus({
             <div className="text-sm text-gray-400">Failed</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-400">
+            <div className="text-2xl font-bold text-emerald-400">
               {currentTask.progress_percentage}%
             </div>
             <div className="text-sm text-gray-400">Progress</div>
@@ -115,7 +115,8 @@ export function ReportTaskStatus({
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 } 

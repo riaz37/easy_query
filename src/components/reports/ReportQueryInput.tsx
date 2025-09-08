@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles } from "lucide-react";
 
@@ -21,16 +20,17 @@ export function ReportQueryInput({
   formatTime,
 }: ReportQueryInputProps) {
   return (
-    <Card className={`bg-gray-900/50 border-purple-400/30 transition-all duration-300 ${
+    <div className={`card-enhanced transition-all duration-300 ${
       isGenerating ? 'opacity-60 scale-95' : ''
     }`}>
-      <CardHeader>
-        <CardTitle className="text-purple-400 flex items-center gap-2">
-          <Sparkles className="w-5 h-5" />
-          AI Report Generation
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-emerald-400" />
+            AI Report Generation
+          </div>
+        </div>
+        <div className="mt-4 space-y-4">
         <div className="space-y-2">
           <label className="text-sm font-medium text-white">
             What would you like to know?
@@ -39,16 +39,16 @@ export function ReportQueryInput({
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
             placeholder="e.g., Show me the financial report of May, or Generate a comprehensive sales analysis for Q2"
-            className="min-h-[120px] bg-gray-800/50 border-purple-400/30 text-white placeholder:text-gray-400 resize-none"
+            className="min-h-[120px] bg-gray-800/50 border-emerald-400/30 text-white placeholder:text-gray-400 resize-none"
             disabled={isGenerating}
           />
         </div>
 
         {/* Enhanced Progress Indicator for Report Generation */}
         {isGenerating && (
-          <div className="space-y-3 p-4 bg-purple-900/20 border border-purple-400/30 rounded-lg">
+          <div className="space-y-3 p-4 bg-emerald-900/20 border border-emerald-400/30 rounded-lg">
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2 text-purple-400">
+              <div className="flex items-center gap-2 text-emerald-400">
                 <span>AI Generating Your Report</span>
               </div>
               <div className="flex items-center gap-2 text-gray-400">
@@ -58,7 +58,7 @@ export function ReportQueryInput({
             
             <div className="w-full bg-gray-700 rounded-full h-2">
               <div 
-                className="bg-purple-500 h-2 rounded-full transition-all duration-300"
+                className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${reportProgress}%` }}
               ></div>
             </div>
@@ -69,11 +69,11 @@ export function ReportQueryInput({
                 <span>Analyzing request</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                 <span>Connecting to DB</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                 <span>Processing data</span>
               </div>
               <div className="flex items-center gap-1">
@@ -83,7 +83,8 @@ export function ReportQueryInput({
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 } 

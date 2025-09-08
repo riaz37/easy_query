@@ -41,7 +41,7 @@ export function DatabaseQueryHeader({
           </Badge>
         )}
         {currentDatabase && (
-          <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+          <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
             <Database className="w-4 h-4 mr-2" />
             DB: {currentDatabase.database_name}
           </Badge>

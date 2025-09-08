@@ -56,11 +56,11 @@ export function QueryHistoryPanel({
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex justify-end">
-      <div className="w-96 h-full bg-gray-900/95 border-l border-blue-400/30 shadow-2xl">
+      <div className="w-96 h-full bg-gray-900/95 border-l border-emerald-400/30 shadow-2xl">
         <Card className="h-full bg-transparent border-none rounded-none">
-          <CardHeader className="border-b border-blue-400/30">
+          <CardHeader className="border-b border-emerald-400/30">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-blue-400 flex items-center gap-2">
+              <CardTitle className="text-emerald-400 flex items-center gap-2">
                 <Clock className="w-5 h-5" />
                 Query History
               </CardTitle>
@@ -78,7 +78,7 @@ export function QueryHistoryPanel({
                   variant="outline"
                   size="sm"
                   onClick={onClose}
-                  className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+                  className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -90,7 +90,7 @@ export function QueryHistoryPanel({
             {loading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-center">
-                  <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                  <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                   <p className="text-gray-400">Loading history...</p>
                 </div>
               </div>

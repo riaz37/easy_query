@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Clock } from "lucide-react";
 
@@ -56,18 +55,19 @@ export function ReportProgressDisplay({
   };
 
   return (
-    <Card className="bg-gray-900/50 border-purple-400/30">
-      <CardHeader>
-        <CardTitle className="text-purple-400 flex items-center gap-2">
-          <Loader2 className="w-5 h-5 animate-spin" />
-          Report Generation Progress
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <Loader2 className="w-5 h-5 animate-spin text-emerald-400" />
+            Report Generation Progress
+          </div>
+        </div>
+        <div className="mt-4">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-white">{getProgressMessage()}</span>
-            <span className="text-purple-400 font-medium">
+            <span className="text-emerald-400 font-medium">
               {reports.progress}%
             </span>
           </div>
@@ -107,7 +107,8 @@ export function ReportProgressDisplay({
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 } 

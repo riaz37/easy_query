@@ -117,7 +117,7 @@ export function ReportResultsPreview({
               <Button
                 onClick={handleDownloadPDF}
                 disabled={pdfGenerating}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
               >
                 {pdfGenerating ? (
                   <Spinner size="sm" variant="primary" className="mr-2" />

@@ -58,14 +58,14 @@ export function FileUploadProgress({
   const getStatusIcon = () => {
     if (error) return <XCircle className="h-6 w-6 text-red-500" />;
     if (bundleStatus?.status === "COMPLETED") return <CheckCircle className="h-6 w-6 text-green-500" />;
-    if (bundleStatus?.status === "PROCESSING") return <Spinner size="md" variant="accent-blue" />;
+    if (bundleStatus?.status === "PROCESSING") return <Spinner size="md" variant="accent-green" />;
     return <Clock className="h-6 w-6 text-yellow-500" />;
   };
 
   const getStatusColor = () => {
     if (error) return "text-red-400";
     if (bundleStatus?.status === "COMPLETED") return "text-green-400";
-    if (bundleStatus?.status === "PROCESSING") return "text-blue-400";
+    if (bundleStatus?.status === "PROCESSING") return "text-emerald-400";
     return "text-yellow-400";
   };
 
@@ -83,9 +83,9 @@ export function FileUploadProgress({
   };
 
   return (
-    <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800">
+    <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-900/20 dark:border-emerald-800">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-blue-900 dark:text-blue-100">
+        <CardTitle className="flex items-center gap-2 text-emerald-900 dark:text-emerald-100">
           <Upload className="h-5 w-5" />
           File Processing Status
         </CardTitle>
@@ -143,7 +143,7 @@ export function FileUploadProgress({
               <ProgressLoader 
                 progress={bundleStatus.progress_percentage} 
                 size="sm"
-                variant="accent-blue"
+                variant="accent-green"
                 showPercentage={false}
               />
             </div>
@@ -151,7 +151,7 @@ export function FileUploadProgress({
             {/* File Counts */}
             <div className="grid grid-cols-3 gap-4 text-sm mb-4">
               <div className="text-center">
-                <div className="text-lg font-semibold text-blue-600 dark:text-blue-400">
+                <div className="text-lg font-semibold text-emerald-600 dark:text-emerald-400">
                   {bundleStatus.total_files}
                 </div>
                 <div className="text-gray-600 dark:text-gray-400">Total</div>
@@ -190,7 +190,7 @@ export function FileUploadProgress({
                         <XCircle className="h-4 w-4 text-red-500" />
                       )}
                       {task.status === 'processing' && (
-                        <Spinner size="sm" variant="accent-blue" />
+                        <Spinner size="sm" variant="accent-green" />
                       )}
                       <Badge 
                         variant={task.status === 'completed' ? 'default' : task.status === 'failed' ? 'destructive' : 'secondary'}
@@ -239,7 +239,7 @@ export function FileUploadProgress({
               disabled={isLoading}
             >
               {isLoading ? (
-                <Spinner size="sm" variant="accent-blue" />
+                <Spinner size="sm" variant="accent-green" />
               ) : (
                 <Clock className="h-4 w-4" />
               )}

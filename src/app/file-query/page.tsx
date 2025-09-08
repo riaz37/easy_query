@@ -16,13 +16,11 @@ import {
   FileText,
   CheckCircle,
   File,
-  Info,
   History,
   AlertCircle,
   X,
   Database,
   Brain,
-  Settings,
 } from "lucide-react";
 import { Spinner } from '@/components/ui/loading';
 import {
@@ -31,7 +29,6 @@ import {
   FileQueryForm,
   QueryHistoryPanel,
   TableSelector,
-  AdvancedQueryParams,
 } from "@/components/data-query";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 import { fileService } from "@/lib/api/services/file-service";
@@ -136,12 +133,6 @@ export default function FileQueryPage() {
         const response = await fileService.searchFiles({
           query: queryText,
           user_id: user?.user_id,
-          use_intent_reranker: options.useIntentReranker,
-          use_chunk_reranker: options.useChunkReranker,
-          use_dual_embeddings: options.useDualEmbeddings,
-          intent_top_k: options.intentTopK,
-          chunk_top_k: options.chunkTopK,
-          max_chunks_for_answer: options.maxChunksForAnswer,
           answer_style: options.answerStyle,
           table_specific: !!selectedTable, // Make query table-specific if table is selected
           tables: selectedTable ? [selectedTable] : undefined, // Include selected table
@@ -559,20 +550,6 @@ export default function FileQueryPage() {
                   </div>
                 )}
 
-                {/* Advanced Query Parameters */}
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="card-header-enhanced">
-                      <div className="card-title-enhanced flex items-center gap-2">
-                        <Settings className="w-5 h-5 text-emerald-400" />
-                        Advanced Options
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <AdvancedQueryParams />
-                    </div>
-                  </div>
-                </div>
 
 
 
@@ -598,56 +575,6 @@ export default function FileQueryPage() {
                   </div>
                 </div>
 
-                {/* Help Information */}
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="card-header-enhanced">
-                      <div className="card-title-enhanced flex items-center gap-2">
-                        <Info className="w-5 h-5 text-emerald-400" />
-                        How to Use
-                      </div>
-                    </div>
-                    <div className="flex-1 space-y-3 text-sm">
-                      <div>
-                        <h4 className="font-medium text-white mb-1">
-                          1. Upload Files
-                        </h4>
-                        <p className="text-gray-400">
-                          Upload your documents (PDF, Word, Excel, etc.) to query their
-                          content.
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-white mb-1">
-                          2. Select Table {useTable ? "(Optional)" : "(Disabled)"}
-                        </h4>
-                        <p className="text-gray-400">
-                          {useTable
-                            ? "Choose a specific table to focus your query on, or leave unselected to search across all tables."
-                            : "Table selection is currently disabled. Files will be processed without table names."}
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-white mb-1">
-                          3. Ask Questions
-                        </h4>
-                        <p className="text-gray-400">
-                          Use natural language to ask questions about your uploaded
-                          files and selected table.
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-white mb-1">
-                          4. Get Results
-                        </h4>
-                        <p className="text-gray-400">
-                          Receive detailed answers with source references from your
-                          documents and table data.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
     </PageLayout>

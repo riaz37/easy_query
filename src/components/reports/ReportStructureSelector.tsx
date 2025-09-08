@@ -1,5 +1,4 @@
 import React, { useMemo, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3 } from "lucide-react";
 import { Spinner } from "@/components/ui/loading";
 
@@ -37,12 +36,14 @@ export function ReportStructureSelector({
   const loadingState = useMemo(() => {
     if (reportStructure.isLoading) {
       return (
-        <Card className="bg-gray-900/50 border-purple-400/30">
-          <CardContent className="pt-12 pb-12 text-center">
-            <Spinner size="md" variant="accent-purple" className="mx-auto mb-4" />
-            <p className="text-gray-400">Loading report templates...</p>
-          </CardContent>
-        </Card>
+        <div className="card-enhanced">
+          <div className="card-content-enhanced">
+            <div className="pt-12 pb-12 text-center">
+              <Spinner size="md" variant="accent-green" className="mx-auto mb-4" />
+              <p className="text-gray-400">Loading report templates...</p>
+            </div>
+          </div>
+        </div>
       );
     }
     return null;
@@ -53,16 +54,17 @@ export function ReportStructureSelector({
     if (!reportStructure.structure || structureKeys.length === 0) return null;
 
     return (
-      <Card className={`bg-gray-900/50 border-purple-400/30 transition-all duration-300 ${
+      <div className={`card-enhanced transition-all duration-300 ${
         isGenerating ? 'opacity-60 scale-95' : ''
       }`}>
-        <CardHeader>
-          <CardTitle className="text-purple-400 flex items-center gap-2">
-            <BarChart3 className="w-5 h-5" />
-            Report Template
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+        <div className="card-content-enhanced">
+          <div className="card-header-enhanced">
+            <div className="card-title-enhanced flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-emerald-400" />
+              Report Template
+            </div>
+          </div>
+          <div className="mt-4">
           <div className="space-y-3">
             <label className="text-sm font-medium text-white">
               Select Report Type
@@ -71,7 +73,7 @@ export function ReportStructureSelector({
               value={selectedStructure}
               onChange={handleStructureChange}
               disabled={isGenerating}
-              className="w-full p-3 border rounded-lg bg-gray-800/50 border-purple-400/30 text-white disabled:opacity-50"
+              className="w-full p-3 border rounded-lg bg-gray-800/50 border-emerald-400/30 text-white disabled:opacity-50"
             >
               {structureKeys.map((key) => (
                 <option key={key} value={key}>
@@ -88,8 +90,9 @@ export function ReportStructureSelector({
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+          </div>
+        </div>
+      </div>
     );
   }, [reportStructure.structure, structureKeys, selectedStructure, selectedStructureContent, isGenerating, handleStructureChange]);
 

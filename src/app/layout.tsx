@@ -14,13 +14,12 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Menu from "@/components/Menu";
 import {
-  FloatingVoiceButton,
   VoiceNavigationHandler,
 } from "@/components/voice-agent";
 import {
-  FloatingTextButton,
   TextConversationPageTracker,
 } from "@/components/text-conversation";
+import { UnifiedRobotAssistant } from "@/components/UnifiedRobotAssistant";
 import { useUIStore } from "@/store/uiStore";
 
 // Configure Barlow for titles
@@ -83,8 +82,7 @@ export default function RootLayout({
                       <VoiceNavigationHandler>
                         <AppContent>{children}</AppContent>
                       </VoiceNavigationHandler>
-                      <FloatingVoiceButton />
-                      <FloatingTextButton />
+                      <UnifiedRobotAssistant />
                       <TextConversationPageTracker />
                       <Toaster />
                     </TextConversationProvider>
