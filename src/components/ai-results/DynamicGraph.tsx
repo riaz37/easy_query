@@ -302,13 +302,13 @@ export function DynamicGraph({
   }
 
   const colors = [
-    "#3b82f6",
-    "#10b981",
-    "#f59e0b",
-    "#ef4444",
-    "#8b5cf6",
-    "#06b6d4",
-    "#84cc16",
+    "#10b981", // emerald-500
+    "#059669", // emerald-600
+    "#047857", // emerald-700
+    "#065f46", // emerald-800
+    "#064e3b", // emerald-900
+    "#34d399", // emerald-400
+    "#6ee7b7", // emerald-300
     "#f97316",
     "#ec4899",
     "#06b6d4",
@@ -322,7 +322,7 @@ export function DynamicGraph({
       case "column":
       case "grouped_bar":
       case "stacked_bar":
-        return <BarChart3 className="w-5 h-5 text-blue-400" />;
+        return <BarChart3 className="w-5 h-5 text-emerald-400" />;
       case "line":
       case "multi_line":
       case "step":
@@ -331,22 +331,22 @@ export function DynamicGraph({
       case "donut":
       case "treemap":
       case "sunburst":
-        return <PieChart className="w-5 h-5 text-purple-400" />;
+        return <PieChart className="w-5 h-5 text-emerald-400" />;
       case "area":
       case "stacked_area":
         return <Activity className="w-5 h-5 text-orange-400" />;
       case "scatter":
       case "bubble":
       case "3d_scatter":
-        return <Circle className="w-5 h-5 text-red-400" />;
+        return <Circle className="w-5 h-5 text-emerald-400" />;
       case "histogram":
       case "box":
       case "violin":
       case "density":
-        return <Target className="w-5 h-5 text-yellow-400" />;
+        return <Target className="w-5 h-5 text-emerald-400" />;
       case "heatmap":
       case "correlation_matrix":
-        return <Layers className="w-5 h-5 text-indigo-400" />;
+        return <Layers className="w-5 h-5 text-emerald-400" />;
       case "radar":
       case "polar":
         return <Zap className="w-5 h-5 text-pink-400" />;
@@ -387,7 +387,7 @@ export function DynamicGraph({
                 }}
               />
               <Legend />
-              <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="#10b981" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         );
@@ -566,8 +566,8 @@ export function DynamicGraph({
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke="#f59e0b"
-                fill="#f59e0b"
+                stroke="#10b981"
+                fill="#10b981"
                 fillOpacity={0.6}
               />
             </AreaChart>
@@ -600,7 +600,7 @@ export function DynamicGraph({
               <Legend />
               <RechartsScatter
                 dataKey="value"
-                fill="#ef4444"
+                fill="#10b981"
                 shape="circle"
                 r={graph_type === "bubble" ? 8 : 5}
               />
@@ -632,7 +632,7 @@ export function DynamicGraph({
                 }}
               />
               <Legend />
-              <Bar dataKey="value" fill="#f59e0b" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="value" fill="#10b981" radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         );
@@ -646,8 +646,8 @@ export function DynamicGraph({
               <PolarRadiusAxis tick={{ fill: "#9ca3af" }} stroke="#374151" />
               <Radar
                 dataKey="value"
-                stroke="#8b5cf6"
-                fill="#8b5cf6"
+                stroke="#10b981"
+                fill="#10b981"
                 fillOpacity={0.3}
               />
               <Tooltip
@@ -670,7 +670,7 @@ export function DynamicGraph({
                 dataKey="value"
                 aspectRatio={4 / 3}
                 stroke="#374151"
-                fill="#3b82f6"
+                fill="#10b981"
               >
                 <Tooltip
                   contentStyle={{
@@ -696,7 +696,7 @@ export function DynamicGraph({
                   color: "#f9fafb",
                 }}
               />
-              <Funnel dataKey="value" fill="#06b6d4" stroke="#374151" />
+              <Funnel dataKey="value" fill="#10b981" stroke="#374151" />
             </FunnelChart>
           </ResponsiveContainer>
         );
@@ -725,7 +725,7 @@ export function DynamicGraph({
                 }}
               />
               <Legend />
-              <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="#10b981" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         );
@@ -793,7 +793,7 @@ export function DynamicGraph({
           </p>
         )}
         {!graphData.column_mapping && (
-          <p className="text-yellow-400">
+          <p className="text-emerald-400">
             <strong>Note:</strong> Column mapping was auto-generated from
             available data
           </p>

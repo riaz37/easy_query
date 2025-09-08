@@ -93,8 +93,21 @@ export function FloatingTextButton() {
     return 'bg-gray-500 hover:bg-gray-600'
   }
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const formatTime = (date: Date | string | number) => {
+    try {
+      // Ensure we have a valid Date object
+      const dateObj = date instanceof Date ? date : new Date(date)
+      
+      // Check if the date is valid
+      if (isNaN(dateObj.getTime())) {
+        return 'Invalid time'
+      }
+      
+      return dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    } catch (error) {
+      console.error('Error formatting time:', error, 'Input:', date)
+      return 'Invalid time'
+    }
   }
 
   return (
@@ -125,11 +138,11 @@ export function FloatingTextButton() {
       {/* Chat Panel */}
       {isExpanded && (
         <div className={cn(
-          "absolute bottom-20 left-0 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300",
+          "absolute bottom-20 left-0 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 flex flex-col",
           isMinimized ? "w-80 h-12" : "w-96 h-[500px]"
         )}>
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
             <div className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5" />
               <h3 className="text-lg font-semibold">Text Chat</h3>
@@ -158,10 +171,10 @@ export function FloatingTextButton() {
           </div>
 
           {!isMinimized && (
-            <>
+            <div className="flex flex-col flex-1 min-h-0">
               {/* Connection Controls */}
               {!isConnected && (
-                <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border-b border-gray-200 dark:border-gray-700">
+                <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
                   <Button onClick={connect} size="sm" className="w-full">
                     Connect to Chat
                   </Button>
@@ -169,7 +182,7 @@ export function FloatingTextButton() {
               )}
 
               {/* Messages Area */}
-              <ScrollArea className="flex-1 h-[340px] p-4">
+              <ScrollArea className="flex-1 p-4 min-h-0">
                 <div className="space-y-4">
                   {messages.length === 0 && isConnected && (
                     <div className="text-center text-muted-foreground py-8">
@@ -231,7 +244,7 @@ export function FloatingTextButton() {
               </ScrollArea>
 
               {/* Input Area */}
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 space-y-2 flex-shrink-0">
                 <div className="flex gap-2">
                   <Input
                     ref={inputRef}
@@ -276,7 +289,7 @@ export function FloatingTextButton() {
                   </div>
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
       )}

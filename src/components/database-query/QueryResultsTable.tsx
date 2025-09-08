@@ -93,7 +93,7 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
 
   if (!data || data.length === 0) {
     return (
-      <Card className="bg-gray-900/50 border-blue-400/30">
+      <Card className="bg-gray-900/50 border-emerald-400/30">
         <CardContent className="pt-12 pb-12 text-center">
           <div className="text-gray-400">
             No data to display
@@ -104,14 +104,14 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
   }
 
   return (
-    <Card className="bg-gray-900/50 border-blue-400/30">
+    <Card className="bg-gray-900/50 border-emerald-400/30">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-blue-400 flex items-center gap-2">
+          <CardTitle className="text-emerald-400 flex items-center gap-2">
             <Filter className="w-5 h-5" />
             Query Results
           </CardTitle>
-          <Badge variant="outline" className="border-blue-400/30 text-blue-400">
+          <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
             {data.length} results
           </Badge>
         </div>
@@ -128,7 +128,7 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-gray-800/50 border-blue-400/30 text-white placeholder:text-gray-400"
+              className="bg-gray-800/50 border-emerald-400/30 text-white placeholder:text-gray-400"
             />
             {searchTerm && (
               <Button
@@ -147,7 +147,7 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
             <select
               value={pageSize}
               onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-              className="bg-gray-800/50 border border-blue-400/30 text-white rounded px-2 py-1 text-sm"
+              className="bg-gray-800/50 border border-emerald-400/30 text-white rounded px-2 py-1 text-sm"
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -158,14 +158,14 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
         </div>
 
         {/* Results Table */}
-        <div className="rounded-lg border border-blue-400/30 overflow-hidden">
+        <div className="rounded-lg border border-emerald-400/30 overflow-hidden">
           <Table>
             <TableHeader className="bg-gray-800/50">
               <TableRow className="hover:bg-transparent">
                 {columns.map((column) => (
                   <TableHead
                     key={column}
-                    className="text-blue-400 font-medium cursor-pointer hover:bg-gray-700/50 transition-colors"
+                    className="text-emerald-400 font-medium cursor-pointer hover:bg-gray-700/50 transition-colors"
                     onClick={() => handleSort(column)}
                   >
                     <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
               size="sm"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+              className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
               Previous
@@ -241,8 +241,8 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
                     onClick={() => handlePageChange(pageNum)}
                     className={
                       currentPage === pageNum
-                        ? "bg-blue-600 text-white"
-                        : "border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+                        ? "bg-emerald-600 text-white"
+                        : "border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
                     }
                   >
                     {pageNum}
@@ -256,7 +256,7 @@ export function QueryResultsTable({ data, columns }: QueryResultsTableProps) {
               size="sm"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+              className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
             >
               Next
               <ChevronRight className="w-4 h-4 ml-1" />

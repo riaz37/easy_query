@@ -335,7 +335,7 @@ export function ExcelToDBManager({
             <FileSpreadsheet className="h-8 w-8 text-green-400" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold font-barlow bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
               Excel to Database
             </h1>
             <p className="text-slate-400 text-lg">

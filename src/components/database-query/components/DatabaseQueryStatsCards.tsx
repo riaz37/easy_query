@@ -13,15 +13,15 @@ export function DatabaseQueryStatsCards({ isDark = true }: DatabaseQueryStatsCar
       title: "Quick Queries",
       description: "Instant results for simple questions",
       icon: Play,
-      color: "blue",
-      valueColor: isDark ? "text-blue-400" : "text-blue-600"
+      color: "emerald",
+      valueColor: isDark ? "text-emerald-400" : "text-emerald-600"
     },
     {
       title: "AI Reports",
       description: "Comprehensive analysis & insights",
       icon: FileText,
-      color: "purple",
-      valueColor: isDark ? "text-purple-400" : "text-purple-600"
+      color: "emerald",
+      valueColor: isDark ? "text-emerald-400" : "text-emerald-600"
     },
     {
       title: "Smart Results",
@@ -34,8 +34,8 @@ export function DatabaseQueryStatsCards({ isDark = true }: DatabaseQueryStatsCar
       title: "Query History",
       description: "Track and reuse past queries",
       icon: History,
-      color: "blue",
-      valueColor: isDark ? "text-blue-400" : "text-blue-600"
+      color: "emerald",
+      valueColor: isDark ? "text-emerald-400" : "text-emerald-600"
     }
   ];
 

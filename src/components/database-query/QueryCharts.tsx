@@ -298,7 +298,7 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
 
   if (!data || data.length === 0) {
     return (
-      <Card className="bg-gray-900/50 border-blue-400/30">
+      <Card className="bg-gray-900/50 border-emerald-400/30">
         <CardContent className="pt-12 pb-12 text-center">
           <div className="text-gray-400">
             No data available for charts
@@ -309,7 +309,7 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
   }
 
   return (
-    <Card className="bg-gray-900/50 border-blue-400/30">
+    <Card className="bg-gray-900/50 border-emerald-400/30">
       <CardHeader>
         <CardTitle className="text-green-400 flex items-center gap-2">
           <BarChart3 className="w-5 h-5" />
@@ -322,10 +322,10 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Chart Type</label>
             <Select value={chartType} onValueChange={(value: ChartType) => setChartType(value)}>
-              <SelectTrigger className="bg-gray-800/50 border-blue-400/30 text-white">
+              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-blue-400/30">
+              <SelectContent className="bg-gray-800 border-emerald-400/30">
                 <SelectItem value="bar">
                   <div className="flex items-center gap-2">
                     <BarChart2 className="w-4 h-4" />
@@ -357,10 +357,10 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Aggregation</label>
             <Select value={aggregation} onValueChange={(value: "sum" | "count" | "average") => setAggregation(value)}>
-              <SelectTrigger className="bg-gray-800/50 border-blue-400/30 text-white">
+              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-blue-400/30">
+              <SelectContent className="bg-gray-800 border-emerald-400/30">
                 <SelectItem value="sum">Sum</SelectItem>
                 <SelectItem value="count">Count</SelectItem>
                 <SelectItem value="average">Average</SelectItem>
@@ -373,10 +373,10 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
           <div className="space-y-2">
             <label className="text-sm text-gray-400">X-Axis (Categories)</label>
             <Select value={xAxis} onValueChange={setXAxis}>
-              <SelectTrigger className="bg-gray-800/50 border-blue-400/30 text-white">
+              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
                 <SelectValue placeholder="Select column" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-blue-400/30">
+              <SelectContent className="bg-gray-800 border-emerald-400/30">
                 {chartableColumns.map((column) => (
                   <SelectItem key={column} value={column}>
                     {column}
@@ -389,10 +389,10 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Y-Axis (Values)</label>
             <Select value={yAxis} onValueChange={setYAxis}>
-              <SelectTrigger className="bg-gray-800/50 border-blue-400/30 text-white">
+              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
                 <SelectValue placeholder="Select column" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-blue-400/30">
+              <SelectContent className="bg-gray-800 border-emerald-400/30">
                 {chartableColumns.map((column) => (
                   <SelectItem key={column} value={column}>
                     {column}

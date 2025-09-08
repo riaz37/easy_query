@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Clock } from "lucide-react";
@@ -14,14 +13,15 @@ export function ProcessingDetails({ reportResults }: ProcessingDetailsProps) {
   if (!reportResults.summary) return null;
 
   return (
-    <Card className="bg-gray-900/50 border-green-400/30 mt-6">
-      <CardHeader>
-        <CardTitle className="text-green-400 flex items-center gap-2">
-          <Clock className="w-5 h-5" />
-          Processing Details
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="card-enhanced mt-6">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="card-title-enhanced flex items-center gap-2">
+            <Clock className="w-5 h-5 text-emerald-400" />
+            Processing Details
+          </div>
+        </div>
+        <div className="mt-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-white">
@@ -36,13 +36,13 @@ export function ProcessingDetails({ reportResults }: ProcessingDetailsProps) {
             <div className="text-sm text-gray-400">Success Rate</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-400">
+            <div className="text-2xl font-bold text-emerald-400">
               {reportResults.summary.total_processing_time?.toFixed(2) || "N/A"}s
             </div>
             <div className="text-sm text-gray-400">Total Time</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-purple-400">
+            <div className="text-2xl font-bold text-emerald-400">
               {reportResults.summary.average_processing_time?.toFixed(2) || "N/A"}s
             </div>
             <div className="text-sm text-gray-400">Avg per Query</div>
@@ -57,7 +57,8 @@ export function ProcessingDetails({ reportResults }: ProcessingDetailsProps) {
             {reportResults.summary.processing_method}
           </Badge>
         </div>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 } 

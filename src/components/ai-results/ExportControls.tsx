@@ -46,7 +46,7 @@ export function ExportControls({
             <Button
               onClick={onDownloadPDF}
               disabled={pdfGenerating}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               <Download className="w-4 h-4 mr-2" />
               {pdfGenerating ? "Generating PDF..." : "Download PDF"}
@@ -56,7 +56,7 @@ export function ExportControls({
               onClick={onPreviewPDF}
               disabled={pdfGenerating}
               variant="outline"
-              className="border-blue-400/30 text-blue-400 hover:bg-blue-400/10"
+              className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
             >
               <Eye className="w-4 h-4 mr-2" />
               Preview PDF

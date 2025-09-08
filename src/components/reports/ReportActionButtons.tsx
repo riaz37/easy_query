@@ -25,7 +25,7 @@ export function ReportActionButtons({
       <Button
         onClick={onGenerateReport}
         disabled={!userQuery.trim() || isGenerating}
-        className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2 min-w-[160px]"
+        className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2 min-w-[160px]"
         data-voice-action="report generation"
         data-voice-element="report generation"
       >
@@ -46,7 +46,7 @@ export function ReportActionButtons({
         onClick={onGenerateReportAndWait}
         disabled={!userQuery.trim() || isGenerating}
         variant="outline"
-        className="border-purple-400/30 text-purple-400 hover:bg-purple-400/10 flex items-center gap-2"
+        className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 flex items-center gap-2"
       >
         <Clock className="h-4 w-4" />
         Generate & Wait

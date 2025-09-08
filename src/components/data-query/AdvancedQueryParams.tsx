@@ -41,7 +41,7 @@ export function AdvancedQueryParams() {
           variant="ghost"
           size="sm"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-purple-400 hover:bg-purple-400/10 p-0 h-auto"
+          className="text-emerald-400 hover:bg-emerald-400/10 p-0 h-auto"
         >
           <Settings className="w-4 h-4 mr-2" />
           Advanced Parameters
@@ -69,7 +69,7 @@ export function AdvancedQueryParams() {
         <div className="space-y-4 p-4 bg-gray-800/30 rounded-lg border border-gray-600/30">
           {/* Reranking Options */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium text-purple-400">Reranking Options</Label>
+            <Label className="text-sm font-medium text-emerald-400">Reranking Options</Label>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="intent-reranker" className="text-sm text-gray-300">
@@ -112,7 +112,7 @@ export function AdvancedQueryParams() {
 
           {/* Retrieval Parameters */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium text-purple-400">Retrieval Parameters</Label>
+            <Label className="text-sm font-medium text-emerald-400">Retrieval Parameters</Label>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label htmlFor="intent-topk" className="text-xs text-gray-400">

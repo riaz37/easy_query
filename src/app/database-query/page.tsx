@@ -217,50 +217,6 @@ export default function DatabaseQueryPage() {
     setShowHistory(prev => !prev);
   }, []);
 
-  // Memoize the current status to prevent unnecessary re-renders
-  const currentStatus = useMemo(() => {
-    if (loading) return 'loading';
-    if (queryMode === 'reports' && isReportGenerating) return 'generating_report';
-    return 'ready';
-  }, [loading, queryMode, isReportGenerating]);
-
-  // Memoize the status message
-  const statusMessage = useMemo(() => {
-    switch (currentStatus) {
-      case 'loading':
-        return "Processing Your Query...";
-      case 'generating_report':
-        return "Generating Your Report...";
-      default:
-        return "Ready to Get Started";
-    }
-  }, [currentStatus]);
-
-  // Memoize the status description
-  const statusDescription = useMemo(() => {
-    switch (currentStatus) {
-      case 'loading':
-        return "AI is analyzing your question and generating results. Please wait...";
-      case 'generating_report':
-        return "AI is analyzing multiple data sources and generating comprehensive insights. This may take several minutes...";
-      default:
-        return queryMode === 'query' 
-          ? 'Ask your question in natural language above to get started'
-          : 'Describe what you want to analyze and generate comprehensive reports';
-    }
-  }, [currentStatus, queryMode]);
-
-  // Memoize the status badge
-  const statusBadge = useMemo(() => {
-    switch (currentStatus) {
-      case 'loading':
-        return 'AI Processing';
-      case 'generating_report':
-        return 'AI Report Generation';
-      default:
-        return queryMode === 'query' ? 'Quick Query Mode' : 'AI Report Mode';
-    }
-  }, [currentStatus, queryMode]);
 
   return (
     <PageLayout background="enhanced" backgroundIntensity="medium" maxWidth="7xl">
@@ -351,51 +307,6 @@ export default function DatabaseQueryPage() {
                 </div>
               )}
 
-              {/* Empty State */}
-              <div className={`card-enhanced transition-all duration-300 ${
-                currentStatus !== 'ready' ? 'border-blue-500/60' : ''
-              }`}>
-                <div className="card-content-enhanced">
-                  <div className="text-center py-12">
-                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 ${
-                      currentStatus !== 'ready'
-                        ? 'bg-blue-500/40 border border-blue-400/60 scale-110' 
-                        : 'bg-blue-500/20'
-                    }`}>
-                      {currentStatus !== 'ready' ? (
-                        <Spinner size="lg" variant="accent-blue" />
-                      ) : (
-                        <Database className="w-8 h-8 text-blue-400" />
-                      )}
-                    </div>
-                    <h3 className="text-white text-lg font-medium mb-2">
-                      {statusMessage}
-                    </h3>
-                    <p className="text-gray-400 mb-4">
-                      {statusDescription}
-                    </p>
-                    {!hasCurrentDatabase && currentStatus === 'ready' && (
-                      <p className="text-yellow-400 text-sm mb-4">
-                        Please select a database first
-                      </p>
-                    )}
-                    {currentStatus !== 'ready' && (
-                      <div className="mb-4">
-                        <div className="flex items-center justify-center gap-2 text-blue-400 text-sm">
-                          <Spinner size="sm" variant="accent-blue" />
-                          <span>{currentStatus === 'generating_report' ? 'Generating Report...' : 'Processing...'}</span>
-                        </div>
-                        <Progress value={queryProgress} className="h-1 mt-2 max-w-xs mx-auto" />
-                      </div>
-                    )}
-                    <div className="flex justify-center gap-2 mt-4">
-                      <Badge variant="outline" className="border-blue-400/30 text-blue-400">
-                        {statusBadge}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
       {/* Query History Panel - Fixed positioning */}

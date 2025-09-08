@@ -79,7 +79,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
       <div className="card-content-enhanced">
         <div className="card-header-enhanced">
           <div className="card-title-enhanced flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-blue-400" />
+            <Sparkles className="w-5 h-5 text-emerald-400" />
             Natural Language Query
           </div>
         </div>
@@ -90,7 +90,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask your question in natural language... (e.g., 'Show me all users from last month')"
-              className="min-h-[120px] bg-gray-800/50 border-blue-400/30 text-white placeholder:text-gray-400 resize-none"
+              className="min-h-[120px] bg-gray-800/50 border-emerald-400/30 text-white placeholder:text-gray-400 resize-none"
               disabled={!hasDatabase || localLoading}
               data-element="query-input"
             />
@@ -104,10 +104,10 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
 
           {/* Loading Progress Indicator */}
           {localLoading && (
-            <div className="space-y-3 p-4 bg-blue-900/20 border border-blue-400/30 rounded-lg">
+            <div className="space-y-3 p-4 bg-emerald-900/20 border border-emerald-400/30 rounded-lg">
               <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2 text-blue-400">
-                  <InlineLoader size="sm" variant="accent-blue">
+                <div className="flex items-center gap-2 text-emerald-400">
+                  <InlineLoader size="sm" variant="accent-green">
                     AI Processing Your Query
                   </InlineLoader>
                 </div>
@@ -120,7 +120,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
               <ProgressLoader 
                 progress={Math.min((processingTime / 30) * 100, 90)} 
                 size="sm"
-                variant="accent-blue"
+                variant="accent-green"
                 showPercentage={false}
               />
               
@@ -130,11 +130,11 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
                   <span>Analyzing question</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                   <span>Connecting to DB</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                   <span>Processing query</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -150,14 +150,13 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
               <ButtonLoader
                 type="submit"
                 disabled={!query.trim() || !hasDatabase || localLoading}
-                loading={localLoading}
+                loading={false}
                 text="Processing..."
                 size="md"
-                variant="accent-blue"
-                className="min-w-[140px]"
+                variant="accent-green"
+                className="min-w-[120px]"
                 data-element="query-submit"
               >
-                <Play className="w-4 h-4 mr-2" />
                 Ask Question
               </ButtonLoader>
               
@@ -189,7 +188,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
               <Badge
                 key={index}
                 variant="outline"
-                className="cursor-pointer border-blue-400/30 text-blue-400 hover:bg-blue-400/10 hover:border-blue-400/50 transition-all duration-200"
+                className="cursor-pointer border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 hover:border-emerald-400/50 transition-all duration-200"
                 onClick={() => handleQuerySelect(template)}
                 disabled={localLoading}
               >
@@ -200,10 +199,10 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
         </div>
 
         {/* Query Tips */}
-        <div className="p-3 bg-blue-900/20 border border-blue-400/30 rounded-lg">
-          <div className="text-sm text-blue-300">
+        <div className="p-3 bg-emerald-900/20 border border-emerald-400/30 rounded-lg">
+          <div className="text-sm text-emerald-300">
             <strong>💡 Natural Language Tips:</strong>
-            <ul className="mt-2 space-y-1 text-blue-200">
+            <ul className="mt-2 space-y-1 text-emerald-200">
               <li>• Ask questions like you're talking to a person</li>
               <li>• Use time references: "last week", "this month", "yesterday"</li>
               <li>• Be specific: "top 10 products" instead of "some products"</li>

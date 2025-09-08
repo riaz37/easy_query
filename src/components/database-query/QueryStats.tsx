@@ -33,10 +33,10 @@ export function QueryStats({ query, metadata, onClear }: QueryStatsProps) {
   };
 
   return (
-    <Card className="bg-gray-900/50 border-blue-400/30">
+    <Card className="bg-gray-900/50 border-emerald-400/30">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-blue-400 flex items-center gap-2">
+          <CardTitle className="text-emerald-400 flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
             Query Results
           </CardTitle>
@@ -53,10 +53,10 @@ export function QueryStats({ query, metadata, onClear }: QueryStatsProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Query Text */}
-        <div className="p-3 bg-blue-900/20 border border-blue-400/30 rounded-lg">
+        <div className="p-3 bg-emerald-900/20 border border-emerald-400/30 rounded-lg">
           <div className="flex items-center gap-2 mb-2">
-            <FileText className="w-4 h-4 text-blue-400" />
-            <span className="text-blue-400 font-medium">Query:</span>
+            <FileText className="w-4 h-4 text-emerald-400" />
+            <span className="text-emerald-400 font-medium">Query:</span>
           </div>
           <p className="text-white text-sm">{query}</p>
         </div>
@@ -64,10 +64,10 @@ export function QueryStats({ query, metadata, onClear }: QueryStatsProps) {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center p-3 bg-gray-800/30 rounded-lg border border-gray-700/50">
-            <div className="flex items-center justify-center w-8 h-8 bg-blue-500/20 rounded-lg mx-auto mb-2">
-              <Database className="w-4 h-4 text-blue-400" />
+            <div className="flex items-center justify-center w-8 h-8 bg-emerald-500/20 rounded-lg mx-auto mb-2">
+              <Database className="w-4 h-4 text-emerald-400" />
             </div>
-            <div className="text-2xl font-bold text-blue-400">
+            <div className="text-2xl font-bold text-emerald-400">
               {metadata.databaseName}
             </div>
             <div className="text-xs text-gray-400">Database</div>
@@ -84,10 +84,10 @@ export function QueryStats({ query, metadata, onClear }: QueryStatsProps) {
           </div>
 
           <div className="text-center p-3 bg-gray-800/30 rounded-lg border border-gray-700/50">
-            <div className="flex items-center justify-center w-8 h-8 bg-purple-500/20 rounded-lg mx-auto mb-2">
-              <User className="w-4 h-4 text-purple-400" />
+            <div className="flex items-center justify-center w-8 h-8 bg-emerald-500/20 rounded-lg mx-auto mb-2">
+              <User className="w-4 h-4 text-emerald-400" />
             </div>
-            <div className="text-sm font-medium text-purple-400 truncate">
+            <div className="text-sm font-medium text-emerald-400 truncate">
               {metadata.userId}
             </div>
             <div className="text-xs text-gray-400">User</div>

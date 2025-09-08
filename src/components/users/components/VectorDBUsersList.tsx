@@ -30,7 +30,7 @@ export function VectorDBUsersList({
             Vector Database Access Users
           </div>
           <p className="card-description-enhanced">
-            Users with access to vector databases for AI and ML operations
+            Users with access to vector databases 
           </p>
           <div className="flex justify-end mt-2">
             <Button

@@ -52,7 +52,7 @@ export function ESAPBrandLoader({
         }}
       >
         <Image
-          src="/logo/ESAP_B_PNG.png"
+          src="/logo/ESAP_W.png"
           alt="ESAP Logo"
           width={80}
           height={80}
