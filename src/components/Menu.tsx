@@ -22,6 +22,7 @@ import {
   Users,
   Mic,
 } from "lucide-react";
+import { DashboardIcon } from "@/components/icons/DashboardIcon";
 
 import { useUIStore } from "@/store/uiStore";
 import { cn } from "@/lib/utils";
@@ -33,7 +34,7 @@ export default function Menu() {
   // Menu items with proper icons
   const menuItems = [
     {
-      icon: Home,
+      icon: DashboardIcon,
       name: "Dashboard",
       path: "/",
       isActive: pathname === "/",
@@ -100,9 +101,25 @@ export default function Menu() {
           className={cn(
             "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group relative",
             isActive
-              ? "bg-green-500/20 text-green-400 border border-green-500/30 shadow-lg"
-              : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10",
+              ? ""
+              : "text-gray-300 hover:text-white",
           )}
+          style={{
+            color: isActive ? 'var(--item-root-active-color, #9EFBCD)' : undefined,
+            ...(isActive ? {} : {
+              '--hover-bg': 'var(--item-root-active-bgcolor, #13F58414)',
+            }),
+          }}
+          onMouseEnter={(e) => {
+            if (!isActive) {
+              e.currentTarget.style.backgroundColor = 'var(--item-root-active-bgcolor, #13F58414)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isActive) {
+              e.currentTarget.style.backgroundColor = '';
+            }
+          }}
           data-menu-item={item.path}
           data-element="navigation"
         >
@@ -138,9 +155,22 @@ export default function Menu() {
                   className={cn(
                     "flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                     pathname === child.path
-                      ? "bg-green-500/10 text-green-300 border border-green-500/20"
-                      : "text-gray-400 hover:text-gray-200 hover:bg-white/5 border border-transparent hover:border-white/5",
+                      ? ""
+                      : "text-gray-400 hover:text-gray-200",
                   )}
+                  style={{
+                    color: pathname === child.path ? 'var(--item-root-active-color, #9EFBCD)' : undefined,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (pathname !== child.path) {
+                      e.currentTarget.style.backgroundColor = 'var(--item-root-active-bgcolor, #13F58414)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (pathname !== child.path) {
+                      e.currentTarget.style.backgroundColor = '';
+                    }
+                  }}
                 >
                   <ChildIconComponent
                     className={cn(
@@ -163,18 +193,25 @@ export default function Menu() {
   return (
     <div className="fixed top-[80px] left-1/2 -translate-x-[calc(50%+300px)] z-50 animate-in slide-in-from-top-4 duration-300">
       <div
-        className="backdrop-blur-2xl border border-green-500/30 rounded-2xl shadow-2xl overflow-hidden w-80 max-h-[80vh] overflow-y-auto"
+        className="border border-green-500/20 rounded-2xl shadow-2xl overflow-hidden w-80 max-h-[80vh] overflow-y-auto"
         style={{
-          background:
-            "linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 50, 30, 0.8) 50%, rgba(0, 0, 0, 0.9) 100%)",
+          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
           boxShadow:
-            "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+            "0 25px 50px -12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
         }}
       >
+        {/* Glass effect overlay */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%)",
+          }}
+        />
+        
         {/* Menu Items */}
-        <div className="p-4">
+        <div className="relative z-10 p-4">
           <div className="space-y-1">{menuItems.map(renderMenuItem)}</div>
         </div>
       </div>

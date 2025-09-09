@@ -3,6 +3,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Users, Plus, Brain } from "lucide-react";
+import { useTheme } from "@/store/theme-store";
+import { cn } from "@/lib/utils";
 import { UsersManagerHeaderProps } from "../types";
 
 export function UsersManagerHeader({
@@ -10,18 +12,32 @@ export function UsersManagerHeader({
   onCreateVectorDBAccess,
   isDark
 }: UsersManagerHeaderProps) {
+  const theme = useTheme();
+  
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold font-barlow text-white flex items-center gap-3">
+          <h1 className={cn(
+            "text-3xl font-bold font-barlow flex items-center gap-3",
+            theme === "dark" ? "text-white" : "text-gray-800"
+          )}>
             <div className="relative">
-              <Users className="h-8 w-8 text-emerald-400" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
+              <Users className={cn(
+                "h-8 w-8",
+                theme === "dark" ? "text-emerald-400" : "text-emerald-600"
+              )} />
+              <div className={cn(
+                "absolute -top-1 -right-1 w-3 h-3 rounded-full animate-pulse",
+                theme === "dark" ? "bg-emerald-400" : "bg-emerald-600"
+              )} />
             </div>
             User Access Management
           </h1>
-          <p className="text-gray-300 mt-2 font-public-sans">
+          <p className={cn(
+            "mt-2 font-public-sans font-medium",
+            theme === "dark" ? "text-gray-300" : "text-gray-700"
+          )}>
             Manage user access to MSSQL databases and vector databases
           </p>
         </div>

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthContext } from '@/components/providers';
+import { useTheme } from '@/store/theme-store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff } from 'lucide-react';
 import { ButtonLoader } from '@/components/ui/loading';
+import { cn } from '@/lib/utils';
 
 // Validation schema for signup form
 const signupSchema = z.object({
@@ -42,6 +44,7 @@ interface SignupFormProps {
 
 export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
   const { signup, isLoading, error, clearError } = useAuthContext();
+  const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -77,14 +80,35 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center text-white">Create account</CardTitle>
-        <CardDescription className="text-center text-gray-300">
-          Enter your details to create a new account
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="text-center mb-6">
+            <h2 className={cn(
+              "text-2xl font-bold mb-2",
+              theme === "dark" ? "text-white" : "text-gray-800"
+            )}>
+              Create your account
+            </h2>
+            <p className={cn(
+              "text-sm",
+              theme === "dark" ? "text-gray-300" : "text-gray-600"
+            )}>
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={onSwitchToLogin}
+                className={cn(
+                  "font-medium hover:underline",
+                  theme === "dark" ? "text-emerald-400 hover:text-emerald-300" : "text-emerald-600 hover:text-emerald-500"
+                )}
+              >
+                Sign in
+              </button>
+            </p>
+          </div>
+        </div>
+        <div className="space-y-4">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {error && (
             <Alert variant="destructive">
@@ -93,13 +117,19 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="username" className="text-white">Username</Label>
+            <Label htmlFor="username" className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-white" : "text-gray-700"
+            )}>Username</Label>
             <Input
               id="username"
               type="text"
               placeholder="Enter your username"
               {...register('username')}
-              className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 ${errors.username ? 'border-red-500' : ''}`}
+              className={cn(
+                "modal-input-enhanced",
+                errors.username ? 'border-red-500' : ''
+              )}
             />
             {errors.username && (
               <p className="text-sm text-red-400">{errors.username.message}</p>
@@ -107,13 +137,19 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-white">Email</Label>
+            <Label htmlFor="email" className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-white" : "text-gray-700"
+            )}>Email</Label>
             <Input
               id="email"
               type="email"
               placeholder="Enter your email"
               {...register('email')}
-              className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 ${errors.email ? 'border-red-500' : ''}`}
+              className={cn(
+                "modal-input-enhanced",
+                errors.email ? 'border-red-500' : ''
+              )}
             />
             {errors.email && (
               <p className="text-sm text-red-400">{errors.email.message}</p>
@@ -121,19 +157,28 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Password</Label>
+            <Label htmlFor="password" className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-white" : "text-gray-700"
+            )}>Password</Label>
             <div className="relative">
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
+                placeholder="6+ characters"
                 {...register('password')}
-                className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 pr-10 ${errors.password ? 'border-red-500' : ''}`}
+                className={cn(
+                  "modal-input-enhanced pr-10",
+                  errors.password ? 'border-red-500' : ''
+                )}
               />
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                className={cn(
+                  "absolute right-3 top-1/2 transform -translate-y-1/2",
+                  theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"
+                )}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -144,19 +189,28 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-white">Confirm Password</Label>
+            <Label htmlFor="confirmPassword" className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-white" : "text-gray-700"
+            )}>Confirm Password</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="Confirm your password"
                 {...register('confirmPassword')}
-                className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 pr-10 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                className={cn(
+                  "modal-input-enhanced pr-10",
+                  errors.confirmPassword ? 'border-red-500' : ''
+                )}
               />
               <button
                 type="button"
                 onClick={toggleConfirmPasswordVisibility}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                className={cn(
+                  "absolute right-3 top-1/2 transform -translate-y-1/2",
+                  theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"
+                )}
               >
                 {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -172,25 +226,18 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
             text="Creating account..."
             size="md"
             variant="primary"
-            className="w-full"
+            className={cn(
+              "w-full h-12 text-base font-semibold",
+              theme === "dark"
+                ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/25"
+                : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/25"
+            )}
           >
-            Create account
+            Create Account
           </ButtonLoader>
         </form>
-
-        <div className="text-center">
-          <p className="text-sm text-gray-300">
-            Already have an account?{' '}
-            <button
-              type="button"
-              onClick={onSwitchToLogin}
-              className="text-emerald-400 hover:text-emerald-300 font-medium"
-            >
-              Sign in
-            </button>
-          </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 } 

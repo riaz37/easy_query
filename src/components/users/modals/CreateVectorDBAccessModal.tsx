@@ -31,6 +31,8 @@ import {
 import { Spinner } from "@/components/ui/loading";
 import { useAuthContext } from "@/components/providers";
 import { useVectorDB } from "@/lib/hooks/use-vector-db";
+import { useTheme } from "@/store/theme-store";
+import { cn } from "@/lib/utils";
 import { UserConfigCreateRequest } from "@/types/api";
 import { VectorDBService } from "@/lib/api/services/vector-db-service";
 import { ServiceRegistry } from "@/lib/api/services/service-registry";
@@ -50,6 +52,8 @@ export function CreateVectorDBAccessModal({
   selectedUser = "",
   editingUser = "",
 }: CreateVectorDBAccessModalProps) {
+  const theme = useTheme();
+  
   // Form state
   const [selectedUserId, setSelectedUserId] = useState<string>(selectedUser || "");
   const [selectedDatabase, setSelectedDatabase] = useState<string>("");
@@ -292,10 +296,16 @@ export function CreateVectorDBAccessModal({
             {isLoadingDatabases ? (
               <div className="flex items-center space-x-2 p-3 modal-input-enhanced rounded-lg">
                 <Spinner size="sm" variant="accent-purple" />
-                <span className="text-gray-400 text-sm">Loading available databases...</span>
+                <span className={cn(
+                  "text-sm font-medium",
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                )}>Loading available databases...</span>
               </div>
             ) : vectorDBConfigs.length === 0 ? (
-              <div className="text-sm text-gray-400 modal-input-enhanced p-3 rounded-lg">
+              <div className={cn(
+                "text-sm font-medium modal-input-enhanced p-3 rounded-lg",
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              )}>
                 No databases available. Please check your database configuration.
               </div>
             ) : (
@@ -314,7 +324,10 @@ export function CreateVectorDBAccessModal({
                           <Database className="w-4 h-4 mr-2 text-green-400" />
                           <span className="font-medium">{db.db_config.DB_NAME}</span>
                         </div>
-                        <div className="text-xs text-gray-400 ml-6">
+                        <div className={cn(
+                          "text-xs ml-6 font-medium",
+                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                        )}>
                           {db.db_config.DB_HOST}:{db.db_config.DB_PORT}
                         </div>
                       </div>
@@ -361,7 +374,10 @@ export function CreateVectorDBAccessModal({
             {existingUserTables.length > 0 && (
               <div className="space-y-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className={cn(
+                    "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4",
+                    theme === "dark" ? "text-gray-400" : "text-gray-500"
+                  )} />
                   <Input
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -372,7 +388,10 @@ export function CreateVectorDBAccessModal({
 
                 {/* Existing Tables List */}
                 <div className="max-h-48 overflow-y-auto modal-input-enhanced rounded-lg p-3">
-                  <div className="text-sm text-gray-400 mb-2">
+                  <div className={cn(
+                    "text-sm mb-2 font-medium",
+                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  )}>
                     Select from existing tables:
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -387,7 +406,10 @@ export function CreateVectorDBAccessModal({
                         />
                         <Label
                           htmlFor={`existing-${table}`}
-                          className="text-sm text-white cursor-pointer flex-1"
+                          className={cn(
+                            "text-sm cursor-pointer flex-1 font-medium",
+                            theme === "dark" ? "text-white" : "text-gray-800"
+                          )}
                         >
                           {table}
                         </Label>
@@ -438,20 +460,40 @@ export function CreateVectorDBAccessModal({
                 <CardContent className="space-y-3">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-400">User ID:</span>
-                    <span className="text-white ml-2">{selectedUserId || 'Not specified'}</span>
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>User ID:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>{selectedUserId || 'Not specified'}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Database ID:</span>
-                    <span className="text-white ml-2">{selectedDatabase}</span>
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>Database ID:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>{selectedDatabase}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Tables:</span>
-                    <span className="text-white ml-2">{selectedTables.length}</span>
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>Tables:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>{selectedTables.length}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Access Level:</span>
-                    <span className="text-white ml-2">2 (Default)</span>
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>Access Level:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>2 (Default)</span>
                   </div>
                 </div>
                 </CardContent>

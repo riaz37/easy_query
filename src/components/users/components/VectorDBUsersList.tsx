@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Brain, RefreshCw } from "lucide-react";
 import { PageLoader, InlineLoader } from "@/components/ui/loading";
+import { useTheme } from "@/store/theme-store";
+import { cn } from "@/lib/utils";
 import { VectorDBUsersListProps } from "../types";
 import { UserCard } from "./UserCard";
 import { EmptyState } from "./EmptyState";
@@ -21,12 +23,17 @@ export function VectorDBUsersList({
   isLoading,
   isDark
 }: VectorDBUsersListProps) {
+  const theme = useTheme();
+  
   return (
     <div className="card-enhanced">
       <div className="card-content-enhanced">
         <div className="card-header-enhanced">
           <div className="card-title-enhanced flex items-center gap-2">
-            <Brain className="h-5 w-5 text-teal-400" />
+            <Brain className={cn(
+              "h-5 w-5",
+              theme === "dark" ? "text-emerald-400" : "text-emerald-500"
+            )} />
             Vector Database Access Users
           </div>
           <p className="card-description-enhanced">

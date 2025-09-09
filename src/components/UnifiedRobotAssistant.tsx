@@ -264,8 +264,18 @@ export function UnifiedRobotAssistant() {
               "px-4 py-2 rounded-2xl shadow-lg backdrop-blur-xl relative whitespace-nowrap",
               theme === "dark" 
                 ? "bg-white/10 border border-emerald-500/20" 
-                : "bg-white/95 border border-emerald-500/30"
-            )}>
+                : "bg-white/95 border border-emerald-500/30 shadow-emerald-500/20"
+            )}
+            style={{
+              background: theme === "dark"
+                ? "rgba(255, 255, 255, 0.1)"
+                : "linear-gradient(158.39deg, rgba(255, 255, 255, 0.98) 14.19%, rgba(240, 249, 245, 0.95) 50.59%, rgba(255, 255, 255, 0.98) 68.79%, rgba(240, 249, 245, 0.95) 105.18%)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              boxShadow: theme === "dark"
+                ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                : "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset"
+            }}>
               {/* Speech bubble tail pointing to robot */}
               <div className={cn(
                 "absolute -right-2 top-1/2 transform -translate-y-1/2 w-0 h-0",
@@ -273,19 +283,32 @@ export function UnifiedRobotAssistant() {
               )}></div>
               
               <div className="flex flex-col gap-2">
-                <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                <span className={cn(
+                  "text-sm font-medium",
+                  theme === "dark" ? "text-emerald-400" : "text-emerald-600"
+                )}>
                   What would you like to do?
                 </span>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleModeSelect('voice')}
-                    className="px-3 py-1 text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-md transition-colors"
+                    className={cn(
+                      "px-3 py-1 text-xs rounded-md transition-all duration-200",
+                      theme === "dark"
+                        ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                        : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm hover:shadow-md"
+                    )}
                   >
                     Talk
                   </button>
                   <button
                     onClick={() => handleModeSelect('text')}
-                    className="px-3 py-1 text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-md transition-colors"
+                    className={cn(
+                      "px-3 py-1 text-xs rounded-md transition-all duration-200",
+                      theme === "dark"
+                        ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                        : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm hover:shadow-md"
+                    )}
                   >
                     Chat
                   </button>
@@ -304,8 +327,18 @@ export function UnifiedRobotAssistant() {
             "px-4 py-2 rounded-2xl shadow-lg backdrop-blur-xl relative w-80",
             theme === "dark" 
               ? "bg-white/10 border border-emerald-500/20" 
-              : "bg-white/95 border border-emerald-500/30"
-          )}>
+              : "bg-white/95 border border-emerald-500/30 shadow-emerald-500/20"
+          )}
+          style={{
+            background: theme === "dark"
+              ? "rgba(255, 255, 255, 0.1)"
+              : "linear-gradient(158.39deg, rgba(255, 255, 255, 0.98) 14.19%, rgba(240, 249, 245, 0.95) 50.59%, rgba(255, 255, 255, 0.98) 68.79%, rgba(240, 249, 245, 0.95) 105.18%)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            boxShadow: theme === "dark"
+              ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+              : "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset"
+          }}>
             {/* Speech bubble tail pointing to robot */}
             <div className={cn(
               "absolute -right-2 top-1/2 transform -translate-y-1/2 w-0 h-0",
@@ -314,15 +347,24 @@ export function UnifiedRobotAssistant() {
             
             {voiceMessages.length > 0 ? (
               <div className="flex flex-col gap-2">
-                <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400 break-words">
+                <span className={cn(
+                  "text-sm font-medium break-words",
+                  theme === "dark" ? "text-emerald-400" : "text-emerald-600"
+                )}>
                   {voiceMessages[voiceMessages.length - 1]?.content}
                 </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400 self-end">
+                <span className={cn(
+                  "text-xs self-end",
+                  theme === "dark" ? "text-gray-400" : "text-gray-500"
+                )}>
                   {formatTime(voiceMessages[voiceMessages.length - 1]?.timestamp)}
                 </span>
               </div>
             ) : (
-              <span className="text-sm text-gray-600 dark:text-gray-300">
+              <span className={cn(
+                "text-sm",
+                theme === "dark" ? "text-gray-300" : "text-gray-600"
+              )}>
                 {isInConversation ? "Listening..." : "Ready to talk"}
               </span>
             )}
@@ -350,7 +392,7 @@ export function UnifiedRobotAssistant() {
           WebkitBackdropFilter: "blur(20px)",
           boxShadow: theme === "dark"
             ? "0 8px 32px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)"
-            : "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset"
+            : "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 0 0 1px rgba(16, 185, 129, 0.08)"
         }}>
           {/* Animated glow dots in corners */}
           <div className="absolute top-4 left-4 w-1 h-1 bg-emerald-400 rounded-full animate-pulse opacity-60" 
@@ -370,7 +412,12 @@ export function UnifiedRobotAssistant() {
               : "border-b border-emerald-500/30"
           )}>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-400/30 flex items-center justify-center">
+              <div className={cn(
+                "w-8 h-8 rounded-full border flex items-center justify-center",
+                theme === "dark"
+                  ? "bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border-emerald-400/30"
+                  : "bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-400/20"
+              )}>
                 <Image
                   src="/autopilot.svg"
                   alt="AI Assistant"
@@ -402,7 +449,10 @@ export function UnifiedRobotAssistant() {
                 onClick={() => setIsExpanded(false)}
                 variant="ghost"
                 size="sm"
-                className="w-8 h-8 p-0"
+                className={cn(
+                  "w-8 h-8 p-0",
+                  theme === "light" && "hover:bg-emerald-50"
+                )}
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -457,6 +507,12 @@ export function UnifiedRobotAssistant() {
                                   ? 'bg-white/10 border border-emerald-500/20 text-white'
                                   : 'bg-white/95 border border-emerald-200 text-gray-900'
                             )}
+                            style={message.type !== 'user' && theme === "light" ? {
+                              background: "linear-gradient(158.39deg, rgba(255, 255, 255, 0.95) 14.19%, rgba(240, 249, 245, 0.9) 50.59%, rgba(255, 255, 255, 0.95) 68.79%, rgba(240, 249, 245, 0.9) 105.18%)",
+                              backdropFilter: "blur(16px)",
+                              WebkitBackdropFilter: "blur(16px)",
+                              boxShadow: "0 4px 16px rgba(16, 185, 129, 0.08), 0 1px 0 rgba(255, 255, 255, 0.6) inset"
+                            } : undefined}
                           >
                             <div className="whitespace-pre-wrap break-words">
                               {message.content}
@@ -480,14 +536,23 @@ export function UnifiedRobotAssistant() {
                             theme === "dark"
                               ? "bg-white/10 border border-emerald-500/20"
                               : "bg-white/95 border border-emerald-200"
-                          )}>
+                          )}
+                          style={theme === "light" ? {
+                            background: "linear-gradient(158.39deg, rgba(255, 255, 255, 0.95) 14.19%, rgba(240, 249, 245, 0.9) 50.59%, rgba(255, 255, 255, 0.95) 68.79%, rgba(240, 249, 245, 0.9) 105.18%)",
+                            backdropFilter: "blur(16px)",
+                            WebkitBackdropFilter: "blur(16px)",
+                            boxShadow: "0 4px 16px rgba(16, 185, 129, 0.08), 0 1px 0 rgba(255, 255, 255, 0.6) inset"
+                          } : undefined}>
                             <div className="flex items-center gap-1">
                               <div className="flex gap-1">
                                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                               </div>
-                              <span className="text-xs text-emerald-500/70 ml-2">typing...</span>
+                              <span className={cn(
+                                "text-xs ml-2",
+                                theme === "dark" ? "text-emerald-500/70" : "text-emerald-600/70"
+                              )}>typing...</span>
                             </div>
                           </div>
                         </div>

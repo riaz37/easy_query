@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/store/theme-store";
 import { CompanyCardProps } from "../types";
 
 export function CompanyCard({
@@ -17,6 +18,7 @@ export function CompanyCard({
   onSelect,
   level = 0,
 }: CompanyCardProps) {
+  const theme = useTheme();
   const isMainCompany = level === 0;
   const companyType = company.id.startsWith("parent-") ? "parent" : "sub";
 
@@ -51,18 +53,36 @@ export function CompanyCard({
           isSelected && "ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-500/30 scale-105",
           isMainCompany ? "w-96 h-48" : "w-80 h-44"
         )}
+        style={{
+          background: theme === "dark"
+            ? "linear-gradient(158.39deg, rgba(255, 255, 255, 0.03) 14.19%, rgba(255, 255, 255, 0.000015) 50.59%, rgba(255, 255, 255, 0.000015) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)"
+            : "linear-gradient(158.39deg, rgba(255, 255, 255, 0.98) 14.19%, rgba(240, 249, 245, 0.95) 50.59%, rgba(255, 255, 255, 0.98) 68.79%, rgba(240, 249, 245, 0.95) 105.18%)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: theme === "dark"
+            ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+            : "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 0 0 1px rgba(16, 185, 129, 0.08)"
+        }}
         onClick={onSelect}
       >
         <CardContent className="p-6 h-full flex items-center gap-4">
           {/* Company Icon */}
           <div className="flex-shrink-0 relative">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-400/30 flex items-center justify-center">
+            <div className={cn(
+              "w-16 h-16 rounded-full border flex items-center justify-center",
+              theme === "dark"
+                ? "bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border-emerald-400/30"
+                : "bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-400/20"
+            )}>
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
             </div>
             {/* Status Indicator */}
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-white dark:border-gray-900 animate-pulse" />
+            <div className={cn(
+              "absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 animate-pulse",
+              theme === "dark" ? "border-white" : "border-gray-900"
+            )} />
           </div>
 
           {/* Company Info */}
@@ -106,7 +126,10 @@ export function CompanyCard({
                 e.stopPropagation();
                 onAddSubCompany(company.id);
               }}
-              className="border-emerald-400/50 text-emerald-400 hover:bg-emerald-400/10 hover:border-emerald-400 cursor-pointer transition-colors"
+              className={cn(
+                "border-emerald-400/50 text-emerald-400 hover:bg-emerald-400/10 hover:border-emerald-400 cursor-pointer transition-colors",
+                theme === "light" && "shadow-sm hover:shadow-md"
+              )}
             >
               <Plus className="w-3 h-3 mr-1" />
               Add Sub
@@ -121,7 +144,10 @@ export function CompanyCard({
                 e.stopPropagation();
                 onUpload(company.id, company.name, companyType);
               }}
-              className="border-blue-400/50 text-blue-400 hover:bg-blue-400/10 hover:border-blue-400 cursor-pointer transition-colors"
+              className={cn(
+                "border-blue-400/50 text-blue-400 hover:bg-blue-400/10 hover:border-blue-400 cursor-pointer transition-colors",
+                theme === "light" && "shadow-sm hover:shadow-md"
+              )}
             >
               <Upload className="w-3 h-3 mr-1" />
               Upload

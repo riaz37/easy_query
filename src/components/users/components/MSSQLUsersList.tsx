@@ -3,6 +3,8 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Database, Plus } from "lucide-react";
+import { useTheme } from "@/store/theme-store";
+import { cn } from "@/lib/utils";
 import { MSSQLUsersListProps } from "../types";
 import { UserCard } from "./UserCard";
 import { EmptyState } from "./EmptyState";
@@ -16,12 +18,17 @@ export function MSSQLUsersList({
   getDatabaseCount,
   isDark
 }: MSSQLUsersListProps) {
+  const theme = useTheme();
+  
   return (
     <div className="card-enhanced">
       <div className="card-content-enhanced">
         <div className="card-header-enhanced">
           <div className="card-title-enhanced flex items-center gap-2">
-            <Database className="h-5 w-5 text-emerald-400" />
+            <Database className={cn(
+              "h-5 w-5",
+              theme === "dark" ? "text-emerald-400" : "text-emerald-500"
+            )} />
             MSSQL Database Access Users
           </div>
           <p className="card-description-enhanced">
