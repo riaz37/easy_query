@@ -7,6 +7,8 @@ interface ReportStructureSelectorProps {
   selectedStructure: string;
   setSelectedStructure: (structure: string) => void;
   isGenerating: boolean;
+  loading?: boolean;
+  error?: string | null;
 }
 
 export function ReportStructureSelector({
@@ -14,18 +16,20 @@ export function ReportStructureSelector({
   selectedStructure,
   setSelectedStructure,
   isGenerating,
+  loading = false,
+  error = null,
 }: ReportStructureSelectorProps) {
   // Memoize the structure keys to prevent recreation
   const structureKeys = useMemo(() => {
-    if (!reportStructure.structure) return [];
-    return Object.keys(reportStructure.structure);
-  }, [reportStructure.structure]);
+    if (!reportStructure) return [];
+    return Object.keys(reportStructure);
+  }, [reportStructure]);
 
   // Memoize the selected structure content
   const selectedStructureContent = useMemo(() => {
-    if (!reportStructure.structure || !selectedStructure) return '';
-    return reportStructure.structure[selectedStructure] || '';
-  }, [reportStructure.structure, selectedStructure]);
+    if (!reportStructure || !selectedStructure) return '';
+    return reportStructure[selectedStructure] || '';
+  }, [reportStructure, selectedStructure]);
 
   // Memoize the structure change handler
   const handleStructureChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -34,7 +38,7 @@ export function ReportStructureSelector({
 
   // Memoize the loading state
   const loadingState = useMemo(() => {
-    if (reportStructure.isLoading) {
+    if (loading) {
       return (
         <div className="card-enhanced">
           <div className="card-content-enhanced">
@@ -47,11 +51,11 @@ export function ReportStructureSelector({
       );
     }
     return null;
-  }, [reportStructure.isLoading]);
+  }, [loading]);
 
   // Memoize the main content
   const mainContent = useMemo(() => {
-    if (!reportStructure.structure || structureKeys.length === 0) return null;
+    if (!reportStructure || structureKeys.length === 0) return null;
 
     return (
       <div className={`card-enhanced transition-all duration-300 ${
@@ -94,10 +98,27 @@ export function ReportStructureSelector({
         </div>
       </div>
     );
-  }, [reportStructure.structure, structureKeys, selectedStructure, selectedStructureContent, isGenerating, handleStructureChange]);
+  }, [reportStructure, structureKeys, selectedStructure, selectedStructureContent, isGenerating, handleStructureChange]);
 
   // Return the appropriate content based on state
   if (loadingState) return loadingState;
+  if (error) {
+    return (
+      <div className="card-enhanced">
+        <div className="card-content-enhanced">
+          <div className="pt-12 pb-12 text-center">
+            <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <BarChart3 className="w-8 h-8 text-red-400" />
+            </div>
+            <h3 className="text-red-400 text-lg font-medium mb-2">
+              Error Loading Report Structure
+            </h3>
+            <p className="text-red-300 text-sm">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (mainContent) return mainContent;
   
   // Return null if no structure is available

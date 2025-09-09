@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useReports } from "@/lib/hooks/use-reports";
-import { useReportStructure } from "@/lib/hooks/use-report-structure";
 import { useUserContext } from "@/lib/hooks/use-user-context";
+import { useUserConfiguration } from "@/components/user-configuration/hooks/useUserConfiguration";
 import { ReportStructureSelector } from "./ReportStructureSelector";
 import { ReportQueryInput } from "./ReportQueryInput";
 import { ReportProgressOverlay } from "./ReportProgressOverlay";
@@ -39,7 +39,7 @@ export function ReportGenerator({
 
   // Hooks
   const reports = useReports();
-  const reportStructure = useReportStructure();
+  const { reportStructure, reportStructureLoading, reportStructureError } = useUserConfiguration();
 
   // Use ref to track current progress without causing re-renders
   const progressRef = useRef(reportProgress);
@@ -59,12 +59,16 @@ export function ReportGenerator({
     "Compiling final report..."
   ], []);
 
-  // Load report structure on mount - only when userId changes
-  useEffect(() => {
-    if (userId && !reportStructure.structure) {
-      reportStructure.loadStructure(userId);
+  // Parse report structure from string
+  const parsedReportStructure = useMemo(() => {
+    if (!reportStructure) return null;
+    try {
+      return JSON.parse(reportStructure);
+    } catch (error) {
+      console.error('Failed to parse report structure:', error);
+      return null;
     }
-  }, [userId]); // Removed reportStructure from deps to prevent infinite loops
+  }, [reportStructure]);
 
   // Handle report completion
   useEffect(() => {
@@ -225,10 +229,12 @@ export function ReportGenerator({
 
       {/* Report Structure Selection */}
       <ReportStructureSelector
-        reportStructure={reportStructure}
+        reportStructure={parsedReportStructure}
         selectedStructure={selectedStructure}
         setSelectedStructure={handleStructureChange}
         isGenerating={reports.isGenerating}
+        loading={reportStructureLoading}
+        error={reportStructureError}
       />
 
       {/* Query Input */}
