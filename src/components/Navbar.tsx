@@ -9,6 +9,7 @@ import { useTheme } from "@/store/theme-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { NavbarTaskIndicator } from "@/components/task-manager";
 
 export default function Navbar() {
   const { showSidebar, setShowSidebar } = useUIStore();
@@ -100,7 +101,7 @@ export default function Navbar() {
 
       </div>
 
-      {/* Right side - Notifications, Theme Toggle and User */}
+      {/* Right side - Notifications, Task Indicator, Theme Toggle and User */}
       <div className="flex items-center gap-4">
         {/* Notification Bell */}
         <div className="relative">
@@ -122,6 +123,9 @@ export default function Navbar() {
             <span className="text-white text-xs font-bold">1</span>
           </div>
         </div>
+
+        {/* Task Indicator */}
+        <NavbarTaskIndicator />
 
         {/* Theme Toggle */}
         <ThemeToggle

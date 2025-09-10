@@ -6,6 +6,7 @@ import { DatabaseContextProvider } from "@/components/providers/DatabaseContextP
 import { BusinessRulesContextProvider } from "@/components/providers/BusinessRulesContextProvider";
 import { VoiceAgentProvider } from "@/components/providers/VoiceAgentContextProvider";
 import { TextConversationProvider } from "@/components/providers/TextConversationContextProvider";
+import { TaskManagerProvider } from "@/components/task-manager";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -79,12 +80,14 @@ export default function RootLayout({
                 <BusinessRulesContextProvider>
                   <VoiceAgentProvider>
                     <TextConversationProvider>
-                      <VoiceNavigationHandler>
-                        <AppContent>{children}</AppContent>
-                      </VoiceNavigationHandler>
-                      <UnifiedRobotAssistant />
-                      <TextConversationPageTracker />
-                      <Toaster />
+                      <TaskManagerProvider>
+                        <VoiceNavigationHandler>
+                          <AppContent>{children}</AppContent>
+                        </VoiceNavigationHandler>
+                        <UnifiedRobotAssistant />
+                        <TextConversationPageTracker />
+                        <Toaster />
+                      </TaskManagerProvider>
                     </TextConversationProvider>
                   </VoiceAgentProvider>
                 </BusinessRulesContextProvider>

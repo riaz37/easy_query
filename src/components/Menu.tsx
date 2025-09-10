@@ -102,22 +102,22 @@ export default function Menu() {
             "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group relative",
             isActive
               ? ""
-              : "text-gray-300 hover:text-white",
+              : "text-gray-300",
           )}
           style={{
             color: isActive ? 'var(--item-root-active-color, #9EFBCD)' : undefined,
-            ...(isActive ? {} : {
-              '--hover-bg': 'var(--item-root-active-bgcolor, #13F58414)',
-            }),
+            backgroundColor: isActive ? 'var(--item-root-active-bgcolor, #13F58414)' : undefined,
           }}
           onMouseEnter={(e) => {
             if (!isActive) {
               e.currentTarget.style.backgroundColor = 'var(--item-root-active-bgcolor, #13F58414)';
+              e.currentTarget.style.color = 'var(--item-root-active-color, #9EFBCD)';
             }
           }}
           onMouseLeave={(e) => {
             if (!isActive) {
               e.currentTarget.style.backgroundColor = '';
+              e.currentTarget.style.color = '';
             }
           }}
           data-menu-item={item.path}
@@ -127,16 +127,29 @@ export default function Menu() {
             className={cn(
               "h-5 w-5 transition-all duration-200",
               isActive
-                ? "text-green-400"
-                : "text-gray-400 group-hover:text-white",
+                ? ""
+                : "text-gray-400",
             )}
+            style={{
+              color: isActive ? 'var(--item-root-active-color, #9EFBCD)' : undefined,
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive) {
+                e.currentTarget.style.color = 'var(--item-root-active-color, #9EFBCD)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive) {
+                e.currentTarget.style.color = '';
+              }
+            }}
           />
           <span className="flex-1">{item.name}</span>
           {hasChildren && (
             <div
               className={cn(
                 "w-2 h-2 rounded-full transition-all duration-200",
-                isActive ? "bg-green-400" : "bg-gray-500 group-hover:bg-white",
+                isActive ? "bg-green-400" : "bg-gray-500 group-hover:bg-green-400",
               )}
             />
           )}
@@ -156,19 +169,22 @@ export default function Menu() {
                     "flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                     pathname === child.path
                       ? ""
-                      : "text-gray-400 hover:text-gray-200",
+                      : "text-gray-400",
                   )}
                   style={{
                     color: pathname === child.path ? 'var(--item-root-active-color, #9EFBCD)' : undefined,
+                    backgroundColor: pathname === child.path ? 'var(--item-root-active-bgcolor, #13F58414)' : undefined,
                   }}
                   onMouseEnter={(e) => {
                     if (pathname !== child.path) {
                       e.currentTarget.style.backgroundColor = 'var(--item-root-active-bgcolor, #13F58414)';
+                      e.currentTarget.style.color = 'var(--item-root-active-color, #9EFBCD)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (pathname !== child.path) {
                       e.currentTarget.style.backgroundColor = '';
+                      e.currentTarget.style.color = '';
                     }
                   }}
                 >
@@ -176,9 +192,22 @@ export default function Menu() {
                     className={cn(
                       "h-4 w-4 transition-all duration-200",
                       pathname === child.path
-                        ? "text-green-300"
-                        : "text-gray-500 group-hover:text-gray-300",
+                        ? ""
+                        : "text-gray-500",
                     )}
+                    style={{
+                      color: pathname === child.path ? 'var(--item-root-active-color, #9EFBCD)' : undefined,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (pathname !== child.path) {
+                        e.currentTarget.style.color = 'var(--item-root-active-color, #9EFBCD)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (pathname !== child.path) {
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
                   />
                   <span className="flex-1">{child.name}</span>
                 </Link>
