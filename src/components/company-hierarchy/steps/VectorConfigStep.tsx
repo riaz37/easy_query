@@ -47,7 +47,9 @@ export function VectorConfigStep({
     if (selectedUserConfigId) {
       setCurrentStep("final-creation");
     } else {
-      toast.error("Please select or create a vector database configuration first");
+      toast.error(
+        "Please select or create a vector database configuration first"
+      );
     }
   };
 
@@ -75,23 +77,25 @@ export function VectorConfigStep({
         DB_USER: newConfigUsername.trim(),
         DB_PASSWORD: newConfigPassword.trim(),
         schema: "public", // Default schema
-        user_id: user.user_id // Add user ID from auth context
+        user_id: user.user_id, // Add user ID from auth context
       };
 
       const newConfig = await createDatabaseConfig(configRequest);
-      
+
       if (newConfig) {
         // Reset form and switch to existing tab
         resetForm();
         setActiveTab("existing");
-        
+
         // Refresh the configurations list to include the new one
         await refreshUserConfigs();
-        
+
         // Set the newly created config as selected
         setSelectedUserConfigId(newConfig.db_id);
-        
-        toast.success("Vector database configuration created and selected successfully");
+
+        toast.success(
+          "Vector database configuration created and selected successfully"
+        );
       } else {
         toast.error("Failed to create vector database configuration");
       }
@@ -112,28 +116,17 @@ export function VectorConfigStep({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-medium text-green-400">Vector Configuration</h3>
-          <p className="text-sm text-gray-400 mt-1">
-            Select existing or create new vector database configuration for AI operations
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          onClick={handlePrevious}
-          className="modal-button-secondary"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
+      <div>
+        <h3 className="text-lg font-medium text-green-400">
+          Vector Configuration
+        </h3>
+        <p className="text-sm text-gray-400 mt-1">
+          Select existing or create new vector database configuration for AI
+          operations
+        </p>
       </div>
 
-      <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
-        className="w-full"
-      >
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2 bg-gray-800/50">
           <TabsTrigger
             value="existing"
@@ -151,7 +144,9 @@ export function VectorConfigStep({
 
         <TabsContent value="existing" className="space-y-4">
           <div className="space-y-3">
-            <Label className="modal-label-enhanced">Select Vector Database Configuration</Label>
+            <Label className="modal-label-enhanced">
+              Select Vector Database Configuration
+            </Label>
             {userConfigLoading ? (
               <div className="flex items-center gap-2 p-4 bg-gray-800/50 rounded-lg">
                 <Loader2 className="w-4 h-4 animate-spin text-green-400" />
@@ -160,7 +155,9 @@ export function VectorConfigStep({
             ) : (
               <Select
                 value={selectedUserConfigId?.toString() || ""}
-                onValueChange={(value) => setSelectedUserConfigId(parseInt(value))}
+                onValueChange={(value) =>
+                  setSelectedUserConfigId(parseInt(value))
+                }
               >
                 <SelectTrigger className="modal-select-enhanced">
                   <SelectValue placeholder="Choose a vector database configuration" />
@@ -174,7 +171,8 @@ export function VectorConfigStep({
                       <div className="flex items-center gap-2">
                         <Brain className="w-4 h-4 text-green-400" />
                         <span>
-                          {config.db_config.DB_NAME || 'Unnamed'} - {config.db_config.DB_HOST}:{config.db_config.DB_PORT}
+                          {config.db_config.DB_NAME || "Unnamed"} -{" "}
+                          {config.db_config.DB_HOST}:{config.db_config.DB_PORT}
                         </span>
                       </div>
                     </SelectItem>
@@ -182,7 +180,7 @@ export function VectorConfigStep({
                 </SelectContent>
               </Select>
             )}
-            
+
             {userConfigs.length === 0 && !userConfigLoading && (
               <div className="text-center py-8 text-gray-400">
                 <Brain className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -194,19 +192,11 @@ export function VectorConfigStep({
         </TabsContent>
 
         <TabsContent value="new" className="space-y-4">
-          {/* User Information Display */}
-          <div className="space-y-3">
-            <Label className="modal-label-enhanced">User</Label>
-            <div className="p-3 bg-gray-800/50 border border-green-400/30 rounded-lg">
-              <div className="text-green-400 font-medium">{user?.username || 'Not authenticated'}</div>
-              <div className="text-xs text-gray-400 mt-1">User ID: {user?.user_id || 'N/A'}</div>
-              <div className="text-xs text-gray-400">Automatically set from your account</div>
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="newConfigHost" className="modal-label-enhanced">Host *</Label>
+              <Label htmlFor="newConfigHost" className="modal-label-enhanced">
+                Host <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="newConfigHost"
                 value={newConfigHost}
@@ -217,19 +207,28 @@ export function VectorConfigStep({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newConfigPort" className="modal-label-enhanced">Port *</Label>
+              <Label htmlFor="newConfigPort" className="modal-label-enhanced">
+                Port <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="newConfigPort"
                 type="number"
                 value={newConfigPort}
-                onChange={(e) => setNewConfigPort(parseInt(e.target.value) || 5432)}
+                onChange={(e) =>
+                  setNewConfigPort(parseInt(e.target.value) || 5432)
+                }
                 placeholder="5432"
                 className="modal-input-enhanced"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newConfigDatabase" className="modal-label-enhanced">Database Name *</Label>
+              <Label
+                htmlFor="newConfigDatabase"
+                className="modal-label-enhanced"
+              >
+                Database Name <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="newConfigDatabase"
                 value={newConfigDatabase}
@@ -242,7 +241,12 @@ export function VectorConfigStep({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="newConfigUsername" className="modal-label-enhanced">Username *</Label>
+              <Label
+                htmlFor="newConfigUsername"
+                className="modal-label-enhanced"
+              >
+                Username *
+              </Label>
               <Input
                 id="newConfigUsername"
                 value={newConfigUsername}
@@ -253,7 +257,12 @@ export function VectorConfigStep({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newConfigPassword" className="modal-label-enhanced">Password *</Label>
+              <Label
+                htmlFor="newConfigPassword"
+                className="modal-label-enhanced"
+              >
+                Password *
+              </Label>
               <Input
                 id="newConfigPassword"
                 type="password"
@@ -312,7 +321,6 @@ export function VectorConfigStep({
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back
         </Button>
-        
         {selectedUserConfigId && (
           <Button
             onClick={handleNext}

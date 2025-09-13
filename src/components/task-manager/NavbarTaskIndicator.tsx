@@ -136,13 +136,43 @@ function TaskListPanel() {
     return `${Math.floor(duration / 3600)}h ${Math.floor((duration % 3600) / 60)}m`;
   };
 
+
   const getTaskIcon = (task: any) => {
+    const iconClass = "w-4 h-4";
+    
     switch (task.status) {
-      case 'running': return <Clock className="w-4 h-4 text-blue-400 animate-pulse" />;
-      case 'completed': return <CheckCircle className="w-4 h-4 text-green-400" />;
-      case 'failed': return <XCircle className="w-4 h-4 text-red-400" />;
-      case 'cancelled': return <XCircle className="w-4 h-4 text-gray-400" />;
-      default: return <Clock className="w-4 h-4 text-gray-400" />;
+      case 'running': 
+        return (
+          <div className="relative">
+            <Clock className={`${iconClass} text-blue-400 animate-spin`} />
+            <div className="absolute inset-0 w-4 h-4 border-2 border-blue-400/30 rounded-full animate-ping"></div>
+          </div>
+        );
+      case 'completed': 
+        return (
+          <div className="relative">
+            <CheckCircle className={`${iconClass} text-green-400`} />
+            <div className="absolute inset-0 w-4 h-4 bg-green-400/20 rounded-full animate-pulse"></div>
+          </div>
+        );
+      case 'failed': 
+        return (
+          <div className="relative">
+            <XCircle className={`${iconClass} text-red-400`} />
+            <div className="absolute inset-0 w-4 h-4 bg-red-400/20 rounded-full animate-pulse"></div>
+          </div>
+        );
+      case 'cancelled': 
+        return <XCircle className={`${iconClass} text-gray-400`} />;
+      case 'pending':
+        return (
+          <div className="relative">
+            <Clock className={`${iconClass} text-yellow-400`} />
+            <div className="absolute inset-0 w-4 h-4 border-2 border-yellow-400/30 rounded-full animate-pulse"></div>
+          </div>
+        );
+      default: 
+        return <Clock className={`${iconClass} text-gray-400`} />;
     }
   };
 
@@ -209,34 +239,77 @@ function TaskListPanel() {
                       {task.description}
                     </p>
                     
-                    {/* Progress Bar */}
+                    {/* Simple Processing Display */}
                     {task.status === 'running' && (
                       <div className="mt-2">
-                        <div className="flex justify-between text-xs text-gray-400 mb-1">
-                          <span>Progress</span>
-                          <span>{task.progress}%</span>
+                        <div className="flex items-center gap-2 text-xs text-blue-400">
+                          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
+                          <span>Processing...</span>
                         </div>
-                        <div className="w-full bg-gray-700 rounded-full h-1.5">
-                          <div
-                            className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
-                            style={{ width: `${task.progress}%` }}
-                          />
+                        <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
+                          <div className="bg-blue-500 h-1 rounded-full w-1/3 animate-pulse"></div>
                         </div>
                       </div>
                     )}
 
-                    {/* Duration */}
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                    {/* Pending State with Animation */}
+                    {task.status === 'pending' && (
+                      <div className="mt-2">
+                        <div className="flex items-center gap-2 text-xs text-yellow-400">
+                          <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></div>
+                          <span>Queued for processing...</span>
+                        </div>
+                        <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
+                          <div className="bg-yellow-500 h-1 rounded-full w-1/3 animate-pulse"></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Enhanced Duration and Status Info */}
+                    <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-4">
                       <span>Created: {task.createdAt.toLocaleTimeString()}</span>
                       {task.startedAt && (
                         <span>Duration: {formatDuration(task.startedAt, task.completedAt)}</span>
                       )}
                     </div>
+                      
+                      {/* Task Type Badge */}
+                      <div className="flex items-center gap-1">
+                        <div className={`w-2 h-2 rounded-full ${
+                          task.type === 'report_generation' ? 'bg-purple-400' :
+                          task.type === 'query_execution' ? 'bg-blue-400' :
+                          task.type === 'data_processing' ? 'bg-green-400' :
+                          'bg-gray-400'
+                        }`}></div>
+                        <span className="text-xs text-gray-400 capitalize">
+                          {task.type.replace('_', ' ')}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Completion Celebration */}
+                    {task.status === 'completed' && task.result && (
+                      <div className="mt-2 p-2 bg-green-900/20 border border-green-500/30 rounded text-xs text-green-300">
+                        <div className="flex items-center gap-2">
+                          <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
+                          <span>Report generated successfully!</span>
+                          <div className="ml-auto flex gap-1">
+                            <div className="w-1 h-1 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-1 h-1 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-1 h-1 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Error Message */}
                     {task.error && (
                       <div className="mt-2 p-2 bg-red-900/20 border border-red-500/30 rounded text-xs text-red-300">
-                        {task.error}
+                        <div className="flex items-center gap-2">
+                          <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>
+                          <span>{task.error}</span>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -250,8 +323,16 @@ function TaskListPanel() {
                       variant="ghost"
                       className="h-6 w-6 p-0 text-gray-400 hover:text-white"
                       onClick={() => {
-                        // Navigate to report detail page
-                        window.location.href = `/ai-results/report/${task.id}`;
+                        // Navigate to report detail page using backend task ID if available
+                        console.log('Task metadata:', task.metadata);
+                        console.log('Backend task ID:', task.metadata?.backend_task_id);
+                        console.log('Local task ID:', task.id);
+                        
+                        const backendTaskId = task.metadata?.backend_task_id;
+                        const taskId = backendTaskId || task.id;
+                        console.log('Using task ID for navigation:', taskId);
+                        
+                        window.location.href = `/ai-results/report/${taskId}`;
                       }}
                     >
                       <Eye className="w-3 h-3" />

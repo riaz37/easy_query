@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import  {CompanyInfoStepProps} from "../types"
+import { CompanyInfoStepProps } from "../types";
 
 export function CompanyInfoStep({
   companyName,
@@ -17,6 +17,7 @@ export function CompanyInfoStep({
   contactEmail,
   setContactEmail,
   setCurrentStep,
+  onClose,
 }: CompanyInfoStepProps) {
   const handleNext = () => {
     if (!companyName.trim()) {
@@ -26,24 +27,17 @@ export function CompanyInfoStep({
     setCurrentStep("database-config");
   };
 
-  return (
-    <div className="space-y-8 p-1">
-      <div>
-        <h3 className="text-xl font-semibold text-green-400 mb-1">
-          Company Information
-        </h3>
-        <p className="text-sm text-gray-400">
-          Enter your company details to get started
-        </p>
-      </div>
+  const handlePrevious = () => {
+    // This is the first step, so we close the modal
+    onClose();
+  };
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Company Name */}
         <div className="space-y-2">
-          <Label
-            htmlFor="companyName"
-            className="modal-label-enhanced"
-          >
+          <Label htmlFor="companyName" className="modal-label-enhanced">
             Company Name <span className="text-red-500">*</span>
           </Label>
           <Input
@@ -58,10 +52,7 @@ export function CompanyInfoStep({
 
         {/* Contact Email */}
         <div className="space-y-2">
-          <Label
-            htmlFor="contactEmail"
-            className="modal-label-enhanced"
-          >
+          <Label htmlFor="contactEmail" className="modal-label-enhanced">
             Contact Email
           </Label>
           <Input
@@ -76,10 +67,7 @@ export function CompanyInfoStep({
 
         {/* Address - Full Width */}
         <div className="md:col-span-2 space-y-2">
-          <Label
-            htmlFor="address"
-            className="modal-label-enhanced"
-          >
+          <Label htmlFor="address" className="modal-label-enhanced">
             Company Address
           </Label>
           <Input
@@ -94,10 +82,7 @@ export function CompanyInfoStep({
         {/* Description - Full Width */}
         <div className="md:col-span-2 space-y-2">
           <div className="flex justify-between items-center">
-            <Label
-              htmlFor="description"
-              className="modal-label-enhanced"
-            >
+            <Label htmlFor="description" className="modal-label-enhanced">
               About the Company
             </Label>
             <span className="text-xs text-gray-500">
@@ -114,11 +99,16 @@ export function CompanyInfoStep({
         </div>
       </div>
 
+      {/* Navigation */}
       <div className="modal-footer-enhanced">
         <Button
-          onClick={handleNext}
-          className="modal-button-primary w-full sm:w-auto"
+          variant="outline"
+          onClick={handlePrevious}
+          className="modal-button-secondary w-full sm:w-auto"
         >
+          Back
+        </Button>
+        <Button onClick={handleNext} className="modal-button-primary w-full sm:w-auto">
           Next: Configure Database
         </Button>
       </div>

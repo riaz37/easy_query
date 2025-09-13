@@ -5,6 +5,7 @@ import { useReports } from "@/lib/hooks/use-reports";
 import { useUserContext } from "@/lib/hooks/use-user-context";
 import { useUserConfiguration } from "@/components/user-configuration/hooks/useUserConfiguration";
 import { useTaskCreator } from "@/components/task-manager";
+import { useTaskStore } from "@/store/task-store";
 import { ReportStructureSelector } from "./ReportStructureSelector";
 import { ReportQueryInput } from "./ReportQueryInput";
 import { ReportActionButtons } from "./ReportActionButtons";
@@ -151,7 +152,24 @@ export function ReportGenerator({
           user_query: userQuery,
         });
 
-        console.log('Report generation started, task ID:', reportTaskId);
+        console.log('Report generation started, backend task ID:', reportTaskId);
+
+        // Update the task with the backend task ID
+        const { updateTask, getTaskById } = useTaskStore.getState();
+        const currentTask = getTaskById(taskId);
+        console.log('Current task before update:', currentTask);
+        console.log('Backend task ID to store:', reportTaskId);
+        
+        updateTask(taskId, {
+          metadata: {
+            ...currentTask?.metadata,
+            backend_task_id: reportTaskId
+          }
+        });
+        
+        // Verify the update
+        const updatedTask = getTaskById(taskId);
+        console.log('Updated task metadata:', updatedTask?.metadata);
 
         // Start monitoring the task with proper callbacks
         return new Promise((resolve, reject) => {

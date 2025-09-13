@@ -84,9 +84,40 @@ const Dashboard: React.FC = () => {
 
       {/* Brain Model SVG - Centered with circle.svg borders */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="relative">
-          {/* Brain Model Container */}
-          <div className="w-96 h-96 relative">
+        <div className="relative w-[1100px] h-[1100px]">
+          {/* Circle Border - Positioned lower to center the brain model */}
+          <div 
+            className="absolute"
+            style={{ 
+              width: '1100px',
+              height: '1100px',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -45%)', // Moved up by 5% to center brain
+              zIndex: 1
+            }}
+          >
+            <Image
+              src="/dashboard/circle.svg"
+              alt="Circle Border"
+              fill
+              className="object-contain transition-all duration-300 opacity-70"
+              priority
+            />
+          </div>
+          
+          {/* Brain Model Container - Centered in the viewport */}
+          <div 
+            className="absolute"
+            style={{ 
+              width: '276px', 
+              height: '208px',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 2
+            }}
+          >
             <Image
               src="/dashboard/brainmodel.svg"
               alt="Brain Model"

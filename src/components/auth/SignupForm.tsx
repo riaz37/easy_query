@@ -83,7 +83,7 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
     <div className="card-enhanced">
       <div className="card-content-enhanced">
         <div className="card-header-enhanced">
-          <div className="text-center mb-6">
+          <div className="text-left mb-6">
             <h2 className={cn(
               "text-2xl font-bold mb-2",
               theme === "dark" ? "text-white" : "text-gray-800"
@@ -99,9 +99,11 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
                 type="button"
                 onClick={onSwitchToLogin}
                 className={cn(
-                  "font-medium hover:underline",
-                  theme === "dark" ? "text-emerald-400 hover:text-emerald-300" : "text-emerald-600 hover:text-emerald-500"
+                  "font-medium hover:underline"
                 )}
+                style={{
+                  color: 'var(--primary-main, #13F584)'
+                }}
               >
                 Sign in
               </button>
@@ -130,6 +132,9 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
                 "modal-input-enhanced",
                 errors.username ? 'border-red-500' : ''
               )}
+              style={{
+                border: '1px solid var(--components-paper-outlined, #FFFFFF1F)'
+              }}
             />
             {errors.username && (
               <p className="text-sm text-red-400">{errors.username.message}</p>
@@ -150,6 +155,9 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
                 "modal-input-enhanced",
                 errors.email ? 'border-red-500' : ''
               )}
+              style={{
+                border: '1px solid var(--components-paper-outlined, #FFFFFF1F)'
+              }}
             />
             {errors.email && (
               <p className="text-sm text-red-400">{errors.email.message}</p>
@@ -171,6 +179,9 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
                   "modal-input-enhanced pr-10",
                   errors.password ? 'border-red-500' : ''
                 )}
+                style={{
+                  border: '1px solid var(--components-paper-outlined, #FFFFFF1F)'
+                }}
               />
               <button
                 type="button"
@@ -203,6 +214,9 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
                   "modal-input-enhanced pr-10",
                   errors.confirmPassword ? 'border-red-500' : ''
                 )}
+                style={{
+                  border: '1px solid var(--components-paper-outlined, #FFFFFF1F)'
+                }}
               />
               <button
                 type="button"
@@ -229,9 +243,13 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
             className={cn(
               "w-full h-12 text-base font-semibold",
               theme === "dark"
-                ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/25"
-                : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/25"
+                ? "text-white shadow-lg hover:shadow-emerald-500/25"
+                : "text-emerald-600 shadow-lg hover:shadow-emerald-500/25"
             )}
+            style={{
+              backgroundColor: '#FFFFFF0A',
+              borderRadius: '99px'
+            }}
           >
             Create Account
           </ButtonLoader>

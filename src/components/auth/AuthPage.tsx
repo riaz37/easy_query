@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
 import { ChangePasswordForm } from './ChangePasswordForm';
@@ -139,58 +138,26 @@ export function AuthPage({ onAuthSuccess }: AuthPageProps) {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as AuthTab)}>
-        <TabsList className={cn(
-          "grid w-full grid-cols-2 mb-6 backdrop-blur-xl shadow-xl",
-          theme === "dark"
-            ? "bg-white/20 border border-white/30"
-            : "bg-white/95 border border-emerald-500/30 shadow-sm"
-        )}>
-          <TabsTrigger 
-            value="login" 
-            className={cn(
-              "transition-all duration-200",
-              theme === "dark"
-                ? "data-[state=active]:bg-emerald-500/30 data-[state=active]:text-emerald-300 data-[state=active]:border-emerald-500/50 text-white"
-                : "data-[state=active]:bg-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-emerald-600"
-            )}
-          >
-            Sign In
-          </TabsTrigger>
-          <TabsTrigger 
-            value="signup" 
-            className={cn(
-              "transition-all duration-200",
-              theme === "dark"
-                ? "data-[state=active]:bg-emerald-500/30 data-[state=active]:text-emerald-300 data-[state=active]:border-emerald-500/50 text-white"
-                : "data-[state=active]:bg-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-md text-gray-600 hover:text-emerald-600"
-            )}
-          >
-            Sign Up
-          </TabsTrigger>
-        </TabsList>
+      {activeTab === 'login' && (
+        <LoginForm
+          onSuccess={handleAuthSuccess}
+          onSwitchToSignup={() => setActiveTab('signup')}
+        />
+      )}
+      
+      {activeTab === 'signup' && (
+        <SignupForm
+          onSuccess={handleAuthSuccess}
+          onSwitchToLogin={() => setActiveTab('login')}
+        />
+      )}
 
-        <TabsContent value="login">
-          <LoginForm
-            onSuccess={handleAuthSuccess}
-            onSwitchToSignup={() => setActiveTab('signup')}
-          />
-        </TabsContent>
-
-        <TabsContent value="signup">
-          <SignupForm
-            onSuccess={handleAuthSuccess}
-            onSwitchToLogin={() => setActiveTab('login')}
-          />
-        </TabsContent>
-
-        <TabsContent value="change-password">
-          <ChangePasswordForm
-            onSuccess={() => setActiveTab('login')}
-            onCancel={() => setActiveTab('login')}
-          />
-        </TabsContent>
-      </Tabs>
+      {activeTab === 'change-password' && (
+        <ChangePasswordForm
+          onSuccess={() => setActiveTab('login')}
+          onCancel={() => setActiveTab('login')}
+        />
+      )}
     </div>
   );
 } 
