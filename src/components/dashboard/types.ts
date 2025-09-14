@@ -3,9 +3,12 @@ import * as THREE from 'three';
 export interface SystemNode {
   id: string;
   label: string;
+  title: string;
+  description: string;
   position: [number, number, number];
   color: string;
   icon: string;
+  iconPath: string;
 }
 
 export interface CardPosition {

@@ -20,6 +20,8 @@ import { useDatabaseContext } from "@/components/providers/DatabaseContextProvid
 import { useParentCompanies } from "@/lib/hooks/use-parent-companies";
 import { useSubCompanies } from "@/lib/hooks/use-sub-companies";
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
+import { useTheme } from "@/store/theme-store";
+import { cn } from "@/lib/utils";
 import { UserAccessCreateRequest, ParentCompanyData, SubCompanyData } from "@/types/api";
 import { toast } from "sonner";
 
@@ -39,6 +41,7 @@ export function CreateDatabaseAccessModal({
   editingUser = "",
 }: CreateDatabaseAccessModalProps) {
   const { user } = useAuthContext();
+  const theme = useTheme();
   
   // Form state
   const [selectedParentCompany, setSelectedParentCompany] = useState<string>("");
@@ -113,12 +116,7 @@ export function CreateDatabaseAccessModal({
     }
   }, [selectedParentCompany, selectedSubCompany, parentCompanies, subCompanies]);
 
-  // Get available databases based on selection - simplified for now
-  const getAvailableDatabases = () => {
-    // This function is no longer needed for the current flow
-    // We're directly setting the database ID when company is selected
-    return [];
-  };
+
 
   // Handle company selection changes
   const handleParentCompanyChange = (value: string) => {
@@ -296,7 +294,10 @@ export function CreateDatabaseAccessModal({
                     Selected Database
                   </Label>
                   <div className="p-3 modal-input-enhanced rounded-lg">
-                    <div className="text-white font-medium">
+                    <div className={cn(
+                      "font-semibold",
+                      theme === "dark" ? "text-white" : "text-gray-800"
+                    )}>
                       Database {selectedDatabase}
                     </div>
                     <div className="modal-form-description mt-1">
@@ -312,7 +313,10 @@ export function CreateDatabaseAccessModal({
           {/* Debug Info - Show when no database is selected */}
           {(selectedParentCompany || selectedSubCompany) && !selectedDatabase && (
             <div className="space-y-3">
-              <Label className="text-white font-medium flex items-center">
+              <Label className={cn(
+                "font-semibold flex items-center",
+                theme === "dark" ? "text-white" : "text-gray-800"
+              )}>
                 <Database className="w-4 h-4 mr-2 text-yellow-400" />
                 Database Selection Issue
               </Label>
@@ -344,34 +348,64 @@ export function CreateDatabaseAccessModal({
                 <CardContent className="space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-400">User:</span>
-                    <span className="text-white ml-2">{selectedUserId || 'Not specified'}</span>
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>User:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>{selectedUserId || 'Not specified'}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Parent Company:</span>
-                    <span className="text-white ml-2">
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>Parent Company:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>
                       {parentCompanies.find(c => c.parent_company_id === parseInt(selectedParentCompany))?.company_name || 'Not selected'}
                     </span>
                   </div>
                   {selectedSubCompany && (
                     <div>
-                      <span className="text-gray-400">Sub Company:</span>
-                      <span className="text-white ml-2">
+                      <span className={cn(
+                        theme === "dark" ? "text-gray-400" : "text-gray-500"
+                      )}>Sub Company:</span>
+                      <span className={cn(
+                        "ml-2",
+                        theme === "dark" ? "text-white" : "text-gray-900"
+                      )}>
                         {subCompanies.find(c => c.sub_company_id === parseInt(selectedSubCompany))?.company_name || 'Not selected'}
                       </span>
                     </div>
                   )}
                   <div>
-                    <span className="text-gray-400">Database:</span>
-                    <span className="text-white ml-2">Database {selectedDatabase}</span>
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>Database:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>Database {selectedDatabase}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Access Level:</span>
-                    <span className="text-white ml-2">Full Access</span>
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>Access Level:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>Full Access</span>
                   </div>
                   <div>
-                    <span className="text-gray-400">Sub Companies:</span>
-                    <span className="text-white ml-2">
+                    <span className={cn(
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    )}>Sub Companies:</span>
+                    <span className={cn(
+                      "ml-2",
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    )}>
                       {selectedSubCompany ? '1 selected' : 'None'}
                     </span>
                   </div>

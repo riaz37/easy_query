@@ -28,6 +28,11 @@ export const useUserConfiguration = () => {
     setError: setBusinessRulesError,
   } = useBusinessRulesContext();
 
+  // Report structure state
+  const [reportStructure, setReportStructure] = useState<string>('');
+  const [reportStructureLoading, setReportStructureLoading] = useState(false);
+  const [reportStructureError, setReportStructureError] = useState<string | null>(null);
+
   // State
   const [loading, setLoading] = useState(false);
   const [databases, setDatabases] = useState<DatabaseInfo[]>([]);
@@ -47,8 +52,10 @@ export const useUserConfiguration = () => {
     setLoading(true);
     setDatabaseLoading(true);
     setBusinessRulesLoading(true);
+    setReportStructureLoading(true);
     setDatabaseError(null);
     setBusinessRulesError(null);
+    setReportStructureError(null);
 
     try {
       // Load accessible databases
@@ -103,12 +110,15 @@ export const useUserConfiguration = () => {
             })),
           );
 
-          // Extract business rules from the response and update the context
+          // Extract business rules and report structure from the response
           const businessRules = currentDBInfo.data.business_rule || '';
+          const reportStructureData = currentDBInfo.data.report_structure || '';
           loadBusinessRulesFromConfig(businessRules);
+          setReportStructure(reportStructureData);
         } else {
           // No current database set
           loadBusinessRulesFromConfig('');
+          setReportStructure('');
         }
       } else {
         throw new Error(databasesResponse.error || 'Failed to load databases');
@@ -118,11 +128,13 @@ export const useUserConfiguration = () => {
         error instanceof Error ? error.message : 'Failed to load configuration';
       setDatabaseError(errorMessage);
       setBusinessRulesError(errorMessage);
+      setReportStructureError(errorMessage);
       toast.error('Failed to load configuration');
     } finally {
       setLoading(false);
       setDatabaseLoading(false);
       setBusinessRulesLoading(false);
+      setReportStructureLoading(false);
     }
   }, [
     user?.user_id,
@@ -189,16 +201,19 @@ export const useUserConfiguration = () => {
               })),
             );
 
-            // Get the current database info which includes business rules
+            // Get the current database info which includes business rules and report structure
             const currentDBInfo =
               await ServiceRegistry.userCurrentDB.getUserCurrentDB(
                 user?.user_id,
               );
             if (currentDBInfo.success && currentDBInfo.data) {
               const businessRules = currentDBInfo.data.business_rule || '';
+              const reportStructureData = currentDBInfo.data.report_structure || '';
               loadBusinessRulesFromConfig(businessRules);
+              setReportStructure(reportStructureData);
             } else {
               loadBusinessRulesFromConfig('');
+              setReportStructure('');
             }
 
             toast.success(`Switched to database: ${selectedDB.db_name}`);
@@ -265,6 +280,43 @@ export const useUserConfiguration = () => {
     loadBusinessRulesFromConfig,
   ]);
 
+  // Handle report structure refresh
+  const handleReportStructureRefresh = useCallback(async () => {
+    try {
+      if (currentDatabaseId) {
+        setReportStructureLoading(true);
+        setReportStructureError(null);
+
+        const currentDBInfo =
+          await ServiceRegistry.userCurrentDB.getUserCurrentDB(user?.user_id);
+        if (currentDBInfo.success && currentDBInfo.data) {
+          const reportStructureData = currentDBInfo.data.report_structure || '';
+          setReportStructure(reportStructureData);
+          toast.success('Report structure refreshed successfully');
+        } else {
+          setReportStructure('');
+          toast.success('Report structure refreshed (no structure found)');
+        }
+      } else {
+        toast.error('No database selected');
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to refresh report structure';
+      setReportStructureError(errorMessage);
+      toast.error('Failed to refresh report structure');
+    } finally {
+      setReportStructureLoading(false);
+    }
+  }, [
+    currentDatabaseId,
+    user?.user_id,
+    setReportStructureLoading,
+    setReportStructureError,
+  ]);
+
   // Memoize the return object to prevent unnecessary re-renders
   return useMemo(() => ({
     // State
@@ -277,12 +329,16 @@ export const useUserConfiguration = () => {
     businessRules,
     hasBusinessRules,
     businessRulesCount,
+    reportStructure,
+    reportStructureLoading,
+    reportStructureError,
     
     // Actions
     loadUserConfiguration,
     handleManualRefresh,
     handleDatabaseChange,
     handleBusinessRulesRefresh,
+    handleReportStructureRefresh,
   }), [
     loading,
     databases,
@@ -293,9 +349,13 @@ export const useUserConfiguration = () => {
     businessRules,
     hasBusinessRules,
     businessRulesCount,
+    reportStructure,
+    reportStructureLoading,
+    reportStructureError,
     loadUserConfiguration,
     handleManualRefresh,
     handleDatabaseChange,
     handleBusinessRulesRefresh,
+    handleReportStructureRefresh,
   ]);
 };

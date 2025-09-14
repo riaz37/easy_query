@@ -2,6 +2,7 @@
 
 import { AuthPage } from '@/components/auth';
 import { useResolvedTheme } from '@/store/theme-store';
+import Image from "next/image";
 
 export default function AuthPageRoute() {
   const theme = useResolvedTheme();
@@ -17,6 +18,21 @@ export default function AuthPageRoute() {
               : "linear-gradient(135deg, #ffffff 0%, #f0f9f5 30%, #e6f7ff 70%, #f0f9f5 100%)",
         }}
       >
+        {/* Frame SVG Background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <Image
+            src="/dashboard/frame.svg"
+            alt="Background Frame"
+            fill
+            className="object-cover object-top"
+            priority
+            style={{
+              opacity: 0.6,
+              mixBlendMode: 'lighten',
+            }}
+          />
+        </div>
+
         {/* Enhanced Background Effects for Light Mode */}
         {theme === "light" && (
           <>
@@ -60,10 +76,7 @@ export default function AuthPageRoute() {
         {/* Auth Content */}
         <div className="relative z-10 flex items-center justify-center h-full px-4">
           <div className="w-full max-w-md">
-            {/* Add a subtle background container for better visibility */}
-            <div className="bg-black/10 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
-              <AuthPage />
-            </div>
+            <AuthPage />
           </div>
         </div>
       </div>

@@ -2,56 +2,74 @@ import { SystemNode, CardPosition } from './types';
 
 export const SYSTEM_NODES: SystemNode[] = [
   {
-    id: "upload",
-    label: "Upload Data",
+    id: "search",
+    label: "Search Engine",
+    title: "Intelligent Search",
+    description: "AI-powered semantic search with contextual results.",
     position: [3, 1.5, 0],
     color: "#10b981",
-    icon: "upload",
+    icon: "search",
+    iconPath: "/dashboard/apiconnect.svg",
   },
   {
-    id: "files",
-    label: "File Manager",
+    id: "analytics",
+    label: "Analytics",
+    title: "Data Analytics",
+    description: "Real-time analytics dashboard with performance insights.",
     position: [-3, 1.5, 0],
     color: "#059669",
-    icon: "files",
+    icon: "analytics",
+    iconPath: "/dashboard/apiconnect.svg",
   },
   {
-    id: "api",
-    label: "API Connect",
+    id: "ai-assistant",
+    label: "AI Assistant",
+    title: "Smart Assistant",
+    description: "AI-powered assistant for document processing and guidance.",
     position: [2.5, -1.5, 1.5],
     color: "#34d399",
-    icon: "api",
+    icon: "ai",
+    iconPath: "/dashboard/apiconnect.svg",
   },
   {
-    id: "query",
-    label: "Smart Query",
+    id: "document-management",
+    label: "Document Management",
+    title: "Document Hub",
+    description: "Centralized document management with version control.",
     position: [-2.5, -1.5, 1.5],
     color: "#6ee7b7",
-    icon: "query",
+    icon: "document",
+    iconPath: "/dashboard/apiconnect.svg",
   },
   {
-    id: "reports",
-    label: "Generate Reports",
-    position: [0, 2.5, -1.5],
-    color: "#22c55e",
-    icon: "reports",
+    id: "knowledge-graph",
+    label: "Knowledge Graph",
+    title: "Knowledge Network",
+    description: "Visual knowledge mapping with interconnected concepts.",
+    position: [-2.5, -3, 0],
+    color: "#10b981",
+    icon: "graph",
+    iconPath: "/dashboard/apiconnect.svg",
   },
   {
-    id: "control",
-    label: "System Control",
-    position: [0, -2.5, -1.5],
-    color: "#16a34a",
-    icon: "control",
+    id: "automation",
+    label: "Automation",
+    title: "Workflow Automation",
+    description: "Automated workflows with intelligent process optimization.",
+    position: [2.5, -3, 0],
+    color: "#059669",
+    icon: "automation",
+    iconPath: "/dashboard/apiconnect.svg",
   },
 ];
 
 export const INITIAL_CARD_POSITIONS: CardPosition[] = [
   { x: 25, y: 15 },   // Left top
   { x: 20, y: 45 },   // Left middle (curved inward)
-  { x: 25, y: 75 },   // Left bottom
   { x: 75, y: 15 },   // Right top
   { x: 80, y: 45 },   // Right middle (curved outward)
-  { x: 75, y: 75 },   // Right bottom
+  { x: 25, y: 75 },   // Bottom left
+  { x: 75, y: 75 },   // Bottom right
 ];
 
 export const ANIMATION_CONFIG = {

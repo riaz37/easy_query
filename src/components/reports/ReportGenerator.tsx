@@ -2,17 +2,14 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useReports } from "@/lib/hooks/use-reports";
-import { useReportStructure } from "@/lib/hooks/use-report-structure";
 import { useUserContext } from "@/lib/hooks/use-user-context";
+import { useUserConfiguration } from "@/components/user-configuration/hooks/useUserConfiguration";
+import { useTaskCreator } from "@/components/task-manager";
+import { useTaskStore } from "@/store/task-store";
 import { ReportStructureSelector } from "./ReportStructureSelector";
 import { ReportQueryInput } from "./ReportQueryInput";
-import { ReportProgressOverlay } from "./ReportProgressOverlay";
-import { ReportProgressIndicator } from "./ReportProgressIndicator";
 import { ReportActionButtons } from "./ReportActionButtons";
-import { ReportProgressDisplay } from "./ReportProgressDisplay";
-import { ReportTaskStatus } from "./ReportTaskStatus";
 import { ReportResultsPreview } from "./ReportResultsPreview";
-import { ReportProcessingStatus } from "./ReportProcessingStatus";
 
 interface ReportGeneratorProps {
   userId?: string;
@@ -39,7 +36,8 @@ export function ReportGenerator({
 
   // Hooks
   const reports = useReports();
-  const reportStructure = useReportStructure();
+  const { reportStructure, reportStructureLoading, reportStructureError } = useUserConfiguration();
+  const { createReportTask, executeTask } = useTaskCreator();
 
   // Use ref to track current progress without causing re-renders
   const progressRef = useRef(reportProgress);
@@ -59,12 +57,16 @@ export function ReportGenerator({
     "Compiling final report..."
   ], []);
 
-  // Load report structure on mount - only when userId changes
-  useEffect(() => {
-    if (userId && !reportStructure.structure) {
-      reportStructure.loadStructure(userId);
+  // Parse report structure from string
+  const parsedReportStructure = useMemo(() => {
+    if (!reportStructure) return null;
+    try {
+      return JSON.parse(reportStructure);
+    } catch (error) {
+      console.error('Failed to parse report structure:', error);
+      return null;
     }
-  }, [userId]); // Removed reportStructure from deps to prevent infinite loops
+  }, [reportStructure]);
 
   // Handle report completion
   useEffect(() => {
@@ -125,50 +127,90 @@ export function ReportGenerator({
     console.log('Starting report generation for user:', user.user_id);
     console.log('User query:', userQuery);
 
-    // Notify parent component that report generation has started
-    if (onReportStart) {
-      onReportStart();
-    }
-
-    try {
-      const taskId = await reports.generateReport({
+    // Create a background task
+    const taskId = createReportTask(
+      `AI Report: ${userQuery.substring(0, 50)}${userQuery.length > 50 ? '...' : ''}`,
+      `Generating AI report for query: "${userQuery}"`,
+      {
         user_id: user.user_id,
         user_query: userQuery,
-      });
+        selected_structure: selectedStructure,
+      }
+    );
 
-      console.log('Report generation started, task ID:', taskId);
+    // Execute the task in background
+    executeTask(
+      taskId,
+      async () => {
+        // Notify parent component that report generation has started
+        if (onReportStart) {
+          onReportStart();
+        }
 
-      // Start monitoring the task with proper callbacks
-      reports.startMonitoring(taskId, {
-        onProgress: (status) => {
-          console.log("Report progress:", status);
-          // Update progress based on real status
-          if (status.progress_percentage) {
-            setReportProgress(status.progress_percentage);
+        const reportTaskId = await reports.generateReport({
+          user_id: user.user_id,
+          user_query: userQuery,
+        });
+
+        console.log('Report generation started, backend task ID:', reportTaskId);
+
+        // Update the task with the backend task ID
+        const { updateTask, getTaskById } = useTaskStore.getState();
+        const currentTask = getTaskById(taskId);
+        console.log('Current task before update:', currentTask);
+        console.log('Backend task ID to store:', reportTaskId);
+        
+        updateTask(taskId, {
+          metadata: {
+            ...(currentTask?.metadata || {}),
+            backend_task_id: reportTaskId
           }
-          if (status.current_step) {
-            setCurrentStep(processingSteps.findIndex(step => 
-              step.toLowerCase().includes(status.current_step.toLowerCase())
-            ) || currentStep);
-          }
-        },
-        onComplete: (results) => {
-          console.log("Report completed:", results);
-          setReportProgress(100);
-          // Store results for the results page
-          if (onReportComplete) {
-            onReportComplete(results);
-          }
-        },
-        onError: (error) => {
-          console.error("Report failed:", error);
-        },
-        pollInterval: 2000, // Poll every 2 seconds
-      });
-    } catch (error) {
-      console.error("Failed to generate report:", error);
-    }
-  }, [user?.user_id, userQuery, onReportStart, onReportComplete, reports, processingSteps, currentStep]);
+        });
+        
+        // Verify the update
+        const updatedTask = getTaskById(taskId);
+        console.log('Updated task metadata:', updatedTask?.metadata);
+
+        // Start monitoring the task with proper callbacks
+        return new Promise((resolve, reject) => {
+          reports.startMonitoring(reportTaskId, {
+            onProgress: (status) => {
+              console.log("Report progress:", status);
+              // Update task progress
+              if (status.progress_percentage) {
+                setReportProgress(status.progress_percentage);
+              }
+              if (status.current_step) {
+                setCurrentStep(processingSteps.findIndex(step => 
+                  step.toLowerCase().includes(status.current_step.toLowerCase())
+                ) || currentStep);
+              }
+            },
+            onComplete: (results) => {
+              console.log("Report completed:", results);
+              setReportProgress(100);
+              // Store results for the results page
+              if (onReportComplete) {
+                onReportComplete(results);
+              }
+              resolve(results);
+            },
+            onError: (error) => {
+              console.error("Report failed:", error);
+              reject(error);
+            },
+            pollInterval: 2000, // Poll every 2 seconds
+          });
+        });
+      },
+      (progress) => {
+        // Progress callback for task system
+        setReportProgress(progress);
+      }
+    ).catch((error) => {
+      console.error('Failed to start report generation:', error);
+    });
+  }, [user?.user_id, userQuery, onReportStart, onReportComplete, reports, processingSteps, currentStep, selectedStructure, createReportTask, executeTask]);
 
   const handleGenerateReportAndWait = useCallback(async () => {
     if (!user?.user_id || !userQuery.trim()) return;
@@ -225,10 +267,12 @@ export function ReportGenerator({
 
       {/* Report Structure Selection */}
       <ReportStructureSelector
-        reportStructure={reportStructure}
+        reportStructure={parsedReportStructure}
         selectedStructure={selectedStructure}
         setSelectedStructure={handleStructureChange}
         isGenerating={reports.isGenerating}
+        loading={reportStructureLoading}
+        error={reportStructureError}
       />
 
       {/* Query Input */}

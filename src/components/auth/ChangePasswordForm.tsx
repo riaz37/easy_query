@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthContext } from '@/components/providers';
+import { useTheme } from '@/store/theme-store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { ButtonLoader } from '@/components/ui/loading';
+import { cn } from '@/lib/utils';
 
 // Validation schema for change password form
 const changePasswordSchema = z.object({
@@ -35,6 +37,7 @@ interface ChangePasswordFormProps {
 
 export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormProps) {
   const { changePassword, isLoading, error, clearError } = useAuthContext();
+  const theme = useTheme();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -83,29 +86,51 @@ export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormPr
 
   if (isSuccess) {
     return (
-      <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
-        <CardContent className="pt-6 text-center">
-          <CheckCircle className="mx-auto h-12 w-12 text-emerald-400 mb-4" />
-          <h3 className="text-lg font-semibold text-emerald-300 mb-2">
-            Password changed successfully!
-          </h3>
-          <p className="text-sm text-gray-300 mb-4">
-            You will be redirected to login in a few seconds...
-          </p>
-        </CardContent>
-      </Card>
+      <div className="card-enhanced">
+        <div className="card-content-enhanced">
+          <div className="text-center py-6">
+            <CheckCircle className={cn(
+              "mx-auto h-12 w-12 mb-4",
+              theme === "dark" ? "text-emerald-400" : "text-emerald-500"
+            )} />
+            <h3 className={cn(
+              "text-lg font-semibold mb-2",
+              theme === "dark" ? "text-emerald-300" : "text-emerald-600"
+            )}>
+              Password changed successfully!
+            </h3>
+            <p className={cn(
+              "text-sm mb-4",
+              theme === "dark" ? "text-gray-300" : "text-gray-600"
+            )}>
+              You will be redirected to login in a few seconds...
+            </p>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center text-white">Change Password</CardTitle>
-        <CardDescription className="text-center text-gray-300">
-          Enter your current password and choose a new one
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="card-enhanced">
+      <div className="card-content-enhanced">
+        <div className="card-header-enhanced">
+          <div className="text-center mb-6">
+            <h2 className={cn(
+              "text-2xl font-bold mb-2",
+              theme === "dark" ? "text-white" : "text-gray-800"
+            )}>
+              Change Password
+            </h2>
+            <p className={cn(
+              "text-sm",
+              theme === "dark" ? "text-gray-300" : "text-gray-600"
+            )}>
+              Enter your current password and choose a new one
+            </p>
+          </div>
+        </div>
+        <div className="space-y-4">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {error && (
             <Alert variant="destructive">
@@ -114,19 +139,28 @@ export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormPr
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="currentPassword" className="text-white">Current Password</Label>
+            <Label htmlFor="currentPassword" className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-white" : "text-gray-700"
+            )}>Current Password</Label>
             <div className="relative">
               <Input
                 id="currentPassword"
                 type={showCurrentPassword ? 'text' : 'password'}
                 placeholder="Enter your current password"
                 {...register('currentPassword')}
-                className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 pr-10 ${errors.currentPassword ? 'border-red-500' : ''}`}
+                className={cn(
+                  "modal-input-enhanced pr-10",
+                  errors.currentPassword ? 'border-red-500' : ''
+                )}
               />
               <button
                 type="button"
                 onClick={toggleCurrentPasswordVisibility}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                className={cn(
+                  "absolute right-3 top-1/2 transform -translate-y-1/2",
+                  theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"
+                )}
               >
                 {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -137,19 +171,28 @@ export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormPr
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="newPassword" className="text-white">New Password</Label>
+            <Label htmlFor="newPassword" className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-white" : "text-gray-700"
+            )}>New Password</Label>
             <div className="relative">
               <Input
                 id="newPassword"
                 type={showNewPassword ? 'text' : 'password'}
                 placeholder="Enter your new password"
                 {...register('newPassword')}
-                className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 pr-10 ${errors.newPassword ? 'border-red-500' : ''}`}
+                className={cn(
+                  "modal-input-enhanced pr-10",
+                  errors.newPassword ? 'border-red-500' : ''
+                )}
               />
               <button
                 type="button"
                 onClick={toggleNewPasswordVisibility}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                className={cn(
+                  "absolute right-3 top-1/2 transform -translate-y-1/2",
+                  theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"
+                )}
               >
                 {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -160,19 +203,28 @@ export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormPr
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmNewPassword" className="text-white">Confirm New Password</Label>
+            <Label htmlFor="confirmNewPassword" className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-white" : "text-gray-700"
+            )}>Confirm New Password</Label>
             <div className="relative">
               <Input
                 id="confirmNewPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="Confirm your new password"
                 {...register('confirmNewPassword')}
-                className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 pr-10 ${errors.confirmNewPassword ? 'border-red-500' : ''}`}
+                className={cn(
+                  "modal-input-enhanced pr-10",
+                  errors.confirmNewPassword ? 'border-red-500' : ''
+                )}
               />
               <button
                 type="button"
                 onClick={toggleConfirmPasswordVisibility}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                className={cn(
+                  "absolute right-3 top-1/2 transform -translate-y-1/2",
+                  theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"
+                )}
               >
                 {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -186,7 +238,12 @@ export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormPr
             <Button
               type="button"
               variant="outline"
-              className="flex-1 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20"
+              className={cn(
+                "flex-1",
+                theme === "dark"
+                  ? "border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20"
+                  : "border-emerald-500/30 text-emerald-600 hover:bg-emerald-50"
+              )}
               onClick={onCancel}
               disabled={isLoading}
             >
@@ -198,13 +255,19 @@ export function ChangePasswordForm({ onSuccess, onCancel }: ChangePasswordFormPr
               text="Changing..."
               size="md"
               variant="primary"
-              className="flex-1"
+              className={cn(
+                "flex-1 h-12 text-base font-semibold",
+                theme === "dark"
+                  ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/25"
+                  : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-emerald-500/25"
+              )}
             >
               Change Password
             </ButtonLoader>
           </div>
         </form>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 } 

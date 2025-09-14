@@ -17,6 +17,7 @@ import type { UserConfigurationProps } from '../types';
 const OverviewTab = lazy(() => import('./OverviewTab').then(module => ({ default: module.OverviewTab })));
 const DatabaseTab = lazy(() => import('./DatabaseTab').then(module => ({ default: module.DatabaseTab })));
 const BusinessRulesTab = lazy(() => import('./BusinessRulesTab').then(module => ({ default: module.BusinessRulesTab })));
+const ReportStructureTab = lazy(() => import('./ReportStructureTab').then(module => ({ default: module.ReportStructureTab })));
 
 // Loading component for Suspense fallback
 const TabLoadingFallback = () => (
@@ -39,9 +40,13 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
     businessRules,
     hasBusinessRules,
     businessRulesCount,
+    reportStructure,
+    reportStructureLoading,
+    reportStructureError,
     handleManualRefresh,
     handleDatabaseChange,
     handleBusinessRulesRefresh,
+    handleReportStructureRefresh,
   } = useUserConfiguration();
 
   const {
@@ -93,13 +98,13 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
             User Configuration
           </h1>
           <p className="text-gray-300 text-lg">
-            Manage your database settings, business rules, and preferences
+            Manage your database settings, business rules, report structures, and preferences
           </p>
         </div>
 
         {/* Main Configuration Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-800/70 border border-emerald-500/30 backdrop-filter backdrop-blur-20">
+          <TabsList className="grid w-full grid-cols-4 bg-slate-800/70 border border-emerald-500/30 backdrop-filter backdrop-blur-20">
             <TabsTrigger value="overview" className="flex items-center gap-2 text-gray-300 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/25 hover:bg-slate-700 hover:text-white">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -117,6 +122,12 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
               Business Rules
+            </TabsTrigger>
+            <TabsTrigger value="report-structure" className="flex items-center gap-2 text-gray-300 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/25 hover:bg-slate-700 hover:text-white">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              Report Structure
             </TabsTrigger>
           </TabsList>
 
@@ -163,6 +174,18 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
                 onCancel={handleRulesCancel}
                 onReset={handleRulesReset}
                 onContentChange={handleRulesContentChange}
+              />
+            </Suspense>
+          </TabsContent>
+
+          {/* Report Structure Tab */}
+          <TabsContent value="report-structure">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <ReportStructureTab
+                reportStructure={reportStructure}
+                reportStructureLoading={reportStructureLoading}
+                reportStructureError={reportStructureError}
+                onRefresh={handleReportStructureRefresh}
               />
             </Suspense>
           </TabsContent>

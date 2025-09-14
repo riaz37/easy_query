@@ -9,6 +9,7 @@ import { useTheme } from "@/store/theme-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { NavbarTaskIndicator } from "@/components/task-manager";
 
 export default function Navbar() {
   const { showSidebar, setShowSidebar } = useUIStore();
@@ -57,50 +58,40 @@ export default function Navbar() {
         {/* Menu Button */}
         <div
           onClick={handleMenuClick}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 cursor-pointer group",
-            theme === "dark"
-              ? "bg-emerald-500/15 border-emerald-500/25 hover:bg-emerald-500/20"
-              : "bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/15"
-          )}
+          className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer group"
+          style={{
+            background: "rgba(255, 255, 255, 0.08)"
+          }}
         >
           <div className="w-4 h-4 flex flex-col items-center justify-center gap-0.5">
             {/* Three horizontal bars */}
             <div
               className={cn(
-                "w-4 h-0.5 rounded-full transition-all duration-300",
-                theme === "dark" ? "bg-emerald-400" : "bg-emerald-600",
+                "w-4 h-0.5 rounded-full transition-all duration-300 bg-white",
                 showSidebar ? "rotate-45 translate-y-1" : ""
               )}
             ></div>
             <div
               className={cn(
-                "w-4 h-0.5 rounded-full transition-all duration-300",
-                theme === "dark" ? "bg-emerald-400" : "bg-emerald-600",
+                "w-4 h-0.5 rounded-full transition-all duration-300 bg-white",
                 showSidebar ? "opacity-0" : ""
               )}
             ></div>
             <div
               className={cn(
-                "w-4 h-0.5 rounded-full transition-all duration-300",
-                theme === "dark" ? "bg-emerald-400" : "bg-emerald-600",
+                "w-4 h-0.5 rounded-full transition-all duration-300 bg-white",
                 showSidebar ? "-rotate-45 -translate-y-1" : ""
               )}
             ></div>
           </div>
-          <span className={cn(
-            "text-sm font-medium transition-colors",
-            theme === "dark" 
-              ? "text-emerald-400 group-hover:text-emerald-300" 
-              : "text-emerald-600 group-hover:text-emerald-700"
-          )}>
+          <span className="text-sm font-medium text-white transition-colors group-hover:text-white/90">
             {showSidebar ? "Close" : "Menu"}
           </span>
         </div>
 
       </div>
 
-      {/* Right side - Notifications, Theme Toggle and User */}
+      {/* Right side - Notifications, Task Indicator, Theme Toggle and User */}
       <div className="flex items-center gap-4">
         {/* Notification Bell */}
         <div className="relative">
@@ -122,6 +113,9 @@ export default function Navbar() {
             <span className="text-white text-xs font-bold">1</span>
           </div>
         </div>
+
+        {/* Task Indicator */}
+        <NavbarTaskIndicator />
 
         {/* Theme Toggle */}
         <ThemeToggle
@@ -173,11 +167,14 @@ export default function Navbar() {
           <Button
             onClick={() => window.location.href = '/auth'}
             className={cn(
-              "transition-colors",
+              "transition-colors cursor-pointer",
               theme === "dark"
                 ? "text-white/90 hover:text-white hover:bg-gray-600/50"
                 : "text-gray-700/90 hover:text-gray-900 hover:bg-gray-300/50"
             )}
+            style={{
+              background: "rgba(255, 255, 255, 0.08)"
+            }}
           >
             <LogIn className="w-4 h-4 mr-2" />
             Sign In

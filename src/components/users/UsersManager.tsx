@@ -175,7 +175,7 @@ export function UsersManager() {
       );
     } else if (hasVectorDB) {
       return (
-        <Badge className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white border-teal-400/30 shadow-lg shadow-teal-500/25">
+        <Badge className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-emerald-400/30 shadow-lg shadow-emerald-500/25">
           Vector DB Access
         </Badge>
       );

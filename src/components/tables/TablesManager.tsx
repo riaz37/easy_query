@@ -8,7 +8,21 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  // Loader2,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { XIcon, Table as TableIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Database,
   Search,
   RefreshCw,
@@ -16,11 +30,24 @@ import {
   FileSpreadsheet,
   Table,
   Eye,
+  Plus,
+  Upload,
+  BarChart3,
+  Users,
+  FileText,
+  Zap,
 } from "lucide-react";
 import { Spinner } from "@/components/ui/loading";
 import { TableFlowVisualization } from "./TableFlowVisualization";
 import { ExcelToDBManager } from "./ExcelToDBManager";
 import { TableManagementSection } from "./TableManagementSection";
+import {
+  CreateTableModal,
+  BusinessRulesModal,
+  YourTablesModal,
+  ExcelImportModal,
+  AnalyticsModal,
+} from "./modals";
 import { ServiceRegistry } from "@/lib/api/services/service-registry";
 import { UserCurrentDBTableData } from "@/types/api";
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
@@ -45,6 +72,29 @@ export function TablesManager() {
   const [activeTab, setActiveTab] = useState("visualization");
   const [selectedTableForViewing, setSelectedTableForViewing] =
     useState<string>("");
+  const [openModal, setOpenModal] = useState<string | null>(null);
+  
+  // Separate modal states
+  const [showCreateTableModal, setShowCreateTableModal] = useState(false);
+  const [showBusinessRulesModal, setShowBusinessRulesModal] = useState(false);
+  const [showYourTablesModal, setShowYourTablesModal] = useState(false);
+  const [showExcelImportModal, setShowExcelImportModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  
+  // Table creation state
+  const [tableName, setTableName] = useState("");
+  const [schema, setSchema] = useState("dbo");
+  const [columns, setColumns] = useState([
+    {
+      name: "column_1",
+      data_type: "INT",
+      nullable: false,
+      is_primary: true,
+      is_identity: true,
+    },
+  ]);
+  const [businessRule, setBusinessRule] = useState("");
+  const [currentBusinessRule, setCurrentBusinessRule] = useState<string>("");
 
   const setCurrentDatabase = async () => {
     if (!user?.user_id) {
@@ -260,243 +310,309 @@ export function TablesManager() {
     })) || [];
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <TablesManagerHeader isDark={isDark} />
+    <div className="h-screen w-full relative overflow-hidden">
+      {/* Main Content Area - PageLayout handles navbar spacing */}
+      <div className="flex h-full">
+        {/* ReactFlow Container - Full width */}
+        <div className="flex-1 relative w-full h-full">
+          {user?.user_id && tableData ? (
+            <TableFlowVisualization rawData={tableData} />
+          ) : !loading && !tableData ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="bg-white/10 dark:bg-gray-800/20 backdrop-blur-sm border border-emerald-200/20 dark:border-emerald-800/20 rounded-xl p-8">
+                <div className="text-center">
+                  <Database className="h-12 w-12 text-emerald-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    No Table Data
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                    Enter a user ID and click Load to fetch table information
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : tableData && filteredTables.length === 0 && searchTerm ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="bg-white/10 dark:bg-gray-800/20 backdrop-blur-sm border border-emerald-200/20 dark:border-emerald-800/20 rounded-xl p-8">
+                <div className="text-center">
+                  <Search className="h-12 w-12 text-emerald-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    No Tables Found
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    No tables match your search criteria: "{searchTerm}"
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
 
-      {/* Stats Cards */}
-      {user?.user_id && tableData && (
-        <TableStatsCards tableData={tableData} isDark={isDark} />
+      {/* Error/Success Messages */}
+      {(error || success) && (
+        <div className="fixed top-4 right-4 z-50 max-w-md">
+          <Alert variant={error ? "destructive" : "default"} className="bg-slate-800/90 border-slate-600">
+            <AlertDescription className="text-white">
+              {error || success}
+            </AlertDescription>
+          </Alert>
+        </div>
       )}
 
+      {/* Bottom Icon Controls */}
+      {user?.user_id && (
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-white/10 dark:bg-gray-800/20 backdrop-blur-sm border border-emerald-200/20 dark:border-emerald-800/20 rounded-2xl p-4 shadow-2xl">
+            <TooltipProvider>
+            <div className="flex items-center gap-4">
+              {/* Create Table Modal */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => setShowCreateTableModal(true)}
+                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    size="icon"
+                  >
+                    <Plus className="h-6 w-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Create Table</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Business Rules Modal */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                      <Button
+                    onClick={() => setShowBusinessRulesModal(true)}
+                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    size="icon"
+                  >
+                    <FileText className="h-6 w-6" />
+                      </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Business Rules</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Your Tables Modal */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => setShowYourTablesModal(true)}
+                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    size="icon"
+                  >
+                    <TableIcon className="h-6 w-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your Tables</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Excel Import Modal */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => setShowExcelImportModal(true)}
+                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    size="icon"
+                  >
+                    <FileSpreadsheet className="h-6 w-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Excel Import</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Analytics Modal */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => setShowAnalyticsModal(true)}
+                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    size="icon"
+                  >
+                    <BarChart3 className="h-6 w-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Table Analytics</p>
+                </TooltipContent>
+              </Tooltip>
+
+
+                  </div>
+            </TooltipProvider>
+          </div>
+        </div>
+      )}
+
+      {/* Separate Modals */}
+      <CreateTableModal
+        open={showCreateTableModal}
+        onOpenChange={setShowCreateTableModal}
+        tableName={tableName}
+        setTableName={setTableName}
+        schema={schema}
+        setSchema={setSchema}
+        columns={columns}
+        dataTypes={null}
+        loading={loading}
+        onAddColumn={() => {
+          setColumns([
+            ...columns,
+            {
+              name: "",
+              data_type: "VARCHAR",
+              nullable: true,
+              is_primary: false,
+              is_identity: false,
+            },
+          ]);
+        }}
+        onUpdateColumn={(index, field, value) => {
+          setColumns((prevColumns) => {
+            const newColumns = [...prevColumns];
+            newColumns[index] = { ...newColumns[index], [field]: value };
+            return newColumns;
+          });
+        }}
+        onRemoveColumn={(index) => {
+          if (columns.length > 1) {
+            setColumns(columns.filter((_, i) => i !== index));
+          }
+        }}
+        onGetDataTypeOptions={() => []}
+        onSubmit={async (modalData) => {
+          try {
+            setLoading(true);
+            setError(null);
+            
+            // Validate input
+            if (!modalData.tableName.trim()) {
+              setError("Table name is required");
+              return;
+            }
+            
+            if (!modalData.schema.trim()) {
+              setError("Schema is required");
+              return;
+            }
+            
+            if (modalData.columns.some(col => !col.name.trim())) {
+              setError("All columns must have names");
+              return;
+            }
+            
+            // Create table request
+            const request = {
+              user_id: user?.user_id || "",
+              table_name: modalData.tableName,
+              schema: modalData.schema,
+              columns: modalData.columns,
+            };
+            
+            console.log("Creating table with request:", request);
+            
+            // Call the create table API using ServiceRegistry
+            const result = await ServiceRegistry.newTable.createTable(request);
+            
+            if (result.success) {
+              setSuccess("Table created successfully!");
+              setShowCreateTableModal(false);
+              // Reset form
+              setTableName("");
+              setSchema("dbo");
+              setColumns([{
+                name: "column_1",
+                data_type: "INT",
+                nullable: false,
+                is_primary: true,
+                is_identity: true,
+              }]);
+              // Refresh table data
+              await setCurrentDatabase();
+            } else {
+              setError(result.error || "Failed to create table");
+            }
+          } catch (error) {
+            console.error("Failed to create table:", error);
+            setError("Failed to create table. Please try again.");
+          } finally {
+            setLoading(false);
+          }
+        }}
+      />
+
+      <BusinessRulesModal
+        open={showBusinessRulesModal}
+        onOpenChange={setShowBusinessRulesModal}
+        businessRule={businessRule}
+        setBusinessRule={setBusinessRule}
+        loading={false}
+        onSubmit={() => {
+          console.log("Update business rule:", businessRule);
+          setShowBusinessRulesModal(false);
+        }}
+      />
+
+      <YourTablesModal
+        open={showYourTablesModal}
+        onOpenChange={setShowYourTablesModal}
+        userTables={null}
+        loading={false}
+        onRefresh={() => {
+          console.log("Refresh tables");
+        }}
+        onCreateTable={() => {
+          setShowYourTablesModal(false);
+          setShowCreateTableModal(true);
+        }}
+      />
+
+      <ExcelImportModal
+        open={showExcelImportModal}
+        onOpenChange={setShowExcelImportModal}
+        userId={user?.user_id || ""}
+        availableTables={availableTables}
+        onViewTableData={(tableName) => {
+          setSelectedTableForViewing(tableName);
+          setShowExcelImportModal(false);
+        }}
+      />
+
+      <AnalyticsModal
+        open={showAnalyticsModal}
+        onOpenChange={setShowAnalyticsModal}
+        tableData={tableData}
+      />
+
       {/* Authentication Check */}
-      {authLoading ? (
-        <div className="card-enhanced">
-          <div className="card-content-enhanced">
+      {authLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-gray-800/20 backdrop-blur-sm z-40">
+          <div className="bg-white/20 dark:bg-gray-800/40 backdrop-blur-sm border border-emerald-200/20 dark:border-emerald-800/20 rounded-xl p-6">
             <div className="flex items-center gap-2 text-emerald-400">
               <Spinner size="sm" variant="accent-blue" />
               Checking authentication...
             </div>
           </div>
         </div>
-      ) : !user?.user_id ? (
-        <div className="card-enhanced">
-          <div className="card-content-enhanced">
-            <div className="text-gray-300">
+      )}
+
+      {!user?.user_id && !authLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-gray-800/20 backdrop-blur-sm z-40">
+          <div className="bg-white/20 dark:bg-gray-800/40 backdrop-blur-sm border border-emerald-200/20 dark:border-emerald-800/20 rounded-xl p-6">
+            <div className="text-gray-700 dark:text-gray-300">
               Please log in to access database table management features.
             </div>
           </div>
         </div>
-      ) : null}
-
-      {/* Error Alert */}
-      {error && (
-        <div className="card-enhanced">
-          <div className="card-content-enhanced">
-            <div className="text-red-400">{error}</div>
-          </div>
-        </div>
-      )}
-
-      {/* Success Alert */}
-      {success && (
-        <div className="card-enhanced">
-          <div className="card-content-enhanced">
-            <div className="text-emerald-400">{success}</div>
-          </div>
-        </div>
-      )}
-
-      {/* Database Configuration */}
-      {user?.user_id && (
-        <div className="card-enhanced">
-          <div className="card-content-enhanced">
-            <div className="card-header-enhanced">
-              <div className="card-title-enhanced flex items-center gap-2">
-                <Settings className="h-5 w-5" />
-                Database Configuration
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm text-slate-400 whitespace-nowrap">
-                    Database ID:
-                  </label>
-                  <Input
-                    type="number"
-                    placeholder="Enter DB ID"
-                    value={dbId || ""}
-                    onChange={(e) => {
-                      const value = parseInt(e.target.value);
-                      if (value > 0) {
-                        setDbId(value);
-                      } else {
-                        setDbId(0); // Set to 0 to indicate invalid state
-                      }
-                    }}
-                    className={`w-32 ${
-                      dbId <= 0 ? "border-red-500 focus:border-red-500" : ""
-                    }`}
-                    min="1"
-                    required
-                  />
-                  {dbId <= 0 && (
-                    <span className="text-red-400 text-xs">Invalid ID</span>
-                  )}
-                </div>
-                <Button
-                  onClick={setCurrentDatabase}
-                  disabled={settingDB || !dbId || dbId <= 0 || !user?.user_id}
-                  className="card-button-enhanced"
-                >
-                  {settingDB ? (
-                    <Spinner size="sm" variant="accent-blue" />
-                  ) : (
-                    <Settings className="h-4 w-4" />
-                  )}
-                  Set Database
-                </Button>
-                <Button
-                  onClick={fetchTableData}
-                  disabled={loading || !user?.user_id}
-                  className="card-button-enhanced"
-                >
-                  {loading ? (
-                    <Spinner size="sm" variant="accent-blue" />
-                  ) : (
-                    <RefreshCw className="h-4 w-4" />
-                  )}
-                  Load Tables
-                </Button>
-                <Button
-                  onClick={generateTableInfo}
-                  disabled={generatingTables || !user?.user_id}
-                  className="card-button-enhanced"
-                >
-                  {generatingTables ? (
-                    <Spinner size="sm" variant="accent-blue" />
-                  ) : (
-                    <Database className="h-4 w-4" />
-                  )}
-                  Reload Database
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content Tabs */}
-      {user?.user_id && (
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 border-slate-600">
-            <TabsTrigger
-              value="visualization"
-              className="flex items-center gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white"
-            >
-              <Table className="h-4 w-4" />
-              Table Visualization
-            </TabsTrigger>
-            <TabsTrigger
-              value="table-management"
-              className="flex items-center gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white"
-            >
-              <Settings className="h-4 w-4" />
-              Table Management
-            </TabsTrigger>
-            <TabsTrigger
-              value="excel-import"
-              className="flex items-center gap-2 data-[state=active]:bg-slate-700 data-[state=active]:text-white"
-            >
-              <FileSpreadsheet className="h-4 w-4" />
-              Excel Import
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Table Visualization Tab */}
-          <TabsContent value="visualization" className="space-y-6 mt-6">
-            {/* Table Flow Visualization */}
-            {tableData && (
-              <div className="card-enhanced">
-                <div className="card-content-enhanced">
-                  <div className="card-header-enhanced">
-                    <div className="card-title-enhanced">
-                      Table Relationships
-                    </div>
-                    <p className="card-description-enhanced">
-                      Interactive visualization of table relationships and
-                      structure
-                    </p>
-                  </div>
-                  <div className="mt-4">
-                    <div className="h-[600px] w-full">
-                      <TableFlowVisualization rawData={tableData} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* No Data State */}
-            {!loading && !tableData && (
-              <div className="card-enhanced">
-                <div className="card-content-enhanced">
-                  <div className="text-center py-12">
-                    <Database className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-2">
-                      No Table Data
-                    </h3>
-                    <p className="text-slate-400 mb-4">
-                      Enter a user ID and click Load to fetch table information
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* No Results State */}
-            {tableData && filteredTables.length === 0 && searchTerm && (
-              <div className="card-enhanced">
-                <div className="card-content-enhanced">
-                  <div className="text-center py-12">
-                    <Search className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-2">
-                      No Tables Found
-                    </h3>
-                    <p className="text-slate-400">
-                      No tables match your search criteria: "{searchTerm}"
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* Table Management Tab */}
-          <TabsContent value="table-management" className="mt-6">
-            <TableManagementSection
-              userId={user?.user_id}
-              databaseId={dbId}
-              onTableCreated={() => {
-                // Refresh table data when a new table is created
-                fetchTableData();
-              }}
-            />
-          </TabsContent>
-
-          {/* Excel Import Tab */}
-          <TabsContent value="excel-import" className="mt-6">
-            <ExcelToDBManager
-              userId={user?.user_id || ""}
-              availableTables={availableTables}
-              onViewTableData={(tableName) => {
-                setSelectedTableForViewing(tableName);
-                setActiveTab("visualization");
-              }}
-            />
-          </TabsContent>
-        </Tabs>
       )}
     </div>
   );

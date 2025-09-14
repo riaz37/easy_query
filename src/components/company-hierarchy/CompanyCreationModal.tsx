@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { Building2, X } from "lucide-react";
+import { Building2, X, XIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -189,28 +189,49 @@ export function CompanyCreationModal({
   }, [loadDatabases]);
 
   const handleTaskComplete = async (success: boolean, result?: any) => {
+    console.log("Task completed:", { success, result, databaseCreationData });
+    
     if (success) {
-      // Reload databases to get the newly created one
-      await loadInitialData();
-
-      // Try to find and select the newly created database
+      // Try to find and select the newly created database first
       let newDbId = null;
 
       if (result?.db_id) {
         newDbId = result.db_id;
+        console.log("Found database ID from result.db_id:", newDbId);
       } else if (result?.database_id) {
         newDbId = result.database_id;
-      } else if (databaseCreationData?.dbConfig?.db_name) {
+        console.log("Found database ID from result.database_id:", newDbId);
+      }
+
+      // If we found the ID, set it immediately
+      if (newDbId) {
+        console.log("Setting selected database ID:", newDbId);
+        setSelectedDbId(newDbId);
+      }
+
+      // Reload databases to get the newly created one
+      await loadInitialData();
+
+      // If we didn't find the ID from result, try to find by name after reload
+      if (!newDbId && databaseCreationData?.dbConfig?.db_name) {
+        // Wait a bit for the databases to be loaded
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         const newDb = databases.find(
           (db) => db.db_name === databaseCreationData.dbConfig.db_name
         );
+        console.log("Looking for database by name:", databaseCreationData.dbConfig.db_name);
+        console.log("Available databases:", databases.map(db => ({ id: db.db_id, name: db.db_name })));
+        
         if (newDb) {
           newDbId = newDb.db_id;
+          console.log("Found database by name:", newDbId);
+          setSelectedDbId(newDbId);
         }
       }
 
-      if (newDbId) {
-        setSelectedDbId(newDbId);
+      if (!newDbId) {
+        console.log("No database ID found, user will need to select manually");
       }
 
       // Move to vector config step
@@ -294,6 +315,7 @@ export function CompanyCreationModal({
     userConfigs,
     mssqlLoading: isLoadingDatabases,
     userConfigLoading: isLoadingUserConfigs,
+    onClose,
     setConfig: async (dbConfig: any) => {
       // Use MSSQLConfigService to create database
       const { MSSQLConfigService } = await import(
@@ -312,27 +334,37 @@ export function CompanyCreationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[95vh] w-[95vw] p-0 border-0 bg-transparent">
+      <DialogContent className="p-0 border-0 bg-transparent" showCloseButton={false}>
         <div className="modal-enhanced">
-          <div className="modal-content-enhanced max-h-[95vh] overflow-y-auto">
+          <div className="modal-content-enhanced overflow-y-auto">
             {/* Header */}
-            <DialogHeader className="modal-header-enhanced">
-              <DialogTitle className="modal-title-enhanced flex items-center gap-3">
-                <Building2 className="w-6 h-6 text-green-400" />
-                Create {type === "parent" ? "Parent" : "Sub"} Company
-              </DialogTitle>
-              <DialogDescription className="modal-description-enhanced">
-                Set up your company with database and vector configurations
-              </DialogDescription>
+            <DialogHeader className="modal-header-enhanced px-8 pt-6 pb-4">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <DialogTitle className="modal-title-enhanced flex items-center gap-3 text-xl">
+                    <Building2 className="h-6 w-6 text-green-400" />
+                    Create {type === "parent" ? "Parent" : "Sub"} Company
+                  </DialogTitle>
+                  <DialogDescription className="modal-description-enhanced text-sm">
+                    Set up your company with database and vector configurations
+                  </DialogDescription>
+                </div>
+                <button
+                  onClick={handleClose}
+                  className="modal-close-button"
+                >
+                  <XIcon className="h-5 w-5" />
+                </button>
+              </div>
             </DialogHeader>
 
             {/* Step Indicator */}
-            <div className="modal-form-group">
+            <div className="px-8 pb-4">
               <StepIndicator currentStep={currentStep} />
             </div>
 
             {/* Content Area */}
-            <div className="modal-form-content">
+            <div className="modal-form-content px-8 pb-6 flex-1 overflow-y-auto">
               {currentStep === "company-info" && (
                 <CompanyInfoStep {...stepProps} />
               )}

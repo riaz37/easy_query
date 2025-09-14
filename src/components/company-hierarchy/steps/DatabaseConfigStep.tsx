@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { MSSQLConfigData } from "@/types/api";
 import { DatabaseConfigStepProps } from "../types";
@@ -28,10 +28,9 @@ export function DatabaseConfigStep({
   setCurrentStep,
   setDatabaseCreationData,
   setCurrentTaskId,
-  refreshUserConfigs,
 }: DatabaseConfigStepProps) {
   const { user } = useAuthContext();
-  const [activeTab, setActiveTab] = useState("existing");
+  const [selectedOption, setSelectedOption] = useState("existing");
 
   // New database form states
   const [newDbUrl, setNewDbUrl] = useState("");
@@ -74,7 +73,7 @@ export function DatabaseConfigStep({
       setDatabaseCreationData({ dbConfig, selectedFile });
 
       const taskResponse = await setConfig(dbConfig);
-      
+
       if (!taskResponse) {
         toast.error("Failed to start database creation - no response received");
         return;
@@ -82,18 +81,24 @@ export function DatabaseConfigStep({
 
       // Handle different response formats
       let taskId: string | null = null;
-      
-      if (typeof taskResponse === 'object') {
-        if ('task_id' in taskResponse) {
+
+      if (typeof taskResponse === "object") {
+        if ("task_id" in taskResponse) {
           taskId = taskResponse.task_id;
-        } else if ('data' in taskResponse && taskResponse.data && 'task_id' in taskResponse.data) {
+        } else if (
+          "data" in taskResponse &&
+          taskResponse.data &&
+          "task_id" in taskResponse.data
+        ) {
           taskId = taskResponse.data.task_id;
         }
       }
 
       if (!taskId) {
         console.error("Task response structure:", taskResponse);
-        toast.error("Failed to start database creation - invalid task ID in response");
+        toast.error(
+          "Failed to start database creation - invalid task ID in response"
+        );
         return;
       }
 
@@ -102,7 +107,8 @@ export function DatabaseConfigStep({
       toast.success("Database creation started successfully");
     } catch (error: any) {
       console.error("Database creation error:", error);
-      const errorMessage = error?.message || error?.toString() || "Failed to create database";
+      const errorMessage =
+        error?.message || error?.toString() || "Failed to create database";
       toast.error(`Database creation failed: ${errorMessage}`);
     }
   };
@@ -116,51 +122,41 @@ export function DatabaseConfigStep({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-medium text-green-400">Database Configuration</h3>
-          <p className="text-sm text-gray-400 mt-1">
-            Choose an existing database or create a new one
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          onClick={handlePrevious}
-          className="modal-button-secondary"
-        >
-          Back
-        </Button>
+      <div>
+        <h3 className="text-lg font-medium text-green-400">
+          Database Configuration
+        </h3>
+        <p className="text-sm text-gray-400 mt-1">
+          Choose an existing database or create a new one
+        </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 bg-gray-800/50">
-          <TabsTrigger
-            value="existing"
-            className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400"
-          >
-            Select Existing
-          </TabsTrigger>
-          <TabsTrigger
-            value="new"
-            className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400"
-          >
-            Create New
-          </TabsTrigger>
-        </TabsList>
+      <div className="space-y-6">
+        {/* Radio Button Selection */}
+        <div className="space-y-4">
+          <Label className="text-sm font-medium text-gray-300">Select Databased</Label>
+          <RadioGroup value={selectedOption} onValueChange={setSelectedOption} className="flex gap-6">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="existing" id="existing" />
+              <Label htmlFor="existing" className="text-sm text-gray-300 cursor-pointer">
+                Existing
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="new" id="new" />
+              <Label htmlFor="new" className="text-sm text-gray-300 cursor-pointer">
+                New
+              </Label>
+            </div>
+          </RadioGroup>
+        </div>
 
-        <TabsContent value="existing" className="space-y-4">
+        {/* Existing Database Content */}
+        {selectedOption === "existing" && (
+          <div className="space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="modal-label-enhanced">Select Database</Label>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={refreshUserConfigs}
-                className="modal-button-secondary"
-              >
-                <Loader2 className="w-4 h-4 mr-2" />
-                Refresh
-              </Button>
             </div>
             {mssqlLoading ? (
               <div className="flex items-center gap-2 p-4 bg-gray-800/50 rounded-lg">
@@ -193,7 +189,7 @@ export function DatabaseConfigStep({
                 <p className="text-sm">Create one to get started</p>
               </div>
             )}
-            
+
             {databases.length === 0 && !mssqlLoading && (
               <div className="text-center py-8 text-gray-400">
                 <Database className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -202,32 +198,29 @@ export function DatabaseConfigStep({
               </div>
             )}
           </div>
-        </TabsContent>
+          </div>
+        )}
 
-        <TabsContent value="new" className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="newDbName" className="modal-label-enhanced">Database Name *</Label>
-              <Input
-                id="newDbName"
-                value={newDbName}
-                onChange={(e) => setNewDbName(e.target.value)}
-                placeholder="MyDatabase"
-                className="modal-input-enhanced"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="modal-label-enhanced">User ID</Label>
-              <div className="p-3 bg-gray-800/50 border border-green-400/30 rounded-lg">
-                <div className="text-green-400 font-medium">{user?.user_id || 'Not authenticated'}</div>
-                <div className="text-xs text-gray-400 mt-1">Automatically set from your account</div>
-              </div>
-            </div>
+        {/* New Database Content */}
+        {selectedOption === "new" && (
+          <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="newDbName" className="modal-label-enhanced">
+              Database Name *
+            </Label>
+            <Input
+              id="newDbName"
+              value={newDbName}
+              onChange={(e) => setNewDbName(e.target.value)}
+              placeholder="MyDatabase"
+              className="modal-input-enhanced"
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="newDbUrl" className="modal-label-enhanced">Database URL *</Label>
+            <Label htmlFor="newDbUrl" className="modal-label-enhanced">
+              Database URL *
+            </Label>
             <Input
               id="newDbUrl"
               value={newDbUrl}
@@ -239,7 +232,12 @@ export function DatabaseConfigStep({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="newDbBusinessRule" className="modal-label-enhanced">Business Rules (Optional)</Label>
+              <Label
+                htmlFor="newDbBusinessRule"
+                className="modal-label-enhanced"
+              >
+                Business Rules (Optional)
+              </Label>
               <Textarea
                 id="newDbBusinessRule"
                 value={newDbBusinessRule}
@@ -250,7 +248,9 @@ export function DatabaseConfigStep({
             </div>
 
             <div className="space-y-2">
-              <Label className="modal-label-enhanced">Database File (Optional)</Label>
+              <Label className="modal-label-enhanced">
+                Database File (Optional)
+              </Label>
               <div className="space-y-2">
                 <div className="text-sm text-gray-400">
                   Supported: .bak, .sql, .mdf, .ldf, .trn, .dmp, .dump
@@ -259,8 +259,10 @@ export function DatabaseConfigStep({
                   <Input
                     type="file"
                     accept=".bak,.sql,.mdf,.ldf,.trn,.dmp,.dump"
-                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    className="modal-input-enhanced file:bg-green-600 file:text-white file:border-0 file:rounded file:px-3 file:py-1"
+                    onChange={(e) =>
+                      setSelectedFile(e.target.files?.[0] || null)
+                    }
+                    className="modal-input-enhanced file:bg-[var(--primary-8,rgba(19,245,132,0.08))] file:border-[var(--primary-16,rgba(19,245,132,0.16))] file:text-white file:border file:rounded file:px-3 file:py-1"
                   />
                   {selectedFile && (
                     <Button
@@ -276,7 +278,8 @@ export function DatabaseConfigStep({
                 </div>
                 {selectedFile && (
                   <div className="text-sm text-green-400">
-                    Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                    Selected: {selectedFile.name} (
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
                   </div>
                 )}
               </div>
@@ -302,8 +305,9 @@ export function DatabaseConfigStep({
               Reset
             </Button>
           </div>
-        </TabsContent>
-      </Tabs>
+          </div>
+        )}
+      </div>
 
       {/* Navigation */}
       <div className="modal-footer-enhanced">
@@ -314,7 +318,6 @@ export function DatabaseConfigStep({
         >
           Back
         </Button>
-        
         {selectedDbId && (
           <Button
             onClick={handleNext}

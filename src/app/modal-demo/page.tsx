@@ -29,7 +29,8 @@ import {
   Palette,
   Eye,
   Code,
-  Sparkles
+  Sparkles,
+  XIcon
 } from "lucide-react";
 
 export default function ModalDemoPage() {
@@ -226,17 +227,27 @@ export default function ModalDemoPage() {
 
         {/* Enhanced Form Modal */}
         <Dialog open={isFormModalOpen} onOpenChange={setIsFormModalOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] p-0 border-0 bg-transparent">
+          <DialogContent className="max-w-2xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
             <div className="modal-enhanced">
               <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
                 <DialogHeader className="modal-header-enhanced">
-                  <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <User className="h-5 w-5 text-green-400" />
-                    Create User Account
-                  </DialogTitle>
-                  <p className="modal-description-enhanced">
-                    Complete user registration with enhanced glass morphism styling
-                  </p>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <DialogTitle className="modal-title-enhanced flex items-center gap-2">
+                        <User className="h-5 w-5 text-green-400" />
+                        Create User Account
+                      </DialogTitle>
+                      <p className="modal-description-enhanced">
+                        Complete user registration with enhanced glass morphism styling
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsFormModalOpen(false)}
+                      className="modal-close-button"
+                    >
+                      <XIcon className="h-5 w-5" />
+                    </button>
+                  </div>
                 </DialogHeader>
 
                 <div className="modal-form-content">
@@ -344,17 +355,27 @@ export default function ModalDemoPage() {
 
         {/* Database Access Modal */}
         <Dialog open={isDatabaseModalOpen} onOpenChange={setIsDatabaseModalOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent">
+          <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
             <div className="modal-enhanced">
               <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
                 <DialogHeader className="modal-header-enhanced">
-                  <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <Database className="h-5 w-5 text-green-400" />
-                    Database Access Configuration
-                  </DialogTitle>
-                  <p className="modal-description-enhanced">
-                    Configure user access to MSSQL databases with enhanced glass styling
-                  </p>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <DialogTitle className="modal-title-enhanced flex items-center gap-2">
+                        <Database className="h-5 w-5 text-green-400" />
+                        Database Access Configuration
+                      </DialogTitle>
+                      <p className="modal-description-enhanced">
+                        Configure user access to MSSQL databases with enhanced glass styling
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsDatabaseModalOpen(false)}
+                      className="modal-close-button"
+                    >
+                      <XIcon className="h-5 w-5" />
+                    </button>
+                  </div>
                 </DialogHeader>
 
                 <div className="modal-form-content">
@@ -427,17 +448,27 @@ export default function ModalDemoPage() {
 
         {/* Vector Database Modal */}
         <Dialog open={isVectorModalOpen} onOpenChange={setIsVectorModalOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent">
+          <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
             <div className="modal-enhanced">
               <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
                 <DialogHeader className="modal-header-enhanced">
-                  <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <Brain className="h-5 w-5 text-green-400" />
-                    Vector Database Access
-                  </DialogTitle>
-                  <p className="modal-description-enhanced">
-                    Configure AI vector database access with table selection
-                  </p>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <DialogTitle className="modal-title-enhanced flex items-center gap-2">
+                        <Brain className="h-5 w-5 text-green-400" />
+                        Vector Database Access
+                      </DialogTitle>
+                      <p className="modal-description-enhanced">
+                        Configure AI vector database access with table selection
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsVectorModalOpen(false)}
+                      className="modal-close-button"
+                    >
+                      <XIcon className="h-5 w-5" />
+                    </button>
+                  </div>
                 </DialogHeader>
 
                 <div className="modal-form-content">
@@ -527,17 +558,27 @@ export default function ModalDemoPage() {
 
         {/* Enhanced Settings Modal */}
         <Dialog open={isEnhancedModalOpen} onOpenChange={setIsEnhancedModalOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] p-0 border-0 bg-transparent">
+          <DialogContent className="max-w-2xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
             <div className="modal-enhanced">
               <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
                 <DialogHeader className="modal-header-enhanced">
-                  <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <Settings className="h-5 w-5 text-green-400" />
-                    System Settings
-                  </DialogTitle>
-                  <p className="modal-description-enhanced">
-                    Configure system preferences with enhanced glass morphism
-                  </p>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <DialogTitle className="modal-title-enhanced flex items-center gap-2">
+                        <Settings className="h-5 w-5 text-green-400" />
+                        System Settings
+                      </DialogTitle>
+                      <p className="modal-description-enhanced">
+                        Configure system preferences with enhanced glass morphism
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsEnhancedModalOpen(false)}
+                      className="modal-close-button"
+                    >
+                      <XIcon className="h-5 w-5" />
+                    </button>
+                  </div>
                 </DialogHeader>
 
                 <div className="modal-form-content">

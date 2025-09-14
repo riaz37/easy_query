@@ -39,6 +39,11 @@ export function useReportStructure(): UseReportStructureReturn {
       return; // Already loaded for this userId, don't reload
     }
 
+    // Prevent multiple simultaneous calls
+    if (currentState.isLoading) {
+      return;
+    }
+
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -70,10 +75,17 @@ export function useReportStructure(): UseReportStructureReturn {
   }, []); // Empty dependency array since we're using ref
 
   const updateStructure = useCallback(async (userId: string, structure: UpdateReportStructureRequest) => {
+    // Prevent multiple simultaneous calls
+    const currentState = stateRef.current;
+    if (currentState.isLoading) {
+      return;
+    }
+
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      await ServiceRegistry.reports.updateReportStructure(userId, structure);
+      // Use the correct API endpoint for user-based updates
+      await ServiceRegistry.reports.updateUserReportStructure(userId, structure);
       
       // Reload the structure after update
       await loadStructure(userId);

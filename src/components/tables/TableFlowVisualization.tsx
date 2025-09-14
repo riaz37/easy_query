@@ -61,12 +61,12 @@ export function TableFlowVisualization({
       (t) => !t.relationships || t.relationships.length === 0
     );
 
-    // Create a more intelligent layout
+    // Create a more intelligent layout with increased spacing for full page
     const createLayout = () => {
-      let currentX = 100;
-      let currentY = 100;
-      const nodeSpacing = 280;
-      const rowHeight = 200;
+      let currentX = 150;
+      let currentY = 150;
+      const nodeSpacing = 400;
+      const rowHeight = 300;
       const maxCols = Math.ceil(Math.sqrt(processedTables.length));
 
       // Place connected tables first in a more organized way
@@ -92,7 +92,7 @@ export function TableFlowVisualization({
       const isolatedStartY =
         currentY +
         Math.ceil(tablesWithRelationships.length / maxCols) * rowHeight +
-        100;
+        150;
       isolatedTables.forEach((table, index) => {
         const row = Math.floor(index / maxCols);
         const col = index % maxCols;
@@ -123,18 +123,9 @@ export function TableFlowVisualization({
           );
 
           if (targetExists) {
-            // Get colors based on relationship type
+            // Unified green color for all relationships
             const getRelationshipColor = (type: string) => {
-              switch (type) {
-                case "many_to_one":
-                  return { stroke: "#10b981", fill: "#10b981" }; // emerald
-                case "one_to_many":
-                  return { stroke: "#3b82f6", fill: "#3b82f6" }; // blue
-                case "one_to_one":
-                  return { stroke: "#f59e0b", fill: "#f59e0b" }; // amber
-                default:
-                  return { stroke: "#8b5cf6", fill: "#8b5cf6" }; // violet
-              }
+              return { stroke: "#10b981", fill: "#10b981" }; // emerald green
             };
 
             const colors = getRelationshipColor(
@@ -149,8 +140,6 @@ export function TableFlowVisualization({
               style: {
                 stroke: colors.stroke,
                 strokeWidth: 2,
-                strokeDasharray:
-                  relationship.type === "many_to_one" ? "5,5" : undefined,
               },
               markerEnd: {
                 type: "arrowclosed",
@@ -170,7 +159,9 @@ export function TableFlowVisualization({
 
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [selectedNodeId, setSelectedNodeId] = React.useState<string | null>(null);
+  const [selectedNodeId, setSelectedNodeId] = React.useState<string | null>(
+    null
+  );
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -179,38 +170,56 @@ export function TableFlowVisualization({
 
   // Handle node selection
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
-    setSelectedNodeId(prevId => prevId === node.id ? null : node.id);
+    setSelectedNodeId((prevId) => (prevId === node.id ? null : node.id));
   }, []);
 
   // Memoize the node and edge styles
-  const nodeStyle = useCallback((node: Node) => ({
-    opacity: !selectedNodeId || 
-            node.id === selectedNodeId || 
-            edges.some(e => (e.source === selectedNodeId && e.target === node.id) || 
-                           (e.target === selectedNodeId && e.source === node.id)) ? 1 : 0.3,
-    transition: 'opacity 0.2s ease-in-out',
-  }), [selectedNodeId, edges]);
+  const nodeStyle = useCallback(
+    (node: Node) => ({
+      opacity:
+        !selectedNodeId ||
+        node.id === selectedNodeId ||
+        edges.some(
+          (e) =>
+            (e.source === selectedNodeId && e.target === node.id) ||
+            (e.target === selectedNodeId && e.source === node.id)
+        )
+          ? 1
+          : 0.3,
+      transition: "opacity 0.2s ease-in-out",
+    }),
+    [selectedNodeId, edges]
+  );
 
-  const edgeStyle = useCallback((edge: Edge) => ({
-    ...edge.style,
-    opacity: !selectedNodeId || 
-            edge.source === selectedNodeId || 
-            edge.target === selectedNodeId ? 1 : 0.2,
-    strokeWidth: (edge.source === selectedNodeId || edge.target === selectedNodeId) ? 3 : 2,
-    transition: 'all 0.2s ease-in-out',
-  }), [selectedNodeId]);
+  const edgeStyle = useCallback(
+    (edge: Edge) => ({
+      ...edge.style,
+      opacity:
+        !selectedNodeId ||
+        edge.source === selectedNodeId ||
+        edge.target === selectedNodeId
+          ? 1
+          : 0.2,
+      strokeWidth:
+        edge.source === selectedNodeId || edge.target === selectedNodeId
+          ? 3
+          : 2,
+      transition: "all 0.2s ease-in-out",
+    }),
+    [selectedNodeId]
+  );
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-slate-900 via-gray-900 to-black rounded-lg overflow-hidden relative">
+    <div className="w-full h-full relative">
       <ReactFlow
-        nodes={nodes.map(node => ({
+        nodes={nodes.map((node) => ({
           ...node,
           style: {
             ...node.style,
             ...nodeStyle(node),
           },
         }))}
-        edges={edges.map(edge => ({
+        edges={edges.map((edge) => ({
           ...edge,
           style: edgeStyle(edge),
         }))}
@@ -223,69 +232,16 @@ export function TableFlowVisualization({
         fitView
         className="bg-transparent"
         proOptions={{ hideAttribution: true }}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-        minZoom={0.3}
-        maxZoom={2}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.6 }}
+        minZoom={0.2}
+        maxZoom={3}
         nodesDraggable={true}
       >
-        <Background
-          variant={BackgroundVariant.Dots}
-          gap={25}
-          size={1.5}
-          color="#374151"
-          className="opacity-60"
-        />
         <Controls
           className="bg-gray-900/90 border-gray-700 backdrop-blur-sm"
           showInteractive={false}
+          position="bottom-left"
         />
-
-        {/* Legend Panel */}
-        <div className="absolute top-4 right-4 bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg p-4 min-w-[200px] z-10">
-          {/* Relationship Types */}
-          <div className="border-t border-gray-700 pt-3">
-            <h4 className="text-gray-300 font-medium text-xs mb-2">
-              Relationships
-            </h4>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-4 h-0.5 bg-emerald-400 border-dashed border border-emerald-400"></div>
-                <span className="text-emerald-300">Many-to-One</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-4 h-0.5 bg-blue-400"></div>
-                <span className="text-blue-300">One-to-Many</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-4 h-0.5 bg-amber-400"></div>
-                <span className="text-amber-300">One-to-One</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Statistics */}
-          <div className="border-t border-gray-700 pt-3 mt-3">
-            <div className="text-xs text-gray-400">
-              <div>Tables: {processedTables.length}</div>
-              <div>
-                Connected:{" "}
-                {
-                  processedTables.filter(
-                    (t) => t.relationships && t.relationships.length > 0
-                  ).length
-                }
-              </div>
-              <div>
-                Isolated:{" "}
-                {
-                  processedTables.filter(
-                    (t) => !t.relationships || t.relationships.length === 0
-                  ).length
-                }
-              </div>
-            </div>
-          </div>
-        </div>
       </ReactFlow>
     </div>
   );

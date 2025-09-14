@@ -3,6 +3,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Edit, UserCheck, Brain } from "lucide-react";
+import { useTheme } from "@/store/theme-store";
+import { cn } from "@/lib/utils";
 import { UserCardProps } from "../types";
 
 export function UserCard({
@@ -16,6 +18,7 @@ export function UserCard({
   formatTableNames,
   isDark
 }: UserCardProps) {
+  const theme = useTheme();
   const isMSSQL = type === 'mssql';
   const userAccessData = user as any; // Type assertion for MSSQL users
   const userConfig = user as any; // Type assertion for Vector DB users
@@ -31,13 +34,16 @@ export function UserCard({
     if (isMSSQL) {
       return "bg-gradient-to-br from-emerald-500 to-emerald-600";
     }
-    return "bg-gradient-to-br from-teal-500 to-teal-600";
+    return "bg-gradient-to-br from-emerald-500 to-emerald-600";
   };
 
   const renderUserDetails = () => {
     if (isMSSQL) {
       return (
-        <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
+        <div className={cn(
+          "flex items-center gap-4 mt-2 text-xs font-medium",
+          theme === "dark" ? "text-gray-400" : "text-gray-600"
+        )}>
           <span>Databases: {getDatabaseCount?.(userAccessData) || 0}</span>
           <span>Sub-companies: {userAccessData.sub_company_ids?.length || 0}</span>
         </div>
@@ -45,18 +51,30 @@ export function UserCard({
     } else {
       return (
         <>
-          <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
+          <div className={cn(
+            "flex items-center gap-4 mt-2 text-xs font-medium",
+            theme === "dark" ? "text-gray-400" : "text-gray-600"
+          )}>
             <span>Access Level: {userConfig.access_level}</span>
             <span>Database: {getDatabaseName?.(userConfig.db_id) || `DB ${userConfig.db_id}`}</span>
             <span>Tables: {formatTableNames?.(userConfig.table_names) || 'No tables'}</span>
           </div>
           {userConfig.table_names && userConfig.table_names.length > 3 && (
-            <div className="mt-2 text-xs text-gray-400">
+            <div className={cn(
+              "mt-2 text-xs font-medium",
+              theme === "dark" ? "text-gray-400" : "text-gray-600"
+            )}>
               <details className="cursor-pointer">
-                <summary className="hover:text-gray-300">Show all tables</summary>
+                <summary className={cn(
+                  "hover:transition-colors font-medium",
+                  theme === "dark" ? "hover:text-gray-300" : "hover:text-gray-700"
+                )}>Show all tables</summary>
                 <div className="mt-2 pl-4">
                   {userConfig.table_names.map((table: string, index: number) => (
-                    <div key={index} className="text-gray-400">
+                    <div key={index} className={cn(
+                      "font-medium",
+                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    )}>
                       • {table}
                     </div>
                   ))}
@@ -78,12 +96,18 @@ export function UserCard({
           </div>
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h4 className="font-medium text-white">
+              <h4 className={cn(
+                "font-semibold",
+                theme === "dark" ? "text-white" : "text-gray-800"
+              )}>
                 {extractNameFromEmail(user.user_id)}
               </h4>
               {getAccessLevelBadge(user)}
             </div>
-            <p className="text-sm text-gray-300">
+            <p className={cn(
+              "text-sm font-medium",
+              theme === "dark" ? "text-gray-300" : "text-gray-700"
+            )}>
               {user.user_id}
             </p>
             {renderUserDetails()}

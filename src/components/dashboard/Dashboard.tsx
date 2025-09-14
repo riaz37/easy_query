@@ -1,11 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
-import { BrainModel } from "../3d/BrainModel";
+import React, { useRef, useState } from "react";
 import { SystemCard } from "./SystemCard";
 import { Spotlight } from "../ui/spotlight";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
-import { useThreeScene } from "./hooks/useThreeScene";
 import { SYSTEM_NODES, INITIAL_CARD_POSITIONS } from "./constants";
 import { useResolvedTheme } from "@/store/theme-store";
+import Image from "next/image";
 
 const Dashboard: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -17,17 +16,6 @@ const Dashboard: React.FC = () => {
     initialPositions: INITIAL_CARD_POSITIONS,
     containerRef: mountRef,
   });
-
-  // Use custom hook for Three.js scene management
-  const { updateConnections } = useThreeScene({
-    mountRef,
-    cardPositions,
-  });
-
-  // Update connections when positions change
-  useEffect(() => {
-    updateConnections();
-  }, [cardPositions, updateConnections]);
 
   const handleNodeMouseEnter = (nodeId: string): void => {
     if (!dragging) {
@@ -47,10 +35,25 @@ const Dashboard: React.FC = () => {
       style={{
         background:
           theme === "dark"
-            ? "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f172a 100%)"
+            ? "var(--BG-2-Primary-Color, #000000D9)"
             : "linear-gradient(135deg, #ffffff 0%, #f0f9f5 30%, #e6f7ff 70%, #f0f9f5 100%)",
       }}
     >
+      {/* Frame SVG Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <Image
+          src="/dashboard/frame.svg"
+          alt="Background Frame"
+          fill
+          className="object-cover object-top"
+          priority
+          style={{
+            opacity: 0.6,
+            mixBlendMode: 'lighten',
+          }}
+        />
+      </div>
+
       {/* Enhanced Background Effects for Light Mode */}
       {theme === "light" && (
         <>
@@ -79,25 +82,54 @@ const Dashboard: React.FC = () => {
         </>
       )}
 
-      {/* Theme-aware Spotlight Effect */}
-      <div className="absolute inset-0 z-[5] pointer-events-none overflow-visible">
-        <Spotlight
-          className="!opacity-100 animate-spotlight absolute -top-20 left-1/2 transform -translate-x-1/2 w-[140%] h-[140%]"
-          fill={theme === "dark" ? "#10b981" : "#059669"}
-        />
-      </div>
-
-      {/* 3D Scene */}
-      <div ref={mountRef} className="absolute inset-0" />
-
-      {/* 3D Brain Model - Interactive with theme-aware colors */}
+      {/* Brain Model SVG - Centered with circle.svg borders */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="w-96 h-96">
-          <BrainModel
-            color={theme === "dark" ? "#10b981" : "#047857"}
-            emissiveIntensity={theme === "dark" ? 0.2 : 0.08}
-            enableControls={true}
-          />
+        <div className="relative w-[1100px] h-[1100px]">
+          {/* Circle Border - Positioned lower to center the brain model */}
+          <div 
+            className="absolute"
+            style={{ 
+              width: '1100px',
+              height: '1100px',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -45%)', // Moved up by 5% to center brain
+              zIndex: 1
+            }}
+          >
+            <Image
+              src="/dashboard/circle.svg"
+              alt="Circle Border"
+              fill
+              className="object-contain transition-all duration-300 opacity-70"
+              priority
+            />
+          </div>
+          
+          {/* Brain Model Container - Centered in the viewport */}
+          <div 
+            className="absolute"
+            style={{ 
+              width: '276px', 
+              height: '208px',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 2
+            }}
+          >
+            <Image
+              src="/dashboard/brainmodel.svg"
+              alt="Brain Model"
+              fill
+              className={`object-contain transition-all duration-300 ${
+                theme === "dark"
+                  ? "brightness-110 contrast-110"
+                  : "brightness-90 contrast-105"
+              }`}
+              priority
+            />
+          </div>
         </div>
       </div>
 

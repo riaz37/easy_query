@@ -39,9 +39,22 @@ export class ReportService extends BaseService {
   }
 
   /**
-   * Update the report structure for a specific user
+   * Update the report structure for a specific config
    */
   async updateReportStructure(
+    configId: number,
+    request: UpdateReportStructureRequest
+  ): Promise<void> {
+    await this.put(
+      API_ENDPOINTS.UPDATE_REPORT_STRUCTURE(configId),
+      request
+    );
+  }
+
+  /**
+   * Update the report structure for a specific user (using user current DB endpoint)
+   */
+  async updateUserReportStructure(
     userId: string,
     request: UpdateReportStructureRequest
   ): Promise<void> {
