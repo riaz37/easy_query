@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import {
   Loader2,
-  Database,
   RefreshCw,
   ArrowLeft,
   ArrowRight,
@@ -45,7 +44,6 @@ export function ExcelStep2SelectDestination({
   const [userTables, setUserTables] = useState<UserTable[]>([]);
   const [isLoadingTables, setIsLoadingTables] = useState(false);
   const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
-  const [currentDbInfo, setCurrentDbInfo] = useState<{ db_id: number; business_rule?: string } | null>(null);
   const [tableLoadError, setTableLoadError] = useState<string | null>(null);
 
   const { getUserTables } = useNewTable();
@@ -53,7 +51,7 @@ export function ExcelStep2SelectDestination({
   // Fetch user tables from API
   const fetchUserTables = useCallback(async () => {
     if (!userId) return;
-    
+
     setIsLoadingTables(true);
     setTableLoadError(null);
     try {
@@ -61,27 +59,20 @@ export function ExcelStep2SelectDestination({
       if (response && response.tables && Array.isArray(response.tables)) {
         setUserTables(response.tables);
         setLastTablesUpdate(new Date());
-        
-        // Extract database info
-        if (response.current_db_id) {
-          setCurrentDbInfo({
-            db_id: response.current_db_id,
-            business_rule: response.business_rule
-          });
-        }
-        
+
         if (response.tables.length > 0) {
           toast.success(`Loaded ${response.tables.length} user table(s)`);
         } else {
-          toast.info('No user tables found');
+          toast.info("No user tables found");
         }
       } else {
-        console.warn('Invalid response structure:', response);
-        toast.error('Invalid response structure from server');
+        console.warn("Invalid response structure:", response);
+        toast.error("Invalid response structure from server");
       }
     } catch (error) {
-      console.error('Failed to fetch user tables:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch user tables';
+      console.error("Failed to fetch user tables:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch user tables";
       setTableLoadError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -97,18 +88,19 @@ export function ExcelStep2SelectDestination({
   }, [userId, fetchUserTables]);
 
   // Transform user table data to match the expected format
-  const transformedTables = userTables.map(table => ({
+  const transformedTables = userTables.map((table) => ({
     table_name: table.table_name,
     full_name: table.table_full_name,
-    columns: table.table_schema.columns.map(col => ({
+    columns: table.table_schema.columns.map((col) => ({
       column_name: col.name,
       data_type: col.type,
-      is_nullable: !col.is_required
-    }))
+      is_nullable: !col.is_required,
+    })),
   }));
 
   // Use transformed tables if available, otherwise fall back to availableTables prop
-  const displayTables = transformedTables.length > 0 ? transformedTables : availableTables;
+  const displayTables =
+    transformedTables.length > 0 ? transformedTables : availableTables;
 
   const handleTableChange = (tableFullName: string) => {
     onTableSelect(tableFullName);
@@ -116,42 +108,11 @@ export function ExcelStep2SelectDestination({
 
   return (
     <div className="space-y-6">
-      {/* Database Context */}
-      {isLoadingTables ? (
-        <div className="p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
-          <div className="flex items-center gap-3">
-            <Loader2 className="h-5 w-5 animate-spin text-blue-400" />
-            <span className="text-slate-300">Loading database information...</span>
-          </div>
-        </div>
-      ) : currentDbInfo ? (
-        <div className="p-4 bg-gradient-to-r from-slate-700/30 to-slate-600/30 rounded-xl border border-slate-600/50">
-          <div className="flex items-center gap-3 mb-3">
-            <Database className="h-5 w-5 text-green-400" />
-            <span className="font-medium text-white">Current Database</span>
-            <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-500/50">
-              ID: {currentDbInfo.db_id}
-            </Badge>
-          </div>
-          {currentDbInfo.business_rule && (
-            <div className="text-sm text-slate-300">
-              <span className="text-slate-400">Business Rule:</span>{" "}
-              <span className="text-white font-medium">{currentDbInfo.business_rule}</span>
-            </div>
-          )}
-        </div>
-      ) : null}
-
       {/* Table Selection */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Label className="font-semibold text-white">Select Table</Label>
-            {displayTables.length > 0 && (
-              <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-500/50">
-                {displayTables.length} available
-              </Badge>
-            )}
           </div>
           <Button
             onClick={fetchUserTables}
@@ -168,15 +129,9 @@ export function ExcelStep2SelectDestination({
             Refresh
           </Button>
         </div>
-        
-        {isLoadingTables ? (
-          <div className="flex items-center gap-3 p-6 bg-slate-700/30 rounded-xl">
-            <Loader2 className="h-6 w-6 animate-spin text-blue-400" />
-            <span className="text-slate-300">Loading user tables...</span>
-          </div>
-        ) : !lastTablesUpdate && !isLoadingTables ? (
+
+        {!lastTablesUpdate && !isLoadingTables ? (
           <div className="p-8 bg-slate-700/30 rounded-xl text-center">
-            <Database className="h-16 w-16 text-slate-500 mx-auto mb-4" />
             <p className="text-slate-300 mb-2">Click refresh to load tables</p>
             <Button
               onClick={fetchUserTables}
@@ -190,9 +145,10 @@ export function ExcelStep2SelectDestination({
           </div>
         ) : displayTables.length === 0 ? (
           <div className="p-8 bg-slate-700/30 rounded-xl text-center">
-            <Database className="h-16 w-16 text-slate-500 mx-auto mb-4" />
             <p className="text-slate-300 mb-2">No tables found</p>
-            <p className="text-slate-500 mb-6">You need to create tables first before importing Excel data</p>
+            <p className="text-slate-500 mb-6">
+              You need to create tables first before importing Excel data
+            </p>
             <div className="flex gap-3 justify-center">
               <Button
                 onClick={fetchUserTables}
@@ -208,7 +164,6 @@ export function ExcelStep2SelectDestination({
                 size="lg"
                 className="text-green-400 border-green-400/50 hover:bg-green-400/10"
               >
-                <Database className="h-5 w-5 mr-2" />
                 Create Table
               </Button>
             </div>
@@ -219,48 +174,61 @@ export function ExcelStep2SelectDestination({
               <SelectTrigger className="modal-input-enhanced">
                 <SelectValue placeholder="Choose a database table" />
               </SelectTrigger>
-              <SelectContent className="modal-select-content-enhanced">
-                {displayTables.map((table) => {
-                  const userTable = userTables.find(ut => ut.table_full_name === table.full_name);
-                  return (
-                    <SelectItem key={table.full_name} value={table.full_name}>
-                      <div className="flex items-center gap-3 p-2">
-                        <div className="p-2 bg-blue-500/20 rounded-lg">
-                          <Database className="h-4 w-4 text-blue-400" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-white">{table.full_name}</div>
-                          <div className="text-sm text-slate-400">
-                            {table.table_name}
+              <SelectContent 
+                className="modal-select-content-enhanced"
+                style={{
+                  background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))"
+                }}
+              >
+                {isLoadingTables ? (
+                  <div className="flex items-center justify-center p-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-green-400" />
+                  </div>
+                ) : (
+                  displayTables.map((table) => {
+                    const userTable = userTables.find(
+                      (ut) => ut.table_full_name === table.full_name
+                    );
+                    return (
+                      <SelectItem 
+                        key={table.full_name} 
+                        value={table.full_name}
+                        className="hover:bg-slate-700/30 focus:bg-slate-700/30 data-[highlighted]:bg-slate-700/30"
+                      >
+                        <div className="flex items-center gap-3 p-3 rounded-lg">
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold text-white">
+                              {table.full_name}
+                            </div>
+                            
                           </div>
+                          <Badge
+                            variant="secondary"
+                            className="bg-green-500/20 text-green-400 border-green-500/30"
+                          >
+                            {table.columns.length} cols
+                          </Badge>
                         </div>
-                        <Badge variant="secondary" className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                          {table.columns.length} cols
-                        </Badge>
-                      </div>
-                    </SelectItem>
-                  );
-                })}
+                      </SelectItem>
+                    );
+                  })
+                )}
               </SelectContent>
             </Select>
           </div>
         )}
-        
+
         {/* Error display */}
         {tableLoadError && (
-          <Alert variant="destructive" className="border-red-500/50 bg-red-500/10">
+          <Alert
+            variant="destructive"
+            className="border-red-500/50 bg-red-500/10"
+          >
             <AlertCircle className="h-4 w-4" />
             <AlertDescription className="text-red-300">
               Failed to load tables: {tableLoadError}
             </AlertDescription>
           </Alert>
-        )}
-
-        {/* Last update timestamp */}
-        {lastTablesUpdate && (
-          <div className="text-center text-sm text-slate-500">
-            Last updated: {lastTablesUpdate.toLocaleTimeString()}
-          </div>
         )}
       </div>
 
@@ -275,7 +243,7 @@ export function ExcelStep2SelectDestination({
           <ArrowLeft className="h-5 w-5 mr-2" />
           Back
         </Button>
-        
+
         <Button
           onClick={onNext}
           disabled={!selectedTable}

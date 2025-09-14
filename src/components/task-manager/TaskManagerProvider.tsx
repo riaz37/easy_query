@@ -129,7 +129,7 @@ export function useTaskCreator() {
     });
   };
 
-  const executeTask = async <T>(
+  const executeTask = async <T,>(
     taskId: string,
     taskFunction: () => Promise<T>,
     progressCallback?: (progress: number) => void

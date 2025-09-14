@@ -22,7 +22,7 @@ import {
   Database,
   Brain,
 } from "lucide-react";
-import { Spinner } from '@/components/ui/loading';
+import { Spinner } from "@/components/ui/loading";
 import {
   FileUpload,
   FileResults,
@@ -47,6 +47,7 @@ export default function FileQueryPage() {
 
   // File upload state
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   // Table selection state
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -83,7 +84,7 @@ export default function FileQueryPage() {
 
   // Handle table usage change from FileUpload
   const handleTableUsageChange = useCallback((useTable: boolean) => {
-    console.log('FileQueryPage: handleTableUsageChange called with:', useTable);
+    console.log("FileQueryPage: handleTableUsageChange called with:", useTable);
     setUseTable(useTable);
     // Clear selected table if tables are disabled
     if (!useTable) {
@@ -145,7 +146,7 @@ export default function FileQueryPage() {
 
           // Extract results from the answer sources or create structured result
           let results: FileQueryResult[] = [];
-          
+
           if (searchResponse.answer) {
             // Create the main result with the AI-generated answer
             const mainResult: FileQueryResult = {
@@ -159,11 +160,14 @@ export default function FileQueryPage() {
               // Add source information
               sources: searchResponse.answer.sources || [],
             };
-            
+
             results.push(mainResult);
-            
+
             // If there are individual sources with content, add them as separate results
-            if (searchResponse.answer.sources && Array.isArray(searchResponse.answer.sources)) {
+            if (
+              searchResponse.answer.sources &&
+              Array.isArray(searchResponse.answer.sources)
+            ) {
               searchResponse.answer.sources.forEach((source, index) => {
                 if (source.content || source.text) {
                   results.push({
@@ -312,126 +316,58 @@ export default function FileQueryPage() {
   }
 
   return (
-    <PageLayout background="enhanced" backgroundIntensity="medium" maxWidth="7xl">
-      <PageHeader
-        title="File Query"
-        description="Upload files and query them using natural language"
-        icon={<FileText className="w-6 h-6 text-emerald-400" />}
-        actions={
-          <>
-            {/* Status Badges */}
-            {user?.user_id && (
-              <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
-                <CheckCircle className="w-4 h-4 mr-2" />
-                User: {user.user_id}
-              </Badge>
-            )}
-            {currentDatabaseId && (
-              <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
-                <File className="w-4 h-4 mr-2" />
-                DB: {currentDatabaseName || currentDatabaseId}
-              </Badge>
-            )}
-            {businessRules.status === "loaded" && (
-              <Badge variant="outline" className="border-emerald-400/30 text-emerald-400">
-                <CheckCircle className="w-4 h-4 mr-2" />
-                Rules Active
-              </Badge>
-            )}
-          </>
-        }
-      />
+    <PageLayout background={["frame", "gridframe"]} maxWidth="7xl">
+      {/* Welcome Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-green-400 mb-2">
+          Hi there, {user?.username || ""}
+        </h1>
+        <p className="text-xl text-white">What would you like to know?</p>
+      </div>
 
-              {/* Feature Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                        <FileText className="w-4 h-4 text-emerald-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">
-                          Smart Upload
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                          Process multiple file formats
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      {/* Top Controls Bar */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <span className="text-white">Use Table</span>
+          <button
+            onClick={() => setUseTable(!useTable)}
+            className={`relative inline-flex h-6 w-11 items-center transition-colors ${
+              useTable ? "bg-green-600" : "bg-gray-600"
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform bg-white transition-transform ${
+                useTable ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
+          </button>
+        </div>
+        <Button
+          variant="outline"
+          className="border-green-400 text-green-400 hover:bg-green-400/10"
+          onClick={() => {
+            // Handle history button click
+            console.log("History clicked");
+          }}
+        >
+          <History className="w-4 h-4 mr-2" />
+          History
+        </Button>
+      </div>
 
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                        <Database className="w-4 h-4 text-emerald-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">
-                          Table Integration
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                          Connect with database tables
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                        <Brain className="w-4 h-4 text-emerald-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">
-                          AI Analysis
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                          Intelligent content insights
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left Column - File Query */}
+        <div className="space-y-6">
+                {/* Query Form */}
+          <div className="card-enhanced">
+            <div className="card-content-enhanced">
+              <div className="card-header-enhanced">
+                <div className="card-title-enhanced flex items-center gap-2">
+                  <Brain className="w-5 h-5 text-green-400" />
+                  File Query
                 </div>
               </div>
-
-            {/* Main Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Left Column - File Upload and Query */}
-              <div className="lg:col-span-2 space-y-6">
-                {/* File Upload */}
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="card-header-enhanced">
-                      <div className="card-title-enhanced flex items-center gap-2">
-                        <FileText className="w-5 h-5 text-emerald-400" />
-                        File Upload
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <FileUpload
-                        onFilesUploaded={handleFilesUploaded}
-                        onUploadStatusChange={handleUploadStatusChange}
-                        onTableUsageChange={handleTableUsageChange}
-                        disabled={!isAuthenticated}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Query Form */}
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="card-header-enhanced">
-                      <div className="card-title-enhanced flex items-center gap-2">
-                        <Database className="w-5 h-5 text-emerald-400" />
-                        Query Interface
-                      </div>
-                    </div>
                     <div className="flex-1">
                       <FileQueryForm
                         onSubmit={handleQuerySubmit}
@@ -440,143 +376,211 @@ export default function FileQueryPage() {
                         isLoading={isExecuting}
                         disabled={!isAuthenticated}
                       />
+                      <div className="mt-4 flex justify-end">
+                        <Button
+                          onClick={() => setIsUploadModalOpen(true)}
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          <FileText className="w-4 h-4 mr-2" />
+                          Upload Files
+                        </Button>
+                      </div>
                     </div>
+            </div>
+          </div>
+
+          {/* Query Results */}
+          {queryResults.length > 0 && (
+            <div className="card-enhanced">
+              <div className="card-content-enhanced">
+                <div className="card-header-enhanced">
+                  <div className="card-title-enhanced flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-green-400" />
+                    Query Results
                   </div>
                 </div>
-
-                {/* Query Results */}
-                {queryResults.length > 0 && (
-                  <div className="card-enhanced">
-                    <div className="card-content-enhanced">
-                      <div className="card-header-enhanced">
-                        <div className="card-title-enhanced flex items-center gap-2">
-                          <FileText className="w-5 h-5 text-emerald-400" />
-                          Query Results
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <FileResults
-                          results={queryResults}
-                          query={query}
-                          isLoading={isExecuting}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Query Error */}
-                {queryError && (
-                  <Card className="bg-red-900/20 border-red-500/30">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-red-400">
-                        <AlertCircle className="w-5 h-5" />
-                        Query Error
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="p-4 bg-red-900/30 border border-red-500/30 rounded-lg">
-                        <p className="text-red-300">{queryError}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+                <div className="flex-1">
+                  <FileResults
+                    results={queryResults}
+                    query={query}
+                    isLoading={isExecuting}
+                  />
+                </div>
               </div>
+            </div>
+          )}
 
-              {/* Right Column - Stats, History, and Info */}
-              <div className="space-y-6">
-                {/* Table Usage Status */}
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <Database className="h-4 w-4" />
-                      <span className="text-sm font-medium">
-                        Table Usage: {useTable ? "Enabled" : "Disabled"}
-                      </span>
-                      <Badge variant="outline" className="ml-auto text-xs border-emerald-400/30 text-emerald-400">
-                        {useTable ? "With Tables" : "No Tables"}
-                      </Badge>
-                    </div>
-                    <p className="text-gray-400 text-xs mt-2">
-                      {useTable
-                        ? "Files will be processed with table names for structured queries"
-                        : "Files will be processed without table names for general content search"}
-                    </p>
-                  </div>
+          {/* Query Error */}
+          {queryError && (
+            <Card className="bg-red-900/20 border-red-500/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-red-400">
+                  <AlertCircle className="w-5 h-5" />
+                  Query Error
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="p-4 bg-red-900/30 border border-red-500/30">
+                  <p className="text-red-300">{queryError}</p>
                 </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
 
+        {/* Right Column - Connect Table */}
+        <div className="space-y-6">
+          {/* Connect Table Card */}
+          <div className="card-enhanced">
+            <div className="card-content-enhanced">
+              <div className="card-header-enhanced">
+                <div className="card-title-enhanced flex items-center gap-2">
+                  <Database className="w-5 h-5 text-green-400" />
+                  Connect Table
+                </div>
+              </div>
+              <div className="space-y-4">
                 {/* Table Selector - for specifying which table to query */}
                 {useTable && (
-                  <div className="card-enhanced">
-                    <div className="card-content-enhanced">
-                      <div className="card-header-enhanced">
-                        <div className="card-title-enhanced flex items-center gap-2">
-                          <Database className="w-5 h-5 text-emerald-400" />
-                          Table Selection
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <TableSelector
-                          databaseId={currentDatabaseId}
-                          onTableSelect={(tableName) => {
-                            setSelectedTable(tableName);
-                            toast.success(`Selected table: ${tableName}`);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  <div className="space-y-3">
+                    <TableSelector
+                      databaseId={currentDatabaseId}
+                      onTableSelect={(tableName) => {
+                        setSelectedTable(tableName);
+                        toast.success(`Selected table: ${tableName}`);
+                      }}
+                    />
 
-                {/* Selected Table Indicator */}
-                {useTable && selectedTable && (
-                  <div className="card-enhanced">
-                    <div className="card-content-enhanced">
-                      <div className="flex items-center gap-2 text-emerald-400">
+                    {/* Selected Table Indicator */}
+                    {selectedTable && (
+                      <div className="flex items-center gap-2 text-green-400 p-2 bg-green-500/10">
                         <CheckCircle className="h-4 w-4" />
                         <span className="text-sm font-medium">
-                          Querying table: {selectedTable}
+                          {selectedTable}
                         </span>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedTable(null)}
-                          className="h-6 w-6 p-0 ml-auto text-emerald-400 hover:text-emerald-300"
+                          className="h-6 w-6 p-0 ml-auto text-green-400 hover:text-green-300"
                         >
                           <X className="h-4 w-4" />
                         </Button>
                       </div>
-                    </div>
+                    )}
                   </div>
                 )}
 
+                {/* Table Usage Status */}
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 text-green-400 mb-2">
+                    <Database className="h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {useTable ? "Table Mode Enabled" : "Table Mode Disabled"}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-xs">
+                    {useTable
+                      ? "Files will be processed with table names for structured queries"
+                      : "Files will be processed without table names for general content search"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-
-
-                {/* Query History */}
-                <div className="card-enhanced">
-                  <div className="card-content-enhanced">
-                    <div className="card-header-enhanced">
-                      <div className="card-title-enhanced flex items-center gap-2">
-                        <History className="w-5 h-5 text-emerald-400" />
-                        Query History
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <QueryHistoryPanel
-                        history={fileQueryHistory}
-                        onSelect={handleHistorySelect}
-                        onClear={() => {
-                          /* Implement clear history */
-                        }}
-                        type="file"
-                      />
+      {/* Recent Commands Section */}
+      <div className="mt-12">
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Recent Commands
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Sample recent commands - replace with actual data */}
+          {[1, 2, 3, 4].map((index) => (
+            <div key={index} className="card-enhanced">
+              <div className="card-content-enhanced">
+                <div className="space-y-2">
+                  <ul className="text-sm text-slate-400 space-y-1">
+                    <li>• last week</li>
+                    <li>• this month</li>
+                    <li>• yesterday</li>
+                  </ul>
+                  <div className="flex justify-center">
+                    <div className="w-6 h-6 bg-green-400 flex items-center justify-center">
+                      <span className="text-white text-xs">?</span>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Upload File Modal */}
+      {isUploadModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setIsUploadModalOpen(false)}
+        >
+          <div 
+            className="bg-slate-800 border border-slate-600 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-6 border-b border-slate-600">
+              <h2 className="text-2xl font-bold text-white mb-2">Upload File</h2>
+              <p className="text-slate-400 text-sm">
+                Add User refund processes with configurable policy enforcement.
+              </p>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {/* File Upload Component */}
+              <FileUpload
+                onFilesUploaded={handleFilesUploaded}
+                onUploadStatusChange={handleUploadStatusChange}
+                onTableUsageChange={handleTableUsageChange}
+                disabled={!isAuthenticated}
+              />
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-slate-600 flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setIsUploadModalOpen(false)}
+                className="border-slate-600 text-slate-300 hover:bg-slate-700"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  // Handle upload action
+                  setIsUploadModalOpen(false);
+                  toast.success("Files uploaded successfully!");
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                Upload
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setUploadedFiles([]);
+                  toast.info("Files cleared");
+                }}
+                className="border-red-500 text-red-400 hover:bg-red-500/10"
+              >
+                Clear
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </PageLayout>
   );
 }

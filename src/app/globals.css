@@ -1000,6 +1000,7 @@ nav {
   border: 1px solid var(--primary-16, #13f58429);
   color: white;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .modal-button-primary:hover {
@@ -1011,6 +1012,7 @@ nav {
   background: #ffffff0a;
   border: 1px solid var(--components-paper-outlined, #ffffff1f);
   color: white;
+  cursor: pointer;
 }
 
 .modal-button-secondary:hover {
