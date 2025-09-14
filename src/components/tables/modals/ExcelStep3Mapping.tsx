@@ -200,7 +200,7 @@ export function ExcelStep3Mapping({
         </p>
         <Button
           onClick={handleGetAIMapping}
-          className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+          className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
         >
           <Sparkles className="h-5 w-5 mr-2" />
           Try Again
@@ -213,19 +213,6 @@ export function ExcelStep3Mapping({
     <div className="space-y-6">
       {/* Mapping Header */}
       <div className="text-center space-y-4">
-        <div className="flex items-center justify-center gap-4 text-sm">
-          <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-            {aiMappingData.all_excel_columns.length} Excel columns
-          </Badge>
-          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-            {aiMappingData.all_table_columns.length} DB columns
-          </Badge>
-          <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
-            {aiMappingData.mapping_details.filter((d) => d.is_mapped).length}{" "}
-            mapped
-          </Badge>
-        </div>
-
         {/* Identity column notice */}
         <div className="modal-input-enhanced p-3 border border-red-500/20 rounded-lg">
           <div className="flex items-center gap-2 text-sm text-red-400">
@@ -238,166 +225,121 @@ export function ExcelStep3Mapping({
         </div>
       </div>
 
-      {/* Mapping Interface */}
-      <div className="grid grid-cols-2 gap-8">
-        {/* Existing Table Column */}
-        <div className="space-y-4">
-          <div className="text-center">
-            <h3 className="modal-title-enhanced text-base mb-2">
-              Existing Table Column
-            </h3>
-            <p className="modal-description-enhanced text-sm">
-              Be Patient Until fully completed
-            </p>
+      {/* Mapping Table */}
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-6 text-sm font-semibold text-slate-400 pb-3 border-b border-slate-600">
+          <div className="flex items-center gap-2">
+            <FileSpreadsheet className="h-4 w-4 text-green-400" />
+            Excel Column
           </div>
+          <div className="flex items-center gap-2">
+            <Database className="h-4 w-4 text-green-400" />
+            Database Column
+          </div>
+        </div>
 
-          <div className="space-y-3">
-            {aiMappingData.all_table_columns.map((column, index) => {
-              const isIdentityColumn =
-                column.toLowerCase().includes("id") || index === 0;
-              return (
-                <div
-                  key={column}
-                  className={`modal-input-enhanced p-4 rounded-xl border-2 transition-all duration-300 ${
-                    isIdentityColumn
-                      ? "border-red-500/30"
-                      : "border-green-500/30"
-                  }`}
-                  style={{
-                    background: isIdentityColumn
-                      ? "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(239, 68, 68, 0) 91.9%, rgba(239, 68, 68, 0.2) 114.38%), linear-gradient(59.16deg, rgba(239, 68, 68, 0) 71.78%, rgba(239, 68, 68, 0.2) 124.92%)"
-                      : "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)"
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`p-2 rounded-lg ${
-                        isIdentityColumn ? "bg-red-500/20" : "bg-green-500/20"
-                      }`}
-                    >
-                      <Database
-                        className={`h-4 w-4 ${
-                          isIdentityColumn ? "text-red-400" : "text-green-400"
-                        }`}
-                      />
-                    </div>
-                    <span
-                      className={`font-semibold ${
-                        isIdentityColumn ? "text-red-400" : "text-white"
-                      }`}
-                    >
-                      {column}
-                    </span>
-                    <div
-                      className={`ml-auto w-3 h-3 rounded-full ${
-                        isIdentityColumn ? "bg-red-500" : "bg-green-500"
-                      }`}
-                    />
-                  </div>
+        {aiMappingData.all_excel_columns.map((excelColumn: string) => {
+          const mappingDetail = aiMappingData.mapping_details.find(
+            (detail) => detail.excel_column === excelColumn
+          );
+          const currentMapping = customMapping[excelColumn];
+
+          return (
+            <div
+              key={excelColumn}
+              className="grid grid-cols-2 gap-6 items-center p-4 bg-slate-700/30 rounded-xl border border-slate-600/50"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-500/20 rounded-lg">
+                  <FileSpreadsheet className="h-4 w-4 text-green-400" />
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                <span className="text-white font-semibold text-lg">
+                  {excelColumn}
+                </span>
+              </div>
 
-        {/* Upload File Column */}
-        <div className="space-y-4">
-          <div className="text-center">
-            <h3 className="modal-title-enhanced text-base mb-2">
-              Upload File Column
-            </h3>
-            <p className="modal-description-enhanced text-sm">
-              Be Patient Until fully completed
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {aiMappingData.all_excel_columns.map((excelColumn) => {
-              const mappingDetail = aiMappingData.mapping_details.find(
-                (detail) => detail.excel_column === excelColumn
-              );
-              const currentMapping = customMapping[excelColumn];
-              const isMismatch =
-                mappingDetail && mappingDetail.mapping_status === "MISMATCH";
-
-              return (
-                <div
-                  key={excelColumn}
-                  className={`modal-input-enhanced p-4 rounded-xl border-2 transition-all duration-300 ${
-                    isMismatch
-                      ? "border-red-500/30"
-                      : currentMapping
-                      ? "border-green-500/30"
-                      : "border-slate-600/50"
-                  }`}
-                  style={{
-                    background: isMismatch
-                      ? "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(239, 68, 68, 0) 91.9%, rgba(239, 68, 68, 0.2) 114.38%), linear-gradient(59.16deg, rgba(239, 68, 68, 0) 71.78%, rgba(239, 68, 68, 0.2) 124.92%)"
-                      : currentMapping
-                      ? "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)"
-                      : "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(107, 114, 128, 0) 91.9%, rgba(107, 114, 128, 0.2) 114.38%), linear-gradient(59.16deg, rgba(107, 114, 128, 0) 71.78%, rgba(107, 114, 128, 0.2) 124.92%)"
-                  }}
+              <div className="space-y-2">
+                <Select
+                  value={currentMapping || ""}
+                  onValueChange={(value) => updateMapping(excelColumn, value)}
                 >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`p-2 rounded-lg ${
-                        isMismatch
-                          ? "bg-red-500/20"
-                          : currentMapping
-                          ? "bg-green-500/20"
-                          : "bg-slate-600/50"
-                      }`}
-                    >
-                      <Database
-                        className={`h-4 w-4 ${
-                          isMismatch
-                            ? "text-red-400"
-                            : currentMapping
-                            ? "text-green-400"
-                            : "text-slate-400"
-                        }`}
-                      />
-                    </div>
-                    <span
-                      className={`font-semibold ${
-                        isMismatch
-                          ? "text-red-400"
-                          : currentMapping
-                          ? "text-white"
-                          : "text-slate-400"
-                      }`}
-                    >
-                      {isMismatch ? "Mis Match" : excelColumn}
-                    </span>
-                    <div className="ml-auto flex items-center gap-2">
-                      {currentMapping && (
-                        <div className="w-3 h-3 rounded-full bg-green-500" />
-                      )}
-                      {isMismatch && (
-                        <div className="w-3 h-3 rounded-full bg-red-500" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+                  <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700/50">
+                    <SelectValue placeholder="Select DB column" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-800 border-slate-600">
+                    <SelectItem value="__no_mapping__">
+                      <div className="flex items-center gap-2">
+                        <X className="h-4 w-4 text-red-400" />
+                        <span>No mapping</span>
+                      </div>
+                    </SelectItem>
+                    {aiMappingData.all_table_columns.map((col) => {
+                      // Check if this is an identity column (first column or has 'id' in name)
+                      const isIdentityColumn =
+                        col === aiMappingData.all_table_columns[0] ||
+                        col.toLowerCase().includes("id");
 
-      {/* Mapping Summary */}
-      <div 
-        className="modal-input-enhanced p-4 rounded-xl border border-slate-600/50"
-        style={{
-          background: "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)"
-        }}
-      >
-        <div className="flex items-center justify-between">
-          <div className="modal-description-enhanced text-base">
-            <span className="text-white font-semibold">{Object.keys(customMapping).length}</span> of{" "}
-            <span className="text-white font-semibold">{aiMappingData.all_excel_columns.length}</span> columns mapped
-          </div>
-        </div>
+                      return (
+                        <SelectItem
+                          key={col}
+                          value={col}
+                          disabled={isIdentityColumn}
+                          className={
+                            isIdentityColumn
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
+                        >
+                          <div className="flex items-center gap-2">
+                            <Database className="h-4 w-4 text-green-400" />
+                            <span
+                              className={
+                                isIdentityColumn
+                                  ? "text-slate-500"
+                                  : "text-white"
+                              }
+                            >
+                              {col}
+                            </span>
+                            {isIdentityColumn && (
+                              <Badge
+                                variant="outline"
+                                className="text-xs bg-red-500/20 text-red-400 border-red-500/30"
+                              >
+                                Identity
+                              </Badge>
+                            )}
+                          </div>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+
+                {mappingDetail && (
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge
+                      className={`${
+                        mappingDetail.mapping_status === "MAPPED"
+                          ? "bg-green-500/20 text-green-400 border-green-500/30"
+                          : mappingDetail.mapping_status === "IDENTITY"
+                          ? "bg-green-500/20 text-green-400 border-green-500/30"
+                          : "bg-gray-500/20 text-gray-400 border-gray-500/30"
+                      }`}
+                    >
+                      {mappingDetail.mapping_status}
+                    </Badge>
+                    {mappingDetail.is_identity && (
+                      <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                        Identity (Auto-generated)
+                      </Badge>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Action Buttons */}

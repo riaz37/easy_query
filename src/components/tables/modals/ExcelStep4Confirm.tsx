@@ -115,7 +115,7 @@ export function ExcelStep4Confirm({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
           <div className="flex items-center gap-3 mb-2">
-            <FileSpreadsheet className="h-5 w-5 text-blue-400" />
+            <FileSpreadsheet className="h-5 w-5 text-green-400" />
             <Label className="text-slate-400 text-sm">File</Label>
           </div>
           <p className="text-white font-semibold">{selectedFile?.name}</p>
@@ -131,26 +131,6 @@ export function ExcelStep4Confirm({
           </div>
           <p className="text-white font-semibold">{getTableName(selectedTable)}</p>
           <p className="text-slate-400 text-sm">{selectedTable}</p>
-        </div>
-
-        <div className="p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
-          <div className="flex items-center gap-3 mb-2">
-            <Settings className="h-5 w-5 text-purple-400" />
-            <Label className="text-slate-400 text-sm">Mapped Columns</Label>
-          </div>
-          <p className="text-white font-semibold">
-            {mappingData?.mapping_details?.filter((d: any) => d.is_mapped && !d.is_identity).length || 0}
-          </p>
-          <p className="text-slate-400 text-sm">columns will be imported</p>
-        </div>
-
-        <div className="p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
-          <div className="flex items-center gap-3 mb-2">
-            <CheckCircle className="h-5 w-5 text-yellow-400" />
-            <Label className="text-slate-400 text-sm">Skip Headers</Label>
-          </div>
-          <p className="text-white font-semibold">Yes</p>
-          <p className="text-slate-400 text-sm">First row will be skipped</p>
         </div>
       </div>
 
@@ -190,7 +170,7 @@ export function ExcelStep4Confirm({
                   className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg"
                 >
                   <div className="flex-1 text-sm">
-                    <span className="text-blue-400">{detail.excel_column}</span>
+                    <span className="text-green-400">{detail.excel_column}</span>
                     <span className="text-slate-400 mx-2">→</span>
                     <span className="text-green-400">{detail.table_column}</span>
                   </div>
