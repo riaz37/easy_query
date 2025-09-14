@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
 import { ButtonLoader } from '@/components/ui/loading';
 import { cn } from '@/lib/utils';
 
@@ -110,7 +110,8 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
                 errors.username ? 'border-red-500' : ''
               )}
               style={{
-                border: '1px solid var(--components-paper-outlined, #FFFFFF1F)'
+                border: '1px solid var(--components-paper-outlined, #FFFFFF1F)',
+                height: '54px'
               }}
             />
             {errors.username && (
@@ -140,14 +141,15 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="6+ characters"
+                placeholder="Enter your password"
                 {...register('password')}
                 className={cn(
                   "modal-input-enhanced pr-10",
                   errors.password ? 'border-red-500' : ''
                 )}
                 style={{
-                  border: '1px solid var(--components-paper-outlined, #FFFFFF1F)'
+                  border: '1px solid var(--components-paper-outlined, #FFFFFF1F)',
+                  height: '54px'
                 }}
               />
               <button
@@ -158,7 +160,16 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
                   theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"
                 )}
               >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                <Image
+                  src="/dashboard/eye.svg"
+                  alt={showPassword ? "Hide password" : "Show password"}
+                  width={16}
+                  height={16}
+                  className={cn(
+                    "transition-opacity duration-200",
+                    showPassword ? "opacity-50" : "opacity-100"
+                  )}
+                />
               </button>
             </div>
             {errors.password && (
@@ -173,14 +184,14 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
             size="md"
             variant="primary"
             className={cn(
-              "w-full h-12 text-base font-semibold",
+              "w-full text-base font-semibold transition-colors duration-200",
               theme === "dark"
-                ? "text-white shadow-lg hover:shadow-emerald-500/25"
-                : "text-emerald-600 shadow-lg hover:shadow-emerald-500/25"
+                ? "text-white bg-white/4 hover:bg-white/10"
+                : "text-emerald-600 bg-emerald-50/20 hover:bg-emerald-50/40"
             )}
             style={{
-              backgroundColor: '#FFFFFF0A',
-              borderRadius: '99px'
+              borderRadius: '99px',
+              height: '54px'
             }}
           >
             Sign In

@@ -788,11 +788,11 @@ nav {
 .modal-enhanced::before {
   content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 22px;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 30px;
   padding: 2px;
   background: linear-gradient(
       132.56deg,
@@ -809,8 +809,8 @@ nav {
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   z-index: 1;
-  box-shadow: 0 0 20px rgba(19, 245, 132, 0.6), 0 0 40px rgba(19, 245, 132, 0.4),
-    0 0 60px rgba(19, 245, 132, 0.2);
+  box-shadow: 0 0 20px rgba(19, 245, 132, 0.4), 0 0 40px rgba(19, 245, 132, 0.2),
+    0 0 60px rgba(19, 245, 132, 0.1);
 }
 
 /* Light mode modal border effect */
@@ -825,8 +825,8 @@ nav {
       rgba(255, 255, 255, 0) 84.76%,
       rgba(16, 185, 129, 0.8) 99.35%
     );
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), 0 0 40px rgba(16, 185, 129, 0.2),
-    0 0 60px rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25),
+    0 0 30px rgba(16, 185, 129, 0.15), 0 0 45px rgba(16, 185, 129, 0.08);
 }
 
 /* Modal content wrapper */
@@ -1293,7 +1293,7 @@ nav {
 .card-enhanced {
   position: relative;
   background: transparent;
-  border-radius: 16px;
+  border-radius: 24px;
   padding: 8px;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(25px) saturate(1.2);
@@ -1311,11 +1311,11 @@ nav {
 .card-enhanced::before {
   content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 18px;
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  border-radius: 30px;
   padding: 2px;
   background: linear-gradient(
       132.56deg,
@@ -1364,7 +1364,7 @@ nav {
       rgba(255, 255, 255, 0) 16.71%
     ),
     linear-gradient(132.98deg, rgba(255, 255, 255, 0) 84.76%, #13f584 99.35%);
-  border-radius: 12px;
+  border-radius: 24px;
   padding: 1.5rem;
   color: white;
   font-family: var(--font-public-sans), system-ui, -apple-system, sans-serif;
@@ -1666,4 +1666,44 @@ nav {
 
 .animate-voice-highlight {
   animation: voice-highlight 1s ease-in-out infinite;
+}
+
+/* ============================================
+   CUSTOM MODAL CLOSE BUTTON STYLES
+   ============================================ */
+
+/* Custom modal close button styling */
+.modal-close-button {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.modal-close-button:hover {
+  color: #f8f8f8;
+  transform: scale(1.1);
+}
+
+.modal-close-button:active {
+  transform: scale(0.95);
+}
+
+/* Light mode modal close button */
+.light .modal-close-button {
+  color: #6b7280;
+}
+
+.light .modal-close-button:hover {
+  color: #374151;
 }

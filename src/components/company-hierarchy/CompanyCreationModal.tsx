@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { Building2, X } from "lucide-react";
+import { Building2, X, XIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -334,17 +334,28 @@ export function CompanyCreationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="p-0 border-0 bg-transparent">
+      <DialogContent className="p-0 border-0 bg-transparent" showCloseButton={false}>
         <div className="modal-enhanced">
           <div className="modal-content-enhanced overflow-y-auto">
             {/* Header */}
             <DialogHeader className="modal-header-enhanced px-8 pt-6 pb-4">
-              <DialogTitle className="modal-title-enhanced flex items-center gap-3 text-xl">
-                Create {type === "parent" ? "Parent" : "Sub"} Company
-              </DialogTitle>
-              <DialogDescription className="modal-description-enhanced text-sm">
-                Set up your company with database and vector configurations
-              </DialogDescription>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <DialogTitle className="modal-title-enhanced flex items-center gap-3 text-xl">
+                    <Building2 className="h-6 w-6 text-green-400" />
+                    Create {type === "parent" ? "Parent" : "Sub"} Company
+                  </DialogTitle>
+                  <DialogDescription className="modal-description-enhanced text-sm">
+                    Set up your company with database and vector configurations
+                  </DialogDescription>
+                </div>
+                <button
+                  onClick={handleClose}
+                  className="modal-close-button"
+                >
+                  <XIcon className="h-5 w-5" />
+                </button>
+              </div>
             </DialogHeader>
 
             {/* Step Indicator */}

@@ -1,15 +1,14 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/store/theme-store";
-import { EnhancedBackground } from "@/components/ui/enhanced-background";
+import Image from "next/image";
 
 interface PageLayoutProps {
   children: React.ReactNode;
   className?: string;
-  background?: "default" | "gradient" | "enhanced" | "none";
+  background?: "default" | "gradient" | "frame" | "gridframe" | "none" | ("frame" | "gridframe")[];
   container?: boolean;
   maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "4xl" | "6xl" | "7xl" | "full";
-  backgroundIntensity?: "low" | "medium" | "high";
 }
 
 /**
@@ -18,9 +17,8 @@ interface PageLayoutProps {
  * 
  * Features:
  * - Consistent top padding to account for fixed navbar (112px total: 64px height + 24px margin + 24px clearance)
- * - Multiple background options: default, gradient, enhanced (animated), or none
- * - Enhanced background includes floating particles, animated grids, and glowing effects
- * - Configurable background intensity (low, medium, high)
+ * - Multiple background options: default, gradient, frame (with frame.svg), or none
+ * - Frame background includes frame.svg with dark background overlay
  * - Responsive container with configurable max-width
  * - Proper bottom padding for content
  */
@@ -30,7 +28,6 @@ export function PageLayout({
   background = "default",
   container = true,
   maxWidth = "7xl",
-  backgroundIntensity = "medium",
 }: PageLayoutProps) {
   const theme = useTheme();
   const isDark = theme === 'dark';
@@ -40,7 +37,8 @@ export function PageLayout({
     gradient: isDark 
       ? "bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900" 
       : "bg-gradient-to-br from-gray-50 via-blue-50 to-emerald-50",
-    enhanced: "", // Enhanced background handles its own styling
+    frame: "", // Frame background handles its own styling
+    gridframe: "", // Gridframe background handles its own styling
     none: "",
   };
 
@@ -72,21 +70,56 @@ export function PageLayout({
     </div>
   );
 
-  // If enhanced background is requested, wrap content with EnhancedBackground
-  if (background === "enhanced") {
+  // Handle frame and gridframe backgrounds (single or multiple)
+  const hasFrame = background === "frame" || (Array.isArray(background) && background.includes("frame"));
+  const hasGridframe = background === "gridframe" || (Array.isArray(background) && background.includes("gridframe"));
+  
+  if (hasFrame || hasGridframe) {
     return (
       <div 
         className={cn("w-full min-h-screen relative", className)}
         style={{
-          background:
-            isDark
-              ? "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f172a 100%)"
-              : "linear-gradient(135deg, #ffffff 0%, #f0f9f5 30%, #e6f7ff 70%, #f0f9f5 100%)",
+          background: "var(--BG-2-Primary-Color, rgba(0, 0, 0, 0.85))",
         }}
       >
-        <EnhancedBackground intensity={backgroundIntensity}>
+        {/* Frame SVG Background */}
+        {hasFrame && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <Image
+              src="/dashboard/frame.svg"
+              alt="Background Frame"
+              fill
+              className="object-cover object-top"
+              priority
+              style={{
+                opacity: 0.6,
+                mixBlendMode: 'lighten',
+              }}
+            />
+          </div>
+        )}
+        
+        {/* Gridframe SVG Background */}
+        {hasGridframe && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <Image
+              src="/gridframe.svg"
+              alt="Background Gridframe"
+              fill
+              className="object-cover object-center"
+              priority
+              style={{
+                opacity: 0.4,
+                mixBlendMode: 'lighten',
+              }}
+            />
+          </div>
+        )}
+        
+        {/* Content */}
+        <div className="relative z-10">
           {content}
-        </EnhancedBackground>
+        </div>
       </div>
     );
   }

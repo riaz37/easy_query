@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { MSSQLConfigData } from "@/types/api";
 import { DatabaseConfigStepProps } from "../types";
@@ -30,7 +30,7 @@ export function DatabaseConfigStep({
   setCurrentTaskId,
 }: DatabaseConfigStepProps) {
   const { user } = useAuthContext();
-  const [activeTab, setActiveTab] = useState("existing");
+  const [selectedOption, setSelectedOption] = useState("existing");
 
   // New database form states
   const [newDbUrl, setNewDbUrl] = useState("");
@@ -131,23 +131,29 @@ export function DatabaseConfigStep({
         </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 bg-gray-800/50">
-          <TabsTrigger
-            value="existing"
-            className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400"
-          >
-            Select Existing
-          </TabsTrigger>
-          <TabsTrigger
-            value="new"
-            className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400"
-          >
-            Create New
-          </TabsTrigger>
-        </TabsList>
+      <div className="space-y-6">
+        {/* Radio Button Selection */}
+        <div className="space-y-4">
+          <Label className="text-sm font-medium text-gray-300">Select Databased</Label>
+          <RadioGroup value={selectedOption} onValueChange={setSelectedOption} className="flex gap-6">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="existing" id="existing" />
+              <Label htmlFor="existing" className="text-sm text-gray-300 cursor-pointer">
+                Existing
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="new" id="new" />
+              <Label htmlFor="new" className="text-sm text-gray-300 cursor-pointer">
+                New
+              </Label>
+            </div>
+          </RadioGroup>
+        </div>
 
-        <TabsContent value="existing" className="space-y-4">
+        {/* Existing Database Content */}
+        {selectedOption === "existing" && (
+          <div className="space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="modal-label-enhanced">Select Database</Label>
@@ -192,9 +198,12 @@ export function DatabaseConfigStep({
               </div>
             )}
           </div>
-        </TabsContent>
+          </div>
+        )}
 
-        <TabsContent value="new" className="space-y-4">
+        {/* New Database Content */}
+        {selectedOption === "new" && (
+          <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="newDbName" className="modal-label-enhanced">
               Database Name *
@@ -296,8 +305,9 @@ export function DatabaseConfigStep({
               Reset
             </Button>
           </div>
-        </TabsContent>
-      </Tabs>
+          </div>
+        )}
+      </div>
 
       {/* Navigation */}
       <div className="modal-footer-enhanced">

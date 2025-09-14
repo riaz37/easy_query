@@ -324,13 +324,18 @@ function TaskListPanel() {
                       className="h-6 w-6 p-0 text-gray-400 hover:text-white"
                       onClick={() => {
                         // Navigate to report detail page using backend task ID if available
+                        console.log('=== TASK MANAGER DEBUG ===');
+                        console.log('Full task object:', task);
                         console.log('Task metadata:', task.metadata);
                         console.log('Backend task ID:', task.metadata?.backend_task_id);
                         console.log('Local task ID:', task.id);
+                        console.log('Task status:', task.status);
+                        console.log('Task result:', task.result);
                         
                         const backendTaskId = task.metadata?.backend_task_id;
                         const taskId = backendTaskId || task.id;
                         console.log('Using task ID for navigation:', taskId);
+                        console.log('========================');
                         
                         window.location.href = `/ai-results/report/${taskId}`;
                       }}

@@ -162,7 +162,7 @@ export function ReportGenerator({
         
         updateTask(taskId, {
           metadata: {
-            ...currentTask?.metadata,
+            ...(currentTask?.metadata || {}),
             backend_task_id: reportTaskId
           }
         });

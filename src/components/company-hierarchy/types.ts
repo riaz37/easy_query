@@ -85,6 +85,7 @@ export interface CompanyInfoStepProps {
   contactEmail: string;
   setContactEmail: (value: string) => void;
   setCurrentStep: (step: WorkflowStep) => void;
+  onClose: () => void;
 }
 
 export interface DatabaseConfigStepProps {
