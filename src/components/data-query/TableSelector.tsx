@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 // Card components removed - now handled by parent component
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Search, Database, RefreshCw, Loader2 } from "lucide-react";
+import { Database, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { ServiceRegistry } from "@/lib/api";
 import { useAuthContext } from "@/components/providers";
@@ -22,7 +20,6 @@ export function TableSelector({
   const { user } = useAuthContext();
   const [availableTables, setAvailableTables] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   // Get user tables from the API using authenticated service
@@ -31,21 +28,24 @@ export function TableSelector({
       setError("Please log in to view tables");
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       // Use endpoint that requires user ID parameter
-      const response = await ServiceRegistry.vectorDB.getUserTableNames(user.user_id);
-      
+      const response = await ServiceRegistry.vectorDB.getUserTableNames(
+        user.user_id
+      );
+
       if (response.success && response.data && Array.isArray(response.data)) {
         setAvailableTables(response.data);
       } else {
         setAvailableTables([]);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to fetch tables";
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch tables";
       console.error("Failed to fetch user tables:", error);
       setError(errorMessage);
       toast.error("Failed to load tables", {
@@ -63,15 +63,6 @@ export function TableSelector({
     }
   }, [user?.user_id, databaseId]);
 
-  // Filter tables based on search term
-  const filteredTables = availableTables.filter((table) =>
-    table.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Handle refresh
-  const handleRefresh = () => {
-    fetchUserTables();
-  };
 
   if (!user?.user_id) {
     return (
@@ -89,31 +80,6 @@ export function TableSelector({
   return (
     <div className={className}>
       <div className="space-y-4">
-        {/* Search and Actions */}
-        <div className="flex items-center gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search tables..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-gray-800/50 border-gray-600/30 text-white placeholder:text-gray-400"
-            />
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={isLoading}
-            className="border-green-400/30 text-green-400 hover:bg-green-400/10"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4" />
-            )}
-          </Button>
-        </div>
 
         {/* Loading State */}
         {isLoading && (
@@ -128,14 +94,6 @@ export function TableSelector({
           <div className="text-center py-6">
             <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
               <p className="text-red-400 text-sm">{error}</p>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                className="mt-2 border-red-400/30 text-red-400 hover:bg-red-400/10"
-              >
-                Try Again
-              </Button>
             </div>
           </div>
         )}
@@ -143,38 +101,15 @@ export function TableSelector({
         {/* Tables List */}
         {!isLoading && !error && (
           <>
-            {filteredTables.length === 0 ? (
+            {availableTables.length === 0 ? (
               <div className="text-center py-6">
                 <Database className="h-12 w-12 mx-auto text-gray-400 mb-2" />
-                <p className="text-gray-400 text-sm">
-                  {availableTables.length === 0 
-                    ? "No tables found" 
-                    : "No tables match your search"
-                  }
-                </p>
-                {searchTerm && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setSearchTerm("")}
-                    className="mt-2 text-green-400 hover:bg-green-400/10"
-                  >
-                    Clear search
-                  </Button>
-                )}
+                <p className="text-gray-400 text-sm">No tables found</p>
               </div>
             ) : (
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-400">
-                    {filteredTables.length} table{filteredTables.length !== 1 ? 's' : ''} found
-                  </p>
-                  <Badge variant="outline" className="border-green-400/30 text-green-400">
-                    {filteredTables.length}
-                  </Badge>
-                </div>
                 <div className="max-h-60 overflow-y-auto space-y-1">
-                  {filteredTables.map((table) => (
+                  {availableTables.map((table) => (
                     <Button
                       key={table}
                       variant="ghost"
@@ -184,7 +119,9 @@ export function TableSelector({
                     >
                       <div className="flex items-center gap-2 w-full">
                         <Database className="h-4 w-4 text-green-400" />
-                        <span className="text-white font-mono text-sm">{table}</span>
+                        <span className="text-white font-mono text-sm">
+                          {table}
+                        </span>
                       </div>
                     </Button>
                   ))}
@@ -193,13 +130,7 @@ export function TableSelector({
             )}
           </>
         )}
-
-        {/* Help Text */}
-        <div className="text-xs text-gray-400 space-y-1">
-          <p>💡 Click on a table name to add it to your query</p>
-          <p>🔍 Use the search box to find specific tables</p>
-        </div>
       </div>
     </div>
   );
-} 
+}
