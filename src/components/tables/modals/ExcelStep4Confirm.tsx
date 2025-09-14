@@ -44,7 +44,7 @@ export function ExcelStep4Confirm({
 
   // Helper function to ensure table name includes schema
   const ensureTableFullName = useCallback((tableName: string): string => {
-    if (!tableName.includes('.')) {
+    if (!tableName.includes(".")) {
       return `dbo.${tableName}`;
     }
     return tableName;
@@ -67,9 +67,10 @@ export function ExcelStep4Confirm({
       if (mappingData.mapping_details) {
         mappingData.mapping_details.forEach((detail: any) => {
           if (detail.is_mapped && detail.excel_column && detail.table_column) {
-            const isIdentityColumn = detail.is_identity || 
-                                   detail.table_column.toLowerCase().includes('id');
-            
+            const isIdentityColumn =
+              detail.is_identity ||
+              detail.table_column.toLowerCase().includes("id");
+
             if (!isIdentityColumn) {
               customMapping[detail.excel_column] = detail.table_column;
             }
@@ -88,7 +89,7 @@ export function ExcelStep4Confirm({
       if (response) {
         setImportProgress(100);
         toast.success(`Successfully imported ${response.rows_inserted} rows`);
-        
+
         // Wait a moment then complete
         setTimeout(() => {
           onComplete();
@@ -96,7 +97,10 @@ export function ExcelStep4Confirm({
       }
     } catch (err) {
       console.error("Error importing data:", err);
-      const errorMessage = err instanceof Error ? err.message : "Failed to import data to database";
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Failed to import data to database";
       setImportError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -106,7 +110,7 @@ export function ExcelStep4Confirm({
 
   // Get table name from full name
   const getTableName = (fullName: string) => {
-    return fullName.split('.').pop() || fullName;
+    return fullName.split(".").pop() || fullName;
   };
 
   return (
@@ -120,7 +124,10 @@ export function ExcelStep4Confirm({
           </div>
           <p className="text-white font-semibold">{selectedFile?.name}</p>
           <p className="text-slate-400 text-sm">
-            {(selectedFile?.size ? selectedFile.size / 1024 / 1024 : 0).toFixed(2)} MB
+            {(selectedFile?.size ? selectedFile.size / 1024 / 1024 : 0).toFixed(
+              2
+            )}{" "}
+            MB
           </p>
         </div>
 
@@ -129,7 +136,9 @@ export function ExcelStep4Confirm({
             <Database className="h-5 w-5 text-green-400" />
             <Label className="text-slate-400 text-sm">Target Table</Label>
           </div>
-          <p className="text-white font-semibold">{getTableName(selectedTable)}</p>
+          <p className="text-white font-semibold">
+            {getTableName(selectedTable)}
+          </p>
           <p className="text-slate-400 text-sm">{selectedTable}</p>
         </div>
       </div>
@@ -139,9 +148,14 @@ export function ExcelStep4Confirm({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-slate-400">Import Progress</span>
-            <span className="text-white font-semibold">{uploadProgress || importProgress}%</span>
+            <span className="text-white font-semibold">
+              {uploadProgress || importProgress}%
+            </span>
           </div>
-          <Progress value={uploadProgress || importProgress} className="w-full h-3" />
+          <Progress
+            value={uploadProgress || importProgress}
+            className="w-full h-3"
+          />
           <div className="text-center text-sm text-slate-400">
             Processing your Excel file and importing data...
           </div>
@@ -150,9 +164,14 @@ export function ExcelStep4Confirm({
 
       {/* Error Display */}
       {importError && (
-        <Alert variant="destructive" className="border-red-500/50 bg-red-500/10">
+        <Alert
+          variant="destructive"
+          className="border-red-500/50 bg-red-500/10"
+        >
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="text-red-300">{importError}</AlertDescription>
+          <AlertDescription className="text-red-300">
+            {importError}
+          </AlertDescription>
         </Alert>
       )}
 
@@ -163,16 +182,20 @@ export function ExcelStep4Confirm({
           <div className="space-y-2 max-h-40 overflow-y-auto">
             {mappingData.mapping_details?.map((detail: any, index: number) => {
               if (!detail.is_mapped || detail.is_identity) return null;
-              
+
               return (
                 <div
                   key={index}
                   className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg"
                 >
                   <div className="flex-1 text-sm">
-                    <span className="text-green-400">{detail.excel_column}</span>
+                    <span className="text-green-400">
+                      {detail.excel_column}
+                    </span>
                     <span className="text-slate-400 mx-2">→</span>
-                    <span className="text-green-400">{detail.table_column}</span>
+                    <span className="text-green-400">
+                      {detail.table_column}
+                    </span>
                   </div>
                   <Badge
                     className={`${
@@ -202,7 +225,7 @@ export function ExcelStep4Confirm({
           <ArrowLeft className="h-5 w-5 mr-2" />
           Back
         </Button>
-        
+
         <Button
           onClick={handleImportData}
           disabled={isImporting || !mappingData}
@@ -214,10 +237,7 @@ export function ExcelStep4Confirm({
               Importing...
             </>
           ) : (
-            <>
-              <Play className="h-5 w-5 mr-2" />
-              Import Data to Database
-            </>
+            <>Import Data to Database</>
           )}
         </Button>
       </div>
