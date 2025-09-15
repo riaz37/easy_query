@@ -2,11 +2,18 @@
 
 import { WorkflowStep } from "../types";
 
-interface StepIndicatorProps {
-  currentStep: WorkflowStep;
+interface Step {
+  id: string;
+  title: string;
+  number: number;
 }
 
-const steps = [
+interface StepIndicatorProps {
+  currentStep: string;
+  steps: Step[];
+}
+
+const companySteps = [
   {
     id: "company-info" as WorkflowStep,
     title: "Company Info",
@@ -29,7 +36,7 @@ const steps = [
   },
 ];
 
-export function StepIndicator({ currentStep }: StepIndicatorProps) {
+export function StepIndicator({ currentStep, steps = companySteps }: StepIndicatorProps) {
   const getCurrentStepIndex = () => {
     return steps.findIndex((step) => step.id === currentStep);
   };

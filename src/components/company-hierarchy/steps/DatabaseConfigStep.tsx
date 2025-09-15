@@ -122,14 +122,14 @@ export function DatabaseConfigStep({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium text-green-400">
-          Database Configuration
-        </h3>
-        <p className="text-sm text-gray-400 mt-1">
-          Choose an existing database or create a new one
-        </p>
-      </div>
+        <div>
+          <h3 className="text-lg font-medium text-green-400">
+            Database Configuration
+          </h3>
+          <p className="text-sm text-gray-400 mt-1">
+            Choose an existing database or create a new one
+          </p>
+        </div>
 
       <div className="space-y-6">
         {/* Radio Button Selection */}
@@ -149,7 +149,7 @@ export function DatabaseConfigStep({
               </Label>
             </div>
           </RadioGroup>
-        </div>
+      </div>
 
         {/* Existing Database Content */}
         {selectedOption === "existing" && (
@@ -204,17 +204,17 @@ export function DatabaseConfigStep({
         {/* New Database Content */}
         {selectedOption === "new" && (
           <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="newDbName" className="modal-label-enhanced">
-              Database Name *
-            </Label>
-            <Input
-              id="newDbName"
-              value={newDbName}
-              onChange={(e) => setNewDbName(e.target.value)}
-              placeholder="MyDatabase"
-              className="modal-input-enhanced"
-            />
+            <div className="space-y-2">
+              <Label htmlFor="newDbName" className="modal-label-enhanced">
+                Database Name *
+              </Label>
+              <Input
+                id="newDbName"
+                value={newDbName}
+                onChange={(e) => setNewDbName(e.target.value)}
+                placeholder="MyDatabase"
+                className="modal-input-enhanced"
+              />
           </div>
 
           <div className="space-y-2">

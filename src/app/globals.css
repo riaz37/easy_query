@@ -774,7 +774,6 @@ nav {
   border-radius: 20px;
   padding: 4px;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
-  
 }
 
 /* Light mode modal styling */
@@ -933,15 +932,16 @@ nav {
 /* Enhanced form inputs with green accent */
 .modal-input-enhanced {
   background: var(--components-paper-bg-paper-blur, #ffffff0a);
-  border: 1px solid var(--components-paper-outlined, #ffffff1f);
+  border: none;
   backdrop-filter: blur(20px) saturate(1.2);
   color: white;
+  height: 54px;
 }
 
 /* Light mode modal inputs */
 .light .modal-input-enhanced {
   background: var(--components-paper-bg-paper-blur, #ffffff0a);
-  border: 1px solid var(--components-paper-outlined, #ffffff1f);
+  border: none;
   backdrop-filter: blur(20px) saturate(1.1);
   color: #1f2937;
 }
@@ -955,19 +955,22 @@ nav {
 }
 
 .modal-input-enhanced:focus {
-  border-color: var(--components-paper-outlined, #ffffff1f);
+  border: none;
+  outline: none;
 }
 
 .light .modal-input-enhanced:focus {
-  border-color: var(--components-paper-outlined, #ffffff1f);
+  border: none;
+  outline: none;
 }
 
 /* Enhanced select components */
 .modal-select-enhanced {
   background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04));
-  border: 1px solid var(--components-paper-outlined, #ffffff1f);
+  border: none;
   backdrop-filter: blur(20px) saturate(1.2);
   color: white;
+  height: 54px;
 }
 
 .modal-select-content-enhanced {
@@ -984,14 +987,19 @@ nav {
 /* Enhanced textarea */
 .modal-textarea-enhanced {
   background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04));
-  border: 1px solid var(--components-paper-outlined, #ffffff1f);
-  backdrop-filter: blur(20px) saturate(1.2);
+  border: none;
+  backdrop-filter: blur(30px) saturate(1.2);
   color: white;
   min-height: 80px;
 }
 
 .modal-textarea-enhanced::placeholder {
   color: #9ca3af;
+}
+
+.modal-textarea-enhanced:focus {
+  border: none;
+  outline: none;
 }
 
 /* Enhanced buttons */
@@ -1001,6 +1009,10 @@ nav {
   color: white;
   font-weight: 500;
   cursor: pointer;
+
+  height: 48px;
+  min-width: 64px;
+  border-radius: 99px;
 }
 
 .modal-button-primary:hover {
@@ -1013,6 +1025,10 @@ nav {
   border: 1px solid var(--components-paper-outlined, #ffffff1f);
   color: white;
   cursor: pointer;
+
+  height: 48px;
+  min-width: 64px;
+  border-radius: 99px;
 }
 
 .modal-button-secondary:hover {
@@ -1088,7 +1104,7 @@ nav {
   border-top: none;
   padding: 1.5rem 1.5rem 1.5rem 1.5rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0.75rem;
   margin: 0;
   margin-top: auto;
@@ -1177,6 +1193,8 @@ nav {
   font-weight: 500;
   transition: color 0.3s ease;
   color: var(--p-darker, #0c9551);
+  white-space: nowrap;
+  min-width: max-content;
 }
 
 .step-title.completed {
@@ -1195,7 +1213,7 @@ nav {
   width: 5rem;
   height: 0.125rem;
   margin: 0 1rem;
-  margin-top: 1rem;
+  margin-top: -0.7rem;
   transition: all 0.3s ease;
 }
 

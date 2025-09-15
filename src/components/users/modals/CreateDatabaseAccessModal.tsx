@@ -13,7 +13,8 @@ import {
   Database, 
   Building2, 
   CheckCircle, 
-  AlertCircle
+  AlertCircle,
+  X
 } from "lucide-react";
 import { useUserAccess } from "@/lib/hooks/use-user-access";
 import { useDatabaseContext } from "@/components/providers/DatabaseContextProvider";
@@ -206,20 +207,30 @@ export function CreateDatabaseAccessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent">
+      <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
         <div className="modal-enhanced">
           <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
             <DialogHeader className="modal-header-enhanced">
-              <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                <Database className="h-5 w-5 text-green-400" />
-                {editingUser ? "Edit Database Access" : "Create Database Access"}
-              </DialogTitle>
-              <p className="modal-description-enhanced">
-                {editingUser 
-                  ? "Update user access to MSSQL databases" 
-                  : "Grant user access to MSSQL databases for data operations"
-                }
-              </p>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <DialogTitle className="modal-title-enhanced flex items-center gap-2">
+                    <Database className="h-5 w-5 text-green-400" />
+                    {editingUser ? "Edit Database Access" : "Create Database Access"}
+                  </DialogTitle>
+                  <p className="modal-description-enhanced">
+                    {editingUser 
+                      ? "Update user access to MSSQL databases" 
+                      : "Grant user access to MSSQL databases for data operations"
+                    }
+                  </p>
+                </div>
+                <button
+                  onClick={handleClose}
+                  className="modal-close-button"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </DialogHeader>
 
             <div className="modal-form-content">

@@ -6,7 +6,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 
 export default function UsersPage() {
   return (
-    <PageLayout background="enhanced" backgroundIntensity="medium">
+    <PageLayout background={["frame", "gridframe"]}>
       <UsersManager />
     </PageLayout>
   );
