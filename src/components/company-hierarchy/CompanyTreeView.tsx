@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import ReactFlow, {
   Node,
   Edge,
@@ -24,9 +24,10 @@ import { useSubCompanies } from "@/lib/hooks/use-sub-companies";
 import { ParentCompanyData, SubCompanyData } from "@/types/api";
 import { toast } from "sonner";
 import { Company, CompanyTreeViewProps } from "./types";
+import { Button } from "@/components/ui/button";
 
 // Custom Node Component using the new CompanyCard
-const CompanyNode = ({ data, selected }: { data: any; selected: boolean }) => {
+const CompanyNode = React.memo(({ data, selected }: { data: any; selected: boolean }) => {
   return (
     <CompanyCard
       company={data.company}
@@ -36,12 +37,12 @@ const CompanyNode = ({ data, selected }: { data: any; selected: boolean }) => {
       level={data.level}
     />
   );
-};
+});
 
 // Empty State Node Component using the new EmptyState
-const EmptyStateNode = ({ data }: { data: any }) => {
+const EmptyStateNode = React.memo(({ data }: { data: any }) => {
   return <EmptyState onAddParentCompany={data.onAddParentCompany} />;
-};
+});
 
 // Define nodeTypes outside component to prevent recreation on every render
 const nodeTypes = {
@@ -54,13 +55,13 @@ const defaultEdgeOptions = {
   animated: true,
   style: {
     stroke: "#10b981",
-    strokeWidth: 3,
+    strokeWidth: 2,
   },
   markerEnd: {
     type: MarkerType.ArrowClosed,
     color: "#10b981",
-    width: 16,
-    height: 16,
+    width: 12,
+    height: 12,
   },
 };
 
@@ -71,7 +72,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
   const { getSubCompanies, createSubCompany } = useSubCompanies();
 
   // React Flow instance for viewport control
-  const { fitView } = useReactFlow();
+  const { fitView, zoomIn, zoomOut } = useReactFlow();
 
   // State management
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -84,10 +85,12 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
   const [modalType, setModalType] = useState<"parent" | "sub">("parent");
   const [parentCompanyId, setParentCompanyId] = useState<number | null>(null);
 
+
   // Load companies on mount
   useEffect(() => {
     loadCompanies();
   }, []);
+
 
   const loadCompanies = async () => {
     try {
@@ -213,14 +216,15 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
         type: "smoothstep",
         style: {
           stroke: "#10b981",
-          strokeWidth: 2,
+          strokeWidth: 1.5,
         },
         markerEnd: {
           type: MarkerType.ArrowClosed,
           color: "#10b981",
-          width: 16,
-          height: 16,
+          width: 12,
+          height: 12,
         },
+        animated: true,
       };
 
       return edge;
@@ -234,22 +238,22 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
     if (!displayCompany) return { nodes: [], edges: [] };
 
     // Calculate centered positioning
-    const containerWidth = 1200; // Approximate container width
-    const containerHeight = 800; // Approximate container height
+    const containerWidth = 1600; // Increased container width for wider cards
+    const containerHeight = 1000; // Increased container height
 
     // Add parent company node - center it horizontally
     const parentPosition = {
-      x: containerWidth / 2 - 200, // Offset by half card width to center
-      y: 100,
+      x: containerWidth / 2 - 250, // Offset by half card width to center (500px/2)
+      y: 150, // Increased from top for better centering
     };
     flowNodes.push(createCompanyNode(displayCompany, parentPosition, 0));
 
     // Add child nodes and edges if they exist
     if (displayCompany.children && displayCompany.children.length > 0) {
-      const childY = 350;
+      const childY = 600; // Increased vertical spacing between parent and children
       const childCount = displayCompany.children.length;
-      const childCardWidth = 320; // Actual sub-company card width (w-80)
-      const parentCenterX = parentPosition.x + 200; // Parent card center (w-96 / 2)
+      const childCardWidth = 480; // Updated sub-company card width
+      const parentCenterX = parentPosition.x + 250; // Parent card center (500px/2)
 
       // For consistent positioning, use fixed spacing based on child count
       let childPositions: { x: number; y: number }[] = [];
@@ -259,14 +263,14 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
         childPositions = [{ x: parentCenterX - childCardWidth / 2, y: childY }];
       } else if (childCount === 2) {
         // Two children: ensure adequate spacing to prevent overlap
-        const minSpacing = childCardWidth + 40; // Card width + 40px gap
+        const minSpacing = childCardWidth + 80; // Card width + 80px gap
         childPositions = [
           { x: parentCenterX - minSpacing / 2 - childCardWidth / 2, y: childY },
           { x: parentCenterX + minSpacing / 2 - childCardWidth / 2, y: childY },
         ];
       } else {
         // Multiple children: distribute evenly with minimum spacing
-        const minSpacing = childCardWidth + 30; // Card width + 30px gap
+        const minSpacing = childCardWidth + 60; // Card width + 60px gap
         const totalWidth = (childCount - 1) * minSpacing;
         const startX = parentCenterX - totalWidth / 2 - childCardWidth / 2;
 
@@ -298,7 +302,13 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
 
     // Fit view to nodes after a short delay to ensure nodes are rendered
     const timer = setTimeout(() => {
-      fitView({ padding: 0.2, duration: 800 });
+      fitView({ 
+        padding: 0.15, 
+        duration: 800,
+        includeHiddenNodes: false,
+        minZoom: 0.3,
+        maxZoom: 1.2
+      });
     }, 100);
 
     return () => clearTimeout(timer);
@@ -365,11 +375,11 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
   };
 
   return (
-    <div className="min-h-screen w-full relative">
-      {/* Main Content Area - Account for navbar height */}
-      <div className="flex h-screen pt-20">
-        {/* ReactFlow Container - Full width */}
-        <div className="flex-1 relative">
+    <div className="w-full h-full relative overflow-hidden" style={{ height: 'calc(100vh - 140px)' }}>
+      {/* Main Content Area - Full height with proper spacing */}
+      <div className="flex h-full">
+        {/* ReactFlow Container - Full width with bottom padding for controls */}
+        <div className="flex-1 relative w-full h-full pb-20">
           <ReactFlow
             nodes={flowNodes}
             edges={flowEdges}
@@ -378,20 +388,87 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
             onConnect={onConnect}
             nodeTypes={nodeTypes}
             fitView
-            fitViewOptions={{
-              padding: 0.2,
-              minZoom: 0.5,
-              maxZoom: 1.5,
-            }}
-            defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-            minZoom={0.3}
-            maxZoom={2}
             className="bg-transparent"
             proOptions={{ hideAttribution: true }}
+            defaultViewport={{ x: 0, y: 0, zoom: 0.6 }}
+            minZoom={0.2}
+            maxZoom={3}
             defaultEdgeOptions={defaultEdgeOptions}
+            nodesDraggable={true}
+            nodesConnectable={false}
+            elementsSelectable={true}
+            selectNodesOnDrag={false}
+            panOnDrag={true}
+            panOnScroll={true}
+            zoomOnScroll={true}
+            zoomOnPinch={true}
+            preventScrolling={false}
+            deleteKeyCode={null}
+            multiSelectionKeyCode={null}
           >
-            <Controls className="opacity-70" />
           </ReactFlow>
+        </div>
+
+        {/* Bottom Control Section */}
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="backdrop-blur-sm p-4 shadow-2xl"
+               style={{
+                 background: "rgba(255, 255, 255, 0.03)",
+                 borderRadius: "32px",
+                 border: "1.5px solid",
+                 borderImageSource: "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 0) 50.59%, rgba(255, 255, 255, 0) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)"
+               }}>
+            <div className="flex items-center gap-4">
+              {/* Add Sub Company Icon */}
+              {companies.length > 0 && (
+                <Button
+                  onClick={() => {
+                    const firstParent = companies.find(c => c.id.startsWith('parent-'));
+                    if (firstParent) {
+                      setModalType("sub");
+                      const numericId = parseInt(firstParent.id.replace("parent-", ""));
+                      setParentCompanyId(numericId);
+                      setModalOpen(true);
+                    }
+                  }}
+                  className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
+                  size="icon"
+                  style={{
+                    background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                    border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                  }}
+                >
+                  <img src="/tables/adduser.svg" alt="Add Sub Company" className="h-6 w-6" />
+                </Button>
+              )}
+
+              {/* Zoom In */}
+              <Button
+                onClick={() => zoomIn()}
+                className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
+                size="icon"
+                style={{
+                  background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                  border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                }}
+              >
+                <img src="/tables/zoomin.svg" alt="Zoom In" className="h-6 w-6" />
+              </Button>
+
+              {/* Zoom Out */}
+              <Button
+                onClick={() => zoomOut()}
+                className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
+                size="icon"
+                style={{
+                  background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                  border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                }}
+              >
+                <img src="/tables/zoomout.svg" alt="Zoom Out" className="h-6 w-6" />
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* Sidebar - Fixed to right side */}
