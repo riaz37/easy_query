@@ -116,15 +116,15 @@ export function VectorConfigStep({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium text-green-400">
-          Vector Configuration
-        </h3>
-        <p className="text-sm text-gray-400 mt-1">
-          Select existing or create new vector database configuration for AI
-          operations
-        </p>
-      </div>
+        <div>
+          <h3 className="text-lg font-medium text-green-400">
+            Vector Configuration
+          </h3>
+          <p className="text-sm text-gray-400 mt-1">
+            Select existing or create new vector database configuration for AI
+            operations
+          </p>
+        </div>
 
       <div className="space-y-6">
         {/* Radio Button Selection */}
@@ -144,7 +144,7 @@ export function VectorConfigStep({
               </Label>
             </div>
           </RadioGroup>
-        </div>
+      </div>
 
         {/* Existing Configuration Content */}
         {selectedOption === "existing" && (

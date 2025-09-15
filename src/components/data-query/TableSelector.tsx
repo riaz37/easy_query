@@ -107,23 +107,25 @@ export function TableSelector({
                 <p className="text-gray-400 text-sm">No tables found</p>
               </div>
             ) : (
-              <div className="space-y-2">
-                <div className="max-h-60 overflow-y-auto space-y-1">
-                  {availableTables.map((table) => (
-                    <Button
+              <div className="space-y-3">
+                <div className="max-h-60 overflow-y-auto space-y-2">
+                  {availableTables.map((table, index) => (
+                    <div
                       key={table}
-                      variant="ghost"
-                      size="sm"
                       onClick={() => onTableSelect(table)}
-                      className="w-full justify-start text-left p-3 h-auto border border-gray-600/30 hover:bg-green-400/10 hover:border-green-400/30"
+                      className="flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-700/20 rounded-lg transition-colors"
                     >
-                      <div className="flex items-center gap-2 w-full">
-                        <Database className="h-4 w-4 text-green-400" />
-                        <span className="text-white font-mono text-sm">
-                          {table}
-                        </span>
+                      {/* Radio Button Circle */}
+                      <div className="relative">
+                        <div className="w-4 h-4 rounded-full border-2 border-gray-400 flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        </div>
                       </div>
-                    </Button>
+                      {/* Table Name */}
+                      <span className="text-white text-sm font-medium">
+                        {table}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </div>

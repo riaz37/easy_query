@@ -1,4 +1,5 @@
 export { UsersManagerHeader } from './UsersManagerHeader';
+export { UsersTableSection } from './UsersTableSection';
 export { UserStatsCards } from './UserStatsCards';
 export { UserAccessTabs } from './UserAccessTabs';
 export { MSSQLUsersList } from './MSSQLUsersList';

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { useQueryStore } from "@/store/query-store";
 import {
   useAuthContext,
@@ -26,10 +27,15 @@ import { Spinner } from "@/components/ui/loading";
 import {
   FileUpload,
   FileResults,
-  FileQueryForm,
   QueryHistoryPanel,
-  TableSelector,
 } from "@/components/data-query";
+import {
+  FileQueryCard,
+  FileQueryPageHeader,
+  QuickSuggestions,
+  TableSection,
+  UseTableToggle,
+} from "@/components/file-query";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 import { fileService } from "@/lib/api/services/file-service";
 import type {
@@ -37,7 +43,6 @@ import type {
   FileQueryResult,
   QueryOptions,
 } from "@/components/data-query";
-import Image from "next/image";
 
 export default function FileQueryPage() {
   // Query state
@@ -331,19 +336,20 @@ export default function FileQueryPage() {
         `,
         }}
       />
-      {/* Welcome Header */}
-      <div className="text-left mb-8">
+      <div className="flex items-center justify-between mb-8">
+        <div>
         <h1 
           className="text-4xl font-bold mb-2 block"
           style={{
-            background: "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+              background:
+                "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
             color: "transparent",
             display: "block",
             backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat"
+              backgroundRepeat: "no-repeat",
           }}
         >
           Hi there, {user?.username || ""}
@@ -351,167 +357,64 @@ export default function FileQueryPage() {
         <p 
           className="text-xl block"
           style={{
-            background: "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+              background:
+                "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
             color: "transparent",
             display: "block",
             backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat"
+              backgroundRepeat: "no-repeat",
           }}
         >
           What would you like to know?
         </p>
-      </div>
-
-      {/* Top Controls Bar */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <span className="text-white">Use Table</span>
-          <button
-            onClick={() => setUseTable(!useTable)}
-            className={`relative inline-flex h-6 w-11 items-center transition-colors rounded-full ${
-              useTable ? "bg-green-600" : "bg-gray-600"
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform bg-white transition-transform rounded-full ${
-                useTable ? "translate-x-6" : "translate-x-1"
-              }`}
-            />
-          </button>
         </div>
         <Button
           variant="outline"
-          className="border-green-400 text-green-400 hover:bg-green-400/10"
+          className="text-white flex items-center gap-2"
+          style={{
+            background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+            border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
+            height: "48px",
+            minWidth: "64px",
+            borderRadius: "99px",
+          }}
           onClick={() => {
             // Handle history button click
             console.log("History clicked");
           }}
         >
-          <History className="w-4 h-4 mr-2" />
+          <Image
+            src="/file-query/history.svg"
+            alt="History"
+            width={16}
+            height={16}
+            className="h-4 w-4"
+          />
           History
         </Button>
       </div>
+
+      <UseTableToggle 
+        useTable={useTable}
+        onToggle={setUseTable}
+      />
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - File Query */}
         <div className="space-y-6 lg:col-span-2">
-          {/* Query Form */}
-          <div
-            className="p-6"
-            style={{
-              background:
-                "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
-              border: "1.5px solid",
-              borderImageSource:
-                "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-              borderRadius: "30px",
-              backdropFilter: "blur(20px)",
-            }}
-          >
-            <div className="flex items-start gap-3 mb-4">
-              <Image
-                src="/file-query/filerobot.svg"
-                alt="File Robot"
-                width={48}
-                height={48}
-              />
-              <div className="flex flex-col justify-center">
-                <h3 className="text-white font-semibold text-2xl mb-1">
-                  File Query
-                </h3>
-              </div>
-            </div>
-
-            <div className="relative">
-              <textarea
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Ask a question about your uploaded files..."
-                className="w-full h-48 p-4 pr-32 bg-slate-800/50 text-white placeholder-slate-400 focus:outline-none resize-none border-0"
-                style={{
-                  background:
-                    "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
-                  borderRadius: "16px",
-                  outline: "none",
-                  border: "none",
-                }}
-              />
-
-              <div className="absolute bottom-3 left-3 right-3 flex justify-between">
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsUploadModalOpen(true)}
-                    className="px-3 py-1 text-xs"
-                    style={{
-                      background:
-                        "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-                      border:
-                        "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-                      color: "white",
-                      borderRadius: "99px",
-                    }}
-                  >
-                    Upload
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleQueryClear}
-                    className="px-3 py-1 text-xs"
-                    style={{
-                      background:
-                        "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-                      border:
-                        "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-                      color: "white",
-                      borderRadius: "99px",
-                    }}
-                  >
-                    Clear
-                  </Button>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    onClick={() =>
-                      handleQuerySubmit(query, { answerStyle: "detailed" })
-                    }
-                    disabled={isExecuting || !query.trim()}
-                    className="px-3 py-1 text-xs"
-                    style={{
-                      background:
-                        "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-                      border:
-                        "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-                      color: "var(--p-main, rgba(19, 245, 132, 1))",
-                      borderRadius: "99px",
-                    }}
-                  >
-                    {isExecuting ? "Executing..." : "Execute"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => handleQuerySave(query)}
-                    disabled={!query.trim()}
-                    className="px-3 py-1 text-xs"
-                    style={{
-                      background:
-                        "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-                      border:
-                        "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-                      color: "white",
-                      borderRadius: "99px",
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FileQueryCard
+            query={query}
+            setQuery={setQuery}
+            isExecuting={isExecuting}
+            onUploadClick={() => setIsUploadModalOpen(true)}
+            onClearClick={handleQueryClear}
+            onExecuteClick={() => handleQuerySubmit(query, { answerStyle: "detailed" })}
+            onSaveClick={() => handleQuerySave(query)}
+          />
 
           {/* Query Results */}
           {queryResults.length > 0 && (
@@ -572,97 +475,22 @@ export default function FileQueryPage() {
 
         {/* Right Column - Connect Table */}
         <div className="space-y-6 lg:col-span-1">
-          {/* Connect Table Card */}
-          <div
-            className="p-6"
-            style={{
-              background:
-                "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
-              border: "1.5px solid",
-              borderImageSource:
-                "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-              borderRadius: "30px",
-              backdropFilter: "blur(20px)",
-            }}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Database className="w-5 h-5 text-green-400" />
-              <h3 className="text-white font-semibold text-xl">
-                Connect Table
-              </h3>
-            </div>
-            <div className="space-y-4">
-              {/* Table Selector - for specifying which table to query */}
               {useTable && (
-                <div className="space-y-3">
-                  <TableSelector
-                    databaseId={currentDatabaseId}
+            <TableSection
+              selectedTable={selectedTable}
                     onTableSelect={(tableName) => {
                       setSelectedTable(tableName);
                       toast.success(`Selected table: ${tableName}`);
                     }}
-                  />
-
-                  {/* Selected Table Indicator */}
-                  {selectedTable && (
-                    <div className="flex items-center gap-2 text-green-400 p-2 bg-green-500/10">
-                      <CheckCircle className="h-4 w-4" />
-                      <span className="text-sm font-medium">
-                        {selectedTable}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedTable(null)}
-                        className="h-6 w-6 p-0 ml-auto text-green-400 hover:text-green-300"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
+              currentDatabaseId={currentDatabaseId}
+            />
+          )}
         </div>
       </div>
 
-      {/* Recent Commands Section */}
+      {/* Quick Suggestions Section */}
       <div className="mt-12">
-        <h3 className="text-xl font-semibold text-white mb-6">
-          Recent Commands
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Sample recent commands - replace with actual data */}
-          {[1, 2, 3, 4].map((index) => (
-            <div
-              key={index}
-              className="p-4"
-              style={{
-                background:
-                  "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
-                border: "1.5px solid",
-                borderImageSource:
-                  "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-                borderRadius: "30px",
-                backdropFilter: "blur(20px)",
-              }}
-            >
-              <div className="space-y-2">
-                <ul className="text-sm text-slate-400 space-y-1">
-                  <li>• last week</li>
-                  <li>• this month</li>
-                  <li>• yesterday</li>
-                </ul>
-                <div className="flex justify-center">
-                  <div className="w-6 h-6 bg-green-400 flex items-center justify-center">
-                    <span className="text-white text-xs">?</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <QuickSuggestions />
       </div>
 
       {/* Upload File Modal */}

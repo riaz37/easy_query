@@ -180,36 +180,14 @@ export function ReportGeneratorBackground({
   }, []);
 
   return (
-    <div className="space-y-6">
-      {/* Report Structure Selection */}
-      <ReportStructureSelector
-        reportStructure={parsedReportStructure}
-        selectedStructure={selectedStructure}
-        setSelectedStructure={handleStructureChange}
-        isGenerating={false} // No longer blocking UI
-        loading={reportStructureLoading}
-        error={reportStructureError}
-      />
-
-      {/* Query Input */}
-      <ReportQueryInput
-        userQuery={userQuery}
-        setUserQuery={handleUserQueryChange}
-        isGenerating={false} // No longer blocking UI
-        reportProgress={0}
-        processingTime={0}
-        formatTime={formatTime}
-      />
-
-      {/* Action Buttons */}
-      <ReportActionButtons
-        userQuery={userQuery}
-        isGenerating={false} // No longer blocking UI
-        onGenerateReport={handleGenerateReport}
-        onGenerateReportAndWait={handleGenerateReportAndWait}
-        onStopMonitoring={handleStopMonitoring}
-        reports={{ error: null, reportResults: null, isGenerating: false }}
-      />
-    </div>
+    <ReportQueryInput
+      userQuery={userQuery}
+      setUserQuery={handleUserQueryChange}
+      isGenerating={false} // No longer blocking UI
+      reportProgress={0}
+      processingTime={0}
+      formatTime={formatTime}
+      onGenerate={handleGenerateReport}
+    />
   );
 }

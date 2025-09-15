@@ -97,3 +97,4 @@ export interface UserAccessConfig {
   sub_company_ids?: string[];
   access_level?: number;
 }
+

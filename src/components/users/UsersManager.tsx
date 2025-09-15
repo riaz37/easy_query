@@ -10,6 +10,7 @@ import { CreateVectorDBAccessModal } from "./modals/CreateVectorDBAccessModal";
 import { useTheme } from "@/store/theme-store";
 import {
   UsersManagerHeader,
+  UsersTableSection,
   UserSearchInput,
   UserStatsCards,
   UserAccessTabs,
@@ -212,51 +213,41 @@ export function UsersManager() {
 
   return (
     <div>
-      {/* Header */}
-      <UsersManagerHeader
-        onCreateMSSQLAccess={handleCreateMSSQLAccess}
-        onCreateVectorDBAccess={handleCreateVectorDBAccess}
-        isDark={isDark}
-      />
-
-      {/* Stats Cards */}
-      <UserStatsCards stats={stats} isDark={isDark} />
-
-      {/* Main Content Tabs */}
-      <UserAccessTabs
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        isDark={isDark}
-      >
-        {/* MSSQL Database Access Tab */}
-        <TabsContent value="mssql" className="mt-6">
-          <MSSQLUsersList
-            users={mssqlUsers}
-            onEditUser={(userId) => handleEditUser(userId, "mssql")}
-            onCreateAccess={handleCreateMSSQLAccess}
-            extractNameFromEmail={extractNameFromEmail}
-            getAccessLevelBadge={getAccessLevelBadge}
-            getDatabaseCount={getDatabaseCount}
-            isDark={isDark}
-          />
-        </TabsContent>
-
-        {/* Vector Database Access Tab */}
-        <TabsContent value="vector" className="mt-6">
-          <VectorDBUsersList
-            users={vectorDBUsers}
-            onEditUser={(userId) => handleEditUser(userId, "vector")}
-            onCreateAccess={handleCreateVectorDBAccess}
-            onRefresh={loadUserConfigs}
-            extractNameFromEmail={extractNameFromEmail}
-            getAccessLevelBadge={getAccessLevelBadge}
-            getDatabaseName={getDatabaseName}
-            formatTableNames={formatTableNames}
-            isLoading={userConfigLoading}
-            isDark={isDark}
-          />
-        </TabsContent>
-      </UserAccessTabs>
+      {/* Combined Table Section with Header and Data Table */}
+      {activeTab === "mssql" ? (
+        <UsersTableSection
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          onCreateMSSQLAccess={handleCreateMSSQLAccess}
+          onCreateVectorDBAccess={handleCreateVectorDBAccess}
+          isDark={isDark}
+          users={mssqlUsers}
+          onEditUser={(userId) => handleEditUser(userId, "mssql")}
+          extractNameFromEmail={extractNameFromEmail}
+          getAccessLevelBadge={getAccessLevelBadge}
+          getDatabaseCount={getDatabaseCount}
+          type="mssql"
+        />
+      ) : (
+        <UsersTableSection
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          onCreateMSSQLAccess={handleCreateMSSQLAccess}
+          onCreateVectorDBAccess={handleCreateVectorDBAccess}
+          isDark={isDark}
+          users={vectorDBUsers}
+          onEditUser={(userId) => handleEditUser(userId, "vector")}
+          extractNameFromEmail={extractNameFromEmail}
+          getAccessLevelBadge={getAccessLevelBadge}
+          getDatabaseName={getDatabaseName}
+          formatTableNames={formatTableNames}
+          type="vector"
+        />
+      )}
 
       {/* Modals */}
       <CreateDatabaseAccessModal

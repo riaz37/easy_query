@@ -118,7 +118,15 @@ export function ExcelImportModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
+      <DialogContent 
+        className="p-0 border-0 bg-transparent" 
+        showCloseButton={false}
+        style={{
+          width: '1000px',
+          maxWidth: '1000px',
+          maxHeight: '90vh',
+        }}
+      >
         <div className="modal-enhanced">
           <div className="modal-content-enhanced">
             <DialogHeader className="modal-header-enhanced">

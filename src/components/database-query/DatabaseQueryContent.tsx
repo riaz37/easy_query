@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useAuthContext, useDatabaseContext } from "@/components/providers";
 import { useDatabaseOperations } from "@/lib/hooks/use-database-operations";
 import { useTaskCreator } from "@/components/task-manager";
@@ -11,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
 import {
   Database,
   Play,
@@ -204,52 +206,151 @@ export function DatabaseQueryContent() {
   }, []);
 
   return (
-    <PageLayout background="enhanced" backgroundIntensity="medium" maxWidth="7xl">
-      {/* Header */}
-      <DatabaseQueryHeader
-        user={user}
-        currentDatabase={currentDatabase}
-        isDark={isDark}
+    <PageLayout
+      background={["frame", "gridframe"]}
+      maxWidth="7xl"
+      className="database-query-page"
+    >
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          .database-query-page textarea {
+            background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04)) !important;
+          }
+        `,
+        }}
       />
-
-      {/* Stats Cards */}
-      <DatabaseQueryStatsCards isDark={isDark} />
-
-      {/* Mode Toggle */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <QueryModeToggle
-            mode={queryMode}
-            onModeChange={handleModeChange}
-            hasDatabase={hasCurrentDatabase}
-            loading={loading}
-          />
-          
-          <Button
-            variant="outline"
-            onClick={handleToggleHistory}
-            className="flex items-center gap-2 border-gray-600 text-gray-300 hover:bg-gray-700"
+      
+      {/* Welcome Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 
+            className="text-4xl font-bold mb-2 block"
+            style={{
+              background:
+                "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              color: "transparent",
+              display: "block",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+            }}
           >
-            <History className="w-4 h-4" />
-            History
-            {history.length > 0 && (
-              <Badge variant="secondary" className="ml-1">
-                {history.length}
-              </Badge>
-            )}
-          </Button>
+            Hi there, {user?.username || ""}
+          </h1>
+          <p 
+            className="text-xl block"
+            style={{
+              background:
+                "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              color: "transparent",
+              display: "block",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            What would you like to know?
+          </p>
         </div>
+        <Button
+          variant="outline"
+          className="text-white flex items-center gap-2"
+          style={{
+            background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+            border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
+            height: "48px",
+            minWidth: "64px",
+            borderRadius: "99px",
+          }}
+          onClick={handleToggleHistory}
+        >
+          <Image
+            src="/file-query/history.svg"
+            alt="History"
+            width={16}
+            height={16}
+            className="h-4 w-4"
+          />
+          History
+          {history.length > 0 && (
+            <Badge variant="secondary" className="ml-1">
+              {history.length}
+            </Badge>
+          )}
+        </Button>
       </div>
 
-      {/* Main Content */}
+      {/* Mode Toggle */}
+      <div className="flex items-center gap-3 mb-8">
+        <Label htmlFor="query-mode" className="text-white font-medium">
+          Quick Query
+        </Label>
+        <button
+          onClick={() => setQueryMode(queryMode === 'query' ? 'reports' : 'query')}
+          className="relative inline-flex h-6 w-11 items-center transition-colors rounded-full"
+          style={{
+            backgroundColor: "var(--white-12, rgba(255, 255, 255, 0.12))",
+            backdropFilter: "blur(29.09090805053711px)"
+          }}
+        >
+          <span
+            className={`inline-block h-4 w-4 transform transition-transform rounded-full ${
+              queryMode === 'query' ? "translate-x-6" : "translate-x-1"
+            }`}
+            style={{
+              backgroundColor: "var(--primary-light, rgba(158, 251, 205, 1))"
+            }}
+          />
+        </button>
+        <Label htmlFor="query-mode" className="text-white font-medium">
+          AI Reports
+        </Label>
+      </div>
+
+      {/* Main Content - Full Width */}
       <div className="space-y-6">
         {queryMode === 'query' ? (
-          <DatabaseQueryForm
-            onSubmit={handleQuerySubmit}
-            loading={loading}
-            hasDatabase={hasCurrentDatabase}
-            currentQuery={currentQuery}
-          />
+          <div
+            className="p-6"
+            style={{
+              background:
+                "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
+              border: "1.5px solid",
+              borderImageSource:
+                "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
+              borderRadius: "30px",
+              backdropFilter: "blur(30px)",
+            }}
+          >
+            <div className="flex items-start">
+              <Image
+                src="/file-query/filerobot.svg"
+                alt="Database Robot"
+                width={120}
+                height={120}
+                className="flex-shrink-0"
+              />
+              <div className="flex flex-col justify-start pt-5 -ml-8 z-10">
+                <h3 className="text-white font-semibold text-2xl">
+                  Database Query
+                </h3>
+              </div>
+            </div>
+
+            <div className="relative -mt-16 px-4 z-10">
+              <DatabaseQueryForm
+                onSubmit={handleQuerySubmit}
+                loading={loading}
+                hasDatabase={hasCurrentDatabase}
+                currentQuery={currentQuery}
+              />
+            </div>
+          </div>
         ) : (
           <ReportGenerator
             userId={user?.user_id}
@@ -262,6 +363,41 @@ export function DatabaseQueryContent() {
             }}
           />
         )}
+      </div>
+
+      {/* Quick Suggestions Section */}
+      <div className="mt-12">
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Quick suggestion
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((index) => (
+            <div
+              key={index}
+              className="p-4"
+              style={{
+                background:
+                  "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
+                border: "1.5px solid",
+                borderImageSource:
+                  "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
+                borderRadius: "30px",
+                backdropFilter: "blur(30px)",
+              }}
+            >
+              <div className="space-y-2">
+                <p className="text-sm text-slate-400">
+                  Use time references: 'last week', 'this month', 'yesterday'
+                </p>
+                <div className="flex justify-center">
+                  <div className="w-6 h-6 bg-green-400 flex items-center justify-center rounded">
+                    <BarChart3 className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Query History Panel */}
