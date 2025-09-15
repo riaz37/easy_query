@@ -315,18 +315,7 @@ export function DatabaseQueryContent() {
       {/* Main Content - Full Width */}
       <div className="space-y-6">
         {queryMode === 'query' ? (
-          <div
-            className="p-6"
-            style={{
-              background:
-                "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
-              border: "1.5px solid",
-              borderImageSource:
-                "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-              borderRadius: "30px",
-              backdropFilter: "blur(30px)",
-            }}
-          >
+          <div className="p-6 query-content-gradient">
             <div className="flex items-start">
               <Image
                 src="/file-query/filerobot.svg"
@@ -374,16 +363,7 @@ export function DatabaseQueryContent() {
           {[1, 2, 3, 4].map((index) => (
             <div
               key={index}
-              className="p-4"
-              style={{
-                background:
-                  "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
-                border: "1.5px solid",
-                borderImageSource:
-                  "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-                borderRadius: "30px",
-                backdropFilter: "blur(30px)",
-              }}
+              className="p-4 query-content-gradient"
             >
               <div className="space-y-2">
                 <p className="text-sm text-slate-400">

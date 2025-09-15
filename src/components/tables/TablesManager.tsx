@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { Spinner } from "@/components/ui/loading";
 import { TableFlowVisualization } from "./TableFlowVisualization";
+import { useReactFlow } from "reactflow";
 import { ExcelToDBManager } from "./ExcelToDBManager";
 import { TableManagementSection } from "./TableManagementSection";
 import {
@@ -54,10 +55,14 @@ import { useAuthContext } from "@/components/providers/AuthContextProvider";
 import { useTheme } from "@/store/theme-store";
 import { TableStatsCards, TablesManagerHeader } from "./components";
 
+
 export function TablesManager() {
   const { user, isLoading: authLoading } = useAuthContext();
   const theme = useTheme();
   const isDark = theme === "dark";
+
+  // React Flow instance for zoom functionality
+  const [reactFlowInstance, setReactFlowInstance] = React.useState<any>(null);
 
   const [tableData, setTableData] = useState<UserCurrentDBTableData | null>(
     null
@@ -316,7 +321,18 @@ export function TablesManager() {
         {/* ReactFlow Container - Full width */}
         <div className="flex-1 relative w-full h-full">
           {user?.user_id && tableData ? (
-            <TableFlowVisualization rawData={tableData} />
+            <TableFlowVisualization 
+              rawData={tableData} 
+              onZoomIn={() => {
+                // This will be called by TableFlowVisualization to set up zoom in
+              }}
+              onZoomOut={() => {
+                // This will be called by TableFlowVisualization to set up zoom out
+              }}
+              onReactFlowInstance={(instance) => {
+                setReactFlowInstance(instance);
+              }}
+            />
           ) : !loading && !tableData ? (
             <div className="h-full flex items-center justify-center">
               <div className="bg-white/10 dark:bg-gray-800/20 backdrop-blur-sm border border-emerald-200/20 dark:border-emerald-800/20 rounded-xl p-8">
@@ -363,54 +379,80 @@ export function TablesManager() {
       {/* Bottom Icon Controls */}
       {user?.user_id && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-white/10 dark:bg-gray-800/20 backdrop-blur-sm border border-emerald-200/20 dark:border-emerald-800/20 rounded-2xl p-4 shadow-2xl">
+          <div className="backdrop-blur-sm p-4 shadow-2xl" 
+               style={{
+                 background: "rgba(255, 255, 255, 0.03)",
+                 borderRadius: "32px",
+                 border: "1.5px solid",
+                 borderImageSource: "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 0) 50.59%, rgba(255, 255, 255, 0) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)"
+               }}>
             <TooltipProvider>
             <div className="flex items-center gap-4">
+              {/* Zoom In */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      if (reactFlowInstance) {
+                        reactFlowInstance.zoomIn();
+                      }
+                    }}
+                    className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
+                    size="icon"
+                    style={{
+                      background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                      border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                    }}
+                  >
+                    <img src="/tables/zoomin.svg" alt="Zoom In" className="h-6 w-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Zoom In</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Zoom Out */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                      <Button
+                    onClick={() => {
+                      if (reactFlowInstance) {
+                        reactFlowInstance.zoomOut();
+                      }
+                    }}
+                    className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
+                    size="icon"
+                    style={{
+                      background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                      border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                    }}
+                  >
+                    <img src="/tables/zoomout.svg" alt="Zoom Out" className="h-6 w-6" />
+                      </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Zoom Out</p>
+                </TooltipContent>
+              </Tooltip>
+
               {/* Create Table Modal */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => setShowCreateTableModal(true)}
-                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
                     size="icon"
+                    style={{
+                      background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                      border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                    }}
                   >
-                    <Plus className="h-6 w-6" />
+                    <img src="/tables/tableview.svg" alt="Add Table" className="h-6 w-6" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Create Table</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Business Rules Modal */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                      <Button
-                    onClick={() => setShowBusinessRulesModal(true)}
-                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
-                    size="icon"
-                  >
-                    <FileText className="h-6 w-6" />
-                      </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Business Rules</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Your Tables Modal */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => setShowYourTablesModal(true)}
-                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
-                    size="icon"
-                  >
-                    <TableIcon className="h-6 w-6" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Your Tables</p>
+                  <p>Add Table</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -419,10 +461,14 @@ export function TablesManager() {
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => setShowExcelImportModal(true)}
-                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
                     size="icon"
+                    style={{
+                      background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                      border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                    }}
                   >
-                    <FileSpreadsheet className="h-6 w-6" />
+                    <img src="/tables/excel.svg" alt="Excel Import" className="h-6 w-6" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -430,22 +476,45 @@ export function TablesManager() {
                 </TooltipContent>
               </Tooltip>
 
-              {/* Analytics Modal */}
+              {/* Business Rules Modal */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    onClick={() => setShowAnalyticsModal(true)}
-                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+                    onClick={() => setShowBusinessRulesModal(true)}
+                    className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
                     size="icon"
+                    style={{
+                      background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                      border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                    }}
                   >
-                    <BarChart3 className="h-6 w-6" />
+                    <img src="/tables/business.svg" alt="Analytics" className="h-6 w-6" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Table Analytics</p>
+                  <p>Analytics</p>
                 </TooltipContent>
               </Tooltip>
 
+              {/* Settings - Your Tables Modal */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => setShowYourTablesModal(true)}
+                    className="w-12 h-12 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer"
+                    size="icon"
+                    style={{
+                      background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                      border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
+                    }}
+                  >
+                    <img src="/tables/Setting.svg" alt="Your Tables" className="h-6 w-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your Tables</p>
+                </TooltipContent>
+              </Tooltip>
 
                   </div>
             </TooltipProvider>

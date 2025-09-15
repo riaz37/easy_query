@@ -159,7 +159,7 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
           <button
             onClick={() => onTabChange("mssql")}
             className={cn(
-              "text-lg font-semibold pb-2 border-b-2 transition-colors cursor-pointer",
+              "text-sm font-medium pb-2 border-b-2 transition-colors cursor-pointer",
               activeTab === "mssql"
                 ? ""
                 : "text-gray-400 border-transparent hover:text-white"
@@ -169,12 +169,12 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
               borderBottomColor: "var(--primary-main, rgba(19, 245, 132, 1))"
             } : {}}
           >
-            MSSQL DATABASE ACCESS
+            Mssql database access
           </button>
           <button
             onClick={() => onTabChange("vector")}
             className={cn(
-              "text-lg font-semibold pb-2 border-b-2 transition-colors cursor-pointer",
+              "text-sm font-medium pb-2 border-b-2 transition-colors cursor-pointer",
               activeTab === "vector"
                 ? ""
                 : "text-gray-400 border-transparent hover:text-white"
@@ -184,7 +184,7 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
               borderBottomColor: "var(--primary-main, rgba(19, 245, 132, 1))"
             } : {}}
           >
-            VECTOR DATABASE ACCESS
+            Vector database access
           </button>
         </div>
 
@@ -281,8 +281,8 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                 className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                 onClick={() => handleSort("email")}
               >
-                <div className="flex items-center gap-2 text-white font-semibold">
-                  EMAIL
+                <div className="flex items-center gap-2 text-white font-medium text-sm">
+                  Email
                   {getSortIcon("email")}
                 </div>
               </th>
@@ -292,8 +292,8 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                     className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                     onClick={() => handleSort("parentCompany")}
                   >
-                    <div className="flex items-center gap-2 text-white font-semibold">
-                      PARENT COMPANY
+                    <div className="flex items-center gap-2 text-white font-medium text-sm">
+                      Parent company
                       {getSortIcon("parentCompany")}
                     </div>
                   </th>
@@ -301,8 +301,8 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                     className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                     onClick={() => handleSort("subCompany")}
                   >
-                    <div className="flex items-center gap-2 text-white font-semibold">
-                      SUB COMPANIES
+                    <div className="flex items-center gap-2 text-white font-medium text-sm">
+                      Sub companies
                       {getSortIcon("subCompany")}
                     </div>
                   </th>
@@ -310,8 +310,8 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                     className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                     onClick={() => handleSort("databaseCount")}
                   >
-                    <div className="flex items-center gap-2 text-white font-semibold">
-                      DATABASES
+                    <div className="flex items-center gap-2 text-white font-medium text-sm">
+                      Databases
                       {getSortIcon("databaseCount")}
                     </div>
                   </th>
@@ -322,8 +322,8 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                     className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                     onClick={() => handleSort("databaseName")}
                   >
-                    <div className="flex items-center gap-2 text-white font-semibold">
-                      DATABASE
+                    <div className="flex items-center gap-2 text-white font-medium text-sm">
+                      Database
                       {getSortIcon("databaseName")}
                     </div>
                   </th>
@@ -331,8 +331,8 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                     className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                     onClick={() => handleSort("accessLevel")}
                   >
-                    <div className="flex items-center gap-2 text-white font-semibold">
-                      ACCESS LEVEL
+                    <div className="flex items-center gap-2 text-white font-medium text-sm">
+                      Access level
                       {getSortIcon("accessLevel")}
                     </div>
                   </th>
@@ -340,8 +340,8 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                     className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                     onClick={() => handleSort("tableNames")}
                   >
-                    <div className="flex items-center gap-2 text-white font-semibold">
-                      TABLES
+                    <div className="flex items-center gap-2 text-white font-medium text-sm">
+                      Tables
                       {getSortIcon("tableNames")}
                     </div>
                   </th>
@@ -351,13 +351,13 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                 className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
                 onClick={() => handleSort("date")}
               >
-                <div className="flex items-center gap-2 text-white font-semibold">
-                  DATE
+                <div className="flex items-center gap-2 text-white font-medium text-sm">
+                  Date
                   {getSortIcon("date")}
                 </div>
               </th>
-              <th className="px-6 py-4 text-right text-white font-semibold rounded-tr-xl">
-                ACTIONS
+              <th className="px-6 py-4 text-right text-white font-medium text-sm rounded-tr-xl">
+                Actions
               </th>
             </tr>
           </thead>

@@ -418,18 +418,7 @@ export default function FileQueryPage() {
 
           {/* Query Results */}
           {queryResults.length > 0 && (
-            <div
-              className="p-6"
-              style={{
-                background:
-                  "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
-                border: "1.5px solid",
-                borderImageSource:
-                  "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-                borderRadius: "30px",
-                backdropFilter: "blur(20px)",
-              }}
-            >
+            <div className="p-6 query-content-gradient">
               <div className="flex items-center gap-2 mb-4">
                 <FileText className="w-5 h-5 text-green-400" />
                 <h3 className="text-white font-semibold text-xl">
@@ -448,18 +437,7 @@ export default function FileQueryPage() {
 
           {/* Query Error */}
           {queryError && (
-            <div
-              className="p-6"
-              style={{
-                background:
-                  "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
-                border: "1.5px solid",
-                borderImageSource:
-                  "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-                borderRadius: "30px",
-                backdropFilter: "blur(20px)",
-              }}
-            >
+            <div className="p-6 query-content-gradient">
               <div className="flex items-center gap-2 mb-4">
                 <AlertCircle className="w-5 h-5 text-red-400" />
                 <h3 className="text-red-400 font-semibold text-xl">

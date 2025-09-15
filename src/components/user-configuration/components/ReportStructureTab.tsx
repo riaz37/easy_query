@@ -1,25 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 import { 
-  Edit3, 
-  Save, 
-  X, 
   Plus, 
-  Trash2, 
-  Eye, 
-  EyeOff,
-  AlertCircle,
-  CheckCircle,
-  FileText,
-  BarChart3,
-  RefreshCw
+  RefreshCw,
+  AlertCircle
 } from "lucide-react";
 import { useUserContext } from "@/lib/hooks/use-user-context";
 import { ReportStructure } from "@/types/reports";
@@ -247,105 +236,94 @@ export const ReportStructureTab = React.memo<ReportStructureTabProps>(({
 
   return (
     <div className={className}>
-      <div className="space-y-6">
-        {/* Header Controls */}
-        <Card className="bg-gray-900/50 border-gray-400/30">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-white">
-                <BarChart3 className="w-5 h-5 text-emerald-400" />
-                Report Structure Management
-              </CardTitle>
-              <div className="flex items-center gap-2">
+      <div className="query-content-gradient rounded-[32px] p-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                Report Structure
+              </h2>
+              <p className="text-gray-400 text-sm">
+                {isEditing
+                  ? "Edit report structures for the current database"
+                  : "View and edit report structures"}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              {!isEditing ? (
                 <Button
+                  onClick={onRefresh}
                   variant="outline"
-                  size="sm"
-                  onClick={() => setShowPreview(!showPreview)}
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  size="icon"
+                  className="border-0 text-white hover:bg-white/10 cursor-pointer"
+                  style={{
+                    background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
+                    borderRadius: "118.8px",
+                    width: "48px",
+                    height: "48px",
+                  }}
                 >
-                  {showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  {showPreview ? "Hide Preview" : "Show Preview"}
+                  <RefreshCw className="w-6 h-6" />
                 </Button>
-                {!isEditing ? (
+              ) : (
+                <div className="flex gap-2">
                   <Button
-                    onClick={() => setIsEditing(true)}
+                    onClick={saveAllChanges}
+                    disabled={saving || !hasUnsavedChanges()}
                     className="bg-emerald-600 hover:bg-emerald-700"
                   >
-                    <Edit3 className="w-4 h-4 mr-2" />
-                    Edit Structure
+                    {saving ? "Saving..." : "Save Changes"}
                   </Button>
-                ) : (
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setIsEditing(false);
-                        resetToOriginal();
-                      }}
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                    >
-                      <X className="w-4 h-4 mr-2" />
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={saveAllChanges}
-                      disabled={saving || !hasUnsavedChanges()}
-                      className="bg-emerald-600 hover:bg-emerald-700"
-                    >
-                      <Save className="w-4 h-4 mr-2" />
-                      {saving ? "Saving..." : "Save Changes"}
-                    </Button>
-                  </div>
-                )}
-              </div>
+                  <Button
+                    onClick={() => {
+                      setIsEditing(false);
+                      resetToOriginal();
+                    }}
+                    variant="outline"
+                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
+              <Button
+                onClick={() => setIsEditing(true)}
+                variant="outline"
+                size="icon"
+                className="border-0 text-white hover:bg-white/10 cursor-pointer"
+                style={{
+                  background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
+                  borderRadius: "118.8px",
+                  width: "48px",
+                  height: "48px",
+                }}
+              >
+                <img src="/user-configuration/edit.svg" alt="Edit" className="w-6 h-6" />
+              </Button>
             </div>
-          </CardHeader>
-          {error && (
-            <CardContent className="pt-0">
-              <div className="flex items-center gap-2 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                <AlertCircle className="w-4 h-4 text-red-400" />
-                <span className="text-red-400 text-sm">{error}</span>
-              </div>
-            </CardContent>
-          )}
-          {hasUnsavedChanges() && (
-            <CardContent className="pt-0">
-              <div className="flex items-center gap-2 p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
-                <AlertCircle className="w-4 h-4 text-yellow-400" />
-                <span className="text-yellow-400 text-sm">You have unsaved changes</span>
-              </div>
-            </CardContent>
-          )}
-        </Card>
+          </div>
 
-        {/* Add New Structure */}
-        {isEditing && (
-          <Card className="bg-gray-900/30 border-dashed border-gray-600">
-            <CardHeader>
-              <CardTitle className="text-white text-lg">Add New Report Structure</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          {/* Add New Structure Form */}
+          {isEditing && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Add New Report Structure</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-300 mb-2 block">
-                    Structure Key
-                  </label>
+                  <Label className="text-gray-400">Structure Key</Label>
                   <Input
                     value={newStructureKey}
                     onChange={(e) => setNewStructureKey(e.target.value)}
                     placeholder="e.g., financial_report, sales_analysis"
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="modal-input-enhanced mt-2"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-300 mb-2 block">
-                    Structure Value
-                  </label>
+                  <Label className="text-gray-400">Structure Value</Label>
                   <Input
                     value={newStructureValue}
                     onChange={(e) => setNewStructureValue(e.target.value)}
                     placeholder="e.g., Financial Report Template"
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="modal-input-enhanced mt-2"
                   />
                 </div>
               </div>
@@ -356,17 +334,15 @@ export const ReportStructureTab = React.memo<ReportStructureTabProps>(({
                 <Plus className="w-4 h-4 mr-2" />
                 Add Structure
               </Button>
-            </CardContent>
-          </Card>
-        )}
+            </div>
+          )}
 
-        {/* Report Structures List */}
-        <div className="space-y-4">
-          {editableStructures.length === 0 ? (
-            <Card className="bg-gray-900/50 border-gray-400/30">
-              <CardContent className="pt-12 pb-12 text-center">
+          {/* Report Structures List */}
+          <div className="space-y-6">
+            {editableStructures.length === 0 ? (
+              <div className="text-center py-12">
                 <div className="w-16 h-16 bg-gray-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-8 h-8 text-gray-400" />
+                  <AlertCircle className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="text-white text-lg font-medium mb-2">
                   No Report Structures Found
@@ -377,110 +353,123 @@ export const ReportStructureTab = React.memo<ReportStructureTabProps>(({
                     : "Report structures will appear here once they are configured."
                   }
                 </p>
-              </CardContent>
-            </Card>
-          ) : (
-            editableStructures.map((structure, index) => (
-              <Card key={index} className="bg-gray-900/50 border-gray-400/30">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Badge variant="default" className="bg-emerald-600">
-                        {structure.key}
-                      </Badge>
-                      {structure.isEditing ? (
-                        <Input
-                          value={structure.key}
-                          onChange={(e) => updateStructure(index, 'key', e.target.value)}
-                          className="bg-gray-800 border-gray-600 text-white"
-                          placeholder="Structure key"
-                        />
-                      ) : (
-                        <span className="text-white font-medium">
-                          {structure.key.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {isEditing && (
-                        <>
+              </div>
+            ) : (
+              editableStructures.map((structure, index) => (
+                <div key={index} className="query-content-gradient rounded-[16px] p-6">
+                  <div className="space-y-4">
+                    {/* Report Header */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">
                           {structure.isEditing ? (
-                            <>
-                              <Button
-                                size="sm"
-                                onClick={() => saveStructure(index)}
-                                className="bg-emerald-600 hover:bg-emerald-700"
-                              >
-                                <CheckCircle className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => cancelEditing(index)}
-                                className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                              >
-                                <X className="w-4 h-4" />
-                              </Button>
-                            </>
+                            <Input
+                              value={structure.key}
+                              onChange={(e) => updateStructure(index, 'key', e.target.value)}
+                              className="modal-input-enhanced text-lg font-semibold"
+                              placeholder="Report name"
+                            />
                           ) : (
-                            <>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => startEditing(index)}
-                                className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                              >
-                                <Edit3 className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => deleteStructure(index)}
-                                className="border-red-600 text-red-300 hover:bg-red-900/20"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </>
+                            structure.key.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())
                           )}
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-                
-                <CardContent>
-                  <div className="space-y-3">
-                    <label className="text-sm font-medium text-gray-300">
-                      Structure Content:
-                    </label>
-                    {structure.isEditing ? (
-                      <Textarea
-                        value={structure.value}
-                        onChange={(e) => updateStructure(index, 'value', e.target.value)}
-                        className="bg-gray-800 border-gray-600 text-white min-h-[120px]"
-                        placeholder="Enter structure content"
-                      />
-                    ) : (
-                      <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-                        {showPreview ? (
-                          <pre className="text-gray-300 text-sm whitespace-pre-wrap">
-                            {structure.value}
-                          </pre>
+                        </h3>
+                        <p className="text-gray-400 text-sm">
+                          View and edit business rules
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {structure.isEditing ? (
+                          <>
+                            <Button
+                              size="sm"
+                              onClick={() => saveStructure(index)}
+                              className="bg-emerald-600 hover:bg-emerald-700"
+                            >
+                              Save
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => cancelEditing(index)}
+                              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                            >
+                              Cancel
+                            </Button>
+                          </>
                         ) : (
-                          <div className="text-gray-400 text-sm">
-                            {structure.value.length > 100 
-                              ? `${structure.value.substring(0, 100)}...` 
-                              : structure.value
-                            }
-                          </div>
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => startEditing(index)}
+                              className="border-0 text-white hover:bg-white/10 cursor-pointer"
+                              style={{
+                                background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
+                                borderRadius: "118.8px",
+                                width: "40px",
+                                height: "40px",
+                              }}
+                            >
+                              <img
+                                src="/user-configuration/reportedit.svg"
+                                alt="Edit"
+                                className="w-5 h-5"
+                              />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => deleteStructure(index)}
+                              className="border-0 text-white hover:bg-white/10 cursor-pointer"
+                              style={{
+                                background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
+                                borderRadius: "118.8px",
+                                width: "40px",
+                                height: "40px",
+                              }}
+                            >
+                              <img
+                                src="/user-configuration/reportdelete.svg"
+                                alt="Delete"
+                                className="w-5 h-5"
+                              />
+                            </Button>
+                          </>
                         )}
                       </div>
-                    )}
+                    </div>
+                    
+                    {/* Report Content - Same styling as business rules */}
+                    <div className="space-y-3">
+                      <Label className="text-gray-400">SQL Business Rules</Label>
+                      <div className="query-content-gradient rounded-[16px] overflow-hidden">
+                        <div className="p-4 max-h-[600px] overflow-y-auto">
+                          {structure.isEditing ? (
+                            <Textarea
+                              value={structure.value}
+                              onChange={(e) => updateStructure(index, 'value', e.target.value)}
+                              className="modal-input-enhanced min-h-[200px] border-0 bg-transparent focus:ring-0 focus:ring-offset-0 rounded-[16px]"
+                              placeholder="Enter SQL business rules for this report structure"
+                            />
+                          ) : (
+                            structure.value ? (
+                              <pre className="text-white whitespace-pre-wrap text-sm font-mono">
+                                {structure.value}
+                              </pre>
+                            ) : (
+                              <p className="text-gray-400 italic">
+                                No business rules configured for this report structure.
+                              </p>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

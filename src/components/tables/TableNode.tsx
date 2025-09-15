@@ -38,16 +38,14 @@ const getTableIcon = (tableName: string) => {
   return Database;
 };
 
-// Unified green color scheme for all tables
+// Unified color scheme for all tables with query-content-gradient
 const getTableColors = () => {
   return {
-    bg: 'bg-emerald-900/20',
-    border: 'border-emerald-500/40',
     icon: 'text-emerald-400',
-    title: 'text-emerald-100',
-    subtitle: 'text-emerald-300/60',
-    dots: 'bg-emerald-400/60',
-    relationships: 'text-emerald-300/60'
+    title: 'text-white',
+    subtitle: 'text-gray-300',
+    relationships: 'text-gray-300',
+    dots: 'bg-emerald-400'
   };
 };
 
@@ -71,7 +69,19 @@ export const TableNode = memo(({ data }: NodeProps<TableNodeData>) => {
       />
 
       {/* Enhanced table card */}
-      <div className={`${colors.bg} ${colors.border} border-2 rounded-xl p-6 min-w-[280px] max-w-[320px] backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105`}>
+      <div className="query-content-gradient p-6 min-w-[280px] max-w-[320px] shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 relative">
+        {/* Corner border effect - closer to main border */}
+        <div className="absolute top-0 left-0 right-0 bottom-0 rounded-[30px] pointer-events-none" 
+             style={{
+               background: `linear-gradient(132.56deg, rgba(19, 245, 132, 1) 0.71%, rgba(255, 255, 255, 0) 16.71%), linear-gradient(132.98deg, rgba(255, 255, 255, 0) 84.76%, rgba(19, 245, 132, 1) 99.35%)`,
+               padding: '1px',
+               WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+               WebkitMaskComposite: 'xor',
+               mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+               maskComposite: 'exclude',
+               zIndex: 1
+             }}>
+        </div>
         {/* Header with icon and title */}
         <div className="flex items-start gap-4 mb-4">
           <div className={`${colors.icon} p-3 rounded-lg bg-black/20`}>
@@ -115,8 +125,8 @@ export const TableNode = memo(({ data }: NodeProps<TableNodeData>) => {
         {/* No relationships indicator */}
         {(!table.relationships || table.relationships.length === 0) && (
           <div className="flex items-center gap-3">
-            <div className="w-4 h-4 bg-gray-600/40 rounded-full" />
-            <span className="text-gray-400/60 text-sm">
+            <div className="w-4 h-4 bg-gray-500/60 rounded-full" />
+            <span className="text-gray-400 text-sm">
               Isolated table
             </span>
           </div>
