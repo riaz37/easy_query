@@ -46,23 +46,11 @@ export function CompanyCard({
       {/* Main Card */}
       <Card
         className={cn(
-          "relative cursor-pointer transition-all duration-300",
-          "border-emerald-400/20 bg-white/5 backdrop-blur-sm",
-          "hover:bg-white/10 hover:border-emerald-400/40",
+          "relative cursor-pointer transition-all duration-300 query-content-gradient modal-enhanced",
           "hover:shadow-lg hover:shadow-emerald-500/20 hover:scale-105",
           isSelected && "ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-500/30 scale-105",
           isMainCompany ? "w-96 h-48" : "w-80 h-44"
         )}
-        style={{
-          background: theme === "dark"
-            ? "linear-gradient(158.39deg, rgba(255, 255, 255, 0.03) 14.19%, rgba(255, 255, 255, 0.000015) 50.59%, rgba(255, 255, 255, 0.000015) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)"
-            : "linear-gradient(158.39deg, rgba(255, 255, 255, 0.98) 14.19%, rgba(240, 249, 245, 0.95) 50.59%, rgba(255, 255, 255, 0.98) 68.79%, rgba(240, 249, 245, 0.95) 105.18%)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          boxShadow: theme === "dark"
-            ? "0 8px 32px rgba(0, 0, 0, 0.3)"
-            : "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 0 0 1px rgba(16, 185, 129, 0.08)"
-        }}
         onClick={onSelect}
       >
         <CardContent className="p-6 h-full flex items-center gap-4">

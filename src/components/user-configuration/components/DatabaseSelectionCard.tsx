@@ -1,11 +1,4 @@
 import React, { useMemo } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { DatabaseCard } from './DatabaseCard';
@@ -30,14 +23,13 @@ export const DatabaseSelectionCard = React.memo<DatabaseSelectionCardProps>(({
   }, [databases, businessRules, onDatabaseChange]);
 
   return (
-    <Card className="bg-slate-800/50 border-slate-700">
-      <CardHeader>
-        <CardTitle className="text-white">Database Selection</CardTitle>
-        <CardDescription className="text-gray-400">
-          Choose your current working database
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="query-content-gradient rounded-[32px] p-6">
+      <div className="space-y-4">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-white">Database Selection</h2>
+          <p className="text-gray-400 text-sm">Choose your current working database</p>
+        </div>
+        <div className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
@@ -70,8 +62,9 @@ export const DatabaseSelectionCard = React.memo<DatabaseSelectionCardProps>(({
             </div>
           </>
         )}
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 });
 

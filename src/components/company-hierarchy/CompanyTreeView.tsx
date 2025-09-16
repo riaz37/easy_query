@@ -23,7 +23,6 @@ import { useParentCompanies } from "@/lib/hooks/use-parent-companies";
 import { useSubCompanies } from "@/lib/hooks/use-sub-companies";
 import { ParentCompanyData, SubCompanyData } from "@/types/api";
 import { toast } from "sonner";
-import { AnimatedGridBackground } from "./AnimatedGridBackground";
 import { Company, CompanyTreeViewProps } from "./types";
 
 // Custom Node Component using the new CompanyCard
@@ -366,10 +365,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
   };
 
   return (
-    <div className="min-h-screen w-full relative bg-gradient-to-br from-gray-50 via-emerald-50/30 to-gray-100 dark:from-gray-900 dark:via-emerald-950/20 dark:to-gray-800">
-      {/* Animated Grid Background */}
-      <AnimatedGridBackground />
-
+    <div className="min-h-screen w-full relative">
       {/* Main Content Area - Account for navbar height */}
       <div className="flex h-screen pt-20">
         {/* ReactFlow Container - Full width */}

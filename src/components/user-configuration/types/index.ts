@@ -116,6 +116,10 @@ export interface BusinessRulesEditorProps {
   businessRules: BusinessRulesState;
   editorState: BusinessRulesEditorState;
   onContentChange: (content: string) => void;
+  onEdit: () => void;
+  onSave: () => void;
+  onCancel: () => void;
+  onReset: () => void;
 }
 
 export interface ContextInfoCardProps {

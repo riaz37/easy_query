@@ -1727,3 +1727,28 @@ nav {
 .light .modal-close-button:hover {
   color: #374151;
 }
+
+/* Query page gradient background */
+.query-content-gradient {
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+              linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%),
+              linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%);
+  border: 1.5px solid;
+  border-image-source: linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%);
+  border-radius: 30px;
+  backdrop-filter: blur(20px);
+}
+
+/* Database card hover effect */
+.database-card-hover:hover {
+  border: 1.5px solid var(--primary-24, rgba(19, 245, 132, 0.24)) !important;
+}
+
+/* Database card toggle switch styling */
+.database-card-hover .switch-thumb {
+  background-color: white !important;
+}
+
+.database-card-hover [data-state="checked"] .switch-thumb {
+  background-color: white !important;
+}

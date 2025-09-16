@@ -1,10 +1,4 @@
 import React from 'react';
-import {
-  Card,
-  CardContent,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle } from 'lucide-react';
 import type { DatabaseCardProps } from '../types';
 
 export const DatabaseCard = React.memo<DatabaseCardProps>(({
@@ -24,40 +18,32 @@ export const DatabaseCard = React.memo<DatabaseCardProps>(({
   };
 
   return (
-    <Card
-      className={`cursor-pointer transition-all hover:scale-105 ${
+    <div
+      className={`cursor-pointer transition-all hover:scale-105 rounded-[32px] p-4 query-content-gradient h-[184px] ${
         database.is_current
-          ? 'bg-emerald-900/30 border-emerald-500'
-          : 'bg-slate-700/50 border-slate-600 hover:border-slate-500'
+          ? 'border-2 border-emerald-500'
+          : 'border-2 border-transparent'
       }`}
       onClick={handleClick}
     >
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="font-semibold text-white">
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-white text-lg">
             {database.db_name}
           </h3>
           {database.is_current && (
-            <CheckCircle className="w-5 h-5 text-emerald-400" />
+            <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-white"></div>
+            </div>
           )}
         </div>
-        <div className="text-sm text-gray-400 space-y-1">
-          <div>Type: {database.db_type}</div>
-          <div className="truncate">URL: {database.db_url}</div>
-          <div>Rules: {getRulesInfo()}</div>
+        <div className="text-sm space-y-1">
+          <div><span className="text-gray-400">Type</span> <span className="text-white">{database.db_type}</span></div>
+          <div className="truncate"><span className="text-gray-400">URL</span> <span className="text-white">{database.db_url}</span></div>
+          <div><span className="text-gray-400">Rules</span> <span className="text-white">{getRulesInfo()}</span></div>
         </div>
-        <Badge
-          variant={database.is_current ? 'default' : 'secondary'}
-          className={`mt-2 ${
-            database.is_current
-              ? 'bg-emerald-600 text-white'
-              : 'bg-slate-600 text-gray-300'
-          }`}
-        >
-          {database.is_current ? 'Current' : 'Select'}
-        </Badge>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 });
 

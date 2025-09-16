@@ -1,7 +1,5 @@
 import React from 'react';
-import { BusinessRulesStatusCard } from './BusinessRulesStatusCard';
 import { BusinessRulesEditor } from './BusinessRulesEditor';
-import { ContextInfoCard } from './ContextInfoCard';
 import type { BusinessRulesTabProps } from '../types';
 
 export const BusinessRulesTab = React.memo<BusinessRulesTabProps>(({
@@ -19,28 +17,17 @@ export const BusinessRulesTab = React.memo<BusinessRulesTabProps>(({
   onContentChange,
 }) => {
   return (
-    <div className="space-y-6 mt-6">
-      <BusinessRulesStatusCard
-        currentDatabaseName={currentDatabaseName}
-        businessRules={businessRules}
-        businessRulesCount={businessRulesCount}
-        hasBusinessRules={hasBusinessRules}
-        editorState={editorState}
-        onRefresh={onRefresh}
-        onEdit={onEdit}
-        onSave={onSave}
-        onCancel={onCancel}
-        onReset={onReset}
-      />
-      
+    <div>
       <BusinessRulesEditor
         currentDatabaseId={currentDatabaseId}
         businessRules={businessRules}
         editorState={editorState}
         onContentChange={onContentChange}
+        onEdit={onEdit}
+        onSave={onSave}
+        onCancel={onCancel}
+        onReset={onReset}
       />
-      
-      <ContextInfoCard />
     </div>
   );
 });

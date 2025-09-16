@@ -24,6 +24,9 @@ interface TableFlowVisualizationProps {
   tables?: ParsedTable[];
   rawData?: any; // For handling raw API response
   maxTables?: number; // Maximum number of tables to display
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onReactFlowInstance?: (instance: any) => void;
 }
 
 const nodeTypes = {
@@ -34,6 +37,9 @@ export function TableFlowVisualization({
   tables = [],
   rawData,
   maxTables = 15,
+  onZoomIn,
+  onZoomOut,
+  onReactFlowInstance,
 }: TableFlowVisualizationProps) {
   // Parse raw API data if provided, otherwise use tables prop
   const processedTables = useMemo(() => {
@@ -163,6 +169,25 @@ export function TableFlowVisualization({
     null
   );
 
+  // Ref to store React Flow instance
+  const reactFlowRef = React.useRef<any>(null);
+
+  // Set up zoom functions when component mounts
+  React.useEffect(() => {
+    if (onZoomIn && onZoomOut) {
+      // Call the parent's zoom functions to notify that setup is complete
+      onZoomIn();
+      onZoomOut();
+    }
+  }, [onZoomIn, onZoomOut]);
+
+  // Pass React Flow instance to parent when it's available
+  React.useEffect(() => {
+    if (reactFlowRef.current && onReactFlowInstance) {
+      onReactFlowInstance(reactFlowRef.current);
+    }
+  }, [onReactFlowInstance]);
+
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -212,6 +237,7 @@ export function TableFlowVisualization({
   return (
     <div className="w-full h-full relative">
       <ReactFlow
+        ref={reactFlowRef}
         nodes={nodes.map((node) => ({
           ...node,
           style: {
@@ -228,6 +254,12 @@ export function TableFlowVisualization({
         onConnect={onConnect}
         onNodeClick={onNodeClick}
         onPaneClick={() => setSelectedNodeId(null)}
+        onInit={(instance) => {
+          reactFlowRef.current = instance;
+          if (onReactFlowInstance) {
+            onReactFlowInstance(instance);
+          }
+        }}
         nodeTypes={nodeTypes}
         fitView
         className="bg-transparent"

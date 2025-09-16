@@ -1,16 +1,27 @@
 import React, { useState, Suspense, lazy } from 'react';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { 
+  AlertCircle, 
+  Upload, 
+  User, 
+  Phone, 
+  MapPin, 
+  Mail, 
+  Lock, 
+  Database, 
+  Shield,
+  CheckCircle,
+  X
+} from 'lucide-react';
 import { Spinner } from '@/components/ui/loading';
 import { useUserConfiguration } from '../hooks/useUserConfiguration';
 import { useBusinessRulesEditor } from '../hooks/useBusinessRulesEditor';
-import { PageLayout } from '@/components/layout/PageLayout';
 import type { UserConfigurationProps } from '../types';
 
 // Lazy load tab components for code splitting
@@ -29,6 +40,12 @@ const TabLoadingFallback = () => (
 
 export const UserConfiguration = React.memo<UserConfigurationProps>(({ className }) => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [blockProfile, setBlockProfile] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState({
+    comments: true,
+    answers: true,
+    follows: false
+  });
   
   const {
     loading,
@@ -82,114 +99,325 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
     );
   }
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <Suspense fallback={<TabLoadingFallback />}>
+            <OverviewTab
+              user={user}
+              currentDatabaseName={currentDatabaseName}
+              businessRules={businessRules}
+              businessRulesCount={businessRulesCount}
+              hasBusinessRules={hasBusinessRules}
+              onNavigateToTab={setActiveTab}
+            />
+          </Suspense>
+        );
+      case 'database':
+        return (
+          <Suspense fallback={<TabLoadingFallback />}>
+            <DatabaseTab
+              databases={databases}
+              loading={loading}
+              onDatabaseChange={handleDatabaseChange}
+              onRefresh={handleManualRefresh}
+              businessRules={businessRules}
+            />
+          </Suspense>
+        );
+      case 'business-rules':
+        return (
+          <Suspense fallback={<TabLoadingFallback />}>
+            <BusinessRulesTab
+              currentDatabaseId={currentDatabaseId}
+              currentDatabaseName={currentDatabaseName}
+              businessRules={businessRules}
+              businessRulesCount={businessRulesCount}
+              hasBusinessRules={hasBusinessRules}
+              editorState={editorState}
+              onRefresh={handleBusinessRulesRefresh}
+              onEdit={handleRulesEdit}
+              onSave={handleRulesSave}
+              onCancel={handleRulesCancel}
+              onReset={handleRulesReset}
+              onContentChange={handleRulesContentChange}
+            />
+          </Suspense>
+        );
+      case 'report-structure':
+        return (
+          <Suspense fallback={<TabLoadingFallback />}>
+            <ReportStructureTab
+              reportStructure={reportStructure}
+              reportStructureLoading={reportStructureLoading}
+              reportStructureError={reportStructureError}
+              onRefresh={handleReportStructureRefresh}
+            />
+          </Suspense>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className={className}>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-            <div className="relative">
-              <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
+      <div className="flex gap-6">
+        {/* Left Side - Profile Management Section */}
+        <div className="w-80 flex-shrink-0">
+          <div className="query-content-gradient rounded-[32px] p-6">
+            {/* Profile Picture Section */}
+            <div className="flex flex-col items-center mb-4">
+              <div className="relative w-24 h-24 mb-4">
+                <div className="w-full h-full rounded-full bg-gray-700 flex items-center justify-center border-2 border-dashed border-emerald-400">
+                  <User className="w-12 h-12 text-gray-400" />
+                </div>
+                <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-colors">
+                  <Upload className="w-4 h-4 text-white" />
+                </button>
+              </div>
+              <p className="text-gray-400 text-sm text-center mb-2">Upload photo</p>
+              <p className="text-gray-500 text-xs text-center mb-4">
+                Allowed *.jpeg, *.jpg, *.png, *.gif<br />
+                Max size of 3.1 MB
+              </p>
             </div>
-            User Configuration
-          </h1>
-          <p className="text-gray-300 text-lg">
-            Manage your database settings, business rules, report structures, and preferences
-          </p>
+
+            {/* Block Profile Toggle */}
+            <div className="mb-8">
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-white font-medium">Block Profile</span>
+                <Switch
+                  checked={blockProfile}
+                  onCheckedChange={setBlockProfile}
+                  className="data-[state=checked]:bg-emerald-500"
+                />
+              </div>
+            </div>
+
+            {/* Delete User Button */}
+            <div className="flex justify-center">
+              <Button 
+                variant="destructive" 
+                className="px-6 py-2"
+                style={{
+                  background: "var(--error-8, rgba(255, 86, 48, 0.08))",
+                  color: "var(--error-main, rgba(255, 86, 48, 1))",
+                  border: "1px solid var(--error-16, rgba(255, 86, 48, 0.16))",
+                  borderRadius: "99px"
+                }}
+              >
+                Delete user
+              </Button>
+            </div>
+          </div>
         </div>
 
-        {/* Main Configuration Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-800/70 border border-emerald-500/30 backdrop-filter backdrop-blur-20">
-            <TabsTrigger value="overview" className="flex items-center gap-2 text-gray-300 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/25 hover:bg-slate-700 hover:text-white">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="database" className="flex items-center gap-2 text-gray-300 data-[state=active]:bg-teal-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-teal-500/25 hover:bg-slate-700 hover:text-white">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-              </svg>
-              Database Settings
-            </TabsTrigger>
-            <TabsTrigger value="business-rules" className="flex items-center gap-2 text-gray-300 data-[state=active]:bg-green-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-green-500/25 hover:bg-slate-700 hover:text-white">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              Business Rules
-            </TabsTrigger>
-            <TabsTrigger value="report-structure" className="flex items-center gap-2 text-gray-300 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/25 hover:bg-slate-700 hover:text-white">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              Report Structure
-            </TabsTrigger>
-          </TabsList>
+        {/* Right Side - Main Content */}
+        <div className="flex-1 space-y-6">
+          {/* Tab Navigation Section */}
+          <div className="query-content-gradient rounded-[32px] p-6 h-24 flex items-center">
+            <div className="flex gap-8">
+              {[
+                { id: 'overview', label: 'OVER VIEW' },
+                { id: 'database', label: 'DATABASED SETTINGS' },
+                { id: 'business-rules', label: 'BUSINESS RULES' },
+                { id: 'report-structure', label: 'REPORT STRUCTURE' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`text-sm font-medium pb-2 border-b-2 transition-colors cursor-pointer ${
+                    activeTab === tab.id
+                      ? ''
+                      : 'text-gray-400 border-transparent hover:text-white'
+                  }`}
+                  style={activeTab === tab.id ? {
+                    color: 'var(--primary-main, rgba(19, 245, 132, 1))',
+                    borderBottomColor: 'var(--primary-main, rgba(19, 245, 132, 1))'
+                  } : {}}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-          {/* Overview Tab */}
-          <TabsContent value="overview">
-            <Suspense fallback={<TabLoadingFallback />}>
-              <OverviewTab
-                user={user}
-                currentDatabaseName={currentDatabaseName}
-                businessRules={businessRules}
-                businessRulesCount={businessRulesCount}
-                hasBusinessRules={hasBusinessRules}
-                onNavigateToTab={setActiveTab}
-              />
-            </Suspense>
-          </TabsContent>
+          {/* Tab Content */}
+          <div className="space-y-6">
+            {activeTab === 'overview' && (
+              <>
+                {/* User Information Section */}
+                <div className="query-content-gradient rounded-[32px] p-6">
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold text-white">User Information</h2>
+                    <p className="text-gray-400 text-sm">Donec mi odio, faucibus at, scelerisque quis</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label className="text-gray-400">Name</Label>
+                        <Input 
+                          value={user?.name || 'Jayvion Simon'} 
+                          className="modal-input-enhanced"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-gray-400 flex items-center gap-2">
+                          <Phone className="w-4 h-4" />
+                          Phone number
+                        </Label>
+                        <Input 
+                          value="365-374-4961" 
+                          className="modal-input-enhanced"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-gray-400 flex items-center gap-2">
+                        <MapPin className="w-4 h-4" />
+                        Address
+                      </Label>
+                      <Input 
+                        value="19034 Verna Unions Apt. 164 - Honolulu, RI / 87535" 
+                        className="modal-input-enhanced"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-gray-400">About</Label>
+                      <Textarea 
+                        value="Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci." 
+                        className="modal-input-enhanced min-h-[100px]"
+                      />
+                    </div>
+                  </div>
+                </div>
 
-          {/* Database Settings Tab */}
-          <TabsContent value="database">
-            <Suspense fallback={<TabLoadingFallback />}>
-              <DatabaseTab
-                databases={databases}
-                loading={loading}
-                onDatabaseChange={handleDatabaseChange}
-                onRefresh={handleManualRefresh}
-                businessRules={businessRules}
-              />
-            </Suspense>
-          </TabsContent>
+                {/* Security Section */}
+                <div className="query-content-gradient rounded-[32px] p-6">
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold text-white">Security</h2>
+                    <p className="text-gray-400 text-sm">Donec mi odio, faucibus at, scelerisque quis</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label className="text-gray-400 flex items-center gap-2">
+                          <Mail className="w-4 h-4" />
+                          Email
+                        </Label>
+                        <Input 
+                          value={user?.email || 'nannie.abernathy70@yahoo.com'} 
+                          className="modal-input-enhanced"
+                        />
+                        <div className="flex items-center gap-1">
+                          <a href="#" className="text-gray-400 text-sm hover:underline">Change Email</a>
+                          <div className="w-4 h-4 rounded-full bg-gray-400 flex items-center justify-center">
+                            <span className="text-xs text-white">i</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label className="text-gray-400 flex items-center gap-2">
+                          <Lock className="w-4 h-4" />
+                          Password
+                        </Label>
+                        <Input 
+                          type="password"
+                          value="••••••••••••" 
+                          className="modal-input-enhanced"
+                        />
+                        <div className="flex items-center gap-1">
+                          <a href="#" className="text-gray-400 text-sm hover:underline">Change Password</a>
+                          <div className="w-4 h-4 rounded-full bg-gray-400 flex items-center justify-center">
+                            <span className="text-xs text-white">i</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Business Rules Tab */}
-          <TabsContent value="business-rules">
-            <Suspense fallback={<TabLoadingFallback />}>
-              <BusinessRulesTab
-                currentDatabaseId={currentDatabaseId}
-                currentDatabaseName={currentDatabaseName}
-                businessRules={businessRules}
-                businessRulesCount={businessRulesCount}
-                hasBusinessRules={hasBusinessRules}
-                editorState={editorState}
-                onRefresh={handleBusinessRulesRefresh}
-                onEdit={handleRulesEdit}
-                onSave={handleRulesSave}
-                onCancel={handleRulesCancel}
-                onReset={handleRulesReset}
-                onContentChange={handleRulesContentChange}
-              />
-            </Suspense>
-          </TabsContent>
+                {/* Activity Section */}
+                <div className="query-content-gradient rounded-[32px] p-6">
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold text-white">Activity</h2>
+                    <p className="text-gray-400 text-sm">Donec mi odio, faucibus at, scelerisque quis</p>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-white">Email me when someone comments on my article</span>
+                        <Switch
+                          checked={emailNotifications.comments}
+                          onCheckedChange={(checked) => setEmailNotifications(prev => ({ ...prev, comments: checked }))}
+                          className="data-[state=checked]:bg-emerald-500"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-white">Email me when someone answers on my form</span>
+                        <Switch
+                          checked={emailNotifications.answers}
+                          onCheckedChange={(checked) => setEmailNotifications(prev => ({ ...prev, answers: checked }))}
+                          className="data-[state=checked]:bg-emerald-500"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-white">Email me when someone follows me</span>
+                        <Switch
+                          checked={emailNotifications.follows}
+                          onCheckedChange={(checked) => setEmailNotifications(prev => ({ ...prev, follows: checked }))}
+                          className="data-[state=checked]:bg-emerald-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Report Structure Tab */}
-          <TabsContent value="report-structure">
-            <Suspense fallback={<TabLoadingFallback />}>
-              <ReportStructureTab
-                reportStructure={reportStructure}
-                reportStructureLoading={reportStructureLoading}
-                reportStructureError={reportStructureError}
-                onRefresh={handleReportStructureRefresh}
-              />
-            </Suspense>
-          </TabsContent>
-        </Tabs>
+                {/* Current Status Section */}
+                <div className="query-content-gradient rounded-[32px] p-6">
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold text-white">Current Status</h2>
+                    <p className="text-gray-400 text-sm">Donec mi odio, faucibus at, scelerisque quis</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Database className="w-5 h-5 text-emerald-400" />
+                          <span className="text-white font-medium">Database Context</span>
+                        </div>
+                        <div className="ml-7">
+                          <div className="text-white mb-2">{currentDatabaseName || 'esadb'}</div>
+                          <Badge className="bg-emerald-500 text-white">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Active
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Shield className="w-5 h-5 text-emerald-400" />
+                          <span className="text-white font-medium">Business Rules</span>
+                        </div>
+                        <div className="ml-7">
+                          <div className="text-white mb-2">rule1</div>
+                          <Badge className="bg-emerald-500 text-white">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Active
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {activeTab !== 'overview' && renderTabContent()}
+          </div>
+        </div>
       </div>
     </div>
   );
