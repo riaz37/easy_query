@@ -360,20 +360,33 @@ export function DatabaseQueryContent() {
           Quick suggestion
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((index) => (
+          {[
+            { 
+              text: "Show me all users from last month", 
+              query: "Show me all users from last month"
+            },
+            { 
+              text: "What are the top performing products?", 
+              query: "What are the top performing products?"
+            },
+            { 
+              text: "Find orders with total amount greater than $1000", 
+              query: "Find orders with total amount greater than $1000"
+            },
+            { 
+              text: "Generate a sales report for this quarter", 
+              query: "Generate a sales report for this quarter"
+            },
+          ].map((suggestion, index) => (
             <div
               key={index}
-              className="p-4 query-content-gradient"
+              className="p-4 query-content-gradient cursor-pointer hover:scale-105 transition-transform duration-200"
+              onClick={() => setCurrentQuery(suggestion.query)}
             >
               <div className="space-y-2">
                 <p className="text-sm text-slate-400">
-                  Use time references: 'last week', 'this month', 'yesterday'
+                  {suggestion.text}
                 </p>
-                <div className="flex justify-center">
-                  <div className="w-6 h-6 bg-green-400 flex items-center justify-center rounded">
-                    <BarChart3 className="h-4 w-4 text-white" />
-                  </div>
-                </div>
               </div>
             </div>
           ))}

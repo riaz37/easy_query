@@ -448,7 +448,7 @@ export function TablesManager() {
                       border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))"
                     }}
                   >
-                    <img src="/tables/tableview.svg" alt="Add Table" className="h-6 w-6" />
+                    <img src="/tables/Table.svg" alt="Add Table" className="h-6 w-6" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>

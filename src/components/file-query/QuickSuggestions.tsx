@@ -1,19 +1,42 @@
 "use client";
 
 import React from "react";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, FileText, Search, Database } from "lucide-react";
 
 interface QuickSuggestionsProps {
   className?: string;
+  onQuerySelect?: (query: string) => void;
 }
 
-export function QuickSuggestions({ className = "" }: QuickSuggestionsProps) {
+export function QuickSuggestions({ className = "", onQuerySelect }: QuickSuggestionsProps) {
   const suggestions = [
-    { text: "Use time references: 'last week', 'this month', 'yesterday'", icon: <BarChart3 className="h-4 w-4 text-green-400" /> },
-    { text: "Use time references: 'last week', 'this month', 'yesterday'", icon: <BarChart3 className="h-4 w-4 text-green-400" /> },
-    { text: "Use time references: 'last week', 'this month', 'yesterday'", icon: <BarChart3 className="h-4 w-4 text-green-400" /> },
-    { text: "Use time references: 'last week', 'this month', 'yesterday'", icon: <BarChart3 className="h-4 w-4 text-green-400" /> },
+    { 
+      text: "What are the main topics covered in the uploaded documents?", 
+      query: "What are the main topics covered in the uploaded documents?",
+      icon: <FileText className="h-4 w-4 text-green-400" /> 
+    },
+    { 
+      text: "Summarize the key findings from the financial reports", 
+      query: "Summarize the key findings from the financial reports",
+      icon: <BarChart3 className="h-4 w-4 text-green-400" /> 
+    },
+    { 
+      text: "Find all mentions of budget allocations and spending", 
+      query: "Find all mentions of budget allocations and spending",
+      icon: <Search className="h-4 w-4 text-green-400" /> 
+    },
+    { 
+      text: "Extract data from tables and structured content", 
+      query: "Extract data from tables and structured content",
+      icon: <Database className="h-4 w-4 text-green-400" /> 
+    },
   ];
+
+  const handleSuggestionClick = (query: string) => {
+    if (onQuerySelect) {
+      onQuerySelect(query);
+    }
+  };
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -24,7 +47,8 @@ export function QuickSuggestions({ className = "" }: QuickSuggestionsProps) {
         {suggestions.map((suggestion, index) => (
           <div
             key={index}
-            className="p-4"
+            className="p-4 cursor-pointer hover:scale-105 transition-transform duration-200"
+            onClick={() => handleSuggestionClick(suggestion.query)}
             style={{
               background:
                 "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
@@ -39,11 +63,6 @@ export function QuickSuggestions({ className = "" }: QuickSuggestionsProps) {
               <p className="text-sm text-slate-400">
                 {suggestion.text}
               </p>
-              <div className="flex justify-center">
-                <div className="w-6 h-6 bg-green-400 flex items-center justify-center rounded">
-                  {suggestion.icon}
-                </div>
-              </div>
             </div>
           </div>
         ))}

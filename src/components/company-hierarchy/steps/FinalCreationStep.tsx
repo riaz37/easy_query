@@ -50,71 +50,51 @@ export function FinalCreationStep({
 
   return (
     <div className="space-y-6 pb-6">
-      <div>
-        <h3 className="text-lg font-medium text-green-400">
-          Review & Create Company
-        </h3>
-        <p className="text-sm text-gray-400 mt-1">
-          Review your configuration before creating the company
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Company Information */}
-        <div className="space-y-4">
-          <h4 className="text-md font-medium text-green-400 flex items-center gap-2">
-            <CheckCircle className="w-4 h-4" />
+        {/* Company Information - Left Side */}
+        <div className="rounded-lg p-4 space-y-3" style={{ background: 'var(--primary-8, rgba(19, 245, 132, 0.08))' }}>
+          <h4 className="text-md font-medium text-green-400">
             Company Information
           </h4>
-          <div className="bg-gray-800/50 rounded-lg p-4 space-y-3">
+          <div>
+            <Label className="text-xs text-gray-400 uppercase tracking-wide">
+              Company Name
+            </Label>
+            <p className="text-white font-medium">{companyName}</p>
+          </div>
+          {description && (
             <div>
               <Label className="text-xs text-gray-400 uppercase tracking-wide">
-                Company Name
+                Description
               </Label>
-              <p className="text-white font-medium">{companyName}</p>
+              <p className="text-gray-300">{description}</p>
             </div>
-            {description && (
-              <div>
-                <Label className="text-xs text-gray-400 uppercase tracking-wide">
-                  Description
-                </Label>
-                <p className="text-gray-300">{description}</p>
-              </div>
-            )}
-            {address && (
-              <div>
-                <Label className="text-xs text-gray-400 uppercase tracking-wide">
-                  Address
-                </Label>
-                <p className="text-gray-300">{address}</p>
-              </div>
-            )}
-            {contactEmail && (
-              <div>
-                <Label className="text-xs text-gray-400 uppercase tracking-wide">
-                  Contact Email
-                </Label>
-                <p className="text-gray-300">{contactEmail}</p>
-              </div>
-            )}
-          </div>
+          )}
+          {address && (
+            <div>
+              <Label className="text-xs text-gray-400 uppercase tracking-wide">
+                Address
+              </Label>
+              <p className="text-gray-300">{address}</p>
+            </div>
+          )}
+          {contactEmail && (
+            <div>
+              <Label className="text-xs text-gray-400 uppercase tracking-wide">
+                Contact Email
+              </Label>
+              <p className="text-gray-300">{contactEmail}</p>
+            </div>
+          )}
         </div>
 
-        {/* Configuration Summary */}
-        <div className="space-y-4">
-          <h4 className="text-md font-medium text-green-400 flex items-center gap-2">
-            <CheckCircle className="w-4 h-4" />
-            Configuration Summary
-          </h4>
-
+        {/* Right Side - Two Sections Stacked */}
+        <div className="space-y-6">
           {/* Database Configuration */}
-          <div className="bg-gray-800/50 rounded-lg p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-green-400" />
-              <span className="text-sm font-medium text-green-400">
-                Database Configuration
-              </span>
-            </div>
+          <div className="rounded-lg p-4 space-y-3" style={{ background: 'var(--primary-8, rgba(19, 245, 132, 0.08))' }}>
+            <h4 className="text-md font-medium text-green-400">
+              Database Configuration
+            </h4>
             {selectedDatabase ? (
               <div className="space-y-2">
                 <p className="text-white font-medium">
@@ -127,13 +107,10 @@ export function FinalCreationStep({
           </div>
 
           {/* Vector Configuration */}
-          <div className="bg-gray-800/50 rounded-lg p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <Brain className="w-4 h-4 text-green-400" />
-              <span className="text-sm font-medium text-green-400">
-                Vector Configuration
-              </span>
-            </div>
+          <div className="rounded-lg p-4 space-y-3" style={{ background: 'var(--primary-8, rgba(19, 245, 132, 0.08))' }}>
+            <h4 className="text-md font-medium text-green-400">
+              Vector Configuration
+            </h4>
             {selectedUserConfig ? (
               <div className="space-y-2">
                 <p className="text-white font-medium">

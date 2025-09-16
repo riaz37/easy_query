@@ -165,7 +165,7 @@ export function VectorConfigStep({
                   setSelectedUserConfigId(parseInt(value))
                 }
               >
-                <SelectTrigger className="modal-select-enhanced">
+                <SelectTrigger className="modal-select-enhanced w-full">
                   <SelectValue placeholder="Choose a vector database configuration" />
                 </SelectTrigger>
                 <SelectContent className="modal-select-content-enhanced">
@@ -173,14 +173,12 @@ export function VectorConfigStep({
                     <SelectItem
                       key={config.db_id}
                       value={config.db_id.toString()}
+                      className="dropdown-item"
                     >
-                      <div className="flex items-center gap-2">
-                        <Brain className="w-4 h-4 text-green-400" />
-                        <span>
-                          {config.db_config.DB_NAME || "Unnamed"} -{" "}
-                          {config.db_config.DB_HOST}:{config.db_config.DB_PORT}
-                        </span>
-                      </div>
+                      <span>
+                        {config.db_config.DB_NAME || "Unnamed"} -{" "}
+                        {config.db_config.DB_HOST}:{config.db_config.DB_PORT}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -336,7 +334,7 @@ export function VectorConfigStep({
             onClick={handleNext}
             className="modal-button-primary w-full sm:w-auto"
           >
-            Continue to Final Step
+            Next
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         )}

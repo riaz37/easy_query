@@ -16,7 +16,7 @@ export default function Menu() {
       path: "/",
     },
     {
-      icon: "/globe.svg",
+      icon: "/dashboard/Databased Query.svg",
       name: "Database Query",
       path: "/database-query",
     },
@@ -26,27 +26,22 @@ export default function Menu() {
       path: "/ai-results",
     },
     {
-      icon: "/dashboard/File_Upload.svg",
+      icon: "/dashboard/File Query.svg",
       name: "File Query",
       path: "/file-query",
     },
     {
-      icon: "/file.svg",
+      icon: "/dashboard/Table.svg",
       name: "Tables",
       path: "/tables",
     },
     {
-      icon: "/dashboard/frame.svg",
+      icon: "/dashboard/Company.svg",
       name: "Company Structure",
       path: "/company-structure",
     },
     {
-      icon: "/dashboard/Userconfig.svg",
-      name: "User Configuration",
-      path: "/user-configuration",
-    },
-    {
-      icon: "/users.svg",
+      icon: "/dashboard/user.svg",
       name: "Users",
       path: "/users",
     },

@@ -168,16 +168,13 @@ export function DatabaseConfigStep({
                 value={selectedDbId?.toString() || ""}
                 onValueChange={(value) => setSelectedDbId(parseInt(value))}
               >
-                <SelectTrigger className="modal-select-enhanced">
+                <SelectTrigger className="modal-select-enhanced w-full">
                   <SelectValue placeholder="Choose a database" />
                 </SelectTrigger>
                 <SelectContent className="modal-select-content-enhanced">
                   {databases.map((db) => (
-                    <SelectItem key={db.db_id} value={db.db_id.toString()}>
-                      <div className="flex items-center gap-2">
-                        <Database className="w-4 h-4 text-green-400" />
-                        <span>{db.db_name}</span>
-                      </div>
+                    <SelectItem key={db.db_id} value={db.db_id.toString()} className="dropdown-item">
+                      <span>{db.db_name}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -323,7 +320,7 @@ export function DatabaseConfigStep({
             onClick={handleNext}
             className="modal-button-primary w-full sm:w-auto"
           >
-            Continue to Vector Config
+            Next
           </Button>
         )}
       </div>
