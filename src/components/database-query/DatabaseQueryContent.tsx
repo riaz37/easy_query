@@ -33,6 +33,7 @@ import { QueryModeToggle } from "@/components/database-query/QueryModeToggle";
 import { ReportGeneratorBackground as ReportGenerator } from "@/components/reports";
 import { QueryResultOverlay } from "@/components/ui/query-result-overlay";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
+import { ContentWrapper } from "@/components/layout/ContentWrapper";
 import { useTheme } from "@/store/theme-store";
 import { DatabaseQueryStatsCards, DatabaseQueryHeader } from "@/components/database-query/components";
 
@@ -222,7 +223,8 @@ export function DatabaseQueryContent() {
       />
       
       {/* Welcome Header */}
-      <div className="flex items-center justify-between mb-8">
+      <ContentWrapper className="mb-8">
+        <div className="flex items-center justify-between">
         <div>
           <h1 
             className="text-4xl font-bold mb-2 block"
@@ -283,10 +285,12 @@ export function DatabaseQueryContent() {
             </Badge>
           )}
         </Button>
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Mode Toggle */}
-      <div className="flex items-center gap-3 mb-8">
+      <ContentWrapper className="mb-8">
+        <div className="flex items-center gap-3">
         <Label htmlFor="query-mode" className="text-white font-medium">
           Quick Query
         </Label>
@@ -310,10 +314,12 @@ export function DatabaseQueryContent() {
         <Label htmlFor="query-mode" className="text-white font-medium">
           AI Reports
         </Label>
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Main Content - Full Width */}
-      <div className="space-y-6">
+      <ContentWrapper>
+        <div className="space-y-6">
         {queryMode === 'query' ? (
           <div className="p-6 query-content-gradient">
             <div className="flex items-start">
@@ -352,10 +358,12 @@ export function DatabaseQueryContent() {
             }}
           />
         )}
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Quick Suggestions Section */}
-      <div className="mt-12">
+      <ContentWrapper className="mt-12">
+        <div>
         <h3 className="text-xl font-semibold text-white mb-6">
           Quick suggestion
         </h3>
@@ -391,7 +399,8 @@ export function DatabaseQueryContent() {
             </div>
           ))}
         </div>
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Query History Panel */}
       {showHistory && (

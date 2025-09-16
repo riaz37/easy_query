@@ -51,8 +51,6 @@ export function FileResults({
 }: FileResultsProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-  const [showAll, setShowAll] = useState(false);
 
   // Pagination calculations
   const totalPages = Math.ceil(results.length / itemsPerPage);
@@ -199,18 +197,6 @@ export function FileResults({
     }
   };
 
-  // Toggle expanded state
-  const toggleExpanded = (id: string) => {
-    setExpandedItems((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
-  };
 
   if (isLoading) {
     return (
@@ -249,16 +235,11 @@ export function FileResults({
 
       {/* Response Content */}
       <div className="space-y-4">
-        {(showAll ? currentResults : currentResults.slice(0, 2)).map(
+        {currentResults.map(
           (result, index) => {
             const resultId = result.id || `result-${index}`;
             const content = getResultContent(result);
-            const shouldTruncate = content.length > 500;
-            const isExpanded = expandedItems.has(resultId);
-            const displayContent =
-              isExpanded || !shouldTruncate
-                ? content
-                : content.substring(0, 500) + "...";
+            const displayContent = content;
 
             return (
               <div key={resultId} className="text-white">
@@ -266,22 +247,6 @@ export function FileResults({
                   {displayContent}
                 </div>
 
-                {shouldTruncate && (
-                  <button
-                    onClick={() => {
-                      const newSet = new Set(expandedItems);
-                      if (newSet.has(resultId)) {
-                        newSet.delete(resultId);
-                      } else {
-                        newSet.add(resultId);
-                      }
-                      setExpandedItems(newSet);
-                    }}
-                    className="mt-2 text-green-400 hover:text-green-300 text-sm underline"
-                  >
-                    {isExpanded ? "Show less" : "Show more"}
-                  </button>
-                )}
 
                 {/* Source information if available */}
                 {(result.source_file || result.source_title) && (
@@ -303,19 +268,6 @@ export function FileResults({
           }
         )}
 
-        {/* Show More/Show Less Button */}
-        {currentResults.length > 2 && (
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="px-4 py-2 text-green-400 hover:text-green-300 border border-green-400/30 hover:border-green-400/50 rounded-lg transition-colors"
-            >
-              {showAll
-                ? "Show Less"
-                : `Show More (${currentResults.length - 2} more)`}
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Bottom Separator */}
