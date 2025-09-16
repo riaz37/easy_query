@@ -5,9 +5,9 @@ export default function DatabaseHierarchyPage() {
   return (
     <PageLayout 
       background={["frame", "gridframe"]}
-      className="min-h-screen"
-      container={true}
+      container={false}
       maxWidth="full"
+      className="h-screen w-full overflow-hidden"
     >
       <CompanyHierarchy />
     </PageLayout>

@@ -33,6 +33,7 @@ import { QueryModeToggle } from "@/components/database-query/QueryModeToggle";
 import { ReportGeneratorBackground as ReportGenerator } from "@/components/reports";
 import { QueryResultOverlay } from "@/components/ui/query-result-overlay";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
+import { ContentWrapper } from "@/components/layout/ContentWrapper";
 import { useTheme } from "@/store/theme-store";
 import { DatabaseQueryStatsCards, DatabaseQueryHeader } from "@/components/database-query/components";
 
@@ -222,7 +223,8 @@ export function DatabaseQueryContent() {
       />
       
       {/* Welcome Header */}
-      <div className="flex items-center justify-between mb-8">
+      <ContentWrapper className="mb-8">
+        <div className="flex items-center justify-between">
         <div>
           <h1 
             className="text-4xl font-bold mb-2 block"
@@ -283,10 +285,12 @@ export function DatabaseQueryContent() {
             </Badge>
           )}
         </Button>
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Mode Toggle */}
-      <div className="flex items-center gap-3 mb-8">
+      <ContentWrapper className="mb-8">
+        <div className="flex items-center gap-3">
         <Label htmlFor="query-mode" className="text-white font-medium">
           Quick Query
         </Label>
@@ -310,10 +314,12 @@ export function DatabaseQueryContent() {
         <Label htmlFor="query-mode" className="text-white font-medium">
           AI Reports
         </Label>
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Main Content - Full Width */}
-      <div className="space-y-6">
+      <ContentWrapper>
+        <div className="space-y-6">
         {queryMode === 'query' ? (
           <div className="p-6 query-content-gradient">
             <div className="flex items-start">
@@ -352,33 +358,49 @@ export function DatabaseQueryContent() {
             }}
           />
         )}
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Quick Suggestions Section */}
-      <div className="mt-12">
+      <ContentWrapper className="mt-12">
+        <div>
         <h3 className="text-xl font-semibold text-white mb-6">
           Quick suggestion
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((index) => (
+          {[
+            { 
+              text: "Show me all users from last month", 
+              query: "Show me all users from last month"
+            },
+            { 
+              text: "What are the top performing products?", 
+              query: "What are the top performing products?"
+            },
+            { 
+              text: "Find orders with total amount greater than $1000", 
+              query: "Find orders with total amount greater than $1000"
+            },
+            { 
+              text: "Generate a sales report for this quarter", 
+              query: "Generate a sales report for this quarter"
+            },
+          ].map((suggestion, index) => (
             <div
               key={index}
-              className="p-4 query-content-gradient"
+              className="p-4 query-content-gradient cursor-pointer hover:scale-105 transition-transform duration-200"
+              onClick={() => setCurrentQuery(suggestion.query)}
             >
               <div className="space-y-2">
                 <p className="text-sm text-slate-400">
-                  Use time references: 'last week', 'this month', 'yesterday'
+                  {suggestion.text}
                 </p>
-                <div className="flex justify-center">
-                  <div className="w-6 h-6 bg-green-400 flex items-center justify-center rounded">
-                    <BarChart3 className="h-4 w-4 text-white" />
-                  </div>
-                </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
+        </div>
+      </ContentWrapper>
 
       {/* Query History Panel */}
       {showHistory && (

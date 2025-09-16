@@ -9,9 +9,7 @@ interface FileQueryCardProps {
   setQuery: (query: string) => void;
   isExecuting: boolean;
   onUploadClick: () => void;
-  onClearClick: () => void;
   onExecuteClick: () => void;
-  onSaveClick: () => void;
   className?: string;
 }
 
@@ -20,9 +18,7 @@ export function FileQueryCard({
   setQuery,
   isExecuting,
   onUploadClick,
-  onClearClick,
   onExecuteClick,
-  onSaveClick,
   className = "",
 }: FileQueryCardProps) {
   return (
@@ -44,9 +40,7 @@ export function FileQueryCard({
         setQuery={setQuery}
         isExecuting={isExecuting}
         onUploadClick={onUploadClick}
-        onClearClick={onClearClick}
         onExecuteClick={onExecuteClick}
-        onSaveClick={onSaveClick}
       />
     </div>
   );

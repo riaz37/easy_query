@@ -284,7 +284,7 @@ export function CreateVectorDBAccessModal({
             <div className="modal-form-content">
               {/* User ID Input */}
               <div className="modal-form-group">
-                <Label className="modal-form-label">User ID *</Label>
+                <Label className="modal-label-enhanced">User ID *</Label>
                 <Input
                   placeholder="Enter user ID (email)"
                   value={selectedUserId}
@@ -298,7 +298,7 @@ export function CreateVectorDBAccessModal({
 
               {/* Database Selection */}
               <div className="modal-form-group">
-                <Label className="modal-form-label flex items-center gap-2">
+                <Label className="modal-label-enhanced flex items-center gap-2">
                   <Database className="w-4 h-4" />
                   Database
                 </Label>
@@ -323,23 +323,20 @@ export function CreateVectorDBAccessModal({
                 value={selectedDatabase}
                 onValueChange={setSelectedDatabase}
               >
-                <SelectTrigger className="modal-select-enhanced">
+                <SelectTrigger className="modal-select-enhanced w-full">
                   <SelectValue placeholder="Select database" />
                 </SelectTrigger>
                 <SelectContent className="modal-select-content-enhanced">
                   {Array.isArray(vectorDBConfigs) && vectorDBConfigs.map((db) => (
-                    <SelectItem key={db.db_id} value={db.db_id.toString()}>
+                    <SelectItem key={db.db_id} value={db.db_id.toString()} className="dropdown-item">
                       <div className="flex flex-col">
-                        <div className="flex items-center">
-                          <Database className="w-4 h-4 mr-2 text-green-400" />
-                          <span className="font-medium">{db.db_config.DB_NAME}</span>
-                        </div>
-                        <div className={cn(
-                          "text-xs ml-6 font-medium",
+                        <span className="font-medium">{db.db_config.DB_NAME}</span>
+                        <span className={cn(
+                          "text-xs font-medium",
                           theme === "dark" ? "text-gray-400" : "text-gray-600"
                         )}>
                           {db.db_config.DB_HOST}:{db.db_config.DB_PORT}
-                        </div>
+                        </span>
                       </div>
                     </SelectItem>
                   ))}
@@ -350,7 +347,7 @@ export function CreateVectorDBAccessModal({
 
           {/* Table Selection */}
           <div className="modal-form-group">
-            <Label className="modal-form-label flex items-center gap-2">
+            <Label className="modal-label-enhanced flex items-center gap-2">
               <Brain className="w-4 h-4" />
               Tables
             </Label>

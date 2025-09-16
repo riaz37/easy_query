@@ -109,7 +109,7 @@ export function CompanyInfoStep({
           Back
         </Button>
         <Button onClick={handleNext} className="modal-button-primary w-full sm:w-auto">
-          Next: Configure Database
+          Next
         </Button>
       </div>
     </div>

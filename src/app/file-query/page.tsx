@@ -37,6 +37,7 @@ import {
   UseTableToggle,
 } from "@/components/file-query";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
+import { ContentWrapper } from "@/components/layout/ContentWrapper";
 import { fileService } from "@/lib/api/services/file-service";
 import type {
   UploadedFile,
@@ -152,7 +153,7 @@ export default function FileQueryPage() {
 
           // Extract results from the answer sources or create structured result
           let results: FileQueryResult[] = [];
-          
+
           if (searchResponse.answer) {
             // Create the main result with the AI-generated answer
             const mainResult: FileQueryResult = {
@@ -166,9 +167,9 @@ export default function FileQueryPage() {
               // Add source information
               sources: searchResponse.answer.sources || [],
             };
-            
+
             results.push(mainResult);
-            
+
             // If there are individual sources with content, add them as separate results
             if (
               searchResponse.answer.sources &&
@@ -336,140 +337,171 @@ export default function FileQueryPage() {
         `,
         }}
       />
-      <div className="flex items-center justify-between mb-8">
-        <div>
-        <h1 
-          className="text-4xl font-bold mb-2 block"
-          style={{
-              background:
-                "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            color: "transparent",
-            display: "block",
-            backgroundSize: "100% 100%",
-              backgroundRepeat: "no-repeat",
-          }}
-        >
-          Hi there, {user?.username || ""}
-        </h1>
-        <p 
-          className="text-xl block"
-          style={{
-              background:
-                "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            color: "transparent",
-            display: "block",
-            backgroundSize: "100% 100%",
-              backgroundRepeat: "no-repeat",
-          }}
-        >
-          What would you like to know?
-        </p>
-        </div>
-        <Button
-          variant="outline"
-          className="text-white flex items-center gap-2"
-          style={{
-            background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-            border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-            height: "48px",
-            minWidth: "64px",
-            borderRadius: "99px",
-          }}
-          onClick={() => {
-            // Handle history button click
-            console.log("History clicked");
-          }}
-        >
-          <Image
-            src="/file-query/history.svg"
-            alt="History"
-            width={16}
-            height={16}
-            className="h-4 w-4"
-          />
-          History
-        </Button>
-      </div>
+      {/* Page Header - Only show when no query results */}
+      {queryResults.length === 0 && !queryError && (
+        <ContentWrapper className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1
+                className="text-4xl font-bold mb-2 block"
+                style={{
+                  background:
+                    "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  display: "block",
+                  backgroundSize: "100% 100%",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                Hi there, {user?.username || ""}
+              </h1>
+              <p
+                className="text-xl block"
+                style={{
+                  background:
+                    "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  display: "block",
+                  backgroundSize: "100% 100%",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                What would you like to know?
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              className="text-white flex items-center gap-2"
+              style={{
+                background:
+                  "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
+                height: "48px",
+                minWidth: "64px",
+                borderRadius: "99px",
+              }}
+              onClick={() => {
+                // Handle history button click
+                console.log("History clicked");
+              }}
+            >
+              <Image
+                src="/file-query/history.svg"
+                alt="History"
+                width={16}
+                height={16}
+                className="h-4 w-4"
+              />
+              History
+            </Button>
+          </div>
+        </ContentWrapper>
+      )}
 
-      <UseTableToggle 
-        useTable={useTable}
-        onToggle={setUseTable}
-      />
+      {/* Query Results - Now at the top */}
+      {queryResults.length > 0 && (
+        <div className="pr-16 mb-8">
+          <div className="flex items-start">
+            {/* Robot Icon - Outside the container, larger size with overlap */}
+            <div className="flex-shrink-0 relative z-10">
+              <Image
+                src="/file-query/filerobot.svg"
+                alt="File Robot"
+                width={120}
+                height={120}
+                className="mt-1"
+              />
+            </div>
+
+            {/* Query Results Container - Overlaps with robot icon */}
+            <div className="flex-1 query-content-gradient max-h-[800px] overflow-y-auto -ml-8 relative z-0">
+              <div className="p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <h3 className="text-white font-semibold text-lg">
+                    Query Results
+                  </h3>
+                </div>
+                <div className="flex-1 max-h-[400px] overflow-y-auto">
+                  <FileResults
+                    results={queryResults}
+                    query={query}
+                    isLoading={isExecuting}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Query Error - Also at the top */}
+      {queryError && (
+        <div className="mb-8">
+          <div className="p-6 query-content-gradient">
+            <div className="flex items-center gap-2 mb-4">
+              <AlertCircle className="w-5 h-5 text-red-400" />
+              <h3 className="text-red-400 font-semibold text-xl">
+                Query Error
+              </h3>
+            </div>
+            <div className="p-4 bg-red-900/30 border border-red-500/30 rounded-lg">
+              <p className="text-red-300">{queryError}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Table Toggle - Above Query Form */}
+      <ContentWrapper className="mb-6">
+        <UseTableToggle useTable={useTable} onToggle={setUseTable} />
+      </ContentWrapper>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className={`grid grid-cols-1 gap-8 ${useTable ? 'lg:grid-cols-3' : 'lg:grid-cols-1'}`}>
         {/* Left Column - File Query */}
-        <div className="space-y-6 lg:col-span-2">
-          <FileQueryCard
-            query={query}
-            setQuery={setQuery}
-            isExecuting={isExecuting}
-            onUploadClick={() => setIsUploadModalOpen(true)}
-            onClearClick={handleQueryClear}
-            onExecuteClick={() => handleQuerySubmit(query, { answerStyle: "detailed" })}
-            onSaveClick={() => handleQuerySave(query)}
-          />
-
-          {/* Query Results */}
-          {queryResults.length > 0 && (
-            <div className="p-6 query-content-gradient">
-              <div className="flex items-center gap-2 mb-4">
-                <FileText className="w-5 h-5 text-green-400" />
-                <h3 className="text-white font-semibold text-xl">
-                  Query Results
-                </h3>
-              </div>
-              <div className="flex-1">
-                <FileResults
-                  results={queryResults}
-                  query={query}
-                  isLoading={isExecuting}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Query Error */}
-          {queryError && (
-            <div className="p-6 query-content-gradient">
-              <div className="flex items-center gap-2 mb-4">
-                <AlertCircle className="w-5 h-5 text-red-400" />
-                <h3 className="text-red-400 font-semibold text-xl">
-                  Query Error
-                </h3>
-              </div>
-              <div className="p-4 bg-red-900/30 border border-red-500/30 rounded-lg">
-                <p className="text-red-300">{queryError}</p>
-              </div>
-            </div>
-          )}
+        <div className={`space-y-6 ${useTable ? 'lg:col-span-2' : 'lg:col-span-1'}`}>
+          <ContentWrapper>
+            <FileQueryCard
+              query={query}
+              setQuery={setQuery}
+              isExecuting={isExecuting}
+              onUploadClick={() => setIsUploadModalOpen(true)}
+              onExecuteClick={() =>
+                handleQuerySubmit(query, { answerStyle: "detailed" })
+              }
+            />
+          </ContentWrapper>
         </div>
 
         {/* Right Column - Connect Table */}
-        <div className="space-y-6 lg:col-span-1">
-              {useTable && (
-            <TableSection
-              selectedTable={selectedTable}
-                    onTableSelect={(tableName) => {
-                      setSelectedTable(tableName);
-                      toast.success(`Selected table: ${tableName}`);
-                    }}
-              currentDatabaseId={currentDatabaseId}
-            />
-          )}
-        </div>
+        {useTable && (
+          <div className="space-y-6 lg:col-span-1">
+            <ContentWrapper>
+              <TableSection
+                selectedTable={selectedTable}
+                onTableSelect={(tableName) => {
+                  setSelectedTable(tableName);
+                  toast.success(`Selected table: ${tableName}`);
+                }}
+                currentDatabaseId={currentDatabaseId}
+              />
+            </ContentWrapper>
+          </div>
+        )}
       </div>
 
-      {/* Quick Suggestions Section */}
-      <div className="mt-12">
-        <QuickSuggestions />
-      </div>
+      {/* Quick Suggestions Section - Only show when no query results */}
+      {queryResults.length === 0 && !queryError && (
+        <ContentWrapper className="mt-12">
+          <QuickSuggestions onQuerySelect={setQuery} />
+        </ContentWrapper>
+      )}
 
       {/* Upload File Modal */}
       {isUploadModalOpen && (

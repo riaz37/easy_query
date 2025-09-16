@@ -99,9 +99,9 @@ export const SystemCard: React.FC<SystemCardProps> = ({
                }} />
 
           {/* Main content layout */}
-          <div className="relative z-10 h-full flex">
-            {/* Left side - Dynamic Icon - Full width */}
-            <div className="flex-shrink-0 w-48 h-full relative">
+          <div className="relative z-10 h-full">
+            {/* Dynamic Icon - Background */}
+            <div className="absolute left-0 top-0 w-80 h-full">
               <Image
                 src={node.iconPath}
                 alt={node.title}
@@ -114,8 +114,8 @@ export const SystemCard: React.FC<SystemCardProps> = ({
               />
             </div>
 
-            {/* Right side - Dynamic Text content with gradient overlay */}
-            <div className="flex-1 px-6 py-6 flex flex-col justify-center overflow-hidden relative">
+            {/* Dynamic Text content - Overlapping */}
+            <div className="absolute left-48 top-0 right-0 h-full px-6 py-6 flex flex-col justify-center overflow-hidden z-10">
               {/* Gradient overlay to blend with the image */}
               <div 
                 className="absolute inset-0 opacity-20"

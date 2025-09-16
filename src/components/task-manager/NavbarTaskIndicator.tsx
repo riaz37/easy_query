@@ -45,7 +45,7 @@ export function NavbarTaskIndicator({ className }: NavbarTaskIndicatorProps) {
 
   const getStatusIcon = () => {
     if (failedCount > 0) return <XCircle className="w-4 h-4 text-red-400" />;
-    if (activeCount > 0) return <Clock className="w-4 h-4 text-blue-400 animate-pulse" />;
+    if (activeCount > 0) return <Clock className="w-4 h-4 animate-pulse" style={{ color: 'var(--primary-main, rgba(19, 245, 132, 1))' }} />;
     if (completedCount > 0) return <CheckCircle className="w-4 h-4 text-green-400" />;
     return <AlertCircle className="w-4 h-4 text-gray-400" />;
   };
@@ -59,7 +59,7 @@ export function NavbarTaskIndicator({ className }: NavbarTaskIndicatorProps) {
 
   const getStatusColor = () => {
     if (failedCount > 0) return 'border-red-500/50 bg-red-500/10 text-red-400';
-    if (activeCount > 0) return 'border-blue-500/50 bg-blue-500/10 text-blue-400';
+    if (activeCount > 0) return 'border-green-500/50 text-green-400';
     if (completedCount > 0) return 'border-green-500/50 bg-green-500/10 text-green-400';
     return 'border-gray-500/50 bg-gray-500/10 text-gray-400';
   };
@@ -68,14 +68,21 @@ export function NavbarTaskIndicator({ className }: NavbarTaskIndicatorProps) {
     <>
       {/* Compact Task Indicator */}
       <div className={cn("relative", className)}>
-        <div className={cn(
-          "flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-200 cursor-pointer group",
-          "hover:shadow-lg",
-          getStatusColor(),
-          theme === "dark"
-            ? "bg-gray-700/50 border-gray-600/30 hover:bg-gray-600/50"
-            : "bg-gray-200/50 border-gray-300/30 hover:bg-gray-300/50"
-        )} onClick={toggleTaskList}>
+        <div 
+          className={cn(
+            "flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-200 cursor-pointer group",
+            "hover:shadow-lg",
+            getStatusColor(),
+            theme === "dark"
+              ? "bg-gray-700/50 border-gray-600/30 hover:bg-gray-600/50"
+              : "bg-gray-200/50 border-gray-300/30 hover:bg-gray-300/50"
+          )}
+          style={activeCount > 0 ? {
+            background: 'var(--primary-8, rgba(19, 245, 132, 0.08))',
+            color: 'var(--primary-main, rgba(19, 245, 132, 1))'
+          } : {}}
+          onClick={toggleTaskList}
+        >
           {getStatusIcon()}
           <span className="text-sm font-medium hidden sm:inline">{getStatusText()}</span>
           <Badge variant="secondary" className="ml-1 text-xs bg-white/20 text-white">
@@ -144,8 +151,8 @@ function TaskListPanel() {
       case 'running': 
         return (
           <div className="relative">
-            <Clock className={`${iconClass} text-blue-400 animate-spin`} />
-            <div className="absolute inset-0 w-4 h-4 border-2 border-blue-400/30 rounded-full animate-ping"></div>
+            <Clock className={`${iconClass} animate-spin`} style={{ color: 'var(--primary-main, rgba(19, 245, 132, 1))' }} />
+            <div className="absolute inset-0 w-4 h-4 border-2 rounded-full animate-ping" style={{ borderColor: 'var(--primary-main, rgba(19, 245, 132, 0.3))' }}></div>
           </div>
         );
       case 'completed': 
@@ -206,7 +213,7 @@ function TaskListPanel() {
               "flex-1 px-3 py-2 text-sm font-medium transition-colors",
               "hover:bg-gray-800 border-b-2",
               activeTab === key
-                ? "border-blue-500 text-blue-400"
+                ? "border-green-500 text-green-400"
                 : "border-transparent text-gray-400 hover:text-white"
             )}
           >
@@ -242,12 +249,12 @@ function TaskListPanel() {
                     {/* Simple Processing Display */}
                     {task.status === 'running' && (
                       <div className="mt-2">
-                        <div className="flex items-center gap-2 text-xs text-blue-400">
-                          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
+                        <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--primary-main, rgba(19, 245, 132, 1))' }}>
+                          <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--primary-main, rgba(19, 245, 132, 1))' }}></div>
                           <span>Processing...</span>
                         </div>
                         <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
-                          <div className="bg-blue-500 h-1 rounded-full w-1/3 animate-pulse"></div>
+                          <div className="h-1 rounded-full w-1/3 animate-pulse" style={{ backgroundColor: 'var(--primary-main, rgba(19, 245, 132, 1))' }}></div>
                         </div>
                       </div>
                     )}
@@ -278,7 +285,7 @@ function TaskListPanel() {
                       <div className="flex items-center gap-1">
                         <div className={`w-2 h-2 rounded-full ${
                           task.type === 'report_generation' ? 'bg-purple-400' :
-                          task.type === 'query_execution' ? 'bg-blue-400' :
+                          task.type === 'query_execution' ? 'bg-green-400' :
                           task.type === 'data_processing' ? 'bg-green-400' :
                           'bg-gray-400'
                         }`}></div>

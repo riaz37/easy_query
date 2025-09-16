@@ -88,7 +88,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
               type="button"
               variant="outline"
               onClick={handleClear}
-              className="text-xs"
+              className="text-xs cursor-pointer"
               style={{
                 background:
                   "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
@@ -105,7 +105,7 @@ export function DatabaseQueryForm({ onSubmit, loading, hasDatabase, currentQuery
             <Button
               type="submit"
               disabled={!query.trim() || !hasDatabase || localLoading}
-              className="text-xs"
+              className="text-xs cursor-pointer"
               style={{
                 background:
                   "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",

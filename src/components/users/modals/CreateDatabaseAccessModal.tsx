@@ -236,7 +236,7 @@ export function CreateDatabaseAccessModal({
             <div className="modal-form-content">
               {/* User ID Input */}
               <div className="modal-form-group">
-                <Label className="modal-form-label">User ID *</Label>
+                <Label className="modal-label-enhanced">User ID *</Label>
                 <Input
                   placeholder="Enter user ID (email)"
                   value={selectedUserId}
@@ -250,18 +250,18 @@ export function CreateDatabaseAccessModal({
 
               {/* Company Selection */}
               <div className="modal-form-group">
-                <Label className="modal-form-label flex items-center gap-2">
+                <Label className="modal-label-enhanced flex items-center gap-2">
                   <Building2 className="w-4 h-4" />
                   Parent Company *
                 </Label>
                 <Select value={selectedParentCompany} onValueChange={handleParentCompanyChange}>
-                  <SelectTrigger className="modal-select-enhanced">
+                  <SelectTrigger className="modal-select-enhanced w-full">
                     <SelectValue placeholder={isLoadingParentCompanies ? "Loading..." : "Select parent company"} />
                   </SelectTrigger>
                   <SelectContent className="modal-select-content-enhanced">
                     {parentCompanies.map((company) => (
-                      <SelectItem key={company.parent_company_id} value={company.parent_company_id.toString()}>
-                        {company.company_name}
+                      <SelectItem key={company.parent_company_id} value={company.parent_company_id.toString()} className="dropdown-item">
+                        <span>{company.company_name}</span>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -274,19 +274,21 @@ export function CreateDatabaseAccessModal({
               {/* Sub Company - Optional */}
               {selectedParentCompany && (
                 <div className="modal-form-group">
-                  <Label className="modal-form-label flex items-center gap-2">
+                  <Label className="modal-label-enhanced flex items-center gap-2">
                     <Building2 className="w-4 h-4" />
                     Sub Company (Optional)
                   </Label>
                   <Select value={selectedSubCompany} onValueChange={handleSubCompanyChange}>
-                    <SelectTrigger className="modal-select-enhanced">
+                    <SelectTrigger className="modal-select-enhanced w-full">
                       <SelectValue placeholder="Select sub company (optional)" />
                     </SelectTrigger>
                     <SelectContent className="modal-select-content-enhanced">
-                      <SelectItem value="none">None</SelectItem>
+                      <SelectItem value="none" className="dropdown-item">
+                        <span>None</span>
+                      </SelectItem>
                       {getAvailableSubCompanies().map((company) => (
-                        <SelectItem key={company.sub_company_id} value={company.sub_company_id.toString()}>
-                          {company.company_name}
+                        <SelectItem key={company.sub_company_id} value={company.sub_company_id.toString()} className="dropdown-item">
+                          <span>{company.company_name}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -300,7 +302,7 @@ export function CreateDatabaseAccessModal({
               {/* Database Display (Auto-populated) */}
               {selectedDatabase && (
                 <div className="modal-form-group">
-                  <Label className="modal-form-label flex items-center gap-2">
+                  <Label className="modal-label-enhanced flex items-center gap-2">
                     <Database className="w-4 h-4" />
                     Selected Database
                   </Label>

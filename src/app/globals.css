@@ -966,7 +966,9 @@ nav {
 
 /* Enhanced select components */
 .modal-select-enhanced {
-  background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04));
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+              linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%),
+              linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%);
   border: none;
   backdrop-filter: blur(20px) saturate(1.2);
   color: white;
@@ -974,14 +976,58 @@ nav {
 }
 
 .modal-select-content-enhanced {
-  background: linear-gradient(
-    0deg,
-    rgba(15, 23, 42, 0.8),
-    rgba(15, 23, 42, 0.6)
-  );
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+              linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%),
+              linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%);
   backdrop-filter: blur(20px) saturate(1.2);
   border: 1px solid rgba(19, 245, 132, 0.2);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Dropdown item hover effect matching menu */
+.modal-select-content-enhanced [data-radix-select-item] {
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  margin: 2px;
+}
+
+.modal-select-content-enhanced [data-radix-select-item]:hover {
+  background-color: var(--item-root-active-bgcolor, #13F58414) !important;
+}
+
+.modal-select-content-enhanced [data-radix-select-item][data-highlighted] {
+  background-color: var(--item-root-active-bgcolor, #13F58414) !important;
+}
+
+/* Alternative selectors for better targeting */
+.modal-select-content-enhanced .radix-select-item {
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  margin: 2px;
+}
+
+.modal-select-content-enhanced .radix-select-item:hover {
+  background-color: var(--item-root-active-bgcolor, #13F58414) !important;
+}
+
+.modal-select-content-enhanced .radix-select-item[data-highlighted] {
+  background-color: var(--item-root-active-bgcolor, #13F58414) !important;
+}
+
+/* Specific class for dropdown items */
+.dropdown-item {
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: var(--item-root-active-bgcolor, #13F58414) !important;
+}
+
+.dropdown-item[data-highlighted] {
+  background-color: var(--item-root-active-bgcolor, #13F58414) !important;
 }
 
 /* Enhanced textarea */
