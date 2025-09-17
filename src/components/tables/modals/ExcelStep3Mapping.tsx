@@ -14,11 +14,7 @@ import {
 } from "@/components/ui/select";
 import {
   Loader2,
-  FileSpreadsheet,
-  Database,
   Settings,
-  ArrowLeft,
-  ArrowRight,
   AlertCircle,
   Trash2,
   X,
@@ -134,8 +130,8 @@ export function ExcelStep3Mapping({
   };
 
   // Update custom mapping
-  const updateMapping = (excelColumn: string, dbColumn: string) => {
-    if (dbColumn === "__no_mapping__") {
+  const updateMapping = (excelColumn: string, dbColumn: string | undefined) => {
+    if (!dbColumn) {
       setCustomMapping((prev) => {
         const newMapping = { ...prev };
         delete newMapping[excelColumn];
@@ -210,136 +206,127 @@ export function ExcelStep3Mapping({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Mapping Header */}
-      <div className="text-center space-y-4">
-        {/* Identity column notice */}
-        <div className="modal-input-enhanced p-3 border border-red-500/20 rounded-lg">
-          <div className="flex items-center gap-2 text-sm text-red-400">
-            <AlertCircle className="h-4 w-4" />
-            <span>
-              <strong>Note:</strong> Identity columns (auto-generated IDs)
-              cannot be mapped.
-            </span>
-          </div>
-        </div>
-      </div>
-
+    <div className="space-y-4">
       {/* Mapping Table */}
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-6 text-sm font-semibold text-slate-400 pb-3 border-b border-slate-600">
-          <div className="flex items-center gap-2">
-            <FileSpreadsheet className="h-4 w-4 text-green-400" />
-            Excel Column
-          </div>
-          <div className="flex items-center gap-2">
-            <Database className="h-4 w-4 text-green-400" />
-            Database Column
+      <div className="rounded-xl overflow-hidden max-h-64 overflow-y-auto">
+        {/* Header */}
+        <div
+          className="px-6 py-4 rounded-t-xl"
+          style={{
+            background:
+              "var(--components-Table-Head-filled, rgba(145, 158, 171, 0.08))",
+            borderRadius: "12px 12px 0 0",
+          }}
+        >
+          <div className="grid grid-cols-2 gap-6 text-sm font-semibold text-white">
+            <div className="flex items-center gap-2">
+              <span className="uppercase">Excel Column</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="uppercase">Database Column</span>
+            </div>
           </div>
         </div>
 
-        {aiMappingData.all_excel_columns.map((excelColumn: string) => {
-          const mappingDetail = aiMappingData.mapping_details.find(
-            (detail) => detail.excel_column === excelColumn
-          );
-          const currentMapping = customMapping[excelColumn];
+        {/* Mapping Rows */}
+        <div className="space-y-0">
+          {aiMappingData.all_excel_columns.map((excelColumn: string) => {
+            const mappingDetail = aiMappingData.mapping_details.find(
+              (detail) => detail.excel_column === excelColumn
+            );
+            const currentMapping = customMapping[excelColumn];
 
-          return (
-            <div
-              key={excelColumn}
-              className="grid grid-cols-2 gap-6 items-center p-4 bg-slate-700/30 rounded-xl border border-slate-600/50"
-            >
+            return (
+              <div
+                key={excelColumn}
+                className="grid grid-cols-2 gap-6 items-center p-6 border-b border-slate-600/30 hover:bg-slate-700/20 transition-colors last:border-b-0"
+                style={{
+                  background:
+                    "var(--components-Table-Head-filled, rgba(145, 158, 171, 0.08))",
+                }}
+              >
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-500/20 rounded-lg">
-                  <FileSpreadsheet className="h-4 w-4 text-green-400" />
-                </div>
                 <span className="text-white font-semibold text-lg">
                   {excelColumn}
                 </span>
               </div>
 
-              <div className="space-y-2">
-                <Select
-                  value={currentMapping || ""}
-                  onValueChange={(value) => updateMapping(excelColumn, value)}
-                >
-                  <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700/50">
-                    <SelectValue placeholder="Select DB column" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-800 border-slate-600">
-                    <SelectItem value="__no_mapping__">
-                      <div className="flex items-center gap-2">
-                        <X className="h-4 w-4 text-red-400" />
-                        <span>No mapping</span>
-                      </div>
-                    </SelectItem>
-                    {aiMappingData.all_table_columns.map((col) => {
-                      // Check if this is an identity column (first column or has 'id' in name)
-                      const isIdentityColumn =
-                        col === aiMappingData.all_table_columns[0] ||
-                        col.toLowerCase().includes("id");
+                <div className="space-y-2">
+                  <Select
+                    value={currentMapping || undefined}
+                    onValueChange={(value) => updateMapping(excelColumn, value)}
+                  >
+                    <SelectTrigger className="modal-select-enhanced w-full">
+                      <SelectValue placeholder="Select DB column" />
+                    </SelectTrigger>
+                    <SelectContent className="modal-select-content-enhanced">
+                      {aiMappingData.all_table_columns.map((col) => {
+                        // Check if this is an identity column (first column or has 'id' in name)
+                        const isIdentityColumn =
+                          col === aiMappingData.all_table_columns[0] ||
+                          col.toLowerCase().includes("id");
 
-                      return (
-                        <SelectItem
-                          key={col}
-                          value={col}
-                          disabled={isIdentityColumn}
-                          className={
-                            isIdentityColumn
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }
-                        >
-                          <div className="flex items-center gap-2">
-                            <Database className="h-4 w-4 text-green-400" />
-                            <span
-                              className={
-                                isIdentityColumn
-                                  ? "text-slate-500"
-                                  : "text-white"
-                              }
-                            >
-                              {col}
-                            </span>
-                            {isIdentityColumn && (
-                              <Badge
-                                variant="outline"
-                                className="text-xs bg-red-500/20 text-red-400 border-red-500/30"
+                        return (
+                          <SelectItem
+                            key={col}
+                            value={col}
+                            disabled={isIdentityColumn}
+                            className={`dropdown-item ${
+                              isIdentityColumn
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={
+                                  isIdentityColumn
+                                    ? "text-slate-500"
+                                    : "text-white"
+                                }
                               >
-                                Identity
-                              </Badge>
-                            )}
-                          </div>
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
+                                {col}
+                              </span>
+                              {isIdentityColumn && (
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs bg-red-500/20 text-red-400 border-red-500/30"
+                                >
+                                  Identity
+                                </Badge>
+                              )}
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
 
-                {mappingDetail && (
-                  <div className="flex items-center gap-2 text-xs">
-                    <Badge
-                      className={`${
-                        mappingDetail.mapping_status === "MAPPED"
-                          ? "bg-green-500/20 text-green-400 border-green-500/30"
-                          : mappingDetail.mapping_status === "IDENTITY"
-                          ? "bg-green-500/20 text-green-400 border-green-500/30"
-                          : "bg-gray-500/20 text-gray-400 border-gray-500/30"
-                      }`}
-                    >
-                      {mappingDetail.mapping_status}
-                    </Badge>
-                    {mappingDetail.is_identity && (
-                      <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
-                        Identity (Auto-generated)
+                  {mappingDetail && (
+                    <div className="flex items-center gap-2 text-xs">
+                      <Badge
+                        className={`${
+                          mappingDetail.mapping_status === "MAPPED"
+                            ? "bg-green-500/20 text-green-400 border-green-500/30"
+                            : mappingDetail.mapping_status === "IDENTITY"
+                            ? "bg-green-500/20 text-green-400 border-green-500/30"
+                            : "bg-gray-500/20 text-gray-400 border-gray-500/30"
+                        }`}
+                      >
+                        {mappingDetail.mapping_status}
                       </Badge>
-                    )}
-                  </div>
-                )}
+                      {mappingDetail.is_identity && (
+                        <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                          Identity (Auto-generated)
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Action Buttons */}
@@ -349,7 +336,6 @@ export function ExcelStep3Mapping({
           variant="outline"
           className="modal-button-secondary"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
 
@@ -359,7 +345,6 @@ export function ExcelStep3Mapping({
           className="modal-button-primary"
         >
           Continue
-          <ArrowRight className="h-4 w-4 ml-2" />
         </Button>
       </div>
     </div>

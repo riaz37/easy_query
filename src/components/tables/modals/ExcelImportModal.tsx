@@ -23,7 +23,11 @@ interface ExcelImportModalProps {
   onViewTableData: (tableName: string) => void;
 }
 
-export type ExcelImportStep = "upload-file" | "select-destination" | "mapping" | "confirm";
+export type ExcelImportStep =
+  | "upload-file"
+  | "select-destination"
+  | "mapping"
+  | "confirm";
 
 export function ExcelImportModal({
   open,
@@ -32,7 +36,8 @@ export function ExcelImportModal({
   availableTables,
   onViewTableData,
 }: ExcelImportModalProps) {
-  const [currentStep, setCurrentStep] = useState<ExcelImportStep>("upload-file");
+  const [currentStep, setCurrentStep] =
+    useState<ExcelImportStep>("upload-file");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedTable, setSelectedTable] = useState<string>("");
   const [mappingData, setMappingData] = useState<any>(null);
@@ -118,48 +123,44 @@ export function ExcelImportModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className="p-0 border-0 bg-transparent" 
+      <DialogContent
+        className="p-0 border-0 bg-transparent"
         showCloseButton={false}
         style={{
-          width: '1000px',
-          maxWidth: '1000px',
-          maxHeight: '90vh',
+          width: "1000px",
+          maxWidth: "1000px",
+          maxHeight: "70vh",
         }}
       >
         <div className="modal-enhanced">
-          <div className="modal-content-enhanced">
+          <div className="modal-content-enhanced flex flex-col overflow-hidden">
             <DialogHeader className="modal-header-enhanced">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <DialogTitle className="modal-title-enhanced flex items-center gap-3">
-                    <div className="p-2 bg-green-500/20 rounded-lg">
-                      <FileSpreadsheet className="h-6 w-6 text-green-400" />
-                    </div>
                     Excel Import
                   </DialogTitle>
                   <p className="modal-description-enhanced">
                     Import data from Excel files to your database tables
                   </p>
                 </div>
-                <button
-                  onClick={handleClose}
-                  className="modal-close-button"
-                >
+                <button onClick={handleClose} className="modal-close-button">
                   <XIcon className="h-5 w-5" />
                 </button>
               </div>
             </DialogHeader>
 
-            <div className="modal-form-content overflow-y-auto max-h-[calc(90vh-200px)] px-6 pb-6">
+            <div className="modal-form-content flex-1 overflow-y-auto px-6 pb-6 min-h-0">
               {/* Step Indicator */}
-              <ExcelStepIndicator 
-                currentStep={currentStep} 
-                onStepChange={handleStepChange}
-              />
+              <div className="flex-shrink-0">
+                <ExcelStepIndicator
+                  currentStep={currentStep}
+                  onStepChange={handleStepChange}
+                />
+              </div>
 
               {/* Step Content */}
-              <div className="mt-8">
+              <div className="mt-8 flex-1 flex flex-col min-h-0 overflow-y-auto">
                 {renderStepContent()}
               </div>
             </div>

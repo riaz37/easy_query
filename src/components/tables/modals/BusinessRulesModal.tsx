@@ -68,7 +68,7 @@ export function BusinessRulesModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
+      <DialogContent
         className="max-w-2xl max-h-[90vh] p-0 border-0 bg-transparent"
         showCloseButton={false}
       >
@@ -78,21 +78,20 @@ export function BusinessRulesModal({
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-green-400" />
                     Business Rules Management
                   </DialogTitle>
                   <p className="modal-description-enhanced">
                     Define and manage business rules for your database tables
                   </p>
-            </div>
+                </div>
                 <button
                   onClick={() => onOpenChange(false)}
                   className="modal-close-button"
                 >
                   <XIcon className="h-5 w-5" />
                 </button>
-          </div>
-        </DialogHeader>
+              </div>
+            </DialogHeader>
 
             <div className="modal-form-content overflow-y-auto max-h-[calc(90vh-200px)]">
               {/* Success Alert */}
@@ -115,7 +114,7 @@ export function BusinessRulesModal({
               <div className="modal-form-group">
                 <Label className="modal-form-label">
                   Business Rule Definition
-              </Label>
+                </Label>
                 <Textarea
                   className="modal-input-enhanced min-h-[200px] resize-none"
                   value={businessRule}
@@ -133,27 +132,24 @@ Example:
                   Define clear, actionable business rules that will be enforced
                   across your database tables.
                 </p>
-        </div>
+              </div>
 
               {/* Submit Button */}
               <div className="modal-footer-enhanced">
-            <Button
+                <Button
                   onClick={handleSubmit}
                   disabled={loading || !businessRule.trim()}
                   className="modal-button-primary"
-            >
-              {loading ? (
-                <>
+                >
+                  {loading ? (
+                    <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Saving Rules...
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                      Save Business Rules
-                </>
-              )}
-            </Button>
+                      Saving...
+                    </>
+                  ) : (
+                    <>Save</>
+                  )}
+                </Button>
               </div>
             </div>
           </div>
@@ -161,4 +157,4 @@ Example:
       </DialogContent>
     </Dialog>
   );
-} 
+}
