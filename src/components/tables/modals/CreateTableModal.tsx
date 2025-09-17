@@ -28,13 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Plus,
-  Trash2,
-  Save,
-  Database,
-  XIcon,
-} from "lucide-react";
+import { Plus, Trash2, Save, Database, XIcon } from "lucide-react";
 import { TableColumn } from "@/types/api";
 
 interface CreateTableModalProps {
@@ -85,11 +79,11 @@ export function CreateTableModal({
     if (!name.trim()) {
       return "Column name is required";
     }
-    
+
     if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
       return "Column name must start with a letter or underscore and contain only letters, numbers, and underscores";
     }
-    
+
     return null;
   };
 
@@ -109,21 +103,25 @@ export function CreateTableModal({
     ) {
       return `Identity columns can only be used with numeric data types (INT, BIGINT, etc.), not with ${column.data_type}`;
     }
-    
+
     return null;
   };
 
-  const handleColumnValidation = (index: number, field: keyof TableColumn, value: any) => {
+  const handleColumnValidation = (
+    index: number,
+    field: keyof TableColumn,
+    value: any
+  ) => {
     onUpdateColumn(index, field, value);
-    
-    if (field === 'name') {
+
+    if (field === "name") {
       const nameError = validateColumnName(value);
       if (nameError) {
         setLocalError(`Column ${index + 1}: ${nameError}`);
       } else {
         setLocalError(null);
       }
-    } else if (field === 'data_type' || field === 'is_identity') {
+    } else if (field === "data_type" || field === "is_identity") {
       const column = { ...columns[index], [field]: value };
       const dataError = validateColumnData(column);
       if (dataError) {
@@ -136,14 +134,21 @@ export function CreateTableModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-7xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
+      <DialogContent
+        className="p-0 border-0 bg-transparent"
+        showCloseButton={false}
+        style={{
+          width: "1200px",
+          maxWidth: "1200px",
+          maxHeight: "90vh",
+        }}
+      >
         <div className="modal-enhanced">
           <div className="modal-content-enhanced">
             <DialogHeader className="modal-header-enhanced">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <Database className="h-5 w-5 text-green-400" />
                     Create New Table
                   </DialogTitle>
                   <p className="modal-description-enhanced">
@@ -191,158 +196,365 @@ export function CreateTableModal({
                 </div>
               </div>
 
-              {/* Interactive Table Preview with Column Management */}
-              <div className="modal-form-group">
-                <div className="flex items-center justify-between mb-4">
-                  <Label className="modal-form-label text-lg">Table Columns</Label>
-                  <Button
-                    onClick={onAddColumn}
-                    variant="outline"
-                    size="sm"
-                    className="border-green-200 text-green-300 hover:bg-green-800/20"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Column
-                  </Button>
+              {/* Column Management Section */}
+              <div className="mb-6">
+                <div className="mb-4">
+                  <h3 className="modal-title-enhanced">Column List</h3>
                 </div>
-                
-                <div className="border border-slate-600/50 rounded-xl overflow-hidden bg-gradient-to-br from-slate-800/60 to-slate-900/80 backdrop-blur-sm shadow-2xl">
-                  <div className="bg-gradient-to-r from-slate-700/80 to-slate-800/80 px-6 py-4 border-b border-slate-600/50">
-                    <div className="flex items-center gap-3">
-                      <Database className="h-5 w-5 text-emerald-400" />
-                      <h4 className="text-slate-100 font-semibold text-lg">
-                        {tableName || "table_name"}
-                      </h4>
-                      <span className="text-slate-400 text-sm font-mono">
-                        ({schema || "dbo"})
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="overflow-x-auto">
+
+                <div className="overflow-x-auto">
+                  <div className="rounded-t-xl overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow className="border-slate-600/50 hover:bg-slate-700/30 bg-slate-800/40">
-                          <TableHead className="text-slate-200 font-semibold text-sm py-4 px-6">Column Name</TableHead>
-                          <TableHead className="text-slate-200 font-semibold text-sm py-4 px-6">Data Type</TableHead>
-                          <TableHead className="text-slate-200 font-semibold text-sm py-4 px-6 text-center">Nullable</TableHead>
-                          <TableHead className="text-slate-200 font-semibold text-sm py-4 px-6 text-center">Primary Key</TableHead>
-                          <TableHead className="text-slate-200 font-semibold text-sm py-4 px-6 text-center">Identity</TableHead>
-                          <TableHead className="text-slate-200 font-semibold text-sm py-4 px-6 text-center">Actions</TableHead>
+                        <TableRow
+                          style={{
+                            background:
+                              "var(--components-Table-Head-filled, rgba(145, 158, 171, 0.08))",
+                            borderRadius: "12px 12px 0 0",
+                          }}
+                        >
+                          <TableHead className="px-6 py-4 text-left rounded-tl-xl">
+                            <span className="text-white font-medium text-sm uppercase">
+                              Column Name
+                            </span>
+                          </TableHead>
+                          <TableHead className="px-6 py-4 text-left">
+                            <span className="text-white font-medium text-sm uppercase">
+                              Data Type
+                            </span>
+                          </TableHead>
+                          <TableHead className="px-6 py-4 text-center">
+                            <span className="text-white font-medium text-sm uppercase">
+                              Nullable
+                            </span>
+                          </TableHead>
+                          <TableHead className="px-6 py-4 text-center">
+                            <span className="text-white font-medium text-sm uppercase">
+                              Primary Key
+                            </span>
+                          </TableHead>
+                          <TableHead className="px-6 py-4 text-center">
+                            <span className="text-white font-medium text-sm uppercase">
+                              Identity
+                            </span>
+                          </TableHead>
+                          <TableHead className="px-6 py-4 text-center rounded-tr-xl">
+                            <span className="text-white font-medium text-sm uppercase">
+                              Actions
+                            </span>
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {columns.map((column, index) => (
-                          <TableRow key={index} className="border-slate-600/30 hover:bg-slate-700/20 transition-colors">
-                            <TableCell className="text-slate-100 py-3 px-6">
+                          <TableRow
+                            key={index}
+                            className="border-slate-600/30"
+                          >
+                            <TableCell className="text-white py-3 px-6">
                               <Input
-                                className="modal-input-enhanced h-9 text-sm bg-slate-700/50 border-slate-600/50 focus:border-emerald-400/50 focus:ring-emerald-400/20"
+                                className="text-sm text-white placeholder-slate-400 focus:border-green-400/50 focus:ring-green-400/20 rounded-lg"
+                                style={{
+                                  background:
+                                    "var(--components-Table-Head-filled, rgba(145, 158, 171, 0.08))",
+                                  border: "none",
+                                  height: "54px",
+                                }}
                                 value={column.name}
-                                onChange={(e) => handleColumnValidation(index, 'name', e.target.value)}
-                                placeholder="column_name"
+                                onChange={(e) =>
+                                  handleColumnValidation(
+                                    index,
+                                    "name",
+                                    e.target.value
+                                  )
+                                }
+                                placeholder="Column Name"
                               />
                             </TableCell>
-                            <TableCell className="text-slate-100 py-3 px-6">
+                            <TableCell className="text-white py-3 px-6">
                               <Select
                                 value={column.data_type}
-                                onValueChange={(value) => handleColumnValidation(index, 'data_type', value)}
+                                onValueChange={(value) =>
+                                  handleColumnValidation(
+                                    index,
+                                    "data_type",
+                                    value
+                                  )
+                                }
                               >
-                                <SelectTrigger className="modal-input-enhanced h-9 text-sm bg-slate-700/50 border-slate-600/50 focus:border-emerald-400/50 focus:ring-emerald-400/20">
+                                <SelectTrigger
+                                  className="modal-select-enhanced text-sm text-white w-32"
+                                  style={{
+                                    height: "54px",
+                                  }}
+                                >
                                   <SelectValue placeholder="Select data type" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-slate-800 border-slate-600">
-                                  <SelectItem value="VARCHAR" className="text-slate-200 hover:bg-slate-700">VARCHAR</SelectItem>
-                                  <SelectItem value="NVARCHAR" className="text-slate-200 hover:bg-slate-700">NVARCHAR</SelectItem>
-                                  <SelectItem value="CHAR" className="text-slate-200 hover:bg-slate-700">CHAR</SelectItem>
-                                  <SelectItem value="NCHAR" className="text-slate-200 hover:bg-slate-700">NCHAR</SelectItem>
-                                  <SelectItem value="TEXT" className="text-slate-200 hover:bg-slate-700">TEXT</SelectItem>
-                                  <SelectItem value="NTEXT" className="text-slate-200 hover:bg-slate-700">NTEXT</SelectItem>
-                                  <SelectItem value="INT" className="text-slate-200 hover:bg-slate-700">INT</SelectItem>
-                                  <SelectItem value="INTEGER" className="text-slate-200 hover:bg-slate-700">INTEGER</SelectItem>
-                                  <SelectItem value="BIGINT" className="text-slate-200 hover:bg-slate-700">BIGINT</SelectItem>
-                                  <SelectItem value="SMALLINT" className="text-slate-200 hover:bg-slate-700">SMALLINT</SelectItem>
-                                  <SelectItem value="TINYINT" className="text-slate-200 hover:bg-slate-700">TINYINT</SelectItem>
-                                  <SelectItem value="DECIMAL" className="text-slate-200 hover:bg-slate-700">DECIMAL</SelectItem>
-                                  <SelectItem value="NUMERIC" className="text-slate-200 hover:bg-slate-700">NUMERIC</SelectItem>
-                                  <SelectItem value="FLOAT" className="text-slate-200 hover:bg-slate-700">FLOAT</SelectItem>
-                                  <SelectItem value="REAL" className="text-slate-200 hover:bg-slate-700">REAL</SelectItem>
-                                  <SelectItem value="DOUBLE" className="text-slate-200 hover:bg-slate-700">DOUBLE</SelectItem>
-                                  <SelectItem value="BIT" className="text-slate-200 hover:bg-slate-700">BIT</SelectItem>
-                                  <SelectItem value="DATE" className="text-slate-200 hover:bg-slate-700">DATE</SelectItem>
-                                  <SelectItem value="TIME" className="text-slate-200 hover:bg-slate-700">TIME</SelectItem>
-                                  <SelectItem value="DATETIME" className="text-slate-200 hover:bg-slate-700">DATETIME</SelectItem>
-                                  <SelectItem value="DATETIME2" className="text-slate-200 hover:bg-slate-700">DATETIME2</SelectItem>
-                                  <SelectItem value="SMALLDATETIME" className="text-slate-200 hover:bg-slate-700">SMALLDATETIME</SelectItem>
-                                  <SelectItem value="TIMESTAMP" className="text-slate-200 hover:bg-slate-700">TIMESTAMP</SelectItem>
-                                  <SelectItem value="UNIQUEIDENTIFIER" className="text-slate-200 hover:bg-slate-700">UNIQUEIDENTIFIER</SelectItem>
-                                  <SelectItem value="BINARY" className="text-slate-200 hover:bg-slate-700">BINARY</SelectItem>
-                                  <SelectItem value="VARBINARY" className="text-slate-200 hover:bg-slate-700">VARBINARY</SelectItem>
-                                  <SelectItem value="IMAGE" className="text-slate-200 hover:bg-slate-700">IMAGE</SelectItem>
-                                  <SelectItem value="XML" className="text-slate-200 hover:bg-slate-700">XML</SelectItem>
-                                  <SelectItem value="JSON" className="text-slate-200 hover:bg-slate-700">JSON</SelectItem>
+                                <SelectContent className="modal-select-content-enhanced">
+                                  <SelectItem
+                                    value="VARCHAR"
+                                    className="dropdown-item"
+                                  >
+                                    VARCHAR
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="NVARCHAR"
+                                    className="dropdown-item"
+                                  >
+                                    NVARCHAR
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="CHAR"
+                                    className="dropdown-item"
+                                  >
+                                    CHAR
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="NCHAR"
+                                    className="dropdown-item"
+                                  >
+                                    NCHAR
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="TEXT"
+                                    className="dropdown-item"
+                                  >
+                                    TEXT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="NTEXT"
+                                    className="dropdown-item"
+                                  >
+                                    NTEXT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="INT"
+                                    className="dropdown-item"
+                                  >
+                                    INT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="INTEGER"
+                                    className="dropdown-item"
+                                  >
+                                    INTEGER
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="BIGINT"
+                                    className="dropdown-item"
+                                  >
+                                    BIGINT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="SMALLINT"
+                                    className="dropdown-item"
+                                  >
+                                    SMALLINT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="TINYINT"
+                                    className="dropdown-item"
+                                  >
+                                    TINYINT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="DECIMAL"
+                                    className="dropdown-item"
+                                  >
+                                    DECIMAL
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="NUMERIC"
+                                    className="dropdown-item"
+                                  >
+                                    NUMERIC
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="FLOAT"
+                                    className="dropdown-item"
+                                  >
+                                    FLOAT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="REAL"
+                                    className="dropdown-item"
+                                  >
+                                    REAL
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="DOUBLE"
+                                    className="dropdown-item"
+                                  >
+                                    DOUBLE
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="BIT"
+                                    className="dropdown-item"
+                                  >
+                                    BIT
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="DATE"
+                                    className="dropdown-item"
+                                  >
+                                    DATE
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="TIME"
+                                    className="dropdown-item"
+                                  >
+                                    TIME
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="DATETIME"
+                                    className="dropdown-item"
+                                  >
+                                    DATETIME
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="DATETIME2"
+                                    className="dropdown-item"
+                                  >
+                                    DATETIME2
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="SMALLDATETIME"
+                                    className="dropdown-item"
+                                  >
+                                    SMALLDATETIME
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="TIMESTAMP"
+                                    className="dropdown-item"
+                                  >
+                                    TIMESTAMP
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="UNIQUEIDENTIFIER"
+                                    className="dropdown-item"
+                                  >
+                                    UNIQUEIDENTIFIER
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="BINARY"
+                                    className="dropdown-item"
+                                  >
+                                    BINARY
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="VARBINARY"
+                                    className="dropdown-item"
+                                  >
+                                    VARBINARY
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="IMAGE"
+                                    className="dropdown-item"
+                                  >
+                                    IMAGE
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="XML"
+                                    className="dropdown-item"
+                                  >
+                                    XML
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="JSON"
+                                    className="dropdown-item"
+                                  >
+                                    JSON
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </TableCell>
-                            <TableCell className="text-slate-100 py-3 px-6 text-center">
+                            <TableCell className="text-white py-3 px-6 text-center">
                               <div className="flex items-center justify-center space-x-2">
                                 <Checkbox
                                   id={`nullable-${index}`}
                                   checked={column.nullable}
-                                  onCheckedChange={(checked) => onUpdateColumn(index, 'nullable', checked)}
-                                  className="border-slate-500 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                                  onCheckedChange={(checked) =>
+                                    onUpdateColumn(index, "nullable", checked)
+                                  }
+                                  style={{
+                                    backgroundColor: column.nullable
+                                      ? "var(--primary-main, rgba(19, 245, 132, 1))"
+                                      : "transparent",
+                                    borderColor:
+                                      "var(--action-active, rgba(145, 158, 171, 1))",
+                                    borderWidth: "1px",
+                                  }}
                                 />
-                                <Label htmlFor={`nullable-${index}`} className="text-sm font-medium">
-                                  {column.nullable ? (
-                                    <span className="text-emerald-400 font-semibold">✓ Yes</span>
-                                  ) : (
-                                    <span className="text-red-400 font-semibold">✗ No</span>
-                                  )}
+                                <Label
+                                  htmlFor={`nullable-${index}`}
+                                  className="text-sm font-medium text-white"
+                                >
+                                  {column.nullable ? "Yes" : "No"}
                                 </Label>
                               </div>
                             </TableCell>
-                            <TableCell className="text-slate-100 py-3 px-6 text-center">
+                            <TableCell className="text-white py-3 px-6 text-center">
                               <div className="flex items-center justify-center space-x-2">
                                 <Checkbox
                                   id={`primary-${index}`}
                                   checked={column.is_primary}
-                                  onCheckedChange={(checked) => onUpdateColumn(index, 'is_primary', checked)}
-                                  className="border-slate-500 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
+                                  onCheckedChange={(checked) =>
+                                    onUpdateColumn(index, "is_primary", checked)
+                                  }
+                                  style={{
+                                    backgroundColor: column.is_primary
+                                      ? "var(--primary-main, rgba(19, 245, 132, 1))"
+                                      : "transparent",
+                                    borderColor:
+                                      "var(--action-active, rgba(145, 158, 171, 1))",
+                                    borderWidth: "1px",
+                                  }}
                                 />
-                                <Label htmlFor={`primary-${index}`} className="text-sm font-medium">
-                                  {column.is_primary ? (
-                                    <span className="text-blue-400 font-semibold">✓ Yes</span>
-                                  ) : (
-                                    <span className="text-slate-500 font-semibold">✗ No</span>
-                                  )}
+                                <Label
+                                  htmlFor={`primary-${index}`}
+                                  className="text-sm font-medium text-white"
+                                >
+                                  {column.is_primary ? "Yes" : "No"}
                                 </Label>
                               </div>
                             </TableCell>
-                            <TableCell className="text-slate-100 py-3 px-6 text-center">
+                            <TableCell className="text-white py-3 px-6 text-center">
                               <div className="flex items-center justify-center space-x-2">
                                 <Checkbox
                                   id={`identity-${index}`}
                                   checked={column.is_identity}
-                                  onCheckedChange={(checked) => handleColumnValidation(index, 'is_identity', checked)}
-                                  className="border-slate-500 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
+                                  onCheckedChange={(checked) =>
+                                    handleColumnValidation(
+                                      index,
+                                      "is_identity",
+                                      checked
+                                    )
+                                  }
+                                  style={{
+                                    backgroundColor: column.is_identity
+                                      ? "var(--primary-main, rgba(19, 245, 132, 1))"
+                                      : "transparent",
+                                    borderColor:
+                                      "var(--action-active, rgba(145, 158, 171, 1))",
+                                    borderWidth: "1px",
+                                  }}
                                 />
-                                <Label htmlFor={`identity-${index}`} className="text-sm font-medium">
-                                  {column.is_identity ? (
-                                    <span className="text-purple-400 font-semibold">✓ Yes</span>
-                                  ) : (
-                                    <span className="text-slate-500 font-semibold">✗ No</span>
-                                  )}
+                                <Label
+                                  htmlFor={`identity-${index}`}
+                                  className="text-sm font-medium text-white"
+                                >
+                                  {column.is_identity ? "Yes" : "No"}
                                 </Label>
                               </div>
                             </TableCell>
-                            <TableCell className="text-slate-100 py-3 px-6 text-center">
+                            <TableCell className="text-white py-3 px-6 text-center">
                               <Button
                                 onClick={() => onRemoveColumn(index)}
-                                variant="outline"
                                 size="sm"
                                 disabled={columns.length === 1}
-                                className="border-red-400/50 text-red-400 hover:bg-red-500/20 hover:border-red-400 h-9 w-9 p-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="modal-button-primary h-9 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                Remove
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -350,6 +562,17 @@ export function CreateTableModal({
                       </TableBody>
                     </Table>
                   </div>
+                </div>
+
+                {/* Add Column Button */}
+                <div className="mt-4 flex justify-start">
+                  <Button
+                    onClick={onAddColumn}
+                    className="modal-button-primary"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Column
+                  </Button>
                 </div>
               </div>
 
@@ -366,10 +589,7 @@ export function CreateTableModal({
                       Creating Table...
                     </>
                   ) : (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      Create Table
-                    </>
+                    <>Create Table</>
                   )}
                 </Button>
               </div>

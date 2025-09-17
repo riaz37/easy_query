@@ -7,7 +7,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import {
-  ArrowLeft,
   Play,
   Loader2,
   CheckCircle,
@@ -214,22 +213,20 @@ export function ExcelStep4Confirm({
       )}
 
       {/* Action Buttons */}
-      <div className="flex justify-between">
+      <div className="modal-footer-enhanced">
         <Button
           onClick={onBack}
           variant="outline"
-          size="lg"
           disabled={isImporting}
-          className="modal-button-secondary disabled:opacity-50"
+          className="modal-button-secondary disabled:opacity-50 w-full sm:w-auto"
         >
-          <ArrowLeft className="h-5 w-5 mr-2" />
           Back
         </Button>
 
         <Button
           onClick={handleImportData}
           disabled={isImporting || !mappingData}
-          className="modal-button-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          className="modal-button-primary disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
         >
           {isImporting ? (
             <>

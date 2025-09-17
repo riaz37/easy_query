@@ -10,7 +10,6 @@ import {
   FileSpreadsheet,
   FileText,
   Trash2,
-  ArrowRight,
   AlertCircle,
 } from "lucide-react";
 import { useDropzone } from "react-dropzone";
@@ -54,11 +53,11 @@ export function ExcelStep1UploadFile({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full flex flex-col">
       {/* File Drop Zone */}
       <div
         {...getRootProps()}
-        className={`modal-input-enhanced border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden ${
+        className={`modal-input-enhanced border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden flex-1 max-w-2xl mx-auto ${
           isDragActive
             ? "border-green-400 bg-green-400/10 scale-105"
             : "hover:border-slate-500 hover:bg-slate-700/20"
@@ -66,7 +65,7 @@ export function ExcelStep1UploadFile({
       >
         <input {...getInputProps()} />
 
-        <div className="flex h-50">
+        <div className="flex h-64">
           {/* Upload Icon - Left Side - Full width like system card */}
           <div className="flex-shrink-0 w-1/2 h-full relative overflow-hidden">
             <img
@@ -108,47 +107,53 @@ export function ExcelStep1UploadFile({
 
       {/* Selected File List */}
       {selectedFile && (
-        <div className="space-y-3">
-          <div className="flex items-center gap-4 p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
-            {/* Excel Icon */}
-            <div className="flex-shrink-0">
-              <img
-                src="/tables/excelfile.svg"
-                alt="Excel File"
-                className="h-6 w-6"
-              />
+        <div className="max-w-2xl mx-auto w-full">
+          <div className="flex items-center justify-between w-full p-4">
+            {/* Left Side - Excel Icon and File Name */}
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="flex-shrink-0">
+                <img
+                  src="/tables/excelfile.svg"
+                  alt="Excel File"
+                  className="h-8 w-8"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-white font-medium truncate text-base">
+                  {selectedFile.name}
+                </p>
+                <p className="text-slate-400 text-sm mt-1">
+                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                </p>
+              </div>
             </div>
 
-            {/* File Name */}
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-medium truncate">
-                {selectedFile.name}
-              </p>
-              <p className="text-slate-400 text-sm">
-                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-              </p>
+            {/* Right Side - Remove Button */}
+            <div className="flex-shrink-0 ml-4">
+              <button
+                onClick={handleRemoveFile}
+                className="p-2 hover:bg-red-500/20 rounded-lg transition-all duration-200 cursor-pointer group"
+                title="Remove file"
+              >
+                <img 
+                  src="/tables/cross.svg" 
+                  alt="Remove" 
+                  className="h-5 w-5 opacity-70 group-hover:opacity-100 transition-opacity" 
+                />
+              </button>
             </div>
-
-            {/* Remove Button */}
-            <button
-              onClick={handleRemoveFile}
-              className="flex-shrink-0 p-2 hover:bg-red-500/20 rounded-lg transition-colors cursor-pointer"
-            >
-              <img src="/tables/cross.svg" alt="Remove" className="h-4 w-4" />
-            </button>
           </div>
         </div>
       )}
 
       {/* Next Button */}
-      <div className="flex justify-end">
+      <div className="modal-footer-enhanced">
         <Button
           onClick={onNext}
           disabled={!selectedFile}
-          className="modal-button-primary"
+          className="modal-button-primary w-full sm:w-auto"
         >
           Continue
-          <ArrowRight className="h-5 w-5 ml-2" />
         </Button>
       </div>
     </div>

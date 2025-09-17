@@ -14,10 +14,8 @@ import {
 } from "@/components/ui/select";
 import {
   Loader2,
-  RefreshCw,
-  ArrowLeft,
-  ArrowRight,
   AlertCircle,
+  Database,
 } from "lucide-react";
 import { useNewTable } from "@/lib/hooks/use-new-table";
 import { toast } from "sonner";
@@ -110,113 +108,54 @@ export function ExcelStep2SelectDestination({
     <div className="space-y-6">
       {/* Table Selection */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Label className="font-semibold text-white">Select Table</Label>
-          </div>
-          <Button
-            onClick={fetchUserTables}
-            variant="outline"
-            size="sm"
-            disabled={isLoadingTables}
-            className="border-slate-600 hover:bg-slate-700/50"
-          >
-            {isLoadingTables ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            ) : (
-              <RefreshCw className="h-4 w-4 mr-2" />
-            )}
-            Refresh
-          </Button>
-        </div>
+        
 
-        {!lastTablesUpdate && !isLoadingTables ? (
-          <div className="p-8 bg-slate-700/30 rounded-xl text-center">
-            <p className="text-slate-300 mb-2">Click refresh to load tables</p>
-            <Button
-              onClick={fetchUserTables}
-              variant="outline"
-              size="lg"
-              className="border-slate-600 hover:bg-slate-700/50"
-            >
-              <RefreshCw className="h-5 w-5 mr-2" />
-              Load Tables
-            </Button>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="modal-label-enhanced">Select Table</Label>
           </div>
-        ) : displayTables.length === 0 ? (
-          <div className="p-8 bg-slate-700/30 rounded-xl text-center">
-            <p className="text-slate-300 mb-2">No tables found</p>
-            <p className="text-slate-500 mb-6">
-              You need to create tables first before importing Excel data
-            </p>
-            <div className="flex gap-3 justify-center">
-              <Button
-                onClick={fetchUserTables}
-                variant="outline"
-                size="lg"
-                className="border-slate-600 hover:bg-slate-700/50"
-              >
-                <RefreshCw className="h-5 w-5 mr-2" />
-                Refresh
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-green-400 border-green-400/50 hover:bg-green-400/10"
-              >
-                Create Table
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <Select value={selectedTable} onValueChange={handleTableChange}>
-              <SelectTrigger className="modal-input-enhanced">
-                <SelectValue placeholder="Choose a database table" />
-              </SelectTrigger>
-              <SelectContent 
-                className="modal-select-content-enhanced"
-                style={{
-                  background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))"
-                }}
-              >
-                {isLoadingTables ? (
-                  <div className="flex items-center justify-center p-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-green-400" />
+          <Select value={selectedTable} onValueChange={handleTableChange}>
+            <SelectTrigger className="modal-select-enhanced w-full">
+              <SelectValue placeholder="Choose a database table" />
+            </SelectTrigger>
+            <SelectContent className="modal-select-content-enhanced">
+              {isLoadingTables ? (
+                <SelectItem value="loading" disabled className="dropdown-item">
+                  <div className="flex items-center justify-center w-full py-2">
+                    <Loader2 className="h-5 w-5 animate-spin text-green-400 mr-2" />
+                    <span className="text-gray-400">Loading tables...</span>
                   </div>
-                ) : (
-                  displayTables.map((table) => {
-                    const userTable = userTables.find(
-                      (ut) => ut.table_full_name === table.full_name
-                    );
-                    return (
-                      <SelectItem 
-                        key={table.full_name} 
-                        value={table.full_name}
-                        className="hover:bg-slate-700/30 focus:bg-slate-700/30 data-[highlighted]:bg-slate-700/30"
+                </SelectItem>
+              ) : displayTables.length > 0 ? (
+                displayTables.map((table) => (
+                  <SelectItem 
+                    key={table.full_name} 
+                    value={table.full_name}
+                    className="dropdown-item"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="font-medium">{table.full_name}</span>
+                      <Badge
+                        variant="secondary"
+                        className="bg-green-500/20 text-green-400 border-green-500/30 ml-2"
                       >
-                        <div className="flex items-center gap-3 p-3 rounded-lg">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-white">
-                              {table.full_name}
-                            </div>
-                            
-                          </div>
-                          <Badge
-                            variant="secondary"
-                            className="bg-green-500/20 text-green-400 border-green-500/30"
-                          >
-                            {table.columns.length} cols
-                          </Badge>
-                        </div>
-                      </SelectItem>
-                    );
-                  })
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
+                        {table.columns.length} cols
+                      </Badge>
+                    </div>
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem value="no-tables" disabled className="dropdown-item">
+                  <div className="text-center py-4 text-gray-400">
+                    <Database className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No tables found</p>
+                    <p className="text-xs">Create tables first before importing Excel data</p>
+                  </div>
+                </SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Error display */}
         {tableLoadError && (
@@ -233,24 +172,21 @@ export function ExcelStep2SelectDestination({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-between">
+      <div className="modal-footer-enhanced">
         <Button
           onClick={onBack}
           variant="outline"
-          size="lg"
-          className="modal-button-secondary"
+          className="modal-button-secondary w-full sm:w-auto"
         >
-          <ArrowLeft className="h-5 w-5 mr-2" />
           Back
         </Button>
 
         <Button
           onClick={onNext}
           disabled={!selectedTable}
-          className="modal-button-primary"
+          className="modal-button-primary w-full sm:w-auto"
         >
           Continue
-          <ArrowRight className="h-5 w-5 ml-2" />
         </Button>
       </div>
     </div>

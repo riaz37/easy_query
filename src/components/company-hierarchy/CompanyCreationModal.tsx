@@ -334,7 +334,13 @@ export function CompanyCreationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="p-0 border-0 bg-transparent" showCloseButton={false}>
+      <DialogContent 
+        className="p-0 border-0 bg-transparent" 
+        showCloseButton={false}
+        style={{
+          maxHeight: '90vh',
+        }}
+      >
         <div className="modal-enhanced">
           <div className="modal-content-enhanced overflow-y-auto">
             {/* Header */}
@@ -364,7 +370,7 @@ export function CompanyCreationModal({
             </div>
 
             {/* Content Area */}
-            <div className="modal-form-content px-8 pb-6 flex-1 overflow-y-auto">
+            <div className="modal-form-content px-8 pb-6 flex-1 overflow-y-auto max-h-[calc(90vh-200px)]">
               {currentStep === "company-info" && (
                 <CompanyInfoStep {...stepProps} />
               )}

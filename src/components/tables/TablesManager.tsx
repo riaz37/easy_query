@@ -631,19 +631,6 @@ export function TablesManager() {
         }}
       />
 
-      <YourTablesModal
-        open={showYourTablesModal}
-        onOpenChange={setShowYourTablesModal}
-        userTables={null}
-        loading={false}
-        onRefresh={() => {
-          console.log("Refresh tables");
-        }}
-        onCreateTable={() => {
-          setShowYourTablesModal(false);
-          setShowCreateTableModal(true);
-        }}
-      />
 
       <ExcelImportModal
         open={showExcelImportModal}
@@ -660,6 +647,19 @@ export function TablesManager() {
         open={showAnalyticsModal}
         onOpenChange={setShowAnalyticsModal}
         tableData={tableData}
+      />
+
+      <YourTablesModal
+        open={showYourTablesModal}
+        onOpenChange={setShowYourTablesModal}
+        userId={user?.user_id}
+        onRefresh={() => {
+          console.log("Refresh tables");
+        }}
+        onCreateTable={() => {
+          setShowYourTablesModal(false);
+          setShowCreateTableModal(true);
+        }}
       />
 
       {/* Authentication Check */}
