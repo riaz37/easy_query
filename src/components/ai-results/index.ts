@@ -5,4 +5,4 @@ export { ReportHeader } from './ReportHeader';
 export { ExportControls } from './ExportControls';
 export { LLMAnalysisOverview } from './LLMAnalysisOverview';
 export { ProcessingDetails } from './ProcessingDetails';
-export { ReportTaskList } from './ReportTaskList'; 
+export { PaginatedReportList } from './PaginatedReportList'; 

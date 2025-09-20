@@ -2,7 +2,6 @@ export { ReportGenerator } from './ReportGenerator';
 export { ReportGeneratorBackground } from './ReportGeneratorBackground';
 export { ReportStructureSelector } from './ReportStructureSelector';
 export { ReportQueryInput } from './ReportQueryInput';
-export { ReportProgressOverlay } from './ReportProgressOverlay';
 export { ReportProgressIndicator } from './ReportProgressIndicator';
 export { ReportActionButtons } from './ReportActionButtons';
 export { ReportProgressDisplay } from './ReportProgressDisplay';

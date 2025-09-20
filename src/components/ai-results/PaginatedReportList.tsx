@@ -1,0 +1,343 @@
+"use client";
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/components/providers';
+import { ServiceRegistry } from '@/lib/api';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { 
+  FileText, 
+  Clock, 
+  CheckCircle, 
+  XCircle, 
+  Eye, 
+  Download,
+  Calendar,
+  User,
+  Database,
+  ChevronLeft,
+  ChevronRight,
+  RefreshCw
+} from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { ESAPBrandLoader } from '@/components/ui/loading';
+
+interface ReportTask {
+  task_id: string;
+  user_id: string;
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  progress: string;
+  current_step: string;
+  total_queries: number;
+  processed_queries: number;
+  successful_queries: number;
+  failed_queries: number;
+  created_at: string;
+  started_at: string;
+  completed_at?: string;
+  progress_percentage: number;
+  results?: any;
+  error?: string;
+  user_query?: string;
+}
+
+interface PaginatedReportListProps {
+  onViewReport: (taskId: string, results: any) => void;
+  onDownloadReport: (taskId: string, results: any) => void;
+}
+
+export function PaginatedReportList({ onViewReport, onDownloadReport }: PaginatedReportListProps) {
+  const router = useRouter();
+  const { user } = useAuthContext();
+  const [tasks, setTasks] = useState<ReportTask[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<string | null>(null);
+
+  const limit = 5;
+  const offset = currentPage * limit;
+
+  // Load tasks from backend
+  const loadTasks = useCallback(async (page: number = 0) => {
+    if (!user?.user_id) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await ServiceRegistry.reports.getUserTasks(
+        user.user_id, 
+        limit, 
+        page * limit
+      );
+      
+      setTasks(response.tasks);
+      setTotalTasks(response.total);
+      setHasMore(response.hasMore);
+    } catch (err) {
+      console.error('Failed to load tasks:', err);
+      setError('Failed to load reports. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.user_id, limit]);
+
+  // Load tasks on mount and when user changes
+  useEffect(() => {
+    loadTasks(currentPage);
+  }, [loadTasks, currentPage]);
+
+  // Refresh tasks
+  const handleRefresh = useCallback(() => {
+    loadTasks(currentPage);
+  }, [loadTasks, currentPage]);
+
+  // Pagination handlers
+  const handleNextPage = useCallback(() => {
+    if (hasMore) {
+      setCurrentPage(prev => prev + 1);
+    }
+  }, [hasMore]);
+
+  const handlePrevPage = useCallback(() => {
+    if (currentPage > 0) {
+      setCurrentPage(prev => prev - 1);
+    }
+  }, [currentPage]);
+
+  const handleViewReport = (task: ReportTask) => {
+    setSelectedTask(task.task_id);
+    if (task.results) {
+      onViewReport(task.task_id, task.results);
+    } else {
+      // Navigate to task detail page if no results in list
+      router.push(`/ai-results/report/${task.task_id}`);
+    }
+  };
+
+  const handleDownloadReport = (task: ReportTask) => {
+    if (task.results) {
+      onDownloadReport(task.task_id, task.results);
+    }
+  };
+
+  // Filter completed tasks for display
+  const completedTasks = tasks.filter(task => task.status === 'completed');
+
+  if (loading && tasks.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <ESAPBrandLoader size="xl" className="mx-auto" />
+        <p className="text-white mt-4">Loading reports...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="bg-red-900/20 border-red-500/30">
+        <CardContent className="p-8 text-center">
+          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <XCircle className="w-8 h-8 text-red-400" />
+          </div>
+          <h3 className="text-white text-lg font-medium mb-2">
+            Error Loading Reports
+          </h3>
+          <p className="text-red-300 mb-4">{error}</p>
+          <Button onClick={handleRefresh} variant="outline" className="border-red-500 text-red-300 hover:bg-red-900/20">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Try Again
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (completedTasks.length === 0) {
+    return (
+      <Card className="bg-gray-900/50 border-gray-700">
+        <CardContent className="p-8 text-center">
+          <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FileText className="w-8 h-8 text-blue-400" />
+          </div>
+          <h3 className="text-white text-lg font-medium mb-2">
+            No Completed Reports
+          </h3>
+          <p className="text-gray-400 mb-4">
+            Generate some reports from the Database Query page to see them here.
+          </p>
+          <Button onClick={handleRefresh} variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Refresh
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="modal-enhanced">
+      <div 
+        className="modal-content-enhanced overflow-hidden"
+        style={{
+          background: `linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+linear-gradient(230.27deg, rgba(19, 245, 132, 0) 71.59%, rgba(19, 245, 132, 0.2) 98.91%),
+linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 100%)`,
+          backdropFilter: "blur(30px)"
+        }}
+      >
+        {/* Header Section */}
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-white">
+              Completed Reports ({totalTasks})
+            </h2>
+            <Button
+              onClick={handleRefresh}
+              variant="outline"
+              size="sm"
+              className="border-0 text-white hover:bg-white/10 cursor-pointer"
+              style={{
+                background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
+                borderRadius: "118.8px",
+                height: "40px",
+                minWidth: "100px"
+              }}
+              disabled={loading}
+            >
+              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </div>
+        </div>
+
+        {/* Reports List */}
+        <div className="px-6 pb-6">
+          <div className="rounded-t-xl overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr 
+                  style={{
+                    background: "var(--components-Table-Head-filled, rgba(145, 158, 171, 0.08))",
+                    borderRadius: "12px 12px 0 0"
+                  }}
+                >
+                  <th className="px-6 py-4 text-left rounded-tl-xl text-white font-medium text-sm">
+                    Report Title
+                  </th>
+                  <th className="px-6 py-4 text-left text-white font-medium text-sm">
+                    Created
+                  </th>
+                  <th className="px-6 py-4 text-left text-white font-medium text-sm">
+                    Queries
+                  </th>
+                  <th className="px-6 py-4 text-right text-white font-medium text-sm rounded-tr-xl">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {completedTasks.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-8 text-center text-white">
+                      No completed reports found
+                    </td>
+                  </tr>
+                ) : (
+                  completedTasks.map((task) => (
+                    <tr 
+                      key={task.task_id} 
+                      className="border-b border-white/10 hover:bg-white/5 transition-colors"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="text-white font-medium">
+                          {task.user_query ? task.user_query.substring(0, 50) + (task.user_query.length > 50 ? '...' : '') : 'Generated Report'}
+                        </div>
+                        <div className="text-gray-400 text-sm">
+                          ID: {task.task_id.substring(0, 8)}...
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-white">
+                        {task.completed_at ? formatDistanceToNow(new Date(task.completed_at), { addSuffix: true }) : 'Unknown'}
+                      </td>
+                      <td className="px-6 py-4 text-white">
+                        {task.total_queries || 0}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center gap-2 justify-end">
+                          <Button
+                            onClick={() => handleViewReport(task)}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                            size="sm"
+                            style={{ borderRadius: "99px", height: "32px", minWidth: "80px" }}
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            View
+                          </Button>
+                          {task.results && (
+                            <Button
+                              onClick={() => handleDownloadReport(task)}
+                              variant="outline"
+                              className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
+                              size="sm"
+                              style={{ borderRadius: "99px", height: "32px", minWidth: "90px" }}
+                            >
+                              <Download className="w-4 h-4 mr-1" />
+                              Download
+                            </Button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="px-6 py-4 flex items-center justify-between">
+          <div className="text-sm text-gray-400">
+            Showing {completedTasks.length} of {totalTasks} reports
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handlePrevPage}
+              disabled={currentPage === 0 || loading}
+              variant="outline"
+              size="sm"
+              className="border-0 text-white hover:bg-white/10 cursor-pointer disabled:opacity-50"
+              style={{ borderRadius: "999px" }}
+            >
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              Previous
+            </Button>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-400">Page {currentPage + 1}</span>
+            </div>
+            
+            <Button
+              onClick={handleNextPage}
+              disabled={!hasMore || loading}
+              variant="outline"
+              size="sm"
+              className="border-0 text-white hover:bg-white/10 cursor-pointer disabled:opacity-50"
+              style={{ borderRadius: "999px" }}
+            >
+              Next
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

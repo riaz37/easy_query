@@ -257,25 +257,25 @@ export function YourTablesModal({
                   >
                     <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                   </Button>
-                  <button
-                    onClick={() => onOpenChange(false)}
-                    className="modal-close-button"
-                  >
-                    <XIcon className="h-5 w-5" />
-                  </button>
+                <button
+                  onClick={() => onOpenChange(false)}
+                  className="modal-close-button"
+                >
+                  <XIcon className="h-5 w-5" />
+                </button>
                 </div>
               </div>
             </DialogHeader>
 
             <div className="modal-form-content overflow-y-auto max-h-[calc(90vh-200px)]">
               {/* Error Display */}
-              {tableLoadError && (
+                {tableLoadError && (
                 <Alert className="mb-6 border-red-500/50 bg-red-900/20">
-                  <AlertDescription className="text-red-300">
-                    {tableLoadError}
-                  </AlertDescription>
-                </Alert>
-              )}
+                    <AlertDescription className="text-red-300">
+                      {tableLoadError}
+                    </AlertDescription>
+                  </Alert>
+                )}
 
               {/* Loading State */}
               {loading ? (
@@ -298,9 +298,9 @@ export function YourTablesModal({
                     onClick={handleCreateTableClick}
                     className="modal-button-primary"
                   >
-                    <Plus className="h-4 w-4 mr-2" />
+                      <Plus className="h-4 w-4 mr-2" />
                     Create Table
-                  </Button>
+                    </Button>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -345,7 +345,7 @@ export function YourTablesModal({
                             <div className="flex items-center gap-2 text-white font-medium text-sm">
                               Schema
                               {getSortIcon("schema_name")}
-                            </div>
+                          </div>
                           </th>
                           <th 
                             className="px-6 py-4 text-left cursor-pointer hover:bg-white/5 transition-colors"
@@ -354,7 +354,7 @@ export function YourTablesModal({
                             <div className="flex items-center gap-2 text-white font-medium text-sm">
                               Columns
                               {getSortIcon("columns")}
-                            </div>
+                        </div>
                           </th>
                           <th className="px-6 py-4 text-right text-white font-medium text-sm rounded-tr-xl">
                             Actions
@@ -381,14 +381,14 @@ export function YourTablesModal({
                               <span className="font-mono text-sm">{table.full_name}</span>
                             </td>
                             <td className="px-6 py-4 text-white">
-                              <Badge variant="outline" className="border-slate-500 text-slate-300">
+                          <Badge variant="outline" className="border-slate-500 text-slate-300">
                                 {table.schema_name}
-                              </Badge>
+                          </Badge>
                             </td>
                             <td className="px-6 py-4 text-white">
-                              <Badge variant="outline" className="border-green-500 text-green-400">
+                            <Badge variant="outline" className="border-green-500 text-green-400">
                                 {table.columns.length} columns
-                              </Badge>
+                            </Badge>
                             </td>
                             <td className="px-6 py-4 text-right">
                               <Button
@@ -413,12 +413,12 @@ export function YourTablesModal({
                       <p className="text-white text-sm">
                         {selectedRows.size} of {transformedTables.length} Row(s) Selected
                       </p>
-                    </div>
-                    
+                        </div>
+
                     {/* Right side: Pagination controls */}
                     <div className="flex items-center gap-6">
                       {/* Rows per page */}
-                      <div className="flex items-center gap-2">
+                                  <div className="flex items-center gap-2">
                         <span className="text-white text-sm">Rows per page:</span>
                         <select
                           value={rowsPerPage}
@@ -433,13 +433,13 @@ export function YourTablesModal({
                           <option value={10}>10</option>
                           <option value={25}>25</option>
                         </select>
-                      </div>
+                                  </div>
                       
                       {/* Page Info and Controls */}
                       <div className="flex items-center gap-4">
                         <span className="text-white text-sm">
                           Page {currentPage} of {paginatedData.totalPages}
-                        </span>
+                                  </span>
                         <div className="flex items-center gap-1">
                           <Button
                             variant="ghost"
@@ -459,8 +459,8 @@ export function YourTablesModal({
                           >
                             <ChevronRight className="h-4 w-4" />
                           </Button>
-                        </div>
-                      </div>
+                            </div>
+                          </div>
                     </div>
                   </div>
                 </div>

@@ -31,7 +31,7 @@ export function PageLayout({
   container = true,
   maxWidth = "7xl",
 }: PageLayoutProps) {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const isDark = theme === 'dark';
   
   const backgroundClasses = {
@@ -57,7 +57,7 @@ export function PageLayout({
   };
 
   const content = (
-    <div className="pt-28 pb-8">
+    <div className="pt-36 pb-8">
       {container ? (
         <div className="container mx-auto px-4">
           <div className={cn("mx-auto", maxWidthClasses[maxWidth])}>

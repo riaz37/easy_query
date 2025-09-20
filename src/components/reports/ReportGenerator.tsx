@@ -253,17 +253,6 @@ export function ReportGenerator({
 
   return (
     <div className="space-y-6">
-      {/* Loading Overlay for Report Generation */}
-      {reports.isGenerating && (
-        <ReportProgressOverlay
-          reportProgress={reportProgress}
-          processingSteps={processingSteps}
-          currentStep={currentStep}
-          processingTime={processingTime}
-          userQuery={userQuery}
-          formatTime={formatTime}
-        />
-      )}
 
       {/* Report Structure Selection */}
       <ReportStructureSelector
