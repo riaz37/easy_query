@@ -23,7 +23,7 @@ export function AnalyticsModal({
 }: AnalyticsModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
+      <DialogContent className="max-w-3xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
         <div className="modal-enhanced">
           <div className="modal-content-enhanced">
             <DialogHeader className="modal-header-enhanced">
@@ -39,7 +39,7 @@ export function AnalyticsModal({
                 </div>
                 <button
                   onClick={() => onOpenChange(false)}
-                  className="modal-close-button"
+                  className="modal-close-button cursor-pointer"
                 >
                   <XIcon className="h-5 w-5" />
                 </button>

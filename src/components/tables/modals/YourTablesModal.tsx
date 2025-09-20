@@ -229,8 +229,8 @@ export function YourTablesModal({
         className="p-0 border-0 bg-transparent" 
         showCloseButton={false}
         style={{
-          width: '1200px',
-          maxWidth: '1200px',
+          width: '1000px',
+          maxWidth: '1000px',
           maxHeight: '90vh',
         }}
       >
@@ -259,7 +259,7 @@ export function YourTablesModal({
                   </Button>
                 <button
                   onClick={() => onOpenChange(false)}
-                  className="modal-close-button"
+                  className="modal-close-button cursor-pointer"
                 >
                   <XIcon className="h-5 w-5" />
                 </button>
@@ -296,7 +296,7 @@ export function YourTablesModal({
                   </p>
                   <Button
                     onClick={handleCreateTableClick}
-                    className="modal-button-primary"
+                    className="modal-button-primary cursor-pointer"
                   >
                       <Plus className="h-4 w-4 mr-2" />
                     Create Table

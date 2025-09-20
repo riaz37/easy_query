@@ -26,14 +26,17 @@ export function QueryResultOverlay({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-900/95 border border-green-400/30 rounded-lg shadow-2xl p-6 max-w-md w-full">
-        {/* Success Icon */}
-        <div className="flex items-center justify-center mb-4">
-          <div className="p-3 bg-green-500/20 rounded-full">
-            <CheckCircle className="w-8 h-8 text-green-400" />
-          </div>
-        </div>
-
+      <div 
+        className="rounded-[32px] shadow-2xl p-6 max-w-md w-full border"
+        style={{
+          background: `linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+                        linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%),
+                        linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)`,
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+        }}
+      >
         {/* Title */}
         <h3 className="text-xl font-semibold text-white text-center mb-2">
           {queryMode === 'reports' ? 'Report Generated!' : 'Query Complete!'}
@@ -48,7 +51,12 @@ export function QueryResultOverlay({
 
         {/* Query Preview */}
         {queryText && (
-          <div className="mb-6 p-3 bg-gray-800/50 rounded-lg border border-gray-700/50">
+          <div 
+            className="mb-6 p-4 rounded-lg"
+            style={{
+              backgroundColor: "var(--item-root-active-bgcolor, #13F58414)",
+            }}
+          >
             <p className="text-sm text-gray-300 line-clamp-2">
               "{queryText}"
             </p>
@@ -58,7 +66,7 @@ export function QueryResultOverlay({
         {/* Action Button */}
         <Button
           onClick={onViewResults}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 cursor-pointer"
         >
           {queryMode === 'reports' ? (
             <FileText className="w-5 h-5 mr-2" />

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useQueryStore } from "@/store/query-store";
+import { useTaskCreator } from "@/components/task-manager/TaskManagerProvider";
 import {
   useAuthContext,
   useDatabaseContext,
@@ -66,6 +67,7 @@ export default function FileQueryPage() {
 
   // Store and context
   const { fileQueryHistory, loadQueryHistory, saveQuery } = useQueryStore();
+  const { createQueryTask, executeTask } = useTaskCreator();
 
   const { user, isLoading: userLoading, isAuthenticated } = useAuthContext();
   const { currentDatabaseId, currentDatabaseName } = useDatabaseContext();
@@ -131,104 +133,130 @@ export default function FileQueryPage() {
 
       const startTime = Date.now();
 
-      try {
-        // Get file IDs from completed uploads
-        const completedFileIds = uploadedFiles
-          .filter((file) => file.status === "completed")
-          .map((file) => file.id);
-
-        // Execute file search
-        const response = await fileService.searchFiles({
+      // Create a task for file query execution
+      const taskId = createQueryTask(
+        "File Query Execution",
+        `Executing file query: "${queryText}"`,
+        {
           query: queryText,
-          user_id: user?.user_id,
-          answer_style: options.answerStyle,
-          table_specific: !!selectedTable, // Make query table-specific if table is selected
-          tables: selectedTable ? [selectedTable] : undefined, // Include selected table
-          file_ids: completedFileIds.length > 0 ? completedFileIds : undefined,
-        });
+          mode: "file_query",
+          selectedTable,
+          useTable,
+          fileIds: uploadedFiles
+            .filter((file) => file.status === "completed")
+            .map((file) => file.id),
+        }
+      );
 
-        if (response.success && response.data) {
-          const searchResponse = response.data;
-          console.log("File search response:", searchResponse);
+      // Execute the task in background
+      executeTask(
+        taskId,
+        async () => {
+          try {
+            // Get file IDs from completed uploads
+            const completedFileIds = uploadedFiles
+              .filter((file) => file.status === "completed")
+              .map((file) => file.id);
 
-          // Extract results from the answer sources or create structured result
-          let results: FileQueryResult[] = [];
+            // Execute file search
+            const response = await fileService.searchFiles({
+              query: queryText,
+              user_id: user?.user_id,
+              answer_style: options.answerStyle,
+              table_specific: !!selectedTable, // Make query table-specific if table is selected
+              tables: selectedTable ? [selectedTable] : undefined, // Include selected table
+              file_ids: completedFileIds.length > 0 ? completedFileIds : undefined,
+            });
 
-          if (searchResponse.answer) {
-            // Create the main result with the AI-generated answer
-            const mainResult: FileQueryResult = {
-              id: "main-answer",
-              answer: searchResponse.answer.answer, // This is the actual AI response
-              confidence: searchResponse.answer.confidence,
-              sources_used: searchResponse.answer.sources_used,
-              query: searchResponse.query,
-              context_length: searchResponse.answer.context_length,
-              prompt_length: searchResponse.answer.prompt_length,
-              // Add source information
-              sources: searchResponse.answer.sources || [],
-            };
+            if (response.success && response.data) {
+              const searchResponse = response.data;
+              console.log("File search response:", searchResponse);
 
-            results.push(mainResult);
+              // Extract results from the answer sources or create structured result
+              let results: FileQueryResult[] = [];
 
-            // If there are individual sources with content, add them as separate results
-            if (
-              searchResponse.answer.sources &&
-              Array.isArray(searchResponse.answer.sources)
-            ) {
-              searchResponse.answer.sources.forEach((source, index) => {
-                if (source.content || source.text) {
-                  results.push({
-                    id: `source-${index}`,
-                    answer: source.content || source.text,
-                    confidence: searchResponse.answer.confidence,
-                    sources_used: 1,
-                    query: searchResponse.query,
-                    source_file: source.file_name,
-                    source_title: source.title,
-                    page_range: source.page_range,
-                    document_number: source.document_number,
-                    is_source: true, // Mark this as a source result
+              if (searchResponse.answer) {
+                // Create the main result with the AI-generated answer
+                const mainResult: FileQueryResult = {
+                  id: "main-answer",
+                  answer: searchResponse.answer.answer, // This is the actual AI response
+                  confidence: searchResponse.answer.confidence,
+                  sources_used: searchResponse.answer.sources_used,
+                  query: searchResponse.query,
+                  context_length: searchResponse.answer.context_length,
+                  prompt_length: searchResponse.answer.prompt_length,
+                  // Add source information
+                  sources: searchResponse.answer.sources || [],
+                };
+
+                results.push(mainResult);
+
+                // If there are individual sources with content, add them as separate results
+                if (
+                  searchResponse.answer.sources &&
+                  Array.isArray(searchResponse.answer.sources)
+                ) {
+                  searchResponse.answer.sources.forEach((source, index) => {
+                    if (source.content || source.text) {
+                      results.push({
+                        id: `source-${index}`,
+                        answer: source.content || source.text,
+                        confidence: searchResponse.answer.confidence,
+                        sources_used: 1,
+                        query: searchResponse.query,
+                        source_file: source.file_name,
+                        source_title: source.title,
+                        page_range: source.page_range,
+                        document_number: source.document_number,
+                        is_source: true, // Mark this as a source result
+                      });
+                    }
                   });
                 }
-              });
+              }
+
+              setQueryResults(results);
+
+              // Save to history
+              if (user?.user_id) {
+                saveQuery({
+                  id: Math.random().toString(36).substr(2, 9),
+                  type: "file",
+                  query: queryText,
+                  userId: user.user_id,
+                  timestamp: new Date(),
+                  results: results,
+                  metadata: {
+                    resultCount: results.length,
+                    fileIds: completedFileIds,
+                  },
+                });
+              }
+
+              toast.success(
+                `Query executed successfully! Found ${results.length} results.`
+              );
+              
+              return results;
+            } else {
+              throw new Error(response.error || "Query execution failed");
             }
+          } catch (error) {
+            console.error("File query execution error:", error);
+            const errorMessage =
+              error instanceof Error
+                ? error.message
+                : "An unexpected error occurred";
+            setQueryError(errorMessage);
+            toast.error(`Query failed: ${errorMessage}`);
+            throw error;
           }
-
-          setQueryResults(results);
-
-          // Save to history
-          if (user?.user_id) {
-            saveQuery({
-              id: Math.random().toString(36).substr(2, 9),
-              type: "file",
-              query: queryText,
-              userId: user.user_id,
-              timestamp: new Date(),
-              results: results,
-              metadata: {
-                resultCount: results.length,
-                fileIds: completedFileIds,
-              },
-            });
-          }
-
-          toast.success(
-            `Query executed successfully! Found ${results.length} results.`
-          );
-        } else {
-          throw new Error(response.error || "Query execution failed");
         }
-      } catch (error) {
-        console.error("File query execution error:", error);
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred";
-        setQueryError(errorMessage);
-        toast.error(`Query failed: ${errorMessage}`);
-      } finally {
+      ).catch((error) => {
+        console.error("Failed to execute file query:", error);
+      }).finally(() => {
         setIsExecuting(false);
-      }
+      });
     },
     [
       isAuthenticated,
@@ -238,6 +266,8 @@ export default function FileQueryPage() {
       uploadedFiles,
       saveQuery,
       selectedTable,
+      createQueryTask,
+      executeTask,
     ]
   );
 
@@ -540,7 +570,7 @@ export default function FileQueryPage() {
               <Button
                 variant="outline"
                 onClick={() => setIsUploadModalOpen(false)}
-                className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                className="border-slate-600 text-slate-300 hover:bg-slate-700 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -550,7 +580,7 @@ export default function FileQueryPage() {
                   setIsUploadModalOpen(false);
                   toast.success("Files uploaded successfully!");
                 }}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-green-600 hover:bg-green-700 text-white cursor-pointer"
               >
                 Upload
               </Button>
@@ -560,7 +590,7 @@ export default function FileQueryPage() {
                   setUploadedFiles([]);
                   toast.info("Files cleared");
                 }}
-                className="border-red-500 text-red-400 hover:bg-red-500/10"
+                className="border-red-500 text-red-400 hover:bg-red-500/10 cursor-pointer"
               >
                 Clear
               </Button>

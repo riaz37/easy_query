@@ -127,8 +127,8 @@ export function ExcelImportModal({
         className="p-0 border-0 bg-transparent"
         showCloseButton={false}
         style={{
-          width: "1000px",
-          maxWidth: "1000px",
+          width: "800px",
+          maxWidth: "800px",
           maxHeight: "70vh",
         }}
       >
@@ -144,7 +144,7 @@ export function ExcelImportModal({
                     Import data from Excel files to your database tables
                   </p>
                 </div>
-                <button onClick={handleClose} className="modal-close-button">
+                <button onClick={handleClose} className="modal-close-button cursor-pointer">
                   <XIcon className="h-5 w-5" />
                 </button>
               </div>

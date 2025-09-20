@@ -338,6 +338,8 @@ export function CompanyCreationModal({
         className="p-0 border-0 bg-transparent" 
         showCloseButton={false}
         style={{
+          width: '900px',
+          maxWidth: '900px',
           maxHeight: '90vh',
         }}
       >
@@ -357,7 +359,7 @@ export function CompanyCreationModal({
                 </div>
                 <button
                   onClick={handleClose}
-                  className="modal-close-button"
+                  className="modal-close-button cursor-pointer"
                 >
                   <XIcon className="h-5 w-5" />
                 </button>

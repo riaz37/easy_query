@@ -69,7 +69,7 @@ export function BusinessRulesModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-2xl max-h-[90vh] p-0 border-0 bg-transparent"
+        className="max-w-3xl max-h-[90vh] p-0 border-0 bg-transparent"
         showCloseButton={false}
       >
         <div className="modal-enhanced">
@@ -86,7 +86,7 @@ export function BusinessRulesModal({
                 </div>
                 <button
                   onClick={() => onOpenChange(false)}
-                  className="modal-close-button"
+                  className="modal-close-button cursor-pointer"
                 >
                   <XIcon className="h-5 w-5" />
                 </button>
@@ -139,7 +139,7 @@ Example:
                 <Button
                   onClick={handleSubmit}
                   disabled={loading || !businessRule.trim()}
-                  className="modal-button-primary"
+                  className="modal-button-primary cursor-pointer"
                 >
                   {loading ? (
                     <>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { useTaskStore } from '@/store/task-store';
 import { Badge } from '@/components/ui/badge';
 import { ChevronDown } from 'lucide-react';
@@ -22,6 +22,8 @@ export function NavbarTaskIndicator({ className }: NavbarTaskIndicatorProps) {
     getCompletedTasksCount,
     getFailedTasksCount,
   } = useTaskStore();
+  
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   const activeCount = getActiveTasksCount();
   const completedCount = getCompletedTasksCount();
@@ -32,9 +34,9 @@ export function NavbarTaskIndicator({ className }: NavbarTaskIndicatorProps) {
   if (totalTasks === 0) return null;
 
   const getStatusText = () => {
-    if (failedCount > 0) return `${failedCount} failed`;
-    if (activeCount > 0) return `${activeCount} running`;
-    if (completedCount > 0) return `${completedCount} completed`;
+    if (failedCount > 0) return 'failed';
+    if (activeCount > 0) return 'running';
+    if (completedCount > 0) return 'completed';
     return 'No tasks';
   };
 
@@ -43,6 +45,7 @@ export function NavbarTaskIndicator({ className }: NavbarTaskIndicatorProps) {
       {/* Compact Task Indicator */}
       <div className={cn("relative", className)}>
         <div 
+          ref={triggerRef}
           className={cn(
             "flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-200 cursor-pointer group",
             "hover:shadow-lg"
@@ -77,6 +80,7 @@ export function NavbarTaskIndicator({ className }: NavbarTaskIndicatorProps) {
         position="right"
         topOffset="top-20"
         className="z-50"
+        triggerRef={triggerRef}
       />
     </>
   );
