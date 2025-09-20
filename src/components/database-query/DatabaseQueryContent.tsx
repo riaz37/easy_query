@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useAuthContext, useDatabaseContext } from "@/components/providers";
 import { useDatabaseOperations } from "@/lib/hooks/use-database-operations";
 import { useTaskCreator } from "@/components/task-manager";
+import { useReports } from "@/lib/hooks/use-reports";
 
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,9 @@ import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 import { ContentWrapper } from "@/components/layout/ContentWrapper";
 import { useTheme } from "@/store/theme-store";
 import { DatabaseQueryStatsCards, DatabaseQueryHeader } from "@/components/database-query/components";
+import { QuickSuggestions } from "@/components/file-query/QuickSuggestions";
+import { QueryForm } from "@/components/shared/QueryForm";
+import { IntegratedReportGenerator } from "@/components/database-query/IntegratedReportGenerator";
 
 export function DatabaseQueryContent() {
   const router = useRouter();
@@ -52,6 +56,7 @@ export function DatabaseQueryContent() {
     historyLoading,
   } = useDatabaseOperations();
   const { createQueryTask, executeTask } = useTaskCreator();
+  const reports = useReports();
 
   // State
   const [queryMode, setQueryMode] = useState<'query' | 'reports'>('query');
@@ -61,6 +66,7 @@ export function DatabaseQueryContent() {
   const [currentQuery, setCurrentQuery] = useState("");
   const [queryProgress, setQueryProgress] = useState(0);
   const [processingSteps, setProcessingSteps] = useState<string[]>([]);
+  const [queryInput, setQueryInput] = useState("");
 
   // Memoize the processing steps to prevent recreation
   const defaultProcessingSteps = useMemo(() => [
@@ -150,12 +156,13 @@ export function DatabaseQueryContent() {
 
     // Create a background task for query execution
     const taskId = createQueryTask(
-      `Query: ${query.substring(0, 50)}${query.length > 50 ? '...' : ''}`,
-      `Executing database query: "${query}"`,
+      `${queryMode === 'query' ? 'Query' : 'Report'}: ${query.substring(0, 50)}${query.length > 50 ? '...' : ''}`,
+      `${queryMode === 'query' ? 'Executing database query' : 'Generating AI report'}: "${query}"`,
       {
         user_id: user.user_id,
         query: query,
         database_id: currentDatabase?.database_id,
+        mode: queryMode,
       }
     );
 
@@ -165,8 +172,10 @@ export function DatabaseQueryContent() {
       async () => {
         try {
           setCurrentQuery(query);
-          console.log("Sending query with user ID:", user.user_id);
+          setQueryInput(query);
+          console.log("Sending database query with user ID:", user.user_id);
 
+          // Only handle database queries here - AI reports are handled by IntegratedReportGenerator
           const response = await sendQuery({
             userId: user.user_id,
             question: query,
@@ -175,6 +184,19 @@ export function DatabaseQueryContent() {
 
           console.log("Query response:", response);
           toast.success("Query submitted successfully!");
+          
+          // Store query result in sessionStorage for the results page
+          const queryResult = {
+            query: query,
+            userId: user.user_id,
+            timestamp: new Date().toISOString(),
+            result: {
+              payload: {
+                data: response.data?.payload?.data || []
+              }
+            }
+          };
+          sessionStorage.setItem("databaseQueryResult", JSON.stringify(queryResult));
           
           // Show result overlay
           setCompletedQuery(query);
@@ -188,9 +210,9 @@ export function DatabaseQueryContent() {
         }
       }
     ).catch((error) => {
-      console.error('Failed to execute query:', error);
+      console.error("Failed to execute query:", error);
     });
-  }, [user?.user_id, hasCurrentDatabase, currentDatabase?.database_id, sendQuery, createQueryTask, executeTask]);
+  }, [user?.user_id, hasCurrentDatabase, currentDatabase?.database_id, sendQuery, createQueryTask, executeTask, queryMode, reports]);
 
   const handleModeChange = useCallback((mode: 'query' | 'reports') => {
     setQueryMode(mode);
@@ -198,9 +220,13 @@ export function DatabaseQueryContent() {
 
   const handleViewResults = useCallback(() => {
     setShowResultOverlay(false);
-    // Navigate to results page or show results in a modal
-    router.push('/database-query-results');
-  }, [router]);
+    // Navigate to appropriate results page based on query mode
+    if (queryMode === 'reports') {
+      router.push('/ai-results');
+    } else {
+      router.push('/database-query-results');
+    }
+  }, [router, queryMode]);
 
   const handleToggleHistory = useCallback(() => {
     setShowHistory(prev => !prev);
@@ -212,15 +238,16 @@ export function DatabaseQueryContent() {
       maxWidth="7xl"
       className="database-query-page"
     >
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-          .database-query-page textarea {
-            background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04)) !important;
-          }
-        `,
-        }}
-      />
+      <div className="mt-12">
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+            .database-query-page textarea {
+              background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04)) !important;
+            }
+          `,
+          }}
+        />
       
       {/* Welcome Header */}
       <ContentWrapper className="mb-8">
@@ -290,37 +317,17 @@ export function DatabaseQueryContent() {
 
       {/* Mode Toggle */}
       <ContentWrapper className="mb-8">
-        <div className="flex items-center gap-3">
-        <Label htmlFor="query-mode" className="text-white font-medium">
-          Quick Query
-        </Label>
-        <button
-          onClick={() => setQueryMode(queryMode === 'query' ? 'reports' : 'query')}
-          className="relative inline-flex h-6 w-11 items-center transition-colors rounded-full"
-          style={{
-            backgroundColor: "var(--white-12, rgba(255, 255, 255, 0.12))",
-            backdropFilter: "blur(29.09090805053711px)"
-          }}
-        >
-          <span
-            className={`inline-block h-4 w-4 transform transition-transform rounded-full ${
-              queryMode === 'query' ? "translate-x-6" : "translate-x-1"
-            }`}
-            style={{
-              backgroundColor: "var(--primary-light, rgba(158, 251, 205, 1))"
-            }}
-          />
-        </button>
-        <Label htmlFor="query-mode" className="text-white font-medium">
-          AI Reports
-        </Label>
-        </div>
+        <QueryModeToggle
+          mode={queryMode}
+          onModeChange={handleModeChange}
+          hasDatabase={hasCurrentDatabase}
+          loading={loading}
+        />
       </ContentWrapper>
 
       {/* Main Content - Full Width */}
       <ContentWrapper>
         <div className="space-y-6">
-        {queryMode === 'query' ? (
           <div className="p-6 query-content-gradient">
             <div className="flex items-start">
               <Image
@@ -332,74 +339,93 @@ export function DatabaseQueryContent() {
               />
               <div className="flex flex-col justify-start pt-5 -ml-8 z-10">
                 <h3 className="text-white font-semibold text-2xl">
-                  Database Query
+                  {queryMode === 'query' ? 'Database Query' : 'AI Reports'}
                 </h3>
               </div>
             </div>
 
             <div className="relative -mt-16 px-4 z-10">
-              <DatabaseQueryForm
-                onSubmit={handleQuerySubmit}
-                loading={loading}
-                hasDatabase={hasCurrentDatabase}
-                currentQuery={currentQuery}
-              />
+              {queryMode === 'query' ? (
+                <QueryForm
+                  query={queryInput}
+                  setQuery={setQueryInput}
+                  isExecuting={loading}
+                  onExecuteClick={() => handleQuerySubmit(queryInput)}
+                  placeholder="Ask your question in natural language... (e.g., 'Show me all users from last month')"
+                  buttonText="Ask"
+                  showClearButton={true}
+                  disabled={!hasCurrentDatabase}
+                />
+              ) : (
+                <IntegratedReportGenerator
+                  userId={user?.user_id}
+                  onReportComplete={(results) => {
+                    console.log("Report completed:", results);
+                    setCompletedQuery(queryInput);
+                    setShowResultOverlay(true);
+                  }}
+                  onReportStart={() => {
+                    console.log("Report generation started");
+                  }}
+                  isReportGenerating={reports.isGenerating}
+                />
+              )}
             </div>
           </div>
-        ) : (
-          <ReportGenerator
-            userId={user?.user_id}
-            onReportComplete={(results) => {
-              console.log('Report completed:', results);
-              toast.success('Report generated successfully!');
-            }}
-            onReportStart={() => {
-              console.log('Report generation started');
-            }}
-          />
-        )}
         </div>
       </ContentWrapper>
 
       {/* Quick Suggestions Section */}
       <ContentWrapper className="mt-12">
-        <div>
-        <h3 className="text-xl font-semibold text-white mb-6">
-          Quick suggestion
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[
-            { 
-              text: "Show me all users from last month", 
-              query: "Show me all users from last month"
-            },
-            { 
-              text: "What are the top performing products?", 
-              query: "What are the top performing products?"
-            },
-            { 
-              text: "Find orders with total amount greater than $1000", 
-              query: "Find orders with total amount greater than $1000"
-            },
-            { 
-              text: "Generate a sales report for this quarter", 
-              query: "Generate a sales report for this quarter"
-            },
-          ].map((suggestion, index) => (
-            <div
-              key={index}
-              className="p-4 query-content-gradient cursor-pointer hover:scale-105 transition-transform duration-200"
-              onClick={() => setCurrentQuery(suggestion.query)}
-            >
-              <div className="space-y-2">
-                <p className="text-sm text-slate-400">
-                  {suggestion.text}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-        </div>
+        <QuickSuggestions
+          title={queryMode === 'query' ? "Database Query Suggestions" : "AI Report Suggestions"}
+          suggestions={
+            queryMode === 'query' ? [
+              { 
+                text: "Show me all users from last month", 
+                query: "Show me all users from last month",
+                icon: <User className="h-4 w-4 text-green-400" />
+              },
+              { 
+                text: "What are the top performing products?", 
+                query: "What are the top performing products?",
+                icon: <BarChart3 className="h-4 w-4 text-green-400" />
+              },
+              { 
+                text: "Find orders with total amount greater than $1000", 
+                query: "Find orders with total amount greater than $1000",
+                icon: <Database className="h-4 w-4 text-green-400" />
+              },
+              { 
+                text: "Show me revenue trends over time", 
+                query: "Show me revenue trends over time",
+                icon: <BarChart3 className="h-4 w-4 text-green-400" />
+              },
+            ] : [
+              { 
+                text: "Generate a comprehensive sales report for Q4", 
+                query: "Generate a comprehensive sales report for Q4",
+                icon: <FileText className="h-4 w-4 text-green-400" />
+              },
+              { 
+                text: "Create a customer analytics dashboard", 
+                query: "Create a customer analytics dashboard",
+                icon: <BarChart3 className="h-4 w-4 text-green-400" />
+              },
+              { 
+                text: "Generate a financial performance summary", 
+                query: "Generate a financial performance summary",
+                icon: <Database className="h-4 w-4 text-green-400" />
+              },
+              { 
+                text: "Create a user engagement report", 
+                query: "Create a user engagement report",
+                icon: <User className="h-4 w-4 text-green-400" />
+              },
+            ]
+          }
+          onQuerySelect={(query) => setQueryInput(query)}
+        />
       </ContentWrapper>
 
       {/* Query History Panel */}
@@ -409,7 +435,7 @@ export function DatabaseQueryContent() {
           loading={historyLoading}
           onClose={() => setShowHistory(false)}
           onQuerySelect={(query) => {
-            setCurrentQuery(query);
+            setQueryInput(query);
             setShowHistory(false); // Close panel after selecting a query
           }}
         />
@@ -420,7 +446,9 @@ export function DatabaseQueryContent() {
         isVisible={showResultOverlay}
         onViewResults={handleViewResults}
         queryText={completedQuery}
+        queryMode={queryMode}
       />
+      </div>
     </PageLayout>
   );
 }

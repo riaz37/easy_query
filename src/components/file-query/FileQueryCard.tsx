@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FileQueryHeader } from "./FileQueryHeader";
-import { FileQueryForm } from "./FileQueryForm";
+import { QueryForm } from "@/components/shared/QueryForm";
 
 interface FileQueryCardProps {
   query: string;
@@ -35,12 +35,16 @@ export function FileQueryCard({
       }}
     >
       <FileQueryHeader />
-      <FileQueryForm
+      <QueryForm
         query={query}
         setQuery={setQuery}
         isExecuting={isExecuting}
-        onUploadClick={onUploadClick}
         onExecuteClick={onExecuteClick}
+        onUploadClick={onUploadClick}
+        placeholder="Ask a question about your uploaded files..."
+        buttonText="Ask"
+        showUploadButton={true}
+        showClearButton={false}
       />
     </div>
   );

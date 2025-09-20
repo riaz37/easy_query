@@ -5,19 +5,22 @@ import { Button } from "@/components/ui/button";
 import { 
   CheckCircle, 
   Database, 
-  ArrowRight
+  ArrowRight,
+  FileText
 } from "lucide-react";
 
 interface QueryResultOverlayProps {
   isVisible: boolean;
   onViewResults: () => void;
   queryText?: string;
+  queryMode?: 'query' | 'reports';
 }
 
 export function QueryResultOverlay({
   isVisible,
   onViewResults,
-  queryText
+  queryText,
+  queryMode = 'query'
 }: QueryResultOverlayProps) {
   if (!isVisible) return null;
 
@@ -33,11 +36,14 @@ export function QueryResultOverlay({
 
         {/* Title */}
         <h3 className="text-xl font-semibold text-white text-center mb-2">
-          Query Complete!
+          {queryMode === 'reports' ? 'Report Generated!' : 'Query Complete!'}
         </h3>
         
         <p className="text-gray-400 text-center mb-6">
-          Your database query has been processed successfully.
+          {queryMode === 'reports' 
+            ? 'Your AI report has been generated successfully.' 
+            : 'Your database query has been processed successfully.'
+          }
         </p>
 
         {/* Query Preview */}
@@ -54,8 +60,12 @@ export function QueryResultOverlay({
           onClick={onViewResults}
           className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
         >
-          <Database className="w-5 h-5 mr-2" />
-          View Results
+          {queryMode === 'reports' ? (
+            <FileText className="w-5 h-5 mr-2" />
+          ) : (
+            <Database className="w-5 h-5 mr-2" />
+          )}
+          {queryMode === 'reports' ? 'View Report' : 'View Results'}
           <ArrowRight className="w-5 h-5 ml-2" />
         </Button>
       </div>

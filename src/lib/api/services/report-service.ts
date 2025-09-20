@@ -98,6 +98,29 @@ export class ReportService extends BaseService {
   }
 
   /**
+   * Get user tasks with pagination
+   */
+  async getUserTasks(userId: string, limit: number = 5, offset: number = 0): Promise<{
+    tasks: any[];
+    total: number;
+    hasMore: boolean;
+  }> {
+    const response = await this.get<{
+      tasks: any[];
+      total: number;
+      has_more: boolean;
+    }>(
+      API_ENDPOINTS.GET_USER_TASKS(userId),
+      { limit, offset }
+    );
+    return {
+      tasks: response.data.tasks || [],
+      total: response.data.total || 0,
+      hasMore: response.data.has_more || false,
+    };
+  }
+
+  /**
    * Delete a report task
    */
   async deleteReportTask(taskId: string): Promise<void> {

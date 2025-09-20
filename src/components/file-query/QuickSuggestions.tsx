@@ -1,15 +1,29 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { BarChart3, FileText, Search, Database } from "lucide-react";
+
+interface Suggestion {
+  text: string;
+  query: string;
+  icon: React.ReactNode;
+}
 
 interface QuickSuggestionsProps {
   className?: string;
   onQuerySelect?: (query: string) => void;
+  suggestions?: Suggestion[];
+  title?: string;
 }
 
-export function QuickSuggestions({ className = "", onQuerySelect }: QuickSuggestionsProps) {
-  const suggestions = [
+export function QuickSuggestions({ 
+  className = "", 
+  onQuerySelect, 
+  suggestions: customSuggestions,
+  title = "Quick suggestion"
+}: QuickSuggestionsProps) {
+  const defaultSuggestions = [
     { 
       text: "What are the main topics covered in the uploaded documents?", 
       query: "What are the main topics covered in the uploaded documents?",
@@ -32,6 +46,8 @@ export function QuickSuggestions({ className = "", onQuerySelect }: QuickSuggest
     },
   ];
 
+  const suggestions = customSuggestions || defaultSuggestions;
+
   const handleSuggestionClick = (query: string) => {
     if (onQuerySelect) {
       onQuerySelect(query);
@@ -39,9 +55,9 @@ export function QuickSuggestions({ className = "", onQuerySelect }: QuickSuggest
   };
 
   return (
-    <div className={`space-y-4 ${className}`} style={{ height: "212px" }}>
+    <div className={`space-y-4 ${className}`} style={{ height: "320px" }}>
       <h3 className="text-xl font-semibold text-white mb-6">
-        Quick suggestion
+        {title}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {suggestions.map((suggestion, index) => (
@@ -63,6 +79,16 @@ export function QuickSuggestions({ className = "", onQuerySelect }: QuickSuggest
               <p className="text-sm text-slate-400">
                 {suggestion.text}
               </p>
+               {/* Quicksuggest SVG at bottom of each card */}
+               <div className="flex justify-start mt-2">
+                <Image
+                  src="/querydemo.svg"
+                  alt="Quick Suggest"
+                  width={100}
+                  height={100}
+                  className="opacity-60"
+                />
+              </div>
             </div>
           </div>
         ))}

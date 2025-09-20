@@ -32,7 +32,7 @@ interface QueryChartsProps {
 type ChartType = "bar" | "line" | "pie" | "area";
 
 const COLORS = [
-  "#3B82F6", "#10B981", "#F59E0B", "#EF4444", 
+  "#13f584", "#10B981", "#F59E0B", "#EF4444", 
   "#8B5CF6", "#06B6D4", "#84CC16", "#F97316"
 ];
 
@@ -79,6 +79,30 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
     }
   }, [chartableColumns, data, xAxis, yAxis]);
 
+  // Helper function to format dates
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString; // Return original if not a valid date
+      
+      const options: Intl.DateTimeFormatOptions = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      };
+      return date.toLocaleDateString('en-US', options);
+    } catch (error) {
+      return dateString; // Return original if formatting fails
+    }
+  };
+
+  // Helper function to check if a value looks like a date
+  const isDateString = (value: any) => {
+    if (typeof value !== 'string') return false;
+    const date = new Date(value);
+    return !isNaN(date.getTime()) && value.match(/\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}/);
+  };
+
   // Process data for charts
   const chartData = useMemo(() => {
     if (!xAxis || !yAxis || !data || data.length === 0) return [];
@@ -86,7 +110,11 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
     if (chartType === "pie") {
       // For pie charts, group by X-axis and aggregate Y-axis
       const grouped = data.reduce((acc: any, row) => {
-        const key = String(row[xAxis] || "Unknown");
+        let key = String(row[xAxis] || "Unknown");
+        // Format date if it looks like a date
+        if (isDateString(key)) {
+          key = formatDate(key);
+        }
         const value = Number(row[yAxis]) || 0;
         
         if (!acc[key]) acc[key] = 0;
@@ -102,7 +130,11 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
     } else {
       // For other charts, group by X-axis and aggregate Y-axis
       const grouped = data.reduce((acc: any, row) => {
-        const key = String(row[xAxis] || "Unknown");
+        let key = String(row[xAxis] || "Unknown");
+        // Format date if it looks like a date
+        if (isDateString(key)) {
+          key = formatDate(key);
+        }
         const value = Number(row[yAxis]) || 0;
         
         if (!acc[key]) acc[key] = { count: 0, sum: 0, values: [] };
@@ -183,7 +215,7 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
               <Legend />
               <Bar 
                 dataKey="value" 
-                fill="#3B82F6" 
+                fill="#13f584" 
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>
@@ -217,10 +249,10 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
               <Line 
                 type="monotone" 
                 dataKey="value" 
-                stroke="#3B82F6" 
+                stroke="#13f584" 
                 strokeWidth={3}
-                dot={{ fill: "#3B82F6", strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, stroke: "#3B82F6", strokeWidth: 2 }}
+                dot={{ fill: "#13f584", strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: "#13f584", strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -283,8 +315,8 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
               <Area 
                 type="monotone" 
                 dataKey="value" 
-                stroke="#3B82F6" 
-                fill="#3B82F6" 
+                stroke="#13f584" 
+                fill="#13f584" 
                 fillOpacity={0.3}
               />
             </AreaChart>
@@ -298,56 +330,54 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
 
   if (!data || data.length === 0) {
     return (
-      <Card className="bg-gray-900/50 border-emerald-400/30">
-        <CardContent className="pt-12 pb-12 text-center">
-          <div className="text-gray-400">
-            No data available for charts
-          </div>
-        </CardContent>
-      </Card>
+      <div className="text-center py-8">
+        <div className="text-white">
+          No data available for charts
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="bg-gray-900/50 border-emerald-400/30">
-      <CardHeader>
-        <CardTitle className="text-green-400 flex items-center gap-2">
-          <BarChart3 className="w-5 h-5" />
-          Data Visualization
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="space-y-4">
         {/* Chart Controls */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-4 gap-4">
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Chart Type</label>
+            <label className="text-sm text-white font-medium">Type</label>
             <Select value={chartType} onValueChange={(value: ChartType) => setChartType(value)}>
-              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
+              <SelectTrigger 
+                className="bg-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:ring-0"
+                style={{ 
+                  outline: 'none',
+                  borderRadius: "99px",
+                  border: "1px solid var(--components-button-outlined, rgba(145, 158, 171, 0.32))"
+                }}
+              >
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-emerald-400/30">
-                <SelectItem value="bar">
+              <SelectContent className="modal-select-content-enhanced">
+                <SelectItem value="bar" className="dropdown-item">
                   <div className="flex items-center gap-2">
                     <BarChart2 className="w-4 h-4" />
-                    Bar Chart
+                    Bar
                   </div>
                 </SelectItem>
-                <SelectItem value="line">
+                <SelectItem value="line" className="dropdown-item">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-4 h-4" />
-                    Line Chart
+                    Line
                   </div>
                 </SelectItem>
-                <SelectItem value="pie">
+                <SelectItem value="pie" className="dropdown-item">
                   <div className="flex items-center gap-2">
                     <PieChartIcon className="w-4 h-4" />
-                    Pie Chart
+                    Pie
                   </div>
                 </SelectItem>
-                <SelectItem value="area">
+                <SelectItem value="area" className="dropdown-item">
                   <div className="flex items-center gap-2">
                     <BarChart3 className="w-4 h-4" />
-                    Area Chart
+                    Area
                   </div>
                 </SelectItem>
               </SelectContent>
@@ -355,30 +385,42 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Aggregation</label>
+            <label className="text-sm text-white font-medium">Aggregation</label>
             <Select value={aggregation} onValueChange={(value: "sum" | "count" | "average") => setAggregation(value)}>
-              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
+              <SelectTrigger 
+                className="bg-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:ring-0"
+                style={{ 
+                  outline: 'none',
+                  borderRadius: "99px",
+                  border: "1px solid var(--components-button-outlined, rgba(145, 158, 171, 0.32))"
+                }}
+              >
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-emerald-400/30">
-                <SelectItem value="sum">Sum</SelectItem>
-                <SelectItem value="count">Count</SelectItem>
-                <SelectItem value="average">Average</SelectItem>
+              <SelectContent className="modal-select-content-enhanced">
+                <SelectItem value="sum" className="dropdown-item">Sum</SelectItem>
+                <SelectItem value="count" className="dropdown-item">Count</SelectItem>
+                <SelectItem value="average" className="dropdown-item">Average</SelectItem>
               </SelectContent>
             </Select>
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">X-Axis (Categories)</label>
+            <label className="text-sm text-white font-medium">X-axis</label>
             <Select value={xAxis} onValueChange={setXAxis}>
-              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
+              <SelectTrigger 
+                className="bg-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:ring-0"
+                style={{ 
+                  outline: 'none',
+                  borderRadius: "99px",
+                  border: "1px solid var(--components-button-outlined, rgba(145, 158, 171, 0.32))"
+                }}
+              >
                 <SelectValue placeholder="Select column" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-emerald-400/30">
+              <SelectContent className="modal-select-content-enhanced">
                 {chartableColumns.map((column) => (
-                  <SelectItem key={column} value={column}>
+                  <SelectItem key={column} value={column} className="dropdown-item">
                     {column}
                   </SelectItem>
                 ))}
@@ -387,14 +429,21 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Y-Axis (Values)</label>
+            <label className="text-sm text-white font-medium">Y-axis</label>
             <Select value={yAxis} onValueChange={setYAxis}>
-              <SelectTrigger className="bg-gray-800/50 border-emerald-400/30 text-white">
+              <SelectTrigger 
+                className="bg-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:ring-0"
+                style={{ 
+                  outline: 'none',
+                  borderRadius: "99px",
+                  border: "1px solid var(--components-button-outlined, rgba(145, 158, 171, 0.32))"
+                }}
+              >
                 <SelectValue placeholder="Select column" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-emerald-400/30">
+              <SelectContent className="modal-select-content-enhanced">
                 {chartableColumns.map((column) => (
-                  <SelectItem key={column} value={column}>
+                  <SelectItem key={column} value={column} className="dropdown-item">
                     {column}
                   </SelectItem>
                 ))}
@@ -404,25 +453,9 @@ export function QueryCharts({ data, columns }: QueryChartsProps) {
         </div>
 
         {/* Chart Display */}
-        <div className="mt-6">
+        <div className="mt-6 bg-gray-800/30 rounded-lg p-4">
           {renderChart()}
         </div>
-
-        {/* Chart Info */}
-        {chartData.length > 0 && (
-          <div className="p-3 bg-green-900/20 border border-green-400/30 rounded-lg">
-            <div className="text-sm text-green-300">
-              <strong>Chart Info:</strong>
-              <div className="mt-1 text-green-200">
-                • {chartData.length} data points
-                • X-axis: {xAxis}
-                • Y-axis: {yAxis} ({aggregation})
-                • Chart type: {chartType.charAt(0).toUpperCase() + chartType.slice(1)}
-              </div>
-            </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    </div>
   );
 } 

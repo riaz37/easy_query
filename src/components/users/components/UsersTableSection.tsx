@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   MoreVertical, 
   ChevronDown, 
@@ -444,19 +445,25 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
           {/* Rows per page */}
           <div className="flex items-center gap-2">
             <span className="text-white text-sm">Rows per page:</span>
-            <select
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(Number(e.target.value))}
-              className="bg-white/10 text-white px-2 py-1 text-sm"
-              style={{
-                border: "1px solid var(--components-button-outlined, rgba(145, 158, 171, 0.32))",
-                borderRadius: "99px"
-              }}
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-            </select>
+            <Select value={rowsPerPage.toString()} onValueChange={(value) => setRowsPerPage(Number(value))}>
+              <SelectTrigger 
+                className="bg-white/10 text-white px-2 py-1 text-sm focus:outline-none focus:ring-0"
+                style={{ 
+                  outline: 'none',
+                  borderRadius: "99px",
+                  width: "auto",
+                  minWidth: "60px",
+                  border: "1px solid var(--components-button-outlined, rgba(145, 158, 171, 0.32))"
+                }}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="modal-select-content-enhanced">
+                <SelectItem value="5" className="dropdown-item">5</SelectItem>
+                <SelectItem value="10" className="dropdown-item">10</SelectItem>
+                <SelectItem value="25" className="dropdown-item">25</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
           {/* Page Info and Controls */}

@@ -328,15 +328,16 @@ export default function FileQueryPage() {
       maxWidth="7xl"
       className="file-query-page"
     >
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-          .file-query-page textarea {
-            background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04)) !important;
-          }
-        `,
-        }}
-      />
+      <div className="mt-12">
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+            .file-query-page textarea {
+              background: var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04)) !important;
+            }
+          `,
+          }}
+        />
       {/* Page Header - Only show when no query results */}
       {queryResults.length === 0 && !queryError && (
         <ContentWrapper className="mb-8">
@@ -458,14 +459,14 @@ export default function FileQueryPage() {
       )}
 
       {/* Table Toggle - Above Query Form */}
-      <ContentWrapper className="mb-6">
+      <ContentWrapper className="mb-4">
         <UseTableToggle useTable={useTable} onToggle={setUseTable} />
       </ContentWrapper>
 
       {/* Main Content */}
-      <div className={`grid grid-cols-1 gap-8 ${useTable ? 'lg:grid-cols-3' : 'lg:grid-cols-1'}`}>
+      <div className={`grid grid-cols-1 gap-6 ${useTable ? 'lg:grid-cols-5' : 'lg:grid-cols-1'}`}>
         {/* Left Column - File Query */}
-        <div className={`space-y-6 ${useTable ? 'lg:col-span-2' : 'lg:col-span-1'}`}>
+        <div className={`space-y-6 ${useTable ? 'lg:col-span-3' : 'lg:col-span-1'}`}>
           <ContentWrapper>
             <FileQueryCard
               query={query}
@@ -481,7 +482,7 @@ export default function FileQueryPage() {
 
         {/* Right Column - Connect Table */}
         {useTable && (
-          <div className="space-y-6 lg:col-span-1">
+          <div className="space-y-6 lg:col-span-2">
             <ContentWrapper>
               <TableSection
                 selectedTable={selectedTable}
@@ -567,6 +568,7 @@ export default function FileQueryPage() {
           </div>
         </div>
       )}
+      </div>
     </PageLayout>
   );
 }

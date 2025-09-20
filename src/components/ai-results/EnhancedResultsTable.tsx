@@ -104,7 +104,7 @@ export function EnhancedResultsTable({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 bg-transparent">
       {/* Search and Filter Controls */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
