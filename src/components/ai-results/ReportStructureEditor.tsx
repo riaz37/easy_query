@@ -211,7 +211,7 @@ export function ReportStructureEditor({
                 variant="outline"
                 size="sm"
                 onClick={() => setShowPreview(!showPreview)}
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                className="border-gray-600 text-gray-300 hover:bg-gray-700 cursor-pointer"
               >
                 {showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 {showPreview ? "Hide Preview" : "Show Preview"}
@@ -219,7 +219,7 @@ export function ReportStructureEditor({
               {!isEditing ? (
                 <Button
                   onClick={() => setIsEditing(true)}
-                  className="bg-emerald-600 hover:bg-emerald-700"
+                  className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
                 >
                   <Edit3 className="w-4 h-4 mr-2" />
                   Edit Structure
@@ -229,7 +229,7 @@ export function ReportStructureEditor({
                   <Button
                     variant="outline"
                     onClick={() => setIsEditing(false)}
-                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                    className="border-gray-600 text-gray-300 hover:bg-gray-700 cursor-pointer"
                   >
                     <X className="w-4 h-4 mr-2" />
                     Cancel
@@ -237,7 +237,7 @@ export function ReportStructureEditor({
                   <Button
                     onClick={saveAllChanges}
                     disabled={saving || !hasUnsavedChanges}
-                    className="bg-emerald-600 hover:bg-emerald-700"
+                    className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
                   >
                     <Save className="w-4 h-4 mr-2" />
                     {saving ? "Saving..." : "Save Changes"}
@@ -305,7 +305,7 @@ export function ReportStructureEditor({
                           <Button
                             size="sm"
                             onClick={() => saveSection(index)}
-                            className="bg-emerald-600 hover:bg-emerald-700"
+                            className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
                           >
                             <CheckCircle className="w-4 h-4" />
                           </Button>
@@ -313,7 +313,7 @@ export function ReportStructureEditor({
                             size="sm"
                             variant="outline"
                             onClick={() => cancelEditing(index)}
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                            className="border-gray-600 text-gray-300 hover:bg-gray-700 cursor-pointer"
                           >
                             <X className="w-4 h-4" />
                           </Button>
@@ -324,7 +324,7 @@ export function ReportStructureEditor({
                             size="sm"
                             variant="outline"
                             onClick={() => startEditing(index)}
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                            className="border-gray-600 text-gray-300 hover:bg-gray-700 cursor-pointer"
                           >
                             <Edit3 className="w-4 h-4" />
                           </Button>
@@ -332,7 +332,7 @@ export function ReportStructureEditor({
                             size="sm"
                             variant="outline"
                             onClick={() => deleteSection(index)}
-                            className="border-red-600 text-red-300 hover:bg-red-900/20"
+                            className="border-red-600 text-red-300 hover:bg-red-900/20 cursor-pointer"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -344,7 +344,7 @@ export function ReportStructureEditor({
                     size="sm"
                     variant="ghost"
                     onClick={() => toggleSectionExpansion(index)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-white cursor-pointer"
                   >
                     {expandedSections.has(index) ? "Collapse" : "Expand"}
                   </Button>
@@ -432,7 +432,7 @@ export function ReportStructureEditor({
               <Button
                 onClick={addNewSection}
                 variant="outline"
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                className="border-gray-600 text-gray-300 hover:bg-gray-700 cursor-pointer"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add New Section

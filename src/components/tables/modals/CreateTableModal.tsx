@@ -138,8 +138,8 @@ export function CreateTableModal({
         className="p-0 border-0 bg-transparent"
         showCloseButton={false}
         style={{
-          width: "1200px",
-          maxWidth: "1200px",
+          width: "900px",
+          maxWidth: "900px",
           maxHeight: "90vh",
         }}
       >

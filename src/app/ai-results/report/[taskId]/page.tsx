@@ -129,13 +129,13 @@ export default function ReportDetailPage() {
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 rounded"
+              className="px-4 py-2 border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 rounded cursor-pointer"
             >
               Try Again
             </button>
             <button
               onClick={() => router.push("/ai-results")}
-              className="px-4 py-2 border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 rounded"
+              className="px-4 py-2 border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 rounded cursor-pointer"
             >
               Back to Reports
             </button>
@@ -160,7 +160,7 @@ export default function ReportDetailPage() {
           </p>
           <button
             onClick={() => router.push("/ai-results")}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded cursor-pointer"
           >
             Back to Reports
           </button>

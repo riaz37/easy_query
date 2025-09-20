@@ -80,22 +80,22 @@ export function ThemeToggle({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon" className={`theme-toggle-button ${className}`}>
+          <Button variant="outline" size="icon" className={`theme-toggle-button cursor-pointer ${className}`}>
             <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] dark:scale-0 dark:-rotate-90" />
             <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] dark:scale-100 dark:rotate-0" />
             <span className="sr-only">Toggle theme</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={(e) => handleThemeChange("light", e as any)}>
+          <DropdownMenuItem onClick={(e) => handleThemeChange("light", e as any)} className="cursor-pointer">
             <Sun className="mr-2 h-4 w-4" />
             Light
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={(e) => handleThemeChange("dark", e as any)}>
+          <DropdownMenuItem onClick={(e) => handleThemeChange("dark", e as any)} className="cursor-pointer">
             <Moon className="mr-2 h-4 w-4" />
             Dark
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={(e) => handleThemeChange("system", e as any)}>
+          <DropdownMenuItem onClick={(e) => handleThemeChange("system", e as any)} className="cursor-pointer">
             <div className="mr-2 h-4 w-4 flex items-center justify-center">
               <div className="h-2 w-2 rounded-full bg-current" />
             </div>

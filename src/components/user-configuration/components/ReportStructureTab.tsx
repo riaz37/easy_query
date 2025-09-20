@@ -473,7 +473,7 @@ export const ReportStructureTab = React.memo<ReportStructureTabProps>(
                     </div>
                     <button
                       onClick={() => setIsAddModalOpen(false)}
-                      className="modal-close-button"
+                      className="modal-close-button cursor-pointer"
                     >
                       <X className="h-5 w-5" />
                     </button>

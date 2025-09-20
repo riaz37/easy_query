@@ -220,7 +220,7 @@ function TaskListPanel() {
             key={key}
             onClick={() => setActiveTab(key as any)}
             className={cn(
-              "flex-1 px-3 py-2 text-sm font-medium transition-colors",
+              "flex-1 px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
               "hover:bg-gray-800 border-b-2",
               activeTab === key
                 ? "border-blue-500 text-blue-400"
@@ -295,7 +295,7 @@ function TaskListPanel() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-white"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-white cursor-pointer"
                       onClick={() => {
                         // TODO: Implement view result functionality
                         console.log('View result:', task.result);
@@ -309,7 +309,7 @@ function TaskListPanel() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-red-400"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-red-400 cursor-pointer"
                       onClick={() => removeTask(task.id)}
                     >
                       <Trash2 className="w-3 h-3" />
@@ -329,7 +329,7 @@ function TaskListPanel() {
             variant="outline"
             size="sm"
             onClick={clearCompletedTasks}
-            className="w-full text-gray-400 border-gray-600 hover:bg-gray-800"
+            className="w-full text-gray-400 border-gray-600 hover:bg-gray-800 cursor-pointer"
           >
             <Trash2 className="w-4 h-4 mr-2" />
             Clear All Completed
