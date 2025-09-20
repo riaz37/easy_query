@@ -37,6 +37,7 @@ export default function AIResultsPage() {
       <PageHeader
         title="AI-Generated Reports"
         description="View and manage your completed AI-generated reports based on your queries"
+        enhancedTitle={true}
       />
 
       <div className="space-y-6">

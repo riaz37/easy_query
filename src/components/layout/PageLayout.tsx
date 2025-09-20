@@ -143,6 +143,7 @@ interface PageHeaderProps {
   icon?: React.ReactNode;
   actions?: React.ReactNode;
   className?: string;
+  enhancedTitle?: boolean;
 }
 
 export function PageHeader({
@@ -151,6 +152,7 @@ export function PageHeader({
   icon,
   actions,
   className,
+  enhancedTitle = false,
 }: PageHeaderProps) {
   const theme = useTheme();
   const isDark = theme === 'dark';
@@ -169,7 +171,12 @@ export function PageHeader({
             </div>
           )}
           <div>
-            <h1 className={`text-3xl font-bold font-barlow ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            <h1 className={cn(
+              "text-3xl font-bold font-barlow",
+              enhancedTitle 
+                ? "modal-title-enhanced" 
+                : isDark ? 'text-white' : 'text-gray-900'
+            )}>
               {title}
             </h1>
             {description && (

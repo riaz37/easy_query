@@ -193,27 +193,9 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
       >
         {/* Header Section */}
         <div className="p-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-white">
-              Completed Reports ({totalTasks})
-            </h2>
-            <Button
-              onClick={handleRefresh}
-              variant="outline"
-              size="sm"
-              className="border-0 text-white hover:bg-white/10 cursor-pointer"
-              style={{
-                background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
-                borderRadius: "118.8px",
-                height: "40px",
-                minWidth: "100px"
-              }}
-              disabled={loading}
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
-          </div>
+          <h2 className="modal-title-enhanced text-2xl font-bold">
+            Completed Reports ({totalTasks})
+          </h2>
         </div>
 
         {/* Reports List */}
