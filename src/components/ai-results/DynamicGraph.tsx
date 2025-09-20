@@ -764,12 +764,6 @@ export function DynamicGraph({
 
   return (
     <div className="bg-transparent rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-4">
-        {getChartIcon(graphData.graph_type)}
-        <h4 className="text-lg font-semibold text-white">
-          {getChartTypeName(graphData.graph_type)}
-        </h4>
-      </div>
 
       <div className="bg-gray-800/30 rounded-lg p-4">{renderChart()}</div>
 

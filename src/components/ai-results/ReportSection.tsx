@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { FileText, Brain } from "lucide-react";
+import { Brain } from "lucide-react";
 import { QueryResultsTable } from "@/components/database-query/QueryResultsTable";
 import { DynamicGraph } from "./DynamicGraph";
 
@@ -21,23 +21,29 @@ export function ReportSection({
   expandedSections,
   toggleSection,
 }: ReportSectionProps) {
+  const [showGraph, setShowGraph] = useState(true);
   const isExpanded = expandedSections.has(index);
 
   return (
-    <div className="query-content-gradient p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200">
+    <div className="query-content-gradient p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">
       <div className="mb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => toggleSection(index)}
-              className="w-8 h-8 bg-gray-600/30 rounded-full flex items-center justify-center hover:bg-gray-500/40 transition-colors"
+              className="w-8 h-8 bg-gray-600/30 rounded-full flex items-center justify-center hover:bg-gray-500/40 transition-colors cursor-pointer"
             >
               <img src="/ai-results/plus.svg" alt="Plus" className="w-4 h-4" />
             </button>
-            <h2 className="text-xl text-white flex items-center gap-3 mb-2">
-              <FileText className="h-5 w-5 text-emerald-400" />
-              Section {section.section_number}: {section.section_name}
-            </h2>
+            <div className="mb-2">
+              <div className="text-xl font-semibold">
+                <span style={{ color: "var(--p-main, rgba(19, 245, 132, 1))" }}>#{section.section_number}</span>
+                <span style={{ color: "var(--text-primary, rgba(255, 255, 255, 1))" }}> Response</span>
+              </div>
+              <div className="text-sm" style={{ color: "var(--p-main, rgba(19, 245, 132, 1))" }}>
+                {section.section_name}...
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -122,11 +128,8 @@ export function ReportSection({
                           .map((insight, i) => (
                             <div
                               key={i}
-                              className="flex items-start gap-2 mb-2"
+                              className="mb-2"
                             >
-                              <span className="text-emerald-400 text-xs mt-1">
-                                •
-                              </span>
                               <span>{insight.trim()}</span>
                             </div>
                           ));
@@ -168,11 +171,8 @@ export function ReportSection({
                           .map((trend, i) => (
                             <div
                               key={i}
-                              className="flex items-start gap-2 mb-2"
+                              className="mb-2"
                             >
-                              <span className="text-blue-400 text-xs mt-1">
-                                •
-                              </span>
                               <span>{trend.trim()}</span>
                             </div>
                           ));
@@ -214,11 +214,8 @@ export function ReportSection({
                           .map((anomaly, i) => (
                             <div
                               key={i}
-                              className="flex items-start gap-2 mb-2"
+                              className="mb-2"
                             >
-                              <span className="text-orange-400 text-xs mt-1">
-                                •
-                              </span>
                               <span>{anomaly.trim()}</span>
                             </div>
                           ));
@@ -260,11 +257,8 @@ export function ReportSection({
                           .map((implication, i) => (
                             <div
                               key={i}
-                              className="flex items-start gap-2 mb-2"
+                              className="mb-2"
                             >
-                              <span className="text-purple-400 text-xs mt-1">
-                                •
-                              </span>
                               <span>{implication.trim()}</span>
                             </div>
                           ));
@@ -306,11 +300,8 @@ export function ReportSection({
                           .map((recommendation, i) => (
                             <div
                               key={i}
-                              className="flex items-start gap-2 mb-2"
+                              className="mb-2"
                             >
-                              <span className="text-green-400 text-xs mt-1">
-                                •
-                              </span>
                               <span>{recommendation.trim()}</span>
                             </div>
                           ));
@@ -320,13 +311,15 @@ export function ReportSection({
                   </div>
                 </div>
               )}
-
             </div>
           )}
 
           {/* Data Visualization */}
           {section.graph_and_analysis && section.table && section.table.data && (
             <div className="mb-6">
+              <h3 className="modal-title-enhanced text-lg font-semibold mb-4">
+                Data Visualization
+              </h3>
               <DynamicGraph
                 graphData={section.graph_and_analysis}
                 tableData={section.table.data}
