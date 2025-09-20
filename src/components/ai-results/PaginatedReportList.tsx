@@ -265,12 +265,17 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                             <Button
                               onClick={() => handleDownloadReport(task)}
                               variant="outline"
-                              className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
+                              className="border-0 text-white hover:bg-emerald-400/10"
                               size="sm"
-                              style={{ borderRadius: "99px", height: "32px", minWidth: "90px" }}
+                              style={{ 
+                                borderRadius: "99px", 
+                                height: "32px", 
+                                minWidth: "90px",
+                                background: "rgba(255, 255, 255, 0.04)"
+                              }}
                             >
-                              <Download className="w-4 h-4 mr-1" />
                               Download
+                              <img src="/ai-results/download.svg" alt="Download" className="w-4 h-4 ml-1" />
                             </Button>
                           )}
                         </div>
