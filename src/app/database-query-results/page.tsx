@@ -89,19 +89,10 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
           <div className="p-6">
             {/* Title and Query Info */}
             <div className="mb-6">
-              <h1 className="modal-title-enhanced text-3xl font-bold mb-4">
-                Query Results
+              <h1 className="modal-title-enhanced text-3xl font-bold mb-2">
+                Query
               </h1>
-              <div className="p-4 rounded-lg" style={{
-                background: "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
-                border: "1px solid var(--components-button-outlined, rgba(145, 158, 171, 0.32))"
-              }}>
-                <div className="flex items-center gap-2 mb-2">
-                  <FileText className="w-4 h-4 text-emerald-400" />
-                  <span className="text-emerald-400 font-medium">Query:</span>
-                </div>
-                <p className="text-white text-sm">{currentQuery.query}</p>
-              </div>
+              <p className="text-white text-sm">{currentQuery.query}</p>
             </div>
 
             {/* Action Bar */}
