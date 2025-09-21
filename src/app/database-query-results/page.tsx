@@ -158,17 +158,17 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                 >
                   <img src="/tables/filter.svg" alt="Filter" className="w-6 h-6" />
                 </Button>
-              </div>
-            </div>
           </div>
+        </div>
+      </div>
 
           {/* Content Section */}
           <div className="px-6 pb-6">
-            {activeTab === "table" ? (
-              <QueryResultsTable data={queryData} columns={columns} />
-            ) : (
-              <QueryCharts data={queryData} columns={columns} />
-            )}
+        {activeTab === "table" ? (
+          <QueryResultsTable data={queryData} columns={columns} />
+        ) : (
+          <QueryCharts data={queryData} columns={columns} />
+        )}
           </div>
         </div>
       </div>

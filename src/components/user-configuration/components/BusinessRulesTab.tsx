@@ -13,7 +13,6 @@ export const BusinessRulesTab = React.memo<BusinessRulesTabProps>(({
   onEdit,
   onSave,
   onCancel,
-  onReset,
   onContentChange,
 }) => {
   return (
@@ -26,7 +25,6 @@ export const BusinessRulesTab = React.memo<BusinessRulesTabProps>(({
         onEdit={onEdit}
         onSave={onSave}
         onCancel={onCancel}
-        onReset={onReset}
       />
     </div>
   );

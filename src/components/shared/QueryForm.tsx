@@ -71,7 +71,7 @@ export function QueryForm({
   };
 
   return (
-    <div className={`relative -mt-16 px-0.5 z-10 ${className}`}>
+    <div className={`relative -mt-16 px-0 z-10 ${className}`}>
       <div className="relative">
         <textarea
           ref={textareaRef}

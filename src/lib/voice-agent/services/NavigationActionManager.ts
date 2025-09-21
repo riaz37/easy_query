@@ -317,7 +317,7 @@ export class NavigationActionManager {
       'file-query': '/file-query',
       'tables': '/tables',
       'users': '/users',
-      'ai-results': '/ai-results',
+      'ai-reports': '/ai-reports',
       'company-structure': '/company-structure',
       'user-configuration': '/user-configuration',
       'business-rules': '/business-rules',

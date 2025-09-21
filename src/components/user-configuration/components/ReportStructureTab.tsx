@@ -357,17 +357,14 @@ export const ReportStructureTab = React.memo<ReportStructureTabProps>(
                       {structure.isEditing ? (
                         <>
                           <Button
-                            size="sm"
                             onClick={() => saveStructure(index)}
-                            className="bg-emerald-600 hover:bg-emerald-700"
+                            className="modal-button-primary"
                           >
                             Save
                           </Button>
                           <Button
-                            size="sm"
-                            variant="outline"
                             onClick={() => cancelEditing(index)}
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                            className="modal-button-secondary"
                           >
                             Cancel
                           </Button>
@@ -420,31 +417,33 @@ export const ReportStructureTab = React.memo<ReportStructureTabProps>(
                   {/* Report Content - Same styling as business rules */}
                   <div className="space-y-3">
                     <div className="query-content-gradient rounded-[16px] overflow-hidden">
-                      <div className="p-4 max-h-[600px] overflow-y-auto">
-                        {structure.isEditing ? (
-                          <Textarea
-                            value={structure.value}
-                            onChange={(e) =>
-                              updateStructure(
-                                index,
-                                "value",
-                                e.target.value
-                              )
-                            }
-                            className="modal-input-enhanced min-h-[200px] border-0 bg-transparent focus:ring-0 focus:ring-offset-0 rounded-[16px]"
-                            placeholder="Enter SQL business rules for this report structure"
-                          />
-                        ) : structure.value ? (
+                      {structure.isEditing ? (
+                        <Textarea
+                          value={structure.value}
+                          onChange={(e) =>
+                            updateStructure(
+                              index,
+                              "value",
+                              e.target.value
+                            )
+                          }
+                          className="modal-input-enhanced min-h-[200px] max-h-[600px] resize-y border-0 bg-transparent focus:ring-0 focus:ring-offset-0 rounded-[16px]"
+                          placeholder="Enter SQL business rules for this report structure"
+                        />
+                      ) : structure.value ? (
+                        <div className="p-4 max-h-[600px] overflow-y-auto">
                           <pre className="text-white whitespace-pre-wrap text-sm font-mono">
                             {structure.value}
                           </pre>
-                        ) : (
+                        </div>
+                      ) : (
+                        <div className="p-4 max-h-[600px] overflow-y-auto">
                           <p className="text-gray-400 italic">
                             No business rules configured for this report
                             structure.
                           </p>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -116,7 +116,7 @@ export function PaginatedReportList({ onViewReport, onDownloadReport }: Paginate
       onViewReport(task.task_id, task.results);
     } else {
       // Navigate to task detail page if no results in list
-      router.push(`/ai-results/report/${task.task_id}`);
+      router.push(`/ai-reports/report/${task.task_id}`);
     }
   };
 
@@ -275,7 +275,7 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                               }}
                             >
                               Download
-                              <img src="/ai-results/download.svg" alt="Download" className="w-4 h-4 ml-1" />
+                              <img src="/tables/download.svg" alt="Download" className="w-4 h-4 ml-1" />
                             </Button>
                           )}
                         </div>

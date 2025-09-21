@@ -261,8 +261,7 @@ export function CreateVectorDBAccessModal({
             <DialogHeader className="modal-header-enhanced">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <DialogTitle className="modal-title-enhanced flex items-center">
-                    <Brain className="w-5 h-5 mr-2 text-green-400" />
+                  <DialogTitle className="modal-title-enhanced">
                     {editingUser ? "Edit Vector DB Access" : "Create Vector DB Access"}
                   </DialogTitle>
                   <p className="modal-description-enhanced">
@@ -284,7 +283,7 @@ export function CreateVectorDBAccessModal({
             <div className="modal-form-content">
               {/* User ID Input */}
               <div className="modal-form-group">
-                <Label className="modal-label-enhanced">User ID *</Label>
+                <Label className="modal-label-enhanced">User ID <span className="text-red-500">*</span></Label>
                 <Input
                   placeholder="Enter user ID (email)"
                   value={selectedUserId}
@@ -298,8 +297,7 @@ export function CreateVectorDBAccessModal({
 
               {/* Database Selection */}
               <div className="modal-form-group">
-                <Label className="modal-label-enhanced flex items-center gap-2">
-                  <Database className="w-4 h-4" />
+                <Label className="modal-label-enhanced">
                   Database
                 </Label>
             
@@ -347,8 +345,7 @@ export function CreateVectorDBAccessModal({
 
           {/* Table Selection */}
           <div className="modal-form-group">
-            <Label className="modal-label-enhanced flex items-center gap-2">
-              <Brain className="w-4 h-4" />
+            <Label className="modal-label-enhanced">
               Tables
             </Label>
 
@@ -372,7 +369,6 @@ export function CreateVectorDBAccessModal({
                 size="sm"
                 className="modal-button-secondary"
               >
-                <Plus className="w-4 h-4 mr-1" />
                 Add Table
               </Button>
             </div>
@@ -443,9 +439,9 @@ export function CreateVectorDBAccessModal({
                       {table}
                       <button
                         onClick={() => handleRemoveTable(table)}
-                        className="ml-2 hover:text-red-400"
+                        className="ml-2 hover:text-red-400 text-red-400"
                       >
-                        <X className="w-3 h-3" />
+                        ×
                       </button>
                     </Badge>
                   ))}
@@ -459,8 +455,7 @@ export function CreateVectorDBAccessModal({
             <div className="modal-form-group">
               <Card className="modal-input-enhanced">
                 <CardHeader>
-                  <CardTitle className="modal-title-enhanced text-lg flex items-center">
-                    <Brain className="w-5 h-5 mr-2 text-green-400" />
+                  <CardTitle className="modal-title-enhanced text-lg">
                     Access Summary
                   </CardTitle>
                 </CardHeader>
@@ -512,7 +507,6 @@ export function CreateVectorDBAccessModal({
           {error && (
             <div className="modal-form-group">
               <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
                 <span className="text-red-400 text-sm">{error}</span>
               </div>
             </div>
@@ -522,7 +516,6 @@ export function CreateVectorDBAccessModal({
           {submitError && (
             <div className="modal-form-group">
               <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
                 <span className="text-red-400 text-sm">{submitError}</span>
               </div>
             </div>
@@ -532,7 +525,6 @@ export function CreateVectorDBAccessModal({
           {submitSuccess && (
             <div className="modal-form-group">
               <div className="flex items-center p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-400 mr-2" />
                 <span className="text-green-400 text-sm">
                   Vector DB access {editingUser ? 'updated' : 'created'} successfully!
                 </span>

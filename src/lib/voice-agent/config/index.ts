@@ -27,7 +27,7 @@ export const VOICE_AGENT_CONFIG = {
     DATABASE_QUERY: ['database', 'sql', 'query', 'database query', 'database search'],
     TABLES: ['table', 'tables', 'show tables', 'manage tables'],
     USERS: ['user', 'users', 'user management', 'manage users'],
-    REPORTS: ['report', 'ai results', 'ai-results', 'generate report'],
+    REPORTS: ['report', 'ai reports', 'ai-reports', 'generate report'],
     COMPANY_STRUCTURE: ['company', 'hierarchy', 'company structure', 'organization']
   },
   
@@ -38,7 +38,7 @@ export const VOICE_AGENT_CONFIG = {
     'database-query': 'database-query',
     'tables': 'tables',
     'users': 'users',
-    'ai-results': 'ai-results',
+    'ai-reports': 'ai-reports',
     'company-structure': 'company-structure'
   },
   

@@ -23,7 +23,7 @@ export default function Menu() {
     {
       icon: "/dashboard/Report.svg",
       name: "AI Reports",
-      path: "/ai-results",
+      path: "/ai-reports",
     },
     {
       icon: "/dashboard/File Query.svg",

@@ -363,7 +363,7 @@ export class VoiceAgentService {
       "dashboard",
       "database-query",
       "file-query",
-      "ai-results",
+      "ai-reports",
       "auth",
       "users",
     ];

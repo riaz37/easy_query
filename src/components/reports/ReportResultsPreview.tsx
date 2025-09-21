@@ -90,7 +90,7 @@ export function ReportResultsPreview({
                     "reportResults",
                     JSON.stringify(reportResults)
                   );
-                  window.open("/ai-results", "_blank");
+                  window.open("/ai-reports", "_blank");
                 }}
                 className="bg-green-600 hover:bg-green-700 text-white"
                 data-voice-action="view report"

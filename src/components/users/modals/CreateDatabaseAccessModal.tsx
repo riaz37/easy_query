@@ -213,8 +213,7 @@ export function CreateDatabaseAccessModal({
             <DialogHeader className="modal-header-enhanced">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <Database className="h-5 w-5 text-green-400" />
+                  <DialogTitle className="modal-title-enhanced">
                     {editingUser ? "Edit Database Access" : "Create Database Access"}
                   </DialogTitle>
                   <p className="modal-description-enhanced">
@@ -236,7 +235,7 @@ export function CreateDatabaseAccessModal({
             <div className="modal-form-content">
               {/* User ID Input */}
               <div className="modal-form-group">
-                <Label className="modal-label-enhanced">User ID *</Label>
+                <Label className="modal-label-enhanced">User ID <span className="text-red-500">*</span></Label>
                 <Input
                   placeholder="Enter user ID (email)"
                   value={selectedUserId}
@@ -250,9 +249,8 @@ export function CreateDatabaseAccessModal({
 
               {/* Company Selection */}
               <div className="modal-form-group">
-                <Label className="modal-label-enhanced flex items-center gap-2">
-                  <Building2 className="w-4 h-4" />
-                  Parent Company *
+                <Label className="modal-label-enhanced">
+                  Parent Company <span className="text-red-500">*</span>
                 </Label>
                 <Select value={selectedParentCompany} onValueChange={handleParentCompanyChange}>
                   <SelectTrigger className="modal-select-enhanced w-full">
@@ -274,8 +272,7 @@ export function CreateDatabaseAccessModal({
               {/* Sub Company - Optional */}
               {selectedParentCompany && (
                 <div className="modal-form-group">
-                  <Label className="modal-label-enhanced flex items-center gap-2">
-                    <Building2 className="w-4 h-4" />
+                  <Label className="modal-label-enhanced">
                     Sub Company (Optional)
                   </Label>
                   <Select value={selectedSubCompany} onValueChange={handleSubCompanyChange}>
@@ -302,8 +299,7 @@ export function CreateDatabaseAccessModal({
               {/* Database Display (Auto-populated) */}
               {selectedDatabase && (
                 <div className="modal-form-group">
-                  <Label className="modal-label-enhanced flex items-center gap-2">
-                    <Database className="w-4 h-4" />
+                  <Label className="modal-label-enhanced">
                     Selected Database
                   </Label>
                   <div className="p-3 modal-input-enhanced rounded-lg">
@@ -327,10 +323,9 @@ export function CreateDatabaseAccessModal({
           {(selectedParentCompany || selectedSubCompany) && !selectedDatabase && (
             <div className="space-y-3">
               <Label className={cn(
-                "font-semibold flex items-center",
+                "font-semibold",
                 theme === "dark" ? "text-white" : "text-gray-800"
               )}>
-                <Database className="w-4 h-4 mr-2 text-yellow-400" />
                 Database Selection Issue
               </Label>
               <div className="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
@@ -432,7 +427,6 @@ export function CreateDatabaseAccessModal({
               {error && (
                 <div className="modal-form-group">
                   <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                    <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
                     <span className="text-red-400 text-sm">{error}</span>
                   </div>
                 </div>

@@ -13,18 +13,28 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Table as TableIcon,
   XIcon,
   Columns,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   Plus,
-  RefreshCw,
+  MoreVertical,
+  Eye,
+  Edit,
+  Trash2,
+  Table as TableIcon,
 } from "lucide-react";
 import { UserTablesResponse, UserTable } from "@/types/api";
 import { useNewTable } from "@/lib/hooks/use-new-table";
 import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface YourTablesModalProps {
   open: boolean;
@@ -239,8 +249,7 @@ export function YourTablesModal({
             <DialogHeader className="modal-header-enhanced">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <DialogTitle className="modal-title-enhanced flex items-center gap-2">
-                    <TableIcon className="h-5 w-5 text-green-400" />
+                  <DialogTitle className="modal-title-enhanced">
                     Your Database Tables
                   </DialogTitle>
                   <p className="modal-description-enhanced">
@@ -248,15 +257,6 @@ export function YourTablesModal({
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button
-                    onClick={fetchUserTables}
-                    variant="ghost"
-                    size="icon"
-                    className="text-white hover:bg-white/10"
-                    disabled={loading}
-                  >
-                    <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                  </Button>
                 <button
                   onClick={() => onOpenChange(false)}
                   className="modal-close-button cursor-pointer"
@@ -391,14 +391,51 @@ export function YourTablesModal({
                             </Badge>
                             </td>
                             <td className="px-6 py-4 text-right">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setSelectedTable(table.table_name)}
-                                className="text-white hover:bg-white/10"
-                              >
-                                <Columns className="h-4 w-4" />
-                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="text-white hover:bg-white/10"
+                                  >
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent 
+                                  align="end" 
+                                  className="w-48 bg-gray-800 border-gray-700"
+                                >
+                                  <DropdownMenuItem 
+                                    onClick={() => {
+                                      setSelectedTable(table.table_name);
+                                      toast.info(`Viewing table: ${table.table_name}`);
+                                    }}
+                                    className="text-white hover:bg-white/10 cursor-pointer"
+                                  >
+                                    <Eye className="h-4 w-4 mr-2" />
+                                    View Table
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    onClick={() => {
+                                      toast.info(`Editing table: ${table.table_name}`);
+                                    }}
+                                    className="text-white hover:bg-white/10 cursor-pointer"
+                                  >
+                                    <Edit className="h-4 w-4 mr-2" />
+                                    Edit Table
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator className="bg-gray-600" />
+                                  <DropdownMenuItem 
+                                    onClick={() => {
+                                      toast.info(`Deleting table: ${table.table_name}`);
+                                    }}
+                                    className="text-red-400 hover:bg-red-900/20 cursor-pointer"
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-2" />
+                                    Delete Table
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </td>
                           </tr>
                         ))}

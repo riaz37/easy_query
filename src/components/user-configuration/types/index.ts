@@ -65,7 +65,6 @@ export interface BusinessRulesTabProps {
   onEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
-  onReset: () => void;
   onContentChange: (content: string) => void;
 }
 
@@ -108,7 +107,6 @@ export interface BusinessRulesStatusCardProps {
   onEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
-  onReset: () => void;
 }
 
 export interface BusinessRulesEditorProps {
@@ -119,7 +117,6 @@ export interface BusinessRulesEditorProps {
   onEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
-  onReset: () => void;
 }
 
 export interface ContextInfoCardProps {

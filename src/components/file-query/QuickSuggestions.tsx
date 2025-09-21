@@ -80,12 +80,12 @@ export function QuickSuggestions({
                 {suggestion.text}
               </p>
                {/* Quicksuggest SVG at bottom of each card */}
-               <div className="flex justify-start mt-2">
+               <div className="flex justify-start mt-2 -ml-4 -mb-4">
                 <Image
                   src="/querydemo.svg"
                   alt="Quick Suggest"
-                  width={100}
-                  height={100}
+                  width={120}
+                  height={120}
                   className="opacity-60"
                 />
               </div>

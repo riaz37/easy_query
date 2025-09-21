@@ -48,7 +48,8 @@ export function CompanyCard({
         className={cn(
           "relative cursor-pointer query-content-gradient modal-enhanced",
           "hover:shadow-lg hover:shadow-emerald-500/20",
-          isSelected && "ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-500/30",
+          isSelected &&
+            "ring-2 ring-emerald-400/50 shadow-lg shadow-emerald-500/30",
           isMainCompany ? "w-[500px] h-[280px]" : "w-[480px] h-[260px]"
         )}
         onClick={onSelect}
@@ -61,7 +62,7 @@ export function CompanyCard({
               alt="Meta Logo"
               className="w-full h-full object-cover rounded-l-[30px]"
               style={{
-                objectPosition: 'left center'
+                objectPosition: "left center",
               }}
             />
           </div>
@@ -73,20 +74,19 @@ export function CompanyCard({
                 {company.name}
               </h3>
             </div>
-            
+
             <p className="modal-description-enhanced line-clamp-3 mb-4 leading-relaxed">
-              {company.description || "Automate refund processes with configurable policy enforcement."}
+              {company.description ||
+                "Automate refund processes with configurable policy enforcement."}
             </p>
-            
+
             {company.address && (
               <p className="text-xs text-gray-300 truncate flex items-center gap-1">
-                <span>📍</span>
                 {company.address}
               </p>
             )}
           </div>
         </CardContent>
-
 
         {/* Action Buttons */}
         <div className="absolute bottom-4 right-4 flex gap-2 pointer-events-auto">

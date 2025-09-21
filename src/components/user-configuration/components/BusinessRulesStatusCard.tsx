@@ -16,9 +16,6 @@ import {
   AlertCircle,
   RefreshCw,
   Edit3,
-  Save,
-  X,
-  RotateCcw,
   Plus,
 } from 'lucide-react';
 import { BusinessLogicModal } from './BusinessLogicModal';
@@ -145,27 +142,15 @@ export const BusinessRulesStatusCard = React.memo<BusinessRulesStatusCardProps>(
                     <Button
                       onClick={onSave}
                       disabled={!editorState.hasUnsavedChanges}
-                      className="bg-green-600 hover:bg-green-700 text-white"
+                      className="modal-button-primary"
                     >
-                      <Save className="w-4 h-4 mr-2" />
                       Save
                     </Button>
                     <Button
                       onClick={onCancel}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                      className="modal-button-secondary"
                     >
-                      <X className="w-4 h-4 mr-2" />
                       Cancel
-                    </Button>
-                    <Button
-                      onClick={onReset}
-                      variant="outline"
-                      disabled={!editorState.hasUnsavedChanges}
-                      className="border-blue-600 text-blue-300 hover:bg-blue-700"
-                    >
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      Reset
                     </Button>
                   </div>
                 )}
