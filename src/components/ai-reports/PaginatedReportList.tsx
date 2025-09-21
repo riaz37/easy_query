@@ -21,7 +21,7 @@ import {
   ChevronRight,
   RefreshCw
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, format, isValid, parseISO } from 'date-fns';
 import { ESAPBrandLoader } from '@/components/ui/loading';
 
 interface ReportTask {
@@ -48,6 +48,30 @@ interface PaginatedReportListProps {
   onDownloadReport: (taskId: string, results: any) => void;
 }
 
+// Utility function to format timestamps safely
+const formatTimestamp = (timestamp: string | undefined | null) => {
+  if (!timestamp) return { relative: 'Unknown', absolute: '', raw: 'No timestamp' };
+  
+  try {
+    // Try to parse the timestamp
+    const date = typeof timestamp === 'string' ? parseISO(timestamp) : new Date(timestamp);
+    
+    if (!isValid(date)) {
+      console.warn('Invalid timestamp:', timestamp);
+      return { relative: 'Invalid date', absolute: '', raw: timestamp };
+    }
+    
+    return {
+      relative: formatDistanceToNow(date, { addSuffix: true }),
+      absolute: format(date, 'MMM dd, yyyy HH:mm'),
+      raw: timestamp
+    };
+  } catch (error) {
+    console.warn('Error formatting timestamp:', timestamp, error);
+    return { relative: 'Invalid date', absolute: '', raw: timestamp };
+  }
+};
+
 export function PaginatedReportList({ onViewReport, onDownloadReport }: PaginatedReportListProps) {
   const router = useRouter();
   const { user } = useAuthContext();
@@ -59,7 +83,7 @@ export function PaginatedReportList({ onViewReport, onDownloadReport }: Paginate
   const [hasMore, setHasMore] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
 
-  const limit = 5;
+  const limit = 20; // Load more tasks to ensure we have enough completed ones
   const offset = currentPage * limit;
 
   // Load tasks from backend
@@ -92,6 +116,16 @@ export function PaginatedReportList({ onViewReport, onDownloadReport }: Paginate
     loadTasks(currentPage);
   }, [loadTasks, currentPage]);
 
+  // Filter completed tasks for display
+  const completedTasks = tasks.filter(task => task.status === 'completed');
+  
+  // Calculate pagination for completed tasks only
+  const completedTasksPerPage = 5;
+  const startIndex = currentPage * completedTasksPerPage;
+  const endIndex = startIndex + completedTasksPerPage;
+  const paginatedCompletedTasks = completedTasks.slice(startIndex, endIndex);
+  const hasMoreCompleted = endIndex < completedTasks.length;
+
   // Refresh tasks
   const handleRefresh = useCallback(() => {
     loadTasks(currentPage);
@@ -99,10 +133,10 @@ export function PaginatedReportList({ onViewReport, onDownloadReport }: Paginate
 
   // Pagination handlers
   const handleNextPage = useCallback(() => {
-    if (hasMore) {
+    if (hasMoreCompleted) {
       setCurrentPage(prev => prev + 1);
     }
-  }, [hasMore]);
+  }, [hasMoreCompleted]);
 
   const handlePrevPage = useCallback(() => {
     if (currentPage > 0) {
@@ -125,9 +159,6 @@ export function PaginatedReportList({ onViewReport, onDownloadReport }: Paginate
       onDownloadReport(task.task_id, task.results);
     }
   };
-
-  // Filter completed tasks for display
-  const completedTasks = tasks.filter(task => task.status === 'completed');
 
   if (loading && tasks.length === 0) {
     return (
@@ -191,15 +222,9 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
           backdropFilter: "blur(30px)"
         }}
       >
-        {/* Header Section */}
-        <div className="p-6">
-          <h2 className="modal-title-enhanced text-2xl font-bold">
-            Completed Reports ({totalTasks})
-          </h2>
-        </div>
 
         {/* Reports List */}
-        <div className="px-6 pb-6">
+        <div className="p-6">
           <div className="rounded-t-xl overflow-hidden">
             <table className="w-full">
               <thead>
@@ -224,14 +249,14 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                 </tr>
               </thead>
               <tbody>
-                {completedTasks.length === 0 ? (
+                {paginatedCompletedTasks.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-6 py-8 text-center text-white">
                       No completed reports found
                     </td>
                   </tr>
                 ) : (
-                  completedTasks.map((task) => (
+                  paginatedCompletedTasks.map((task) => (
                     <tr 
                       key={task.task_id} 
                       className="border-b border-white/10 hover:bg-white/5 transition-colors"
@@ -240,12 +265,11 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                         <div className="text-white font-medium">
                           {task.user_query ? task.user_query.substring(0, 50) + (task.user_query.length > 50 ? '...' : '') : 'Generated Report'}
                         </div>
-                        <div className="text-gray-400 text-sm">
-                          ID: {task.task_id.substring(0, 8)}...
-                        </div>
                       </td>
                       <td className="px-6 py-4 text-white">
-                        {task.completed_at ? formatDistanceToNow(new Date(task.completed_at), { addSuffix: true }) : 'Unknown'}
+                        <div className="text-sm">
+                          {formatTimestamp(task.completed_at || task.created_at).absolute}
+                        </div>
                       </td>
                       <td className="px-6 py-4 text-white">
                         {task.total_queries || 0}
@@ -291,7 +315,7 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
         {/* Pagination Controls */}
         <div className="px-6 py-4 flex items-center justify-between">
           <div className="text-sm text-gray-400">
-            Showing {completedTasks.length} of {totalTasks} reports
+            Showing {paginatedCompletedTasks.length} of {completedTasks.length} completed reports
           </div>
           
           <div className="flex items-center gap-2">
@@ -313,7 +337,7 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
             
             <Button
               onClick={handleNextPage}
-              disabled={!hasMore || loading}
+              disabled={!hasMoreCompleted || loading}
               variant="outline"
               size="sm"
               className="border-0 text-white hover:bg-white/10 cursor-pointer disabled:opacity-50"

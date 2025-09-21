@@ -69,7 +69,7 @@ export function ExcelStep1UploadFile({
           {/* Upload Icon - Left Side - Full width like system card */}
           <div className="flex-shrink-0 w-1/2 h-full relative overflow-hidden">
             <img
-              src="/tables/uploadexcel.svg"
+              src="/tables/uploadXL.svg"
               alt="Upload Excel"
               className={`w-full h-full object-cover transition-all duration-300 ${
                 isDragActive ? "scale-110" : ""

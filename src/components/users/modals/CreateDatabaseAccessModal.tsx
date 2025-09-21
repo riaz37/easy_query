@@ -1,21 +1,26 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Database, 
-  Building2, 
-  CheckCircle, 
-  AlertCircle,
-  X
-} from "lucide-react";
+import { Database, Building2, CheckCircle, AlertCircle, X } from "lucide-react";
 import { useUserAccess } from "@/lib/hooks/use-user-access";
 import { useDatabaseContext } from "@/components/providers/DatabaseContextProvider";
 import { useParentCompanies } from "@/lib/hooks/use-parent-companies";
@@ -23,7 +28,11 @@ import { useSubCompanies } from "@/lib/hooks/use-sub-companies";
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
 import { useTheme } from "@/store/theme-store";
 import { cn } from "@/lib/utils";
-import { UserAccessCreateRequest, ParentCompanyData, SubCompanyData } from "@/types/api";
+import {
+  UserAccessCreateRequest,
+  ParentCompanyData,
+  SubCompanyData,
+} from "@/types/api";
 import { toast } from "sonner";
 
 interface CreateDatabaseAccessModalProps {
@@ -43,9 +52,10 @@ export function CreateDatabaseAccessModal({
 }: CreateDatabaseAccessModalProps) {
   const { user } = useAuthContext();
   const theme = useTheme();
-  
+
   // Form state
-  const [selectedParentCompany, setSelectedParentCompany] = useState<string>("");
+  const [selectedParentCompany, setSelectedParentCompany] =
+    useState<string>("");
   const [selectedSubCompany, setSelectedSubCompany] = useState<string>("");
   const [selectedDatabase, setSelectedDatabase] = useState<string>("");
   const [selectedUserId, setSelectedUserId] = useState<string>(""); // New state for user ID
@@ -56,8 +66,16 @@ export function CreateDatabaseAccessModal({
   // Hooks
   const { createUserAccess, isLoading, error } = useUserAccess();
   const { availableDatabases } = useDatabaseContext();
-  const { parentCompanies, getParentCompanies, isLoading: isLoadingParentCompanies } = useParentCompanies();
-  const { subCompanies, getSubCompanies, isLoading: isLoadingSubCompanies } = useSubCompanies();
+  const {
+    parentCompanies,
+    getParentCompanies,
+    isLoading: isLoadingParentCompanies,
+  } = useParentCompanies();
+  const {
+    subCompanies,
+    getSubCompanies,
+    isLoading: isLoadingSubCompanies,
+  } = useSubCompanies();
 
   // Load data when modal opens
   useEffect(() => {
@@ -70,10 +88,10 @@ export function CreateDatabaseAccessModal({
     try {
       // Load parent companies
       await getParentCompanies();
-      
+
       // Load sub companies
       await getSubCompanies();
-      
+
       // Note: availableDatabases is already loaded from context
       // No need to fetch separately
     } catch (error) {
@@ -88,36 +106,46 @@ export function CreateDatabaseAccessModal({
 
   // Auto-populate database when company selection changes
   useEffect(() => {
-    console.log('Company selection changed:', { selectedParentCompany, selectedSubCompany });
-    
+    console.log("Company selection changed:", {
+      selectedParentCompany,
+      selectedSubCompany,
+    });
+
     if (selectedParentCompany || selectedSubCompany) {
       let databaseId = "";
-      
+
       if (selectedParentCompany) {
         // Get database ID from parent company
-        const parentCompany = parentCompanies.find(c => c.parent_company_id === parseInt(selectedParentCompany));
+        const parentCompany = parentCompanies.find(
+          (c) => c.parent_company_id === parseInt(selectedParentCompany)
+        );
         if (parentCompany) {
           databaseId = parentCompany.db_id.toString();
-          console.log('Setting database ID from parent company:', databaseId);
+          console.log("Setting database ID from parent company:", databaseId);
         }
       } else if (selectedSubCompany) {
         // Get database ID from sub company
-        const subCompany = subCompanies.find(c => c.sub_company_id === parseInt(selectedSubCompany));
+        const subCompany = subCompanies.find(
+          (c) => c.sub_company_id === parseInt(selectedSubCompany)
+        );
         if (subCompany) {
           databaseId = subCompany.db_id.toString();
-          console.log('Setting database ID from sub company:', databaseId);
+          console.log("Setting database ID from sub company:", databaseId);
         }
       }
-      
+
       if (databaseId) {
         setSelectedDatabase(databaseId);
       }
     } else {
       setSelectedDatabase("");
     }
-  }, [selectedParentCompany, selectedSubCompany, parentCompanies, subCompanies]);
-
-
+  }, [
+    selectedParentCompany,
+    selectedSubCompany,
+    parentCompanies,
+    subCompanies,
+  ]);
 
   // Handle company selection changes
   const handleParentCompanyChange = (value: string) => {
@@ -134,8 +162,8 @@ export function CreateDatabaseAccessModal({
   // Get available sub companies for selected parent company
   const getAvailableSubCompanies = () => {
     if (!selectedParentCompany) return [];
-    return subCompanies.filter(sub => 
-      sub.parent_company_id === parseInt(selectedParentCompany)
+    return subCompanies.filter(
+      (sub) => sub.parent_company_id === parseInt(selectedParentCompany)
     );
   };
 
@@ -161,21 +189,29 @@ export function CreateDatabaseAccessModal({
       parent_company_id: parseInt(selectedParentCompany),
       sub_company_ids: selectedSubCompany ? [parseInt(selectedSubCompany)] : [],
       database_access: {
-        parent_databases: [{
-          db_id: parseInt(selectedDatabase),
-          access_level: "full" // Use string enum instead of number
-        }],
-        sub_databases: selectedSubCompany ? [{
-          sub_company_id: parseInt(selectedSubCompany),
-          databases: [{
+        parent_databases: [
+          {
             db_id: parseInt(selectedDatabase),
-            access_level: "full" // Use string enum instead of number
-          }]
-        }] : []
+            access_level: "full", // Use string enum instead of number
+          },
+        ],
+        sub_databases: selectedSubCompany
+          ? [
+              {
+                sub_company_id: parseInt(selectedSubCompany),
+                databases: [
+                  {
+                    db_id: parseInt(selectedDatabase),
+                    access_level: "full", // Use string enum instead of number
+                  },
+                ],
+              },
+            ]
+          : [],
       },
       table_shows: {
-        [selectedDatabase]: [] // Empty array for tables since we removed table selection
-      }
+        [selectedDatabase]: [], // Empty array for tables since we removed table selection
+      },
     };
 
     try {
@@ -207,26 +243,27 @@ export function CreateDatabaseAccessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
+      <DialogContent
+        className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent"
+        showCloseButton={false}
+      >
         <div className="modal-enhanced">
           <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
             <DialogHeader className="modal-header-enhanced">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <DialogTitle className="modal-title-enhanced">
-                    {editingUser ? "Edit Database Access" : "Create Database Access"}
+                    {editingUser
+                      ? "Edit Database Access"
+                      : "Create Database Access"}
                   </DialogTitle>
                   <p className="modal-description-enhanced">
-                    {editingUser 
-                      ? "Update user access to MSSQL databases" 
-                      : "Grant user access to MSSQL databases for data operations"
-                    }
+                    {editingUser
+                      ? "Update user access to MSSQL databases"
+                      : "Grant user access to MSSQL databases for data operations"}
                   </p>
                 </div>
-                <button
-                  onClick={handleClose}
-                  className="modal-close-button"
-                >
+                <button onClick={handleClose} className="modal-close-button">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -235,16 +272,15 @@ export function CreateDatabaseAccessModal({
             <div className="modal-form-content">
               {/* User ID Input */}
               <div className="modal-form-group">
-                <Label className="modal-label-enhanced">User ID <span className="text-red-500">*</span></Label>
+                <Label className="modal-label-enhanced">
+                  User ID <span className="text-red-500">*</span>
+                </Label>
                 <Input
-                  placeholder="Enter user ID (email)"
+                  placeholder="Enter user ID"
                   value={selectedUserId}
                   onChange={(e) => setSelectedUserId(e.target.value)}
                   className="modal-input-enhanced"
                 />
-                <div className="modal-form-description">
-                  Enter the email address of the user you want to grant database access to
-                </div>
               </div>
 
               {/* Company Selection */}
@@ -252,13 +288,26 @@ export function CreateDatabaseAccessModal({
                 <Label className="modal-label-enhanced">
                   Parent Company <span className="text-red-500">*</span>
                 </Label>
-                <Select value={selectedParentCompany} onValueChange={handleParentCompanyChange}>
+                <Select
+                  value={selectedParentCompany}
+                  onValueChange={handleParentCompanyChange}
+                >
                   <SelectTrigger className="modal-select-enhanced w-full">
-                    <SelectValue placeholder={isLoadingParentCompanies ? "Loading..." : "Select parent company"} />
+                    <SelectValue
+                      placeholder={
+                        isLoadingParentCompanies
+                          ? "Loading..."
+                          : "Select parent company"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent className="modal-select-content-enhanced">
                     {parentCompanies.map((company) => (
-                      <SelectItem key={company.parent_company_id} value={company.parent_company_id.toString()} className="dropdown-item">
+                      <SelectItem
+                        key={company.parent_company_id}
+                        value={company.parent_company_id.toString()}
+                        className="dropdown-item"
+                      >
                         <span>{company.company_name}</span>
                       </SelectItem>
                     ))}
@@ -275,7 +324,10 @@ export function CreateDatabaseAccessModal({
                   <Label className="modal-label-enhanced">
                     Sub Company (Optional)
                   </Label>
-                  <Select value={selectedSubCompany} onValueChange={handleSubCompanyChange}>
+                  <Select
+                    value={selectedSubCompany}
+                    onValueChange={handleSubCompanyChange}
+                  >
                     <SelectTrigger className="modal-select-enhanced w-full">
                       <SelectValue placeholder="Select sub company (optional)" />
                     </SelectTrigger>
@@ -284,14 +336,26 @@ export function CreateDatabaseAccessModal({
                         <span>None</span>
                       </SelectItem>
                       {getAvailableSubCompanies().map((company) => (
-                        <SelectItem key={company.sub_company_id} value={company.sub_company_id.toString()} className="dropdown-item">
+                        <SelectItem
+                          key={company.sub_company_id}
+                          value={company.sub_company_id.toString()}
+                          className="dropdown-item"
+                        >
                           <span>{company.company_name}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                   <div className="modal-form-description">
-                    Only sub companies belonging to {parentCompanies.find(c => c.parent_company_id === parseInt(selectedParentCompany))?.company_name} are shown
+                    Only sub companies belonging to{" "}
+                    {
+                      parentCompanies.find(
+                        (c) =>
+                          c.parent_company_id ===
+                          parseInt(selectedParentCompany)
+                      )?.company_name
+                    }{" "}
+                    are shown
                   </div>
                 </div>
               )}
@@ -303,125 +367,196 @@ export function CreateDatabaseAccessModal({
                     Selected Database
                   </Label>
                   <div className="p-3 modal-input-enhanced rounded-lg">
-                    <div className={cn(
-                      "font-semibold",
-                      theme === "dark" ? "text-white" : "text-gray-800"
-                    )}>
+                    <div
+                      className={cn(
+                        "font-semibold",
+                        theme === "dark" ? "text-white" : "text-gray-800"
+                      )}
+                    >
                       Database {selectedDatabase}
                     </div>
                     <div className="modal-form-description mt-1">
-                      {selectedParentCompany 
-                        ? `Parent Company Database` 
-                        : `Sub Company Database`
-                      }
+                      {selectedParentCompany
+                        ? `Parent Company Database`
+                        : `Sub Company Database`}
                     </div>
                   </div>
                 </div>
               )}
 
-          {/* Debug Info - Show when no database is selected */}
-          {(selectedParentCompany || selectedSubCompany) && !selectedDatabase && (
-            <div className="space-y-3">
-              <Label className={cn(
-                "font-semibold",
-                theme === "dark" ? "text-white" : "text-gray-800"
-              )}>
-                Database Selection Issue
-              </Label>
-              <div className="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
-                <div className="text-yellow-400 text-sm">
-                  No databases found for the selected company configuration.
-                </div>
-                <div className="text-xs text-yellow-300 mt-2">
-                  Available databases: {getAvailableDatabases().length}
-                  {selectedParentCompany && (
-                    <div>Parent Company ID: {selectedParentCompany}</div>
-                  )}
-                  {selectedSubCompany && (
-                    <div>Sub Company ID: {selectedSubCompany}</div>
-                  )}
-                  <div>Total DB Configs: {availableDatabases.length}</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Access Summary */}
-          {selectedDatabase && (
-            <div className="modal-form-group">
-              <Card className="modal-input-enhanced">
-                <CardHeader>
-                  <CardTitle className="modal-title-enhanced text-lg">Access Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>User:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>{selectedUserId || 'Not specified'}</span>
-                  </div>
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>Parent Company:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>
-                      {parentCompanies.find(c => c.parent_company_id === parseInt(selectedParentCompany))?.company_name || 'Not selected'}
-                    </span>
-                  </div>
-                  {selectedSubCompany && (
-                    <div>
-                      <span className={cn(
-                        theme === "dark" ? "text-gray-400" : "text-gray-500"
-                      )}>Sub Company:</span>
-                      <span className={cn(
-                        "ml-2",
-                        theme === "dark" ? "text-white" : "text-gray-900"
-                      )}>
-                        {subCompanies.find(c => c.sub_company_id === parseInt(selectedSubCompany))?.company_name || 'Not selected'}
-                      </span>
+              {/* Debug Info - Show when no database is selected */}
+              {(selectedParentCompany || selectedSubCompany) &&
+                !selectedDatabase && (
+                  <div className="space-y-3">
+                    <Label
+                      className={cn(
+                        "font-semibold",
+                        theme === "dark" ? "text-white" : "text-gray-800"
+                      )}
+                    >
+                      Database Selection Issue
+                    </Label>
+                    <div className="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+                      <div className="text-yellow-400 text-sm">
+                        No databases found for the selected company
+                        configuration.
+                      </div>
+                      <div className="text-xs text-yellow-300 mt-2">
+                        Available databases: {getAvailableDatabases().length}
+                        {selectedParentCompany && (
+                          <div>Parent Company ID: {selectedParentCompany}</div>
+                        )}
+                        {selectedSubCompany && (
+                          <div>Sub Company ID: {selectedSubCompany}</div>
+                        )}
+                        <div>Total DB Configs: {availableDatabases.length}</div>
+                      </div>
                     </div>
-                  )}
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>Database:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>Database {selectedDatabase}</span>
                   </div>
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>Access Level:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>Full Access</span>
-                  </div>
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>Sub Companies:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>
-                      {selectedSubCompany ? '1 selected' : 'None'}
-                    </span>
-                  </div>
+                )}
+
+              {/* Access Summary */}
+              {selectedDatabase && (
+                <div className="modal-form-group">
+                  <Card className="modal-input-enhanced">
+                    <CardHeader>
+                      <CardTitle className="modal-title-enhanced text-lg">
+                        Access Summary
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            User:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            {selectedUserId || "Not specified"}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            Parent Company:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            {parentCompanies.find(
+                              (c) =>
+                                c.parent_company_id ===
+                                parseInt(selectedParentCompany)
+                            )?.company_name || "Not selected"}
+                          </span>
+                        </div>
+                        {selectedSubCompany && (
+                          <div>
+                            <span
+                              className={cn(
+                                theme === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-500"
+                              )}
+                            >
+                              Sub Company:
+                            </span>
+                            <span
+                              className={cn(
+                                "ml-2",
+                                theme === "dark"
+                                  ? "text-white"
+                                  : "text-gray-900"
+                              )}
+                            >
+                              {subCompanies.find(
+                                (c) =>
+                                  c.sub_company_id ===
+                                  parseInt(selectedSubCompany)
+                              )?.company_name || "Not selected"}
+                            </span>
+                          </div>
+                        )}
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            Database:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            Database {selectedDatabase}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            Access Level:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            Full Access
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            Sub Companies:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            {selectedSubCompany ? "1 selected" : "None"}
+                          </span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+              )}
 
               {/* Error Display */}
               {error && (
@@ -435,24 +570,29 @@ export function CreateDatabaseAccessModal({
 
             {/* Action Buttons */}
             <div className="modal-footer-enhanced">
-          <Button
-            variant="outline"
-            onClick={handleClose}
-            className="modal-button-secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={isLoading || !selectedUserId || !selectedParentCompany || !selectedDatabase}
-            className="modal-button-primary"
-          >
-            {isLoading ? "Creating..." : "Create Access"}
-          </Button>
+              <Button
+                variant="outline"
+                onClick={handleClose}
+                className="modal-button-secondary"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSubmit}
+                disabled={
+                  isLoading ||
+                  !selectedUserId ||
+                  !selectedParentCompany ||
+                  !selectedDatabase
+                }
+                className="modal-button-primary"
+              >
+                {isLoading ? "Creating..." : "Create Access"}
+              </Button>
             </div>
           </div>
         </div>
       </DialogContent>
     </Dialog>
   );
-} 
+}

@@ -12,7 +12,7 @@ interface FileQueryPageHeaderProps {
 
 export function FileQueryPageHeader({ 
   onHistoryClick, 
-  username = "riaz",
+  username = "",
   className = "" 
 }: FileQueryPageHeaderProps) {
   return (

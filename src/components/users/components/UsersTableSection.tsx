@@ -283,8 +283,7 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                 onClick={() => handleSort("email")}
               >
                 <div className="flex items-center gap-2 text-white font-medium text-sm">
-                  Email
-                  {getSortIcon("email")}
+                  User ID
                 </div>
               </th>
               {isMSSQL ? (
@@ -295,7 +294,6 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                   >
                     <div className="flex items-center gap-2 text-white font-medium text-sm">
                       Parent company
-                      {getSortIcon("parentCompany")}
                     </div>
                   </th>
                   <th 
@@ -304,7 +302,6 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                   >
                     <div className="flex items-center gap-2 text-white font-medium text-sm">
                       Sub companies
-                      {getSortIcon("subCompany")}
                     </div>
                   </th>
                   <th 
@@ -313,7 +310,6 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                   >
                     <div className="flex items-center gap-2 text-white font-medium text-sm">
                       Databases
-                      {getSortIcon("databaseCount")}
                     </div>
                   </th>
                 </>
@@ -325,7 +321,6 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                   >
                     <div className="flex items-center gap-2 text-white font-medium text-sm">
                       Database
-                      {getSortIcon("databaseName")}
                     </div>
                   </th>
                   <th 
@@ -334,7 +329,6 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                   >
                     <div className="flex items-center gap-2 text-white font-medium text-sm">
                       Access level
-                      {getSortIcon("accessLevel")}
                     </div>
                   </th>
                   <th 
@@ -343,7 +337,6 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                   >
                     <div className="flex items-center gap-2 text-white font-medium text-sm">
                       Tables
-                      {getSortIcon("tableNames")}
                     </div>
                   </th>
                 </>
@@ -354,7 +347,6 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
               >
                 <div className="flex items-center gap-2 text-white font-medium text-sm">
                   Date
-                  {getSortIcon("date")}
                 </div>
               </th>
               <th className="px-6 py-4 text-right text-white font-medium text-sm rounded-tr-xl">

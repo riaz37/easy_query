@@ -34,7 +34,7 @@ export function AuthPage({ onAuthSuccess }: AuthPageProps) {
   // Redirect authenticated users to dashboard
   useEffect(() => {
     if (isAuthenticated && user) {
-      router.push('/dashboard');
+      router.push('/');
     }
   }, [isAuthenticated, user, router]);
 

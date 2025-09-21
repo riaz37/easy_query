@@ -53,49 +53,9 @@
    CSS CUSTOM PROPERTIES (DESIGN TOKENS)
    ============================================ */
 
-/* Light mode color palette (Enhanced for beautiful light mode) */
+/* Base color palette (Dark mode only) */
 :root {
   --radius: 0.625rem;
-  --background: 0 0% 99%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 160 84% 39%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 160 20% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 160 15% 97%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 160 25% 95%;
-  --accent-foreground: 222.2 84% 4.9%;
-  --destructive: 0 84.2% 60.2%;
-  --border: 160 20% 90%;
-  --input: 160 15% 94%;
-  --ring: 160 84% 39%;
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
-  --sidebar: 160 30% 98%;
-  --sidebar-foreground: 222.2 84% 4.9%;
-  --sidebar-primary: 160 84% 39%;
-  --sidebar-primary-foreground: 210 40% 98%;
-  --sidebar-accent: 160 25% 95%;
-  --sidebar-accent-foreground: 222.2 84% 4.9%;
-  --sidebar-border: 160 20% 88%;
-  --sidebar-ring: 160 84% 39%;
-
-  /* Light mode specific variables */
-  --light-glass-bg: rgba(255, 255, 255, 0.85);
-  --light-glass-border: rgba(16, 185, 129, 0.15);
-  --light-spotlight-color: rgba(16, 185, 129, 0.08);
-  --light-card-shadow: rgba(16, 185, 129, 0.1);
-  --light-text-primary: #1f2937;
-  --light-text-secondary: #6b7280;
-  --light-text-muted: #9ca3af;
 }
 
 /* Dark mode color palette (OKLCH format for better color accuracy) */
@@ -427,18 +387,18 @@ nav {
   background: rgba(0, 0, 0, 0.18);
 }
 
-/* Dark mode scrollbar styles */
-.dark ::-webkit-scrollbar-track {
+/* Scrollbar styles */
+::-webkit-scrollbar-track {
   background: rgba(0, 255, 185, 0.05);
   border-radius: 4px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: rgba(0, 255, 185, 0.1);
   border-radius: 4px;
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 255, 185, 0.15);
 }
 
@@ -483,37 +443,6 @@ nav {
   border: 1px solid rgba(54, 62, 60, 0.1);
 }
 
-/* Light mode glass morphism effects */
-.glass-light {
-  background: var(--light-glass-bg);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--light-glass-border);
-  box-shadow: 0 8px 32px var(--light-card-shadow),
-    0 1px 0 rgba(255, 255, 255, 0.5) inset;
-}
-
-/* Enhanced light mode spotlight */
-.spotlight-light {
-  background: radial-gradient(
-    ellipse at center,
-    var(--light-spotlight-color) 0%,
-    transparent 70%
-  );
-}
-
-/* Light mode system cards */
-.system-card-light {
-  background: linear-gradient(
-    158.39deg,
-    rgba(255, 255, 255, 0.95) 14.19%,
-    rgba(255, 255, 255, 0.85) 50.59%,
-    rgba(255, 255, 255, 0.9) 68.79%,
-    rgba(255, 255, 255, 0.95) 105.18%
-  );
-  border: 1.2px solid rgba(16, 185, 129, 0.2);
-  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.12),
-    0 1px 0 rgba(255, 255, 255, 0.8) inset;
-}
 
 /* Button component styles - USED IN: custom buttons throughout the app */
 .btn-primary {
@@ -586,10 +515,6 @@ nav {
 
 /* Markdown body component - USED IN: FileQuery.tsx for displaying markdown content */
 .markdown-body {
-  color: rgb(31 41 55);
-}
-
-.dark .markdown-body {
   color: rgb(255 255 255);
 }
 
@@ -600,7 +525,7 @@ nav {
   font-weight: bold;
   margin-top: 1.2em;
   margin-bottom: 0.5em;
-  color: rgb(17 24 39);
+  color: rgb(243 244 246);
 }
 
 .markdown-body h2 {
@@ -609,7 +534,7 @@ nav {
   font-weight: bold;
   margin-top: 1em;
   margin-bottom: 0.5em;
-  color: rgb(17 24 39);
+  color: rgb(243 244 246);
 }
 
 .markdown-body h3 {
@@ -618,15 +543,12 @@ nav {
   font-weight: bold;
   margin-top: 0.8em;
   margin-bottom: 0.4em;
-  color: rgb(17 24 39);
+  color: rgb(243 244 246);
 }
 
-.dark .markdown-body h1,
-.dark .markdown-body h2,
-.dark .markdown-body h3,
-.dark .markdown-body h4,
-.dark .markdown-body h5,
-.dark .markdown-body h6 {
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
   color: rgb(243 244 246);
 }
 
@@ -643,64 +565,36 @@ nav {
 
 /* Markdown paragraphs */
 .markdown-body p {
-  color: rgb(55 65 81);
-}
-
-.dark .markdown-body p {
   color: rgb(209 213 219);
 }
 
 /* Markdown code blocks */
 .markdown-body code,
 .markdown-body pre {
-  background-color: rgb(243 244 246);
-  color: rgb(31 41 55);
+  background-color: rgb(31 41 55);
+  color: rgb(229 231 235);
   border-radius: 4px;
   padding: 2px 6px;
   font-family: "Fira Mono", "Consolas", "Menlo", monospace;
 }
 
-.dark .markdown-body code {
-  background-color: rgb(31 41 55);
-  color: rgb(229 231 235);
-}
-
 .markdown-body pre {
-  border: 1px solid rgb(229 231 235);
-}
-
-.dark .markdown-body pre {
-  background-color: rgb(31 41 55);
   border: 1px solid rgb(55 65 81);
 }
 
 /* Markdown blockquotes */
 .markdown-body blockquote {
-  border-left: 4px solid rgb(209 213 219);
-  background-color: rgb(249 250 251);
-}
-
-.dark .markdown-body blockquote {
   border-left: 4px solid rgb(75 85 99);
   background-color: rgb(31 41 55);
 }
 
 /* Markdown tables */
 .markdown-body table {
-  border: 1px solid rgb(229 231 235);
-}
-
-.dark .markdown-body table {
   border: 1px solid rgb(55 65 81);
 }
 
 .markdown-body th,
 .markdown-body td {
-  border: 1px solid rgb(229 231 235);
-}
-
-.dark .markdown-body th,
-.dark .markdown-body td {
   border: 1px solid rgb(55 65 81);
 }
 
@@ -776,12 +670,6 @@ nav {
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
 }
 
-/* Light mode modal styling */
-.light .modal-enhanced {
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15),
-    0 8px 32px rgba(16, 185, 129, 0.1);
-  backdrop-filter: blur(25px) saturate(1.1);
-}
 
 /* The gradient corner border effect for enhanced modal */
 .modal-enhanced::before {
@@ -812,21 +700,6 @@ nav {
     0 0 60px rgba(19, 245, 132, 0.1);
 }
 
-/* Light mode modal border effect */
-.light .modal-enhanced::before {
-  background: linear-gradient(
-      132.56deg,
-      rgba(16, 185, 129, 0.8) 0.71%,
-      rgba(255, 255, 255, 0) 16.71%
-    ),
-    linear-gradient(
-      132.98deg,
-      rgba(255, 255, 255, 0) 84.76%,
-      rgba(16, 185, 129, 0.8) 99.35%
-    );
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25),
-    0 0 30px rgba(16, 185, 129, 0.15), 0 0 45px rgba(16, 185, 129, 0.08);
-}
 
 /* Modal content wrapper */
 .modal-content-enhanced {
@@ -859,27 +732,6 @@ nav {
   box-shadow: none;
 }
 
-/* Light mode modal content */
-.light .modal-content-enhanced {
-  background: linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.03),
-      rgba(255, 255, 255, 0.03)
-    ),
-    linear-gradient(
-      230.27deg,
-      rgba(19, 245, 132, 0) 71.59%,
-      rgba(19, 245, 132, 0.2) 98.91%
-    ),
-    linear-gradient(
-      67.9deg,
-      rgba(19, 245, 132, 0) 66.65%,
-      rgba(19, 245, 132, 0.2) 100%
-    );
-  color: #1f2937;
-  border: none;
-  box-shadow: none;
-}
 
 /* Modal header with gradient background */
 .modal-header-enhanced {
@@ -905,17 +757,6 @@ nav {
   font-size: 1.25rem;
 }
 
-/* Light mode modal title */
-.light .modal-title-enhanced {
-  background: linear-gradient(
-    180deg,
-    rgba(248, 248, 248, 0.95) 18.33%,
-    rgba(146, 146, 146, 0.95) 81.67%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 /* Modal description with solid color */
 .modal-description-enhanced {
@@ -924,10 +765,6 @@ nav {
   margin-top: 0.5rem;
 }
 
-/* Light mode modal description */
-.light .modal-description-enhanced {
-  color: #f8f8f8b2;
-}
 
 /* Enhanced form inputs with green accent */
 .modal-input-enhanced {
@@ -938,28 +775,11 @@ nav {
   height: 54px;
 }
 
-/* Light mode modal inputs */
-.light .modal-input-enhanced {
-  background: var(--components-paper-bg-paper-blur, #ffffff0a);
-  border: none;
-  backdrop-filter: blur(20px) saturate(1.1);
-  color: #1f2937;
-}
-
 .modal-input-enhanced::placeholder {
   color: #9ca3af;
 }
 
-.light .modal-input-enhanced::placeholder {
-  color: #6b7280;
-}
-
 .modal-input-enhanced:focus {
-  border: none;
-  outline: none;
-}
-
-.light .modal-input-enhanced:focus {
   border: none;
   outline: none;
 }
@@ -1279,24 +1099,12 @@ nav {
   margin-bottom: 0.25rem;
 }
 
-/* Light mode form labels */
-.light .modal-form-label {
-  color: #1f2937;
-  font-weight: 600;
-}
-
 /* Form field descriptions */
 .modal-form-description {
   color: #9ca3af;
   font-size: 0.75rem;
   margin-top: 0.25rem;
   line-height: 1.4;
-}
-
-/* Light mode form descriptions */
-.light .modal-form-description {
-  color: #6b7280;
-  font-weight: 500;
 }
 
 /* Modal label styling */
@@ -1308,12 +1116,6 @@ nav {
   gap: 0.5rem;
 }
 
-/* Light mode modal label enhanced */
-.light .modal-label-enhanced {
-  color: #1f2937;
-  font-weight: 600;
-}
-
 /* Modal label with icon */
 .modal-label-with-icon {
   color: white;
@@ -1321,12 +1123,6 @@ nav {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-/* Light mode modal label with icon */
-.light .modal-label-with-icon {
-  color: #1f2937;
-  font-weight: 600;
 }
 
 .modal-label-with-icon svg {
@@ -1366,12 +1162,6 @@ nav {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Light mode enhanced card styling */
-.light .card-enhanced {
-  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.12),
-    0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 0 0 1px rgba(16, 185, 129, 0.08);
-  backdrop-filter: blur(20px) saturate(1.1);
-}
 
 /* The gradient corner border effect for enhanced cards */
 .card-enhanced::before {
@@ -1402,21 +1192,6 @@ nav {
     0 0 60px rgba(19, 245, 132, 0.1);
 }
 
-/* Light mode gradient border effect */
-.light .card-enhanced::before {
-  background: linear-gradient(
-      132.56deg,
-      rgba(16, 185, 129, 0.8) 0.71%,
-      rgba(255, 255, 255, 0) 16.71%
-    ),
-    linear-gradient(
-      132.98deg,
-      rgba(255, 255, 255, 0) 84.76%,
-      rgba(16, 185, 129, 0.8) 99.35%
-    );
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25),
-    0 0 30px rgba(16, 185, 129, 0.15), 0 0 45px rgba(16, 185, 129, 0.08);
-}
 
 /* Card content wrapper */
 .card-content-enhanced {
@@ -1439,18 +1214,6 @@ nav {
   height: 100%;
 }
 
-/* Light mode card content */
-.light .card-content-enhanced {
-  background: transparent;
-  color: #1f2937;
-  border: 2px solid;
-  border-image-source: linear-gradient(
-      132.56deg,
-      #13f584 0.71%,
-      rgba(255, 255, 255, 0) 16.71%
-    ),
-    linear-gradient(132.98deg, rgba(255, 255, 255, 0) 84.76%, #13f584 99.35%);
-}
 
 /* Card header with gradient background */
 .card-header-enhanced {
@@ -1462,10 +1225,6 @@ nav {
   backdrop-filter: none;
 }
 
-/* Light mode card header */
-.light .card-header-enhanced {
-  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
-}
 
 /* Card title with gradient text effect */
 .card-title-enhanced {
@@ -1480,14 +1239,6 @@ nav {
   letter-spacing: -0.025em;
 }
 
-/* Light mode card title */
-.light .card-title-enhanced {
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-}
 
 /* Card description with gradient text */
 .card-description-enhanced {
@@ -1500,13 +1251,6 @@ nav {
   margin-top: 0.5rem;
 }
 
-/* Light mode card description */
-.light .card-description-enhanced {
-  background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 /* Enhanced button styles for cards */
 .card-button-enhanced {
@@ -1535,31 +1279,6 @@ nav {
   transform: translateY(-2px);
 }
 
-/* Light mode enhanced button styles */
-.light .card-button-enhanced {
-  background: linear-gradient(
-    135deg,
-    rgba(16, 185, 129, 0.08) 0%,
-    rgba(16, 185, 129, 0.04) 100%
-  );
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  color: #059669;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 0 0 1px rgba(16, 185, 129, 0.1), 0 4px 12px rgba(16, 185, 129, 0.15);
-}
-
-.light .card-button-enhanced:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(16, 185, 129, 0.12) 0%,
-    rgba(16, 185, 129, 0.08) 100%
-  );
-  border-color: rgba(16, 185, 129, 0.3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 0 0 1px rgba(16, 185, 129, 0.15), 0 0 0 3px rgba(16, 185, 129, 0.08),
-    0 6px 16px rgba(16, 185, 129, 0.2);
-  transform: translateY(-2px);
-}
 
 /* Enhanced user card styles */
 .user-card-enhanced {
@@ -1572,12 +1291,6 @@ nav {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Light mode user card */
-.light .user-card-enhanced {
-  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.1),
-    0 1px 0 rgba(255, 255, 255, 0.8) inset;
-  backdrop-filter: blur(16px) saturate(1.1);
-}
 
 .user-card-enhanced::before {
   content: "";
@@ -1607,19 +1320,6 @@ nav {
   transition: opacity 0.3s ease;
 }
 
-/* Light mode user card border */
-.light .user-card-enhanced::before {
-  background: linear-gradient(
-      132.56deg,
-      rgba(16, 185, 129, 0.6) 0.71%,
-      rgba(255, 255, 255, 0) 16.71%
-    ),
-    linear-gradient(
-      132.98deg,
-      rgba(255, 255, 255, 0) 84.76%,
-      rgba(16, 185, 129, 0.6) 99.35%
-    );
-}
 
 .user-card-enhanced:hover::before {
   opacity: 1;
@@ -1630,11 +1330,6 @@ nav {
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4), 0 0 20px rgba(19, 245, 132, 0.3);
 }
 
-/* Light mode user card hover */
-.light .user-card-enhanced:hover {
-  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15),
-    0 0 0 1px rgba(16, 185, 129, 0.1), 0 0 20px rgba(16, 185, 129, 0.2);
-}
 
 .user-card-content-enhanced {
   position: relative;
@@ -1664,18 +1359,6 @@ nav {
   height: 100%;
 }
 
-/* Light mode user card content */
-.light .user-card-content-enhanced {
-  background: linear-gradient(
-    158.39deg,
-    rgba(255, 255, 255, 0.95) 14.19%,
-    rgba(240, 249, 245, 0.9) 50.59%,
-    rgba(255, 255, 255, 0.95) 68.79%,
-    rgba(240, 249, 245, 0.9) 105.18%
-  );
-  color: #1f2937;
-  border: 1px solid rgba(16, 185, 129, 0.12);
-}
 
 /* ============================================
    VOICE NAVIGATION ANIMATIONS
@@ -1765,14 +1448,6 @@ nav {
   transform: scale(0.95);
 }
 
-/* Light mode modal close button */
-.light .modal-close-button {
-  color: #6b7280;
-}
-
-.light .modal-close-button:hover {
-  color: #374151;
-}
 
 /* Query page gradient background */
 .query-content-gradient {
