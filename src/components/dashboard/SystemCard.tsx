@@ -59,13 +59,15 @@ export const SystemCard: React.FC<SystemCardProps> = ({
     
     // Calculate new position based on drag offset
     if (onPositionChange && (dragOffset.x !== 0 || dragOffset.y !== 0)) {
-      const containerWidth = window.innerWidth;
-      const containerHeight = window.innerHeight;
-      
-      const newX = Math.max(0, Math.min(100, position.x + (dragOffset.x / containerWidth) * 100));
-      const newY = Math.max(0, Math.min(100, position.y + (dragOffset.y / containerHeight) * 100));
-      
-      onPositionChange(node.id, { x: newX, y: newY });
+      if (typeof window !== 'undefined') {
+        const containerWidth = window.innerWidth;
+        const containerHeight = window.innerHeight;
+        
+        const newX = Math.max(0, Math.min(100, position.x + (dragOffset.x / containerWidth) * 100));
+        const newY = Math.max(0, Math.min(100, position.y + (dragOffset.y / containerHeight) * 100));
+        
+        onPositionChange(node.id, { x: newX, y: newY });
+      }
     }
     
     setDragOffset({ x: 0, y: 0 });
@@ -86,8 +88,8 @@ export const SystemCard: React.FC<SystemCardProps> = ({
 
   // Calculate current position with drag offset
   const currentPosition = {
-    x: position.x + (dragOffset.x / window.innerWidth) * 100,
-    y: position.y + (dragOffset.y / window.innerHeight) * 100
+    x: typeof window !== 'undefined' ? position.x + (dragOffset.x / window.innerWidth) * 100 : position.x,
+    y: typeof window !== 'undefined' ? position.y + (dragOffset.y / window.innerHeight) * 100 : position.y
   };
   return (
     <div
