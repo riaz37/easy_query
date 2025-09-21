@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { ReportResults } from "@/types/reports";
 import { generateAndDownloadPDF } from "@/lib/utils/smart-pdf-generator";
-import { PaginatedReportList } from "@/components/ai-results";
+import { PaginatedReportList } from "@/components/ai-reports";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 
-export default function AIResultsPage() {
+export default function AIReportsPage() {
   const router = useRouter();
 
   const handleBackToQuery = () => {
@@ -17,7 +17,7 @@ export default function AIResultsPage() {
   };
 
   const handleViewReport = (taskId: string, results: ReportResults) => {
-    router.push(`/ai-results/report/${taskId}`);
+    router.push(`/ai-reports/report/${taskId}`);
   };
 
   const handleDownloadReport = async (taskId: string, results: ReportResults) => {
@@ -35,7 +35,7 @@ export default function AIResultsPage() {
   return (
     <PageLayout background={["frame", "gridframe"]} maxWidth="7xl">
       <PageHeader
-        title="AI-Generated Reports"
+        title="AI Reports"
         description="View and manage your completed AI-generated reports based on your queries"
         enhancedTitle={true}
       />

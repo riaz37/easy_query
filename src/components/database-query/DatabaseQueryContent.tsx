@@ -222,7 +222,7 @@ export function DatabaseQueryContent() {
     setShowResultOverlay(false);
     // Navigate to appropriate results page based on query mode
     if (queryMode === 'reports') {
-      router.push('/ai-results');
+      router.push('/ai-reports');
     } else {
       router.push('/database-query-results');
     }
@@ -335,7 +335,7 @@ export function DatabaseQueryContent() {
                 alt="Database Robot"
                 width={120}
                 height={120}
-                className="flex-shrink-0"
+                className="flex-shrink-0 -ml-6"
               />
               <div className="flex flex-col justify-start pt-5 -ml-8 z-10">
                 <h3 className="text-white font-semibold text-2xl">
@@ -344,7 +344,7 @@ export function DatabaseQueryContent() {
               </div>
             </div>
 
-            <div className="relative -mt-16 px-4 z-10">
+            <div className="relative -mt-16 px-2 z-10">
               {queryMode === 'query' ? (
                 <QueryForm
                   query={queryInput}

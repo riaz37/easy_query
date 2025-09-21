@@ -85,7 +85,7 @@ export function VoiceNavigationHandler({ children }: VoiceNavigationHandlerProps
       console.log(`📊 Voice view report: ${request}`)
       
       // Navigate to reports page
-      router.push('/ai-results')
+      router.push('/ai-reports')
       
       // Show visual feedback
       showReportFeedback(request, 'view')
@@ -97,7 +97,7 @@ export function VoiceNavigationHandler({ children }: VoiceNavigationHandlerProps
       console.log(`📈 Voice generate report: ${query}`)
       
       // Navigate to report generation page
-      router.push('/ai-results')
+      router.push('/ai-reports')
       
       // Show visual feedback
       showReportFeedback(query, 'generate')

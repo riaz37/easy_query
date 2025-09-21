@@ -10,7 +10,7 @@ interface SystemCardProps {
   onMouseDown: (e: React.MouseEvent, nodeId: string) => void;
   onMouseEnter: (nodeId: string) => void;
   onMouseLeave: () => void;
-  theme?: 'light' | 'dark';
+  theme?: "light" | "dark";
 }
 
 export const SystemCard: React.FC<SystemCardProps> = ({
@@ -21,7 +21,7 @@ export const SystemCard: React.FC<SystemCardProps> = ({
   onMouseDown,
   onMouseEnter,
   onMouseLeave,
-  theme = 'dark',
+  theme = "dark",
 }) => {
   return (
     <div
@@ -42,10 +42,14 @@ export const SystemCard: React.FC<SystemCardProps> = ({
         onMouseDown={(e) => onMouseDown(e, node.id)}
         style={{
           cursor: isDragging ? "grabbing" : "grab",
-          filter: isActive || isDragging ? "drop-shadow(0 0 30px rgba(16, 185, 129, 0.6))" : undefined,
+          filter:
+            isActive || isDragging
+              ? "drop-shadow(0 0 30px rgba(16, 185, 129, 0.6))"
+              : undefined,
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.filter = "drop-shadow(0 0 40px rgba(16, 185, 129, 0.8))";
+          e.currentTarget.style.filter =
+            "drop-shadow(0 0 40px rgba(16, 185, 129, 0.8))";
         }}
         onMouseLeave={(e) => {
           if (!isActive && !isDragging) {
@@ -62,41 +66,57 @@ export const SystemCard: React.FC<SystemCardProps> = ({
             width: "371.2px",
             height: "200px",
             borderRadius: "25.6px",
-            background: theme === 'light' 
-              ? "rgba(255, 255, 255, 0.95)" 
-              : "rgba(255, 255, 255, 0.03)",
-            border: theme === 'light' 
-              ? "1.2px solid rgba(16, 185, 129, 0.2)" 
-              : "1.2px solid transparent",
-            backgroundImage: theme === 'light' 
-              ? "linear-gradient(158.39deg, rgba(255, 255, 255, 0.98) 14.19%, rgba(240, 249, 245, 0.95) 50.59%, rgba(255, 255, 255, 0.98) 68.79%, rgba(240, 249, 245, 0.95) 105.18%)"
-              : "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 0.000015) 50.59%, rgba(255, 255, 255, 0.000015) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
+            background:
+              theme === "light"
+                ? "rgba(255, 255, 255, 0.95)"
+                : "rgba(255, 255, 255, 0.03)",
+            border:
+              theme === "light"
+                ? "1.2px solid rgba(16, 185, 129, 0.2)"
+                : "1.2px solid transparent",
+            backgroundImage:
+              theme === "light"
+                ? "linear-gradient(158.39deg, rgba(255, 255, 255, 0.98) 14.19%, rgba(240, 249, 245, 0.95) 50.59%, rgba(255, 255, 255, 0.98) 68.79%, rgba(240, 249, 245, 0.95) 105.18%)"
+                : "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 0.000015) 50.59%, rgba(255, 255, 255, 0.000015) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
             backgroundOrigin: "border-box",
             backgroundClip: "padding-box, border-box",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            boxShadow: theme === 'light' 
-              ? "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 0 0 1px rgba(16, 185, 129, 0.08)"
-              : undefined,
+            boxShadow:
+              theme === "light"
+                ? "0 8px 32px rgba(16, 185, 129, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 0 0 1px rgba(16, 185, 129, 0.08)"
+                : undefined,
           }}
         >
           {/* Animated glow dots in corners */}
-          <div className="absolute top-4 right-4 w-1 h-1 bg-emerald-400 rounded-full animate-pulse opacity-60" 
-               style={{ 
-                 boxShadow: theme === 'light' ? "0 0 6px #10b981" : "0 0 8px #10b981"
-               }} />
-          <div className="absolute top-8 right-2 w-0.5 h-0.5 bg-emerald-300 rounded-full animate-pulse opacity-40" 
-               style={{ 
-                 boxShadow: theme === 'light' ? "0 0 3px #6ee7b7" : "0 0 4px #6ee7b7"
-               }} />
-          <div className="absolute bottom-12 right-6 w-0.5 h-0.5 bg-emerald-400 rounded-full animate-pulse opacity-50" 
-               style={{ 
-                 boxShadow: theme === 'light' ? "0 0 4px #10b981" : "0 0 6px #10b981"
-               }} />
-          <div className="absolute bottom-4 right-2 w-1 h-1 bg-emerald-300 rounded-full animate-pulse opacity-30" 
-               style={{ 
-                 boxShadow: theme === 'light' ? "0 0 6px #6ee7b7" : "0 0 8px #6ee7b7"
-               }} />
+          <div
+            className="absolute top-4 right-4 w-1 h-1 bg-emerald-400 rounded-full animate-pulse opacity-60"
+            style={{
+              boxShadow:
+                theme === "light" ? "0 0 6px #10b981" : "0 0 8px #10b981",
+            }}
+          />
+          <div
+            className="absolute top-8 right-2 w-0.5 h-0.5 bg-emerald-300 rounded-full animate-pulse opacity-40"
+            style={{
+              boxShadow:
+                theme === "light" ? "0 0 3px #6ee7b7" : "0 0 4px #6ee7b7",
+            }}
+          />
+          <div
+            className="absolute bottom-12 right-6 w-0.5 h-0.5 bg-emerald-400 rounded-full animate-pulse opacity-50"
+            style={{
+              boxShadow:
+                theme === "light" ? "0 0 4px #10b981" : "0 0 6px #10b981",
+            }}
+          />
+          <div
+            className="absolute bottom-4 right-2 w-1 h-1 bg-emerald-300 rounded-full animate-pulse opacity-30"
+            style={{
+              boxShadow:
+                theme === "light" ? "0 0 6px #6ee7b7" : "0 0 8px #6ee7b7",
+            }}
+          />
 
           {/* Main content layout */}
           <div className="relative z-10 h-full">
@@ -109,7 +129,7 @@ export const SystemCard: React.FC<SystemCardProps> = ({
                 className="object-cover rounded-l-[25.6px]"
                 priority
                 style={{
-                  objectPosition: 'left center'
+                  objectPosition: "left center",
                 }}
               />
             </div>
@@ -117,55 +137,37 @@ export const SystemCard: React.FC<SystemCardProps> = ({
             {/* Dynamic Text content - Overlapping */}
             <div className="absolute left-48 top-0 right-0 h-full px-6 py-6 flex flex-col justify-center overflow-hidden z-10">
               {/* Gradient overlay to blend with the image */}
-              <div 
+              <div
                 className="absolute inset-0 opacity-20"
                 style={{
-                  background: "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)"
+                  background:
+                    "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",
                 }}
               />
-              
+
               <div className="relative z-10">
-                <h2 
-                  className="text-xl font-semibold mb-4 tracking-wide"
-                  style={{
-                    background: "linear-gradient(180deg, rgba(248, 248, 248, 0.95) 18.33%, rgba(146, 146, 146, 0.95) 81.67%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text"
-                  }}
-                >
+                <h2 className="modal-title-enhanced text-xl font-semibold mb-4 tracking-wide">
                   {node.title}
                 </h2>
-                <p 
-                  className="text-sm leading-relaxed break-words"
-                  style={{
-                    color: "#F8F8F8B2",
-                    lineHeight: "1.5",
-                    wordWrap: "break-word",
-                    overflowWrap: "break-word"
-                  }}
-                >
+                <p className="modal-description-enhanced text-sm leading-relaxed break-words">
                   {node.description}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Drag indicator */}
-          {isDragging && (
-            <div className="absolute top-3 right-3 w-2 h-2 bg-emerald-400 rounded-full animate-pulse" 
-                 style={{ boxShadow: "0 0 8px #10b981" }} />
-          )}
-
           {/* Hover glow effect */}
           <div
             className={`absolute inset-0 rounded-[25.6px] transition-all duration-500 pointer-events-none ${
-              isDragging || isActive ? "opacity-30" : "opacity-0 group-hover:opacity-20"
+              isDragging || isActive
+                ? "opacity-30"
+                : "opacity-0 group-hover:opacity-20"
             }`}
             style={{
-              background: theme === 'light'
-                ? "radial-gradient(circle at 30% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 70%)"
-                : "radial-gradient(circle at 30% 50%, rgba(16, 185, 129, 0.2) 0%, transparent 70%)",
+              background:
+                theme === "light"
+                  ? "radial-gradient(circle at 30% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 70%)"
+                  : "radial-gradient(circle at 30% 50%, rgba(16, 185, 129, 0.2) 0%, transparent 70%)",
             }}
           />
         </div>

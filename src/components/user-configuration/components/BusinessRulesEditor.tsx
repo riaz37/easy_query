@@ -2,7 +2,7 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { FileText, Save, X, RotateCcw } from "lucide-react";
+import { FileText } from "lucide-react";
 import type { BusinessRulesEditorProps } from "../types";
 
 export const BusinessRulesEditor = React.memo<BusinessRulesEditorProps>(
@@ -50,9 +50,9 @@ export const BusinessRulesEditor = React.memo<BusinessRulesEditorProps>(
                   }}
                 >
                   <img
-                    src="/user-configuration/edit.svg"
+                    src="/user-configuration/reportedit.svg"
                     alt="Edit"
-                    className="w-6 h-6"
+                    className="w-5 h-5"
                   />
                 </Button>
               ) : (
@@ -60,27 +60,15 @@ export const BusinessRulesEditor = React.memo<BusinessRulesEditorProps>(
                   <Button
                     onClick={onSave}
                     disabled={!editorState.hasUnsavedChanges}
-                    className="bg-green-600 hover:bg-green-700 text-white"
+                    className="modal-button-primary"
                   >
-                    <Save className="w-4 h-4 mr-2" />
                     Save
                   </Button>
                   <Button
                     onClick={onCancel}
-                    variant="outline"
-                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                    className="modal-button-secondary"
                   >
-                    <X className="w-4 h-4 mr-2" />
                     Cancel
-                  </Button>
-                  <Button
-                    onClick={onReset}
-                    variant="outline"
-                    disabled={!editorState.hasUnsavedChanges}
-                    className="border-blue-600 text-blue-300 hover:bg-blue-700"
-                  >
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Reset
                   </Button>
                 </div>
               )}

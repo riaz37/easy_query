@@ -7,7 +7,7 @@ import { ESAPBrandLoader } from "@/components/ui/loading";
 import { ReportResults } from "@/types/reports";
 import { useTaskStore } from "@/store/task-store";
 import { ServiceRegistry } from "@/lib/api";
-import { ReportSection } from "@/components/ai-results";
+import { ReportSection } from "@/components/ai-reports";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 
 export default function ReportDetailPage() {
@@ -45,7 +45,7 @@ export default function ReportDetailPage() {
 
       try {
         setLoading(true);
-
+        
         // First try to get from local store
         const localTask = getTaskById(taskId);
         if (localTask && localTask.status === "completed" && localTask.result) {
@@ -57,7 +57,7 @@ export default function ReportDetailPage() {
 
         // If not found locally, fetch from backend API
         const taskStatus = await ServiceRegistry.reports.getTaskStatus(taskId);
-
+        
         if (taskStatus.status === "completed" && taskStatus.results) {
           // Create a task object from the API response
           const apiTask = {
@@ -83,7 +83,7 @@ export default function ReportDetailPage() {
               failed_queries: taskStatus.failed_queries,
             },
           };
-
+          
           setTask(apiTask);
           setReportResults(taskStatus.results);
         } else {
@@ -134,7 +134,7 @@ export default function ReportDetailPage() {
               Try Again
             </button>
             <button
-              onClick={() => router.push("/ai-results")}
+              onClick={() => router.push("/ai-reports")}
               className="px-4 py-2 border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 rounded cursor-pointer"
             >
               Back to Reports
@@ -159,7 +159,7 @@ export default function ReportDetailPage() {
             The requested report could not be found or is not completed.
           </p>
           <button
-            onClick={() => router.push("/ai-results")}
+            onClick={() => router.push("/ai-reports")}
             className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded cursor-pointer"
           >
             Back to Reports
@@ -180,25 +180,25 @@ export default function ReportDetailPage() {
           </h1>
           <p className="text-white text-sm">{task.title}</p>
         </div>
-      </div>
+          </div>
 
       {/* Content Section */}
       <div className="space-y-6">
-        {/* Report Sections */}
-        {reportResults.results && reportResults.results.length > 0 && (
-          <div className="space-y-6">
-            {reportResults.results.map((section, index) => (
-              <ReportSection
-                key={index}
-                section={section}
-                index={index}
+      {/* Report Sections */}
+      {reportResults.results && reportResults.results.length > 0 && (
+        <div className="space-y-6">
+          {reportResults.results.map((section, index) => (
+            <ReportSection
+              key={index}
+              section={section}
+              index={index}
                 expandedSections={expandedSections}
                 toggleSection={toggleSection}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+            />
+          ))}
+        </div>
+      )}
+        </div>
     </PageLayout>
   );
 }

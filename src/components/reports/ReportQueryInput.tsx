@@ -45,7 +45,7 @@ export function ReportQueryInput({
           alt="AI Report Robot"
           width={120}
           height={120}
-          className="flex-shrink-0"
+          className="flex-shrink-0 -ml-6"
         />
         <div className="flex flex-col justify-start pt-5 -ml-8 z-10">
           <h3 className="text-white font-semibold text-2xl">
@@ -54,7 +54,7 @@ export function ReportQueryInput({
         </div>
       </div>
 
-      <div className="relative -mt-16 px-4 z-10">
+      <div className="relative -mt-16 px-2 z-10">
         <Textarea
           value={userQuery}
           onChange={(e) => setUserQuery(e.target.value)}

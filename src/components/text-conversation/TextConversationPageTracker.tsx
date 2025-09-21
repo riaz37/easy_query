@@ -27,7 +27,7 @@ export function TextConversationPageTracker() {
         "database-query": "database-query",
         tables: "tables",
         users: "users",
-        "ai-results": "ai-results",
+        "ai-reports": "ai-reports",
         "company-structure": "company-structure",
         "voice-control": "voice-control",
         "user-configuration": "user-configuration",

@@ -71,7 +71,6 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
     handleRulesEdit,
     handleRulesSave,
     handleRulesCancel,
-    handleRulesReset,
     handleRulesContentChange,
   } = useBusinessRulesEditor({
     currentDatabaseId,
@@ -140,7 +139,6 @@ export const UserConfiguration = React.memo<UserConfigurationProps>(({ className
               onEdit={handleRulesEdit}
               onSave={handleRulesSave}
               onCancel={handleRulesCancel}
-              onReset={handleRulesReset}
               onContentChange={handleRulesContentChange}
             />
           </Suspense>

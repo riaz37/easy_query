@@ -131,13 +131,13 @@ export const NAVIGATION_ACTION_CONFIGS: NavigationActionCategory[] = [
         }
       },
       {
-        actionName: 'go to ai-results',
+        actionName: 'go to ai-reports',
         actionType: 'page_navigation',
-        targetPage: 'ai-results',
+        targetPage: 'ai-reports',
         handler: 'executePageNavigation',
         context: 'data_management',
-        description: 'Navigate to the AI analysis results page',
-        aliases: ['ai results', 'results', 'ai analysis', 'view results', 'go to results', 'ai-results'],
+        description: 'Navigate to the AI analysis reports page',
+        aliases: ['ai reports', 'reports', 'ai analysis', 'view reports', 'go to reports', 'ai-reports'],
         parameters: {
           optional: ['reportId', 'filter']
         },

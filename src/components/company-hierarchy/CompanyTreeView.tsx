@@ -44,10 +44,24 @@ const EmptyStateNode = React.memo(({ data }: { data: any }) => {
   return <EmptyState onAddParentCompany={data.onAddParentCompany} />;
 });
 
+// Loading State Node Component
+const LoadingStateNode = React.memo(() => {
+  return (
+    <div className="flex items-center justify-center min-h-[400px]">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400 mx-auto mb-4" />
+        <p className="text-white text-lg font-medium">Loading companies...</p>
+        <p className="text-gray-400 text-sm mt-2">Please wait while we fetch your company data</p>
+      </div>
+    </div>
+  );
+});
+
 // Define nodeTypes outside component to prevent recreation on every render
 const nodeTypes = {
   company: CompanyNode,
   emptyState: EmptyStateNode,
+  loadingState: LoadingStateNode,
 };
 
 // Define defaultEdgeOptions outside component to prevent recreation on every render
@@ -76,6 +90,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
 
   // State management
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
   const [selectedParentForFlow, setSelectedParentForFlow] = useState<
     string | null
@@ -94,6 +109,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
 
   const loadCompanies = async () => {
     try {
+      setIsLoading(true);
       // Use hooks for consistent API calls - no more response structure guessing!
       const [parentCompanies, subCompanies] = await Promise.all([
         getParentCompanies(),
@@ -142,12 +158,30 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
       console.error("Error loading companies:", error);
       toast.error("Failed to load companies");
       setCompanies([]); // Set empty array as fallback
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Create nodes and edges for React Flow - Simplified and precise
   const { nodes, edges } = useMemo(() => {
-    // Empty state
+    // Loading state
+    if (isLoading) {
+      return {
+        nodes: [
+          {
+            id: "loading-state",
+            type: "loadingState",
+            position: { x: 0, y: 0 },
+            data: {},
+            draggable: false,
+          },
+        ],
+        edges: [],
+      };
+    }
+
+    // Empty state (only show after loading is complete)
     if (companies.length === 0) {
       return {
         nodes: [
@@ -290,7 +324,7 @@ function CompanyTreeViewContent({ onCompanyCreated }: CompanyTreeViewProps) {
     }
 
     return { nodes: flowNodes, edges: flowEdges };
-  }, [companies, selectedCompany, selectedParentForFlow]);
+  }, [companies, selectedCompany, selectedParentForFlow, isLoading]);
 
   const [flowNodes, setNodes, onNodesChange] = useNodesState([]);
   const [flowEdges, setEdges, onEdgesChange] = useEdgesState([]);

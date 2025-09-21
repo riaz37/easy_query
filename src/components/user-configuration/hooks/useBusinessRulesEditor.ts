@@ -120,15 +120,6 @@ export const useBusinessRulesEditor = ({
     });
   }, []);
 
-  const handleRulesReset = useCallback(() => {
-    setEditorState(prev => ({
-      ...prev,
-      editedContent: businessRulesContent,
-      hasUnsavedChanges: false,
-      contentError: null,
-    }));
-  }, [businessRulesContent]);
-
   const handleRulesContentChange = useCallback(
     (content: string) => {
       setEditorState(prev => ({
@@ -147,14 +138,12 @@ export const useBusinessRulesEditor = ({
     handleRulesEdit,
     handleRulesSave,
     handleRulesCancel,
-    handleRulesReset,
     handleRulesContentChange,
   }), [
     editorState,
     handleRulesEdit,
     handleRulesSave,
     handleRulesCancel,
-    handleRulesReset,
     handleRulesContentChange,
   ]);
 };

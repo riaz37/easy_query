@@ -3,7 +3,6 @@ import React from "react";
 import Image from "next/image";
 import { Bell, User, LogIn, Settings } from "lucide-react";
 import { useUIStore } from "@/store/uiStore";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
 import { useTheme } from "@/store/theme-store";
 import { Button } from "@/components/ui/button";
@@ -129,16 +128,6 @@ export default function Navbar() {
 
         {/* Task Indicator */}
         <NavbarTaskIndicator />
-
-        {/* Theme Toggle */}
-        <ThemeToggle
-          size="sm"
-          className={cn(
-            theme === "dark"
-              ? "bg-gray-700/50 border-gray-600/30 hover:bg-gray-600/50"
-              : "bg-gray-200/50 border-gray-300/30 hover:bg-gray-300/50"
-          )}
-        />
 
         {/* User Avatar */}
         {isAuthenticated && user ? (
