@@ -2,12 +2,6 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { 
-  CheckCircle, 
-  Database, 
-  ArrowRight,
-  FileText
-} from "lucide-react";
 
 interface QueryResultOverlayProps {
   isVisible: boolean;
@@ -68,13 +62,7 @@ export function QueryResultOverlay({
           onClick={onViewResults}
           className="w-full bg-green-600 hover:bg-green-700 text-white py-3 cursor-pointer"
         >
-          {queryMode === 'reports' ? (
-            <FileText className="w-5 h-5 mr-2" />
-          ) : (
-            <Database className="w-5 h-5 mr-2" />
-          )}
           {queryMode === 'reports' ? 'View Report' : 'View Results'}
-          <ArrowRight className="w-5 h-5 ml-2" />
         </Button>
       </div>
     </div>

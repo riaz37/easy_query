@@ -2,10 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { Building2, ChevronRight, ChevronDown } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { ChevronRight, ChevronDown } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Company } from "../types";
 
@@ -65,7 +63,7 @@ function CompanyTreeItem({
   const hasChildren = company.children && company.children.length > 0;
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-0">
       {/* Parent Company */}
       <div
         className={cn(
@@ -99,8 +97,7 @@ function CompanyTreeItem({
           </span>
         </div>
 
-
-        {/* Expand/Collapse Icon - At the very end */}
+        {/* Expand/Collapse Icon */}
         {hasChildren && (
           <div className="flex items-center">
             {isExpanded ? (
@@ -112,58 +109,69 @@ function CompanyTreeItem({
         )}
       </div>
 
-      {/* Sub-Companies */}
+      {/* Sub-Companies Container */}
       {hasChildren && isExpanded && (
-        <div className="ml-4 space-y-1">
-          {company.children!.map((child, index) => {
-            const isLast = index === company.children!.length - 1;
+        <div className="relative">
+          {/* Main vertical line - spans all children */}
+          <div 
+            className="absolute left-2 w-px bg-emerald-400"
+            style={{
+              top: '0px',
+              height: `${company.children!.length * 36}px`
+            }}
+          />
+          
+          {/* Children items */}
+          <div className="space-y-0">
+            {company.children!.map((child, index) => {
+              const isLast = index === company.children!.length - 1;
+              
+              return (
+                <div key={child.id} className="relative flex items-center">
+                  {/* Horizontal connector line */}
+                  <div 
+                    className="absolute left-2 w-3 h-px bg-emerald-400"
+                    style={{
+                      top: '18px' // Center of the item
+                    }}
+                  />
+                  
+                  {/* Child Company Item */}
+                  <div
+                    className={cn(
+                      "flex items-center gap-2 p-2 ml-6 rounded-lg cursor-pointer transition-all duration-200",
+                      "hover:bg-emerald-500/10 active:scale-95",
+                      selectedCompany === child.id &&
+                        "bg-emerald-500/15 border border-emerald-400/30"
+                    )}
+                    onClick={() => onSelectCompany(child.id)}
+                    style={{
+                      height: '36px',
+                      minHeight: '36px'
+                    }}
+                  >
+                    {/* File Icon */}
+                    <div className="w-4 h-4 text-emerald-400/70">
+                      <Image
+                        src="/filelogo.svg"
+                        alt="Sub-Company"
+                        width={16}
+                        height={16}
+                        className="w-4 h-4"
+                      />
+                    </div>
 
-            return (
-              <div key={child.id} className="relative">
-                {/* Tree connector lines - Fully connected */}
-                <div className="absolute left-2 top-0 flex items-center h-8">
-                  {/* Vertical line that continues for all items except the last */}
-                  {!isLast && (
-                    <div className="absolute left-0 top-4 w-px h-4 bg-emerald-400" />
-                  )}
-                  <div className="flex">
-                    {/* Main vertical line */}
-                    <div className="w-px h-4 bg-emerald-400" />
-                    {/* Horizontal connector line */}
-                    <div className="w-3 h-px mt-4 bg-emerald-400" />
+                    {/* Company Name */}
+                    <div className="flex-1 min-w-0 flex items-center gap-2">
+                      <span className="text-sm text-gray-700 dark:text-gray-300 truncate">
+                        {child.name}
+                      </span>
+                    </div>
                   </div>
                 </div>
-
-                <div
-                  className={cn(
-                    "flex items-center gap-2 p-2 ml-6 rounded-lg cursor-pointer transition-all duration-200",
-                    "hover:bg-emerald-500/10 active:scale-95",
-                    selectedCompany === child.id &&
-                      "bg-emerald-500/15 border border-emerald-400/30"
-                  )}
-                  onClick={() => onSelectCompany(child.id)}
-                >
-                  {/* File Icon */}
-                  <div className="w-4 h-4 text-emerald-400/70">
-                    <Image
-                      src="/filelogo.svg"
-                      alt="Sub-Company"
-                      width={16}
-                      height={16}
-                      className="w-4 h-4"
-                    />
-                  </div>
-
-                  {/* Company Name */}
-                  <div className="flex-1 min-w-0 flex items-center gap-2">
-                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate">
-                      {child.name}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

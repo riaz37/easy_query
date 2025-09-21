@@ -63,7 +63,7 @@ export function QuickSuggestions({
         {suggestions.map((suggestion, index) => (
           <div
             key={index}
-            className="p-4 cursor-pointer hover:scale-105 transition-transform duration-200"
+            className="p-4 cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col h-48"
             onClick={() => handleSuggestionClick(suggestion.query)}
             style={{
               background:
@@ -75,17 +75,17 @@ export function QuickSuggestions({
               backdropFilter: "blur(30px)",
             }}
           >
-            <div className="space-y-2">
-              <p className="text-sm text-slate-400">
+            <div className="flex flex-col h-full">
+              <p className="text-sm text-slate-400 flex-1">
                 {suggestion.text}
               </p>
-               {/* Quicksuggest SVG at bottom of each card */}
-               <div className="flex justify-start mt-2 -ml-4 -mb-4">
+              {/* Quicksuggest SVG at bottom of each card - consistently positioned */}
+              <div className="flex justify-start mt-auto -ml-4 -mb-4">
                 <Image
                   src="/querydemo.svg"
                   alt="Quick Suggest"
-                  width={120}
-                  height={120}
+                  width={220}
+                  height={220}
                   className="opacity-60"
                 />
               </div>

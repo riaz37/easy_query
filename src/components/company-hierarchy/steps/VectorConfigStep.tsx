@@ -340,21 +340,6 @@ export function VectorConfigStep({
         )}
       </div>
 
-      {/* Skip option */}
-      <div className="border-t border-gray-700/30 pt-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-400">
-            Vector configuration is optional. You can configure it later.
-          </p>
-          <Button
-            variant="outline"
-            onClick={() => setCurrentStep("final-creation")}
-            className="modal-button-secondary"
-          >
-            Skip for Now
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

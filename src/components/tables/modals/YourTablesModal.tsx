@@ -326,7 +326,6 @@ export function YourTablesModal({
                           >
                             <div className="flex items-center gap-2 text-white font-medium text-sm">
                               Table Name
-                              {getSortIcon("table_name")}
                             </div>
                           </th>
                           <th 
@@ -335,7 +334,6 @@ export function YourTablesModal({
                           >
                             <div className="flex items-center gap-2 text-white font-medium text-sm">
                               Full Name
-                              {getSortIcon("full_name")}
                             </div>
                           </th>
                           <th 
@@ -344,7 +342,6 @@ export function YourTablesModal({
                           >
                             <div className="flex items-center gap-2 text-white font-medium text-sm">
                               Schema
-                              {getSortIcon("schema_name")}
                           </div>
                           </th>
                           <th 
@@ -353,7 +350,6 @@ export function YourTablesModal({
                           >
                             <div className="flex items-center gap-2 text-white font-medium text-sm">
                               Columns
-                              {getSortIcon("columns")}
                         </div>
                           </th>
                           <th className="px-6 py-4 text-right text-white font-medium text-sm rounded-tr-xl">

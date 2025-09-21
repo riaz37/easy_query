@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { SystemNode, CardPosition } from "./types";
 import Image from "next/image";
 
@@ -10,6 +10,7 @@ interface SystemCardProps {
   onMouseDown: (e: React.MouseEvent, nodeId: string) => void;
   onMouseEnter: (nodeId: string) => void;
   onMouseLeave: () => void;
+  onPositionChange?: (nodeId: string, newPosition: CardPosition) => void;
   theme?: "light" | "dark";
 }
 
@@ -21,38 +22,106 @@ export const SystemCard: React.FC<SystemCardProps> = ({
   onMouseDown,
   onMouseEnter,
   onMouseLeave,
+  onPositionChange,
   theme = "dark",
 }) => {
+  const [isDraggingLocal, setIsDraggingLocal] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setIsDraggingLocal(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    setDragOffset({ x: 0, y: 0 });
+    
+    onMouseDown(e, node.id);
+  }, [node.id, onMouseDown]);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDraggingLocal) return;
+    
+    e.preventDefault();
+    
+    const deltaX = e.clientX - dragStart.x;
+    const deltaY = e.clientY - dragStart.y;
+    
+    setDragOffset({ x: deltaX, y: deltaY });
+  }, [isDraggingLocal, dragStart]);
+
+  const handleMouseUp = useCallback(() => {
+    if (!isDraggingLocal) return;
+    
+    setIsDraggingLocal(false);
+    
+    // Calculate new position based on drag offset
+    if (onPositionChange && (dragOffset.x !== 0 || dragOffset.y !== 0)) {
+      const containerWidth = window.innerWidth;
+      const containerHeight = window.innerHeight;
+      
+      const newX = Math.max(0, Math.min(100, position.x + (dragOffset.x / containerWidth) * 100));
+      const newY = Math.max(0, Math.min(100, position.y + (dragOffset.y / containerHeight) * 100));
+      
+      onPositionChange(node.id, { x: newX, y: newY });
+    }
+    
+    setDragOffset({ x: 0, y: 0 });
+  }, [isDraggingLocal, dragOffset, position, onPositionChange, node.id]);
+
+  // Add global mouse event listeners
+  React.useEffect(() => {
+    if (isDraggingLocal) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDraggingLocal, handleMouseMove, handleMouseUp]);
+
+  // Calculate current position with drag offset
+  const currentPosition = {
+    x: position.x + (dragOffset.x / window.innerWidth) * 100,
+    y: position.y + (dragOffset.y / window.innerHeight) * 100
+  };
   return (
     <div
+      ref={cardRef}
       className="absolute transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
       style={{
-        left: `${position.x}%`,
-        top: `${position.y}%`,
-        zIndex: isDragging ? 1000 : 10,
-        transition: isDragging ? "none" : "all 0.3s ease-out",
+        left: `${currentPosition.x}%`,
+        top: `${currentPosition.y}%`,
+        zIndex: (isDragging || isDraggingLocal) ? 1000 : 10,
+        transition: (isDragging || isDraggingLocal) ? "none" : "all 0.3s ease-out",
       }}
       onMouseEnter={() => onMouseEnter(node.id)}
       onMouseLeave={onMouseLeave}
     >
       <div
         className={`relative group cursor-grab active:cursor-grabbing transition-all duration-300 ${
-          isActive || isDragging ? "scale-105" : "hover:scale-105"
-        } ${isDragging ? "z-50 shadow-2xl" : ""}`}
-        onMouseDown={(e) => onMouseDown(e, node.id)}
+          isActive || isDragging || isDraggingLocal ? "scale-105" : "hover:scale-105"
+        } ${(isDragging || isDraggingLocal) ? "z-50 shadow-2xl" : ""}`}
+        onMouseDown={handleMouseDown}
         style={{
-          cursor: isDragging ? "grabbing" : "grab",
+          cursor: (isDragging || isDraggingLocal) ? "grabbing" : "grab",
           filter:
-            isActive || isDragging
+            isActive || isDragging || isDraggingLocal
               ? "drop-shadow(0 0 30px rgba(16, 185, 129, 0.6))"
               : undefined,
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.filter =
-            "drop-shadow(0 0 40px rgba(16, 185, 129, 0.8))";
+          if (!isDraggingLocal) {
+            e.currentTarget.style.filter =
+              "drop-shadow(0 0 40px rgba(16, 185, 129, 0.8))";
+          }
         }}
         onMouseLeave={(e) => {
-          if (!isActive && !isDragging) {
+          if (!isActive && !isDragging && !isDraggingLocal) {
             e.currentTarget.style.filter = "";
           }
         }}
@@ -60,7 +129,7 @@ export const SystemCard: React.FC<SystemCardProps> = ({
         {/* Glass Card - Theme-aware Design */}
         <div
           className={`relative overflow-hidden ${
-            isDragging ? "shadow-2xl shadow-emerald-500/20" : ""
+            (isDragging || isDraggingLocal) ? "shadow-2xl shadow-emerald-500/20" : ""
           }`}
           style={{
             width: "371.2px",
@@ -159,7 +228,7 @@ export const SystemCard: React.FC<SystemCardProps> = ({
           {/* Hover glow effect */}
           <div
             className={`absolute inset-0 rounded-[25.6px] transition-all duration-500 pointer-events-none ${
-              isDragging || isActive
+              isDragging || isDraggingLocal || isActive
                 ? "opacity-30"
                 : "opacity-0 group-hover:opacity-20"
             }`}

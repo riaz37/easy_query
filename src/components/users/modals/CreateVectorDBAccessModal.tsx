@@ -53,9 +53,11 @@ export function CreateVectorDBAccessModal({
   editingUser = "",
 }: CreateVectorDBAccessModalProps) {
   const theme = useTheme();
-  
+
   // Form state
-  const [selectedUserId, setSelectedUserId] = useState<string>(selectedUser || "");
+  const [selectedUserId, setSelectedUserId] = useState<string>(
+    selectedUser || ""
+  );
   const [selectedDatabase, setSelectedDatabase] = useState<string>("");
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [newTableName, setNewTableName] = useState("");
@@ -74,21 +76,25 @@ export function CreateVectorDBAccessModal({
 
   // Hooks
   const { user } = useAuthContext();
-  
+
   // Placeholder state - will be implemented with proper database context
   const isLoading = false;
   const error = null;
-  
+
   const createUserConfig = async (data: UserConfigCreateRequest) => {
     try {
       const response = await ServiceRegistry.userConfig.createUserConfig(data);
       return response;
     } catch (error) {
-      console.error('Error creating user config:', error);
+      console.error("Error creating user config:", error);
       throw error;
     }
   };
-  const { vectorDBConfigs, getVectorDBConfigs, isLoading: isLoadingDatabases } = useVectorDB();
+  const {
+    vectorDBConfigs,
+    getVectorDBConfigs,
+    isLoading: isLoadingDatabases,
+  } = useVectorDB();
 
   // Load data when modal opens
   useEffect(() => {
@@ -106,8 +112,8 @@ export function CreateVectorDBAccessModal({
     try {
       // Load vector DB configurations
       const result = await getVectorDBConfigs();
-      console.log('Vector DB configs loaded:', result);
-      console.log('vectorDBConfigs state:', vectorDBConfigs);
+      console.log("Vector DB configs loaded:", result);
+      console.log("vectorDBConfigs state:", vectorDBConfigs);
     } catch (error) {
       console.error("Error loading data:", error);
     }
@@ -198,7 +204,7 @@ export function CreateVectorDBAccessModal({
 
       const result = await createUserConfig(request);
 
-      if (result && (result.status === 'success' || result.config_id)) {
+      if (result && (result.status === "success" || result.config_id)) {
         setSubmitSuccess(true);
         console.log("Vector DB access created successfully:", result);
 
@@ -244,7 +250,6 @@ export function CreateVectorDBAccessModal({
     setExistingUserTables([]);
     setIsFetchingUserTables(false);
     setUserTablesError("");
-    // setAvailableDatabases([]); // This line is no longer needed
   };
 
   // Handle close
@@ -255,26 +260,27 @@ export function CreateVectorDBAccessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent" showCloseButton={false}>
+      <DialogContent
+        className="max-w-4xl max-h-[90vh] p-0 border-0 bg-transparent"
+        showCloseButton={false}
+      >
         <div className="modal-enhanced">
           <div className="modal-content-enhanced max-h-[90vh] overflow-y-auto">
             <DialogHeader className="modal-header-enhanced">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <DialogTitle className="modal-title-enhanced">
-                    {editingUser ? "Edit Vector DB Access" : "Create Vector DB Access"}
+                    {editingUser
+                      ? "Edit Vector DB Access"
+                      : "Create Vector DB Access"}
                   </DialogTitle>
                   <p className="modal-description-enhanced">
-                    {editingUser 
-                      ? "Update user access to vector databases" 
-                      : "Grant user access to vector databases for AI operations"
-                    }
+                    {editingUser
+                      ? "Update user access to vector databases"
+                      : "Grant user access to vector databases for AI operations"}
                   </p>
                 </div>
-                <button
-                  onClick={handleClose}
-                  className="modal-close-button"
-                >
+                <button onClick={handleClose} className="modal-close-button">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -283,281 +289,349 @@ export function CreateVectorDBAccessModal({
             <div className="modal-form-content">
               {/* User ID Input */}
               <div className="modal-form-group">
-                <Label className="modal-label-enhanced">User ID <span className="text-red-500">*</span></Label>
+                <Label className="modal-label-enhanced">
+                  User ID <span className="text-red-500">*</span>
+                </Label>
                 <Input
-                  placeholder="Enter user ID (email)"
+                  placeholder="Enter user ID"
                   value={selectedUserId}
                   onChange={(e) => setSelectedUserId(e.target.value)}
                   className="modal-input-enhanced"
                 />
-                <div className="modal-form-description">
-                  Enter the email address of the user you want to grant vector database access to
-                </div>
               </div>
 
               {/* Database Selection */}
               <div className="modal-form-group">
-                <Label className="modal-label-enhanced">
-                  Database
-                </Label>
-            
-            {isLoadingDatabases ? (
-              <div className="flex items-center space-x-2 p-3 modal-input-enhanced rounded-lg">
-                <Spinner size="sm" variant="accent-purple" />
-                <span className={cn(
-                  "text-sm font-medium",
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
-                )}>Loading available databases...</span>
+                <Label className="modal-label-enhanced">Database</Label>
+
+                {isLoadingDatabases ? (
+                  <div className="flex items-center space-x-2 p-3 modal-input-enhanced rounded-lg">
+                    <Spinner size="sm" variant="accent-purple" />
+                    <span
+                      className={cn(
+                        "text-sm font-medium",
+                        theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      )}
+                    >
+                      Loading available databases...
+                    </span>
+                  </div>
+                ) : vectorDBConfigs.length === 0 ? (
+                  <div
+                    className={cn(
+                      "text-sm font-medium modal-input-enhanced p-3 rounded-lg",
+                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    )}
+                  >
+                    No databases available. Please check your database
+                    configuration.
+                  </div>
+                ) : (
+                  <Select
+                    value={selectedDatabase}
+                    onValueChange={setSelectedDatabase}
+                  >
+                    <SelectTrigger className="modal-select-enhanced w-full">
+                      <SelectValue placeholder="Select database" />
+                    </SelectTrigger>
+                    <SelectContent className="modal-select-content-enhanced">
+                      {Array.isArray(vectorDBConfigs) &&
+                        vectorDBConfigs.map((db) => (
+                          <SelectItem
+                            key={db.db_id}
+                            value={db.db_id.toString()}
+                            className="dropdown-item"
+                          >
+                            <div className="flex flex-col">
+                              <span className="font-medium">
+                                {db.db_config.DB_NAME}
+                              </span>
+                              <span
+                                className={cn(
+                                  "text-xs font-medium",
+                                  theme === "dark"
+                                    ? "text-gray-400"
+                                    : "text-gray-600"
+                                )}
+                              >
+                                {db.db_config.DB_HOST}:{db.db_config.DB_PORT}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
-            ) : vectorDBConfigs.length === 0 ? (
-              <div className={cn(
-                "text-sm font-medium modal-input-enhanced p-3 rounded-lg",
-                theme === "dark" ? "text-gray-400" : "text-gray-600"
-              )}>
-                No databases available. Please check your database configuration.
-              </div>
-            ) : (
-              <Select
-                value={selectedDatabase}
-                onValueChange={setSelectedDatabase}
-              >
-                <SelectTrigger className="modal-select-enhanced w-full">
-                  <SelectValue placeholder="Select database" />
-                </SelectTrigger>
-                <SelectContent className="modal-select-content-enhanced">
-                  {Array.isArray(vectorDBConfigs) && vectorDBConfigs.map((db) => (
-                    <SelectItem key={db.db_id} value={db.db_id.toString()} className="dropdown-item">
-                      <div className="flex flex-col">
-                        <span className="font-medium">{db.db_config.DB_NAME}</span>
-                        <span className={cn(
-                          "text-xs font-medium",
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
-                        )}>
-                          {db.db_config.DB_HOST}:{db.db_config.DB_PORT}
-                        </span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          </div>
 
-          {/* Table Selection */}
-          <div className="modal-form-group">
-            <Label className="modal-label-enhanced">
-              Tables
-            </Label>
+              {/* Table Selection */}
+              <div className="modal-form-group">
+                <Label className="modal-label-enhanced">Tables</Label>
 
-            {/* Add New Table */}
-            <div className="flex gap-2">
-              <Input
-                value={newTableName}
-                onChange={(e) => setNewTableName(e.target.value)}
-                placeholder="Enter new table name"
-                className="modal-input-enhanced flex-1"
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    handleAddNewTable();
-                  }
-                }}
-              />
-              <Button
-                onClick={handleAddNewTable}
-                disabled={!newTableName.trim()}
-                variant="outline"
-                size="sm"
-                className="modal-button-secondary"
-              >
-                Add Table
-              </Button>
-            </div>
-
-            {/* Search Existing Tables */}
-            {existingUserTables.length > 0 && (
-              <div className="space-y-3">
-                <div className="relative">
-                  <Search className={cn(
-                    "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4",
-                    theme === "dark" ? "text-gray-400" : "text-gray-500"
-                  )} />
+                {/* Add New Table */}
+                <div className="flex gap-2">
                   <Input
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search existing tables..."
-                    className="pl-10 modal-input-enhanced"
+                    value={newTableName}
+                    onChange={(e) => setNewTableName(e.target.value)}
+                    placeholder="Enter new table name"
+                    className="modal-input-enhanced flex-1"
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        handleAddNewTable();
+                      }
+                    }}
                   />
+                  <Button
+                    onClick={handleAddNewTable}
+                    disabled={!newTableName.trim()}
+                    variant="outline"
+                    size="sm"
+                    className="modal-button-secondary"
+                  >
+                    Add Table
+                  </Button>
                 </div>
 
-                {/* Existing Tables List */}
-                <div className="max-h-48 overflow-y-auto modal-input-enhanced rounded-lg p-3">
-                  <div className={cn(
-                    "text-sm mb-2 font-medium",
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
-                  )}>
-                    Select from existing tables:
+                {/* Search Existing Tables */}
+                {existingUserTables.length > 0 && (
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <Search
+                        className={cn(
+                          "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4",
+                          theme === "dark" ? "text-gray-400" : "text-gray-500"
+                        )}
+                      />
+                      <Input
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Search existing tables..."
+                        className="pl-10 modal-input-enhanced"
+                      />
+                    </div>
+
+                    {/* Existing Tables List */}
+                    <div className="max-h-48 overflow-y-auto modal-input-enhanced rounded-lg p-3">
+                      <div
+                        className={cn(
+                          "text-sm mb-2 font-medium",
+                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                        )}
+                      >
+                        Select from existing tables:
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {filteredTables.map((table) => (
+                          <div
+                            key={table}
+                            className="flex items-center space-x-2"
+                          >
+                            <input
+                              type="checkbox"
+                              id={`existing-${table}`}
+                              checked={selectedTables.includes(table)}
+                              onChange={(e) =>
+                                handleTableSelection(table, e.target.checked)
+                              }
+                              className="rounded border-slate-500 bg-slate-600 text-green-400 focus:ring-green-400"
+                            />
+                            <Label
+                              htmlFor={`existing-${table}`}
+                              className={cn(
+                                "text-sm cursor-pointer flex-1 font-medium",
+                                theme === "dark"
+                                  ? "text-white"
+                                  : "text-gray-800"
+                              )}
+                            >
+                              {table}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {filteredTables.map((table) => (
-                      <div key={table} className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id={`existing-${table}`}
-                          checked={selectedTables.includes(table)}
-                          onChange={(e) => handleTableSelection(table, e.target.checked)}
-                          className="rounded border-slate-500 bg-slate-600 text-green-400 focus:ring-green-400"
-                        />
-                        <Label
-                          htmlFor={`existing-${table}`}
-                          className={cn(
-                            "text-sm cursor-pointer flex-1 font-medium",
-                            theme === "dark" ? "text-white" : "text-gray-800"
-                          )}
+                )}
+
+                {/* Selected Tables Display */}
+                {selectedTables.length > 0 && (
+                  <div className="space-y-2">
+                    <Label className="modal-label-enhanced text-sm">
+                      Selected Tables ({selectedTables.length}):
+                    </Label>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedTables.map((table) => (
+                        <Badge
+                          key={table}
+                          variant="secondary"
+                          className="bg-green-600/20 text-green-400 border-green-500"
                         >
                           {table}
-                        </Label>
+                          <button
+                            onClick={() => handleRemoveTable(table)}
+                            className="ml-2 hover:text-red-400 text-red-400"
+                          >
+                            ×
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Summary */}
+              {selectedDatabase && selectedTables.length > 0 && (
+                <div className="modal-form-group">
+                  <Card className="modal-input-enhanced">
+                    <CardHeader>
+                      <CardTitle className="modal-title-enhanced text-lg">
+                        Access Summary
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            User ID:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            {selectedUserId || "Not specified"}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            Database ID:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            {selectedDatabase}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            Tables:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            {selectedTables.length}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            className={cn(
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            )}
+                          >
+                            Access Level:
+                          </span>
+                          <span
+                            className={cn(
+                              "ml-2",
+                              theme === "dark" ? "text-white" : "text-gray-900"
+                            )}
+                          >
+                            2 (Default)
+                          </span>
+                        </div>
                       </div>
-                    ))}
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {/* Error Display */}
+              {error && (
+                <div className="modal-form-group">
+                  <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+                    <span className="text-red-400 text-sm">{error}</span>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Selected Tables Display */}
-            {selectedTables.length > 0 && (
-              <div className="space-y-2">
-                <Label className="modal-label-enhanced text-sm">
-                  Selected Tables ({selectedTables.length}):
-                </Label>
-                <div className="flex flex-wrap gap-2">
-                  {selectedTables.map((table) => (
-                    <Badge
-                      key={table}
-                      variant="secondary"
-                      className="bg-green-600/20 text-green-400 border-green-500"
-                    >
-                      {table}
-                      <button
-                        onClick={() => handleRemoveTable(table)}
-                        className="ml-2 hover:text-red-400 text-red-400"
-                      >
-                        ×
-                      </button>
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Summary */}
-          {selectedDatabase && selectedTables.length > 0 && (
-            <div className="modal-form-group">
-              <Card className="modal-input-enhanced">
-                <CardHeader>
-                  <CardTitle className="modal-title-enhanced text-lg">
-                    Access Summary
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>User ID:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>{selectedUserId || 'Not specified'}</span>
-                  </div>
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>Database ID:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>{selectedDatabase}</span>
-                  </div>
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>Tables:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>{selectedTables.length}</span>
-                  </div>
-                  <div>
-                    <span className={cn(
-                      theme === "dark" ? "text-gray-400" : "text-gray-500"
-                    )}>Access Level:</span>
-                    <span className={cn(
-                      "ml-2",
-                      theme === "dark" ? "text-white" : "text-gray-900"
-                    )}>2 (Default)</span>
+              {/* Submit Error Display */}
+              {submitError && (
+                <div className="modal-form-group">
+                  <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+                    <span className="text-red-400 text-sm">{submitError}</span>
                   </div>
                 </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+              )}
 
-          {/* Error Display */}
-          {error && (
-            <div className="modal-form-group">
-              <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                <span className="text-red-400 text-sm">{error}</span>
-              </div>
+              {/* Submit Success Display */}
+              {submitSuccess && (
+                <div className="modal-form-group">
+                  <div className="flex items-center p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+                    <span className="text-green-400 text-sm">
+                      Vector DB access {editingUser ? "updated" : "created"}{" "}
+                      successfully!
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
 
-          {/* Submit Error Display */}
-          {submitError && (
-            <div className="modal-form-group">
-              <div className="flex items-center p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                <span className="text-red-400 text-sm">{submitError}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Submit Success Display */}
-          {submitSuccess && (
-            <div className="modal-form-group">
-              <div className="flex items-center p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
-                <span className="text-green-400 text-sm">
-                  Vector DB access {editingUser ? 'updated' : 'created'} successfully!
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="modal-footer-enhanced">
-          <Button
-            variant="outline"
-            onClick={handleClose}
-            disabled={isSubmitting}
-            className="modal-button-secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={
-              isSubmitting ||
-              !selectedUserId ||
-              !selectedDatabase ||
-              selectedTables.length === 0
-            }
-            className="modal-button-primary"
-          >
-            {isSubmitting 
-              ? (editingUser ? "Updating..." : "Creating...") 
-              : (editingUser ? "Update Vector Access" : "Create Vector Access")
-            }
-          </Button>
+            {/* Action Buttons */}
+            <div className="modal-footer-enhanced">
+              <Button
+                variant="outline"
+                onClick={handleClose}
+                disabled={isSubmitting}
+                className="modal-button-secondary"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSubmit}
+                disabled={
+                  isSubmitting ||
+                  !selectedUserId ||
+                  !selectedDatabase ||
+                  selectedTables.length === 0
+                }
+                className="modal-button-primary"
+              >
+                {isSubmitting
+                  ? editingUser
+                    ? "Updating..."
+                    : "Creating..."
+                  : editingUser
+                  ? "Update Vector Access"
+                  : "Create Vector Access"}
+              </Button>
             </div>
           </div>
         </div>
