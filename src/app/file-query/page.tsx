@@ -269,6 +269,7 @@ export default function FileQueryPage() {
       selectedTable,
       createQueryTask,
       executeTask,
+      useTable,
     ]
   );
 
@@ -369,175 +370,176 @@ export default function FileQueryPage() {
           `,
           }}
         />
-      {/* Page Header - Only show when no query results */}
-      {queryResults.length === 0 && !queryError && (
-        <ContentWrapper className="mb-20">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1
-                className="text-4xl font-bold mb-2 block"
-                style={{
-                  background:
-                    "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  display: "block",
-                  backgroundSize: "100% 100%",
-                  backgroundRepeat: "no-repeat",
-                }}
-              >
-                Hi there, {user?.username || ""}
-              </h1>
-              <p
-                className="text-xl block"
-                style={{
-                  background:
-                    "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  display: "block",
-                  backgroundSize: "100% 100%",
-                  backgroundRepeat: "no-repeat",
-                }}
-              >
-                What would you like to know?
-              </p>
-            </div>
-            <Button
-              variant="outline"
-              className="text-white flex items-center gap-2"
-              style={{
-                background:
-                  "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-                border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-                height: "48px",
-                minWidth: "64px",
-                borderRadius: "99px",
-              }}
-              onClick={() => {
-                // Handle history button click
-                console.log("History clicked");
-              }}
-            >
-              <Image
-                src="/file-query/history.svg"
-                alt="History"
-                width={16}
-                height={16}
-                className="h-4 w-4"
-              />
-              History
-            </Button>
-          </div>
-        </ContentWrapper>
-      )}
 
-      {/* Query Results - Now at the top */}
-      {queryResults.length > 0 && (
-        <ContentWrapper className="mb-8">
-          <div className="query-content-gradient">
+        {/* Page Header - Only show when no query results */}
+        {queryResults.length === 0 && !queryError && (
+          <ContentWrapper className="mb-20">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1
+                  className="text-4xl font-bold mb-2 block"
+                  style={{
+                    background:
+                      "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    color: "transparent",
+                    display: "block",
+                    backgroundSize: "100% 100%",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                >
+                  Hi there, {user?.username || ""}
+                </h1>
+                <p
+                  className="text-xl block"
+                  style={{
+                    background:
+                      "radial-gradient(70.83% 118.23% at 55.46% 50%, #0DAC5C 0%, #FFFFFF 84.18%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    color: "transparent",
+                    display: "block",
+                    backgroundSize: "100% 100%",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                >
+                  What would you like to know?
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                className="text-white flex items-center gap-2"
+                style={{
+                  background:
+                    "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
+                  border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
+                  height: "48px",
+                  minWidth: "64px",
+                  borderRadius: "99px",
+                }}
+                onClick={() => {
+                  // Handle history button click
+                  console.log("History clicked");
+                }}
+              >
+                <Image
+                  src="/file-query/history.svg"
+                  alt="History"
+                  width={16}
+                  height={16}
+                  className="h-4 w-4"
+                />
+                History
+              </Button>
+            </div>
+          </ContentWrapper>
+        )}
+
+        {/* Query Results - Now at the top */}
+        {queryResults.length > 0 && (
+          <ContentWrapper className="mb-8">
+            <div className="query-content-gradient">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <h3 className="text-white font-semibold text-lg">
-                  Query: "{query}"
+                    Query: "{query}"
                   </h3>
                 </div>
-              
-              {/* Fixed Top Separator */}
-              <div
-                className="w-full border-bottom mb-4"
-                style={{
-                  borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
-                }}
-              ></div>
-              
-              {/* Scrollable Content Area */}
-              <div className="max-h-[300px] overflow-y-auto">
+                
+                {/* Fixed Top Separator */}
+                <div
+                  className="w-full border-bottom mb-4"
+                  style={{
+                    borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
+                  }}
+                ></div>
+                
+                {/* Scrollable Content Area */}
+                <div className="max-h-[300px] overflow-y-auto">
                   <FileResults
                     results={queryResults}
                     query={query}
                     isLoading={isExecuting}
                   />
                 </div>
-              
-              {/* Fixed Bottom Separator */}
-              <div
-                className="w-full border-bottom mt-4"
-                style={{
-                  borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
-                }}
-              ></div>
-              
-              {/* Copy Button - After Separator */}
-              <div className="flex justify-start mt-4">
-                <button
-                  onClick={async () => {
-                    try {
-                      const allResultsText = queryResults
-                        .map((result) => {
-                          if (result.answer && result.answer.trim()) return result.answer;
-                          if (result.content && result.content.trim()) return result.content;
-                          if (result.text && result.text.trim()) return result.text;
-                          return "No content available";
-                        })
-                        .join("\n\n");
-                      
-                      await navigator.clipboard.writeText(allResultsText);
-                      toast.success("Results copied to clipboard!");
-                    } catch (error) {
-                      console.error("Failed to copy to clipboard:", error);
-                      toast.error("Failed to copy to clipboard");
-                    }
+                
+                {/* Fixed Bottom Separator */}
+                <div
+                  className="w-full border-bottom mt-4"
+                  style={{
+                    borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
                   }}
-                  className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors cursor-pointer"
-                  title="Copy all results to clipboard"
-                >
-                  <Image
-                    src="/file-query/copy.svg"
-                    alt="Copy"
-                    width={16}
-                    height={16}
-                    className="w-4 h-4"
-                  />
-                </button>
+                ></div>
+                
+                {/* Copy Button - After Separator */}
+                <div className="flex justify-start mt-4">
+                  <button
+                    onClick={async () => {
+                      try {
+                        const allResultsText = queryResults
+                          .map((result) => {
+                            if (result.answer && result.answer.trim()) return result.answer;
+                            if (result.content && result.content.trim()) return result.content;
+                            if (result.text && result.text.trim()) return result.text;
+                            return "No content available";
+                          })
+                          .join("\n\n");
+                        
+                        await navigator.clipboard.writeText(allResultsText);
+                        toast.success("Results copied to clipboard!");
+                      } catch (error) {
+                        console.error("Failed to copy to clipboard:", error);
+                        toast.error("Failed to copy to clipboard");
+                      }
+                    }}
+                    className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors cursor-pointer"
+                    title="Copy all results to clipboard"
+                  >
+                    <Image
+                      src="/file-query/copy.svg"
+                      alt="Copy"
+                      width={16}
+                      height={16}
+                      className="w-4 h-4"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </ContentWrapper>
-      )}
+          </ContentWrapper>
+        )}
 
-      {/* Query Error - Also at the top */}
-      {queryError && (
-        <ContentWrapper className="mb-20">
-          <div className="query-content-gradient max-h-[200px] overflow-y-auto">
-            <div className="p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <h3 className="text-red-400 font-semibold text-lg">
-                Query Error
-              </h3>
+        {/* Query Error - Also at the top */}
+        {queryError && (
+          <ContentWrapper className="mb-20">
+            <div className="query-content-gradient max-h-[200px] overflow-y-auto">
+              <div className="p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <h3 className="text-red-400 font-semibold text-lg">
+                    Query Error
+                  </h3>
+                </div>
+                <div className="p-4 bg-red-900/30 border border-red-500/30 rounded-lg">
+                  <p className="text-red-300">{queryError}</p>
+                </div>
+              </div>
             </div>
-            <div className="p-4 bg-red-900/30 border border-red-500/30 rounded-lg">
-              <p className="text-red-300">{queryError}</p>
-            </div>
-          </div>
-        </div>
+          </ContentWrapper>
+        )}
+
+        {/* Table Toggle - Above Query Form */}
+        <ContentWrapper className="mb-8">
+          <UseTableToggle useTable={useTable} onToggle={setUseTable} />
         </ContentWrapper>
-      )}
 
-      {/* Table Toggle - Above Query Form */}
-      <ContentWrapper className="mb-8">
-        <UseTableToggle useTable={useTable} onToggle={setUseTable} />
-      </ContentWrapper>
-
-      {/* Main Content */}
-      <div className={`flex flex-col ${useTable ? 'lg:flex-row' : ''} mb-20`}>
-        {/* Left Column - File Query */}
-        <div className={`space-y-6 ${useTable ? 'lg:flex-1 lg:mr-2' : 'w-full'}`}>
-          <ContentWrapper>
+        {/* Main Content */}
+        <ContentWrapper>
+        <div className={`flex flex-col ${useTable ? 'lg:flex-row' : ''} mb-20 ${useTable ? 'lg:gap-4' : ''}`}>
+          {/* Left Column - File Query */}
+          <div className={`${useTable ? 'lg:flex-1' : 'w-full'}`}>
             <FileQueryCard
               query={query}
               setQuery={setQuery}
@@ -547,41 +549,39 @@ export default function FileQueryPage() {
                 handleQuerySubmit(query, { answerStyle: "detailed" })
               }
             />
-          </ContentWrapper>
-        </div>
-
-        {/* Right Column - Connect Table */}
-        {useTable && (
-          <div className={`space-y-6 ${useTable ? 'lg:w-2/5 lg:ml-2' : 'w-full'}`}>
-            <ContentWrapper>
-              <TableSection
-                selectedTable={selectedTable}
-                onTableSelect={(tableName) => {
-                  setSelectedTable(tableName);
-                  toast.success(`Selected table: ${tableName}`);
-                }}
-                currentDatabaseId={currentDatabaseId}
-              />
-            </ContentWrapper>
           </div>
-        )}
-      </div>
 
-      {/* Quick Suggestions Section - Only show when no query results */}
-      {queryResults.length === 0 && !queryError && (
-        <ContentWrapper className="mb-16">
-          <QuickSuggestions onQuerySelect={setQuery} />
+          {/* Right Column - Connect Table */}
+          {useTable && (
+            <div className={`${useTable ? 'lg:w-80' : 'w-full'} ${useTable ? 'mt-4 lg:mt-0' : ''}`}>
+                <TableSection
+                  selectedTable={selectedTable}
+                  onTableSelect={(tableName) => {
+                    setSelectedTable(tableName);
+                    toast.success(`Selected table: ${tableName}`);
+                  }}
+                  currentDatabaseId={currentDatabaseId}
+                />
+              </div>
+            )}
+          </div>
         </ContentWrapper>
-      )}
 
-      {/* Enhanced File Upload Modal */}
-      <EnhancedFileUploadModal
-        open={isUploadModalOpen}
-        onOpenChange={setIsUploadModalOpen}
-        onFilesUploaded={handleFilesUploaded}
-        onUploadStatusChange={handleUploadStatusChange}
-        disabled={!isAuthenticated}
-      />
+        {/* Quick Suggestions Section - Only show when no query results */}
+        {queryResults.length === 0 && !queryError && (
+          <ContentWrapper className="mb-16">
+            <QuickSuggestions onQuerySelect={setQuery} />
+          </ContentWrapper>
+        )}
+
+        {/* Enhanced File Upload Modal */}
+        <EnhancedFileUploadModal
+          open={isUploadModalOpen}
+          onOpenChange={setIsUploadModalOpen}
+          onFilesUploaded={handleFilesUploaded}
+          onUploadStatusChange={handleUploadStatusChange}
+          disabled={!isAuthenticated}
+        />
       </div>
     </PageLayout>
   );
