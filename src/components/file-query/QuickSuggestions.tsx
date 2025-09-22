@@ -63,7 +63,7 @@ export function QuickSuggestions({
         {suggestions.map((suggestion, index) => (
           <div
             key={index}
-            className="p-4 cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col h-48"
+            className="p-4 cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col h-48 overflow-hidden"
             onClick={() => handleSuggestionClick(suggestion.query)}
             style={{
               background:
