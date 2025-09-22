@@ -250,7 +250,7 @@ export function DatabaseQueryContent() {
         />
       
       {/* Welcome Header */}
-      <ContentWrapper className="mb-8">
+      <ContentWrapper className="mb-16">
         <div className="flex items-center justify-between">
         <div>
           <h1 
@@ -328,7 +328,7 @@ export function DatabaseQueryContent() {
       {/* Main Content - Full Width */}
       <ContentWrapper>
         <div className="space-y-6">
-          <div className="p-6 query-content-gradient">
+          <div className="p-3 query-content-gradient">
             <div className="flex items-start">
               <Image
                 src="/file-query/filerobot.svg"
@@ -344,7 +344,7 @@ export function DatabaseQueryContent() {
               </div>
             </div>
 
-            <div className="relative -mt-16 px-2 z-10">
+            <div className="relative -mt-16 z-10">
               {queryMode === 'query' ? (
                 <QueryForm
                   query={queryInput}
@@ -376,7 +376,7 @@ export function DatabaseQueryContent() {
       </ContentWrapper>
 
       {/* Quick Suggestions Section */}
-      <ContentWrapper className="mt-12">
+      <ContentWrapper className="mt-20">
         <QuickSuggestions
           title={queryMode === 'query' ? "Database Query Suggestions" : "AI Report Suggestions"}
           suggestions={
@@ -445,6 +445,7 @@ export function DatabaseQueryContent() {
       <QueryResultOverlay
         isVisible={showResultOverlay}
         onViewResults={handleViewResults}
+        onClose={() => setShowResultOverlay(false)}
         queryText={completedQuery}
         queryMode={queryMode}
       />

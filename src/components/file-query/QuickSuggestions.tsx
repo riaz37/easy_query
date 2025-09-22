@@ -1,13 +1,10 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import { BarChart3, FileText, Search, Database } from "lucide-react";
 
 interface Suggestion {
   text: string;
   query: string;
-  icon: React.ReactNode;
 }
 
 interface QuickSuggestionsProps {
@@ -26,23 +23,19 @@ export function QuickSuggestions({
   const defaultSuggestions = [
     { 
       text: "What are the main topics covered in the uploaded documents?", 
-      query: "What are the main topics covered in the uploaded documents?",
-      icon: <FileText className="h-4 w-4 text-green-400" /> 
+      query: "What are the main topics covered in the uploaded documents?"
     },
     { 
       text: "Summarize the key findings from the financial reports", 
-      query: "Summarize the key findings from the financial reports",
-      icon: <BarChart3 className="h-4 w-4 text-green-400" /> 
+      query: "Summarize the key findings from the financial reports"
     },
     { 
       text: "Find all mentions of budget allocations and spending", 
-      query: "Find all mentions of budget allocations and spending",
-      icon: <Search className="h-4 w-4 text-green-400" /> 
+      query: "Find all mentions of budget allocations and spending"
     },
     { 
       text: "Extract data from tables and structured content", 
-      query: "Extract data from tables and structured content",
-      icon: <Database className="h-4 w-4 text-green-400" /> 
+      query: "Extract data from tables and structured content"
     },
   ];
 
@@ -55,15 +48,15 @@ export function QuickSuggestions({
   };
 
   return (
-    <div className={`space-y-4 ${className}`} style={{ height: "320px" }}>
-      <h3 className="text-xl font-semibold text-white mb-6">
+    <div className={`space-y-4 ${className}`}>
+      <h3 className="text-lg font-semibold text-white mb-6">
         {title}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {suggestions.map((suggestion, index) => (
           <div
             key={index}
-            className="p-4 cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col h-48 overflow-hidden"
+            className="p-6 cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col justify-center items-center text-center min-h-[120px]"
             onClick={() => handleSuggestionClick(suggestion.query)}
             style={{
               background:
@@ -71,25 +64,13 @@ export function QuickSuggestions({
               border: "1.5px solid",
               borderImageSource:
                 "linear-gradient(158.39deg, rgba(255, 255, 255, 0.06) 14.19%, rgba(255, 255, 255, 1.5e-05) 50.59%, rgba(255, 255, 255, 1.5e-05) 68.79%, rgba(255, 255, 255, 0.015) 105.18%)",
-              borderRadius: "30px",
+              borderRadius: "20px",
               backdropFilter: "blur(30px)",
             }}
           >
-            <div className="flex flex-col h-full">
-              <p className="text-sm text-slate-400 flex-1">
-                {suggestion.text}
-              </p>
-              {/* Quicksuggest SVG at bottom of each card - consistently positioned */}
-              <div className="flex justify-start mt-auto -ml-4 -mb-4">
-                <Image
-                  src="/querydemo.svg"
-                  alt="Quick Suggest"
-                  width={220}
-                  height={220}
-                  className="opacity-60"
-                />
-              </div>
-            </div>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              {suggestion.text}
+            </p>
           </div>
         ))}
       </div>
