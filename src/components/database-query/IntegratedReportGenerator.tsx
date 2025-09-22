@@ -162,7 +162,7 @@ export function IntegratedReportGenerator({
           rows={1}
         />
         
-        <div className={`absolute right-2 flex gap-2 ${isMultiLine ? 'bottom-2' : 'top-1/2 transform -translate-y-1/2'}`}>
+        <div className={`absolute right-2 flex gap-2 items-center ${isMultiLine ? 'bottom-3' : 'top-3'}`}>
           <Button
             onClick={handleGenerateReport}
             disabled={isReportGenerating || !userQuery.trim()}

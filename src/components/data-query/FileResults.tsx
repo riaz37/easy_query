@@ -225,14 +225,6 @@ export function FileResults({
 
   return (
     <div className={className}>
-      {/* Top Separator */}
-      <div
-        className="w-full border-bottom mb-6"
-        style={{
-          borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
-        }}
-      ></div>
-
       {/* Response Content */}
       <div className="space-y-4">
         {currentResults.map(
@@ -246,7 +238,6 @@ export function FileResults({
                 <div className="text-white leading-relaxed whitespace-pre-wrap">
                   {displayContent}
                 </div>
-
 
                 {/* Source information if available */}
                 {(result.source_file || result.source_title) && (
@@ -267,32 +258,8 @@ export function FileResults({
             );
           }
         )}
-
       </div>
 
-      {/* Bottom Separator */}
-      <div
-        className="w-full border-bottom mt-6"
-        style={{
-          borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
-        }}
-      ></div>
-
-      {/* Copy Button */}
-      <div className="flex justify-start mt-4">
-        <button
-          onClick={() => copyToClipboard(getAllResultsText())}
-          className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors cursor-pointer"
-        >
-          <Image
-            src="/file-query/copy.svg"
-            alt="Copy"
-            width={16}
-            height={16}
-            className="w-4 h-4"
-          />
-        </button>
-      </div>
     </div>
   );
 }

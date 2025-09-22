@@ -23,7 +23,7 @@ export function FileQueryCard({
 }: FileQueryCardProps) {
   return (
     <div
-      className={`p-6 ${className}`}
+      className={`px-4 py-2 ${className}`}
       style={{
         background:
           "linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), linear-gradient(246.02deg, rgba(19, 245, 132, 0) 91.9%, rgba(19, 245, 132, 0.2) 114.38%), linear-gradient(59.16deg, rgba(19, 245, 132, 0) 71.78%, rgba(19, 245, 132, 0.2) 124.92%)",

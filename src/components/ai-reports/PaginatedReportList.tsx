@@ -22,7 +22,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { formatDistanceToNow, format, isValid, parseISO } from 'date-fns';
-import { ESAPBrandLoader } from '@/components/ui/loading';
+import { ESAPBrandLoader, ReportListSkeleton } from '@/components/ui/loading';
 
 interface ReportTask {
   task_id: string;
@@ -162,10 +162,12 @@ export function PaginatedReportList({ onViewReport, onDownloadReport }: Paginate
 
   if (loading && tasks.length === 0) {
     return (
-      <div className="text-center py-12">
-        <ESAPBrandLoader size="xl" className="mx-auto" />
-        <p className="text-white mt-4">Loading reports...</p>
-      </div>
+      <ReportListSkeleton 
+        reportCount={5}
+        showActions={true}
+        showPagination={true}
+        size="md"
+      />
     );
   }
 
@@ -249,7 +251,34 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                 </tr>
               </thead>
               <tbody>
-                {paginatedCompletedTasks.length === 0 ? (
+                {loading ? (
+                  // Show skeleton rows while loading
+                  Array.from({ length: 3 }).map((_, index) => (
+                    <tr key={`loading-row-${index}`} className="border-b border-white/10">
+                      <td className="px-6 py-4">
+                        <div className="space-y-2">
+                          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-48" />
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-32" />
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="space-y-1">
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-24" />
+                          <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-16" />
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-8" />
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center gap-2 justify-end">
+                          <div className="bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse h-8 w-20" />
+                          <div className="bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse h-8 w-24" />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : paginatedCompletedTasks.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-6 py-8 text-center text-white">
                       No completed reports found
@@ -314,39 +343,55 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
 
         {/* Pagination Controls */}
         <div className="px-6 py-4 flex items-center justify-between">
-          <div className="text-sm text-gray-400">
-            Showing {paginatedCompletedTasks.length} of {completedTasks.length} completed reports
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={handlePrevPage}
-              disabled={currentPage === 0 || loading}
-              variant="outline"
-              size="sm"
-              className="border-0 text-white hover:bg-white/10 cursor-pointer disabled:opacity-50"
-              style={{ borderRadius: "999px" }}
-            >
-              <ChevronLeft className="w-4 h-4 mr-1" />
-              Previous
-            </Button>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-400">Page {currentPage + 1}</span>
-            </div>
-            
-            <Button
-              onClick={handleNextPage}
-              disabled={!hasMoreCompleted || loading}
-              variant="outline"
-              size="sm"
-              className="border-0 text-white hover:bg-white/10 cursor-pointer disabled:opacity-50"
-              style={{ borderRadius: "999px" }}
-            >
-              Next
-              <ChevronRight className="w-4 h-4 ml-1" />
-            </Button>
-          </div>
+          {loading ? (
+            // Pagination skeleton while loading
+            <>
+              <div className="space-y-1">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-48" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse h-8 w-20" />
+                <div className="bg-gray-200 dark:bg-gray-700 rounded animate-pulse h-6 w-16" />
+                <div className="bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse h-8 w-16" />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-sm text-gray-400">
+                Showing {paginatedCompletedTasks.length} of {completedTasks.length} completed reports
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 0 || loading}
+                  variant="outline"
+                  size="sm"
+                  className="border-0 text-white hover:bg-white/10 cursor-pointer disabled:opacity-50"
+                  style={{ borderRadius: "999px" }}
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Previous
+                </Button>
+                
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-400">Page {currentPage + 1}</span>
+                </div>
+                
+                <Button
+                  onClick={handleNextPage}
+                  disabled={!hasMoreCompleted || loading}
+                  variant="outline"
+                  size="sm"
+                  className="border-0 text-white hover:bg-white/10 cursor-pointer disabled:opacity-50"
+                  style={{ borderRadius: "999px" }}
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

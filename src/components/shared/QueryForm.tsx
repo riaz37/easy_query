@@ -54,6 +54,14 @@ export function QueryForm({
     }
   }, [query]);
 
+  // Set initial height on mount
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = '64px'; // Set initial height
+    }
+  }, []);
+
   const handleClear = () => {
     setQuery("");
     setIsMultiLine(false);
@@ -83,7 +91,7 @@ export function QueryForm({
           style={{
             background:
               "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
-            borderRadius: "16px",
+            borderRadius: "30px",
             outline: "none",
             border: "none",
             minHeight: "64px",
@@ -93,7 +101,7 @@ export function QueryForm({
           rows={1}
         />
         
-        <div className={`absolute right-2 flex gap-2 ${isMultiLine ? 'bottom-2' : 'top-1/2 transform -translate-y-1/2'}`}>
+        <div className={`absolute right-2 flex gap-2 items-center ${isMultiLine ? 'bottom-3' : 'top-3'}`}>
           {showUploadButton && onUploadClick && (
             <Button
               variant="outline"
