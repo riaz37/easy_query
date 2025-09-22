@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { Building2, X, XIcon } from "lucide-react";
+import { X, XIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -349,8 +349,7 @@ export function CompanyCreationModal({
             <DialogHeader className="modal-header-enhanced px-8 pt-6 pb-4">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <DialogTitle className="modal-title-enhanced flex items-center gap-3 text-xl">
-                    <Building2 className="h-6 w-6 text-green-400" />
+                  <DialogTitle className="modal-title-enhanced text-xl">
                     Create {type === "parent" ? "Parent" : "Sub"} Company
                   </DialogTitle>
                   <DialogDescription className="modal-description-enhanced text-sm">
@@ -367,7 +366,7 @@ export function CompanyCreationModal({
             </DialogHeader>
 
             {/* Step Indicator */}
-            <div className="px-8 pb-4">
+            <div className="px-8 pb-2">
               <StepIndicator currentStep={currentStep} />
             </div>
 

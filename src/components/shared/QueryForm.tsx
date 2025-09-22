@@ -91,7 +91,7 @@ export function QueryForm({
           style={{
             background:
               "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
-            borderRadius: "16px",
+            borderRadius: "30px",
             outline: "none",
             border: "none",
             minHeight: "64px",

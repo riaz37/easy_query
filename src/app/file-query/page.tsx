@@ -37,6 +37,7 @@ import {
   TableSection,
   UseTableToggle,
 } from "@/components/file-query";
+import { EnhancedFileUploadModal } from "@/components/file-query/EnhancedFileUploadModal";
 import { PageLayout, PageHeader } from "@/components/layout/PageLayout";
 import { ContentWrapper } from "@/components/layout/ContentWrapper";
 import { fileService } from "@/lib/api/services/file-service";
@@ -358,7 +359,7 @@ export default function FileQueryPage() {
       maxWidth="7xl"
       className="file-query-page"
     >
-      <div className="mt-12">
+      <div className="mt-8">
         <style
           dangerouslySetInnerHTML={{
             __html: `
@@ -370,7 +371,7 @@ export default function FileQueryPage() {
         />
       {/* Page Header - Only show when no query results */}
       {queryResults.length === 0 && !queryError && (
-        <ContentWrapper className="mb-8">
+        <ContentWrapper className="mb-20">
           <div className="flex items-center justify-between">
             <div>
               <h1
@@ -437,47 +438,85 @@ export default function FileQueryPage() {
 
       {/* Query Results - Now at the top */}
       {queryResults.length > 0 && (
-        <div className="pr-16 mb-8">
-          <div className="flex items-start">
-            {/* Robot Icon - Outside the container, larger size with overlap */}
-            <div className="flex-shrink-0 relative z-10">
-              <Image
-                src="/file-query/filerobot.svg"
-                alt="File Robot"
-                width={120}
-                height={120}
-                className="mt-1"
-              />
-            </div>
-
-            {/* Query Results Container - Overlaps with robot icon */}
-            <div className="flex-1 query-content-gradient max-h-[800px] overflow-y-auto -ml-8 relative z-0">
+        <ContentWrapper className="mb-8">
+          <div className="query-content-gradient">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <h3 className="text-white font-semibold text-lg">
-                    Query Results
+                  Query: "{query}"
                   </h3>
                 </div>
-                <div className="flex-1 max-h-[400px] overflow-y-auto">
+              
+              {/* Fixed Top Separator */}
+              <div
+                className="w-full border-bottom mb-4"
+                style={{
+                  borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
+                }}
+              ></div>
+              
+              {/* Scrollable Content Area */}
+              <div className="max-h-[300px] overflow-y-auto">
                   <FileResults
                     results={queryResults}
                     query={query}
                     isLoading={isExecuting}
                   />
                 </div>
+              
+              {/* Fixed Bottom Separator */}
+              <div
+                className="w-full border-bottom mt-4"
+                style={{
+                  borderBottom: "1px solid var(--white-4, rgba(255, 255, 255, 0.04))",
+                }}
+              ></div>
+              
+              {/* Copy Button - After Separator */}
+              <div className="flex justify-start mt-4">
+                <button
+                  onClick={async () => {
+                    try {
+                      const allResultsText = queryResults
+                        .map((result) => {
+                          if (result.answer && result.answer.trim()) return result.answer;
+                          if (result.content && result.content.trim()) return result.content;
+                          if (result.text && result.text.trim()) return result.text;
+                          return "No content available";
+                        })
+                        .join("\n\n");
+                      
+                      await navigator.clipboard.writeText(allResultsText);
+                      toast.success("Results copied to clipboard!");
+                    } catch (error) {
+                      console.error("Failed to copy to clipboard:", error);
+                      toast.error("Failed to copy to clipboard");
+                    }
+                  }}
+                  className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors cursor-pointer"
+                  title="Copy all results to clipboard"
+                >
+                  <Image
+                    src="/file-query/copy.svg"
+                    alt="Copy"
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                  />
+                </button>
               </div>
             </div>
           </div>
-        </div>
+        </ContentWrapper>
       )}
 
       {/* Query Error - Also at the top */}
       {queryError && (
-        <div className="mb-8">
-          <div className="p-6 query-content-gradient">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertCircle className="w-5 h-5 text-red-400" />
-              <h3 className="text-red-400 font-semibold text-xl">
+        <ContentWrapper className="mb-20">
+          <div className="query-content-gradient max-h-[200px] overflow-y-auto">
+            <div className="p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <h3 className="text-red-400 font-semibold text-lg">
                 Query Error
               </h3>
             </div>
@@ -486,17 +525,18 @@ export default function FileQueryPage() {
             </div>
           </div>
         </div>
+        </ContentWrapper>
       )}
 
       {/* Table Toggle - Above Query Form */}
-      <ContentWrapper className="mb-4">
+      <ContentWrapper className="mb-8">
         <UseTableToggle useTable={useTable} onToggle={setUseTable} />
       </ContentWrapper>
 
       {/* Main Content */}
-      <div className={`grid grid-cols-1 gap-6 ${useTable ? 'lg:grid-cols-5' : 'lg:grid-cols-1'}`}>
+      <div className={`flex flex-col ${useTable ? 'lg:flex-row' : ''} mb-20`}>
         {/* Left Column - File Query */}
-        <div className={`space-y-6 ${useTable ? 'lg:col-span-3' : 'lg:col-span-1'}`}>
+        <div className={`space-y-6 ${useTable ? 'lg:flex-1 lg:mr-2' : 'w-full'}`}>
           <ContentWrapper>
             <FileQueryCard
               query={query}
@@ -512,7 +552,7 @@ export default function FileQueryPage() {
 
         {/* Right Column - Connect Table */}
         {useTable && (
-          <div className="space-y-6 lg:col-span-2">
+          <div className={`space-y-6 ${useTable ? 'lg:w-2/5 lg:ml-2' : 'w-full'}`}>
             <ContentWrapper>
               <TableSection
                 selectedTable={selectedTable}
@@ -529,75 +569,19 @@ export default function FileQueryPage() {
 
       {/* Quick Suggestions Section - Only show when no query results */}
       {queryResults.length === 0 && !queryError && (
-        <ContentWrapper className="mt-12">
+        <ContentWrapper className="mb-16">
           <QuickSuggestions onQuerySelect={setQuery} />
         </ContentWrapper>
       )}
 
-      {/* Upload File Modal */}
-      {isUploadModalOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => setIsUploadModalOpen(false)}
-        >
-          <div
-            className="bg-slate-800 border border-slate-600 max-w-md w-full mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="p-6 border-b border-slate-600">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                Upload File
-              </h2>
-              <p className="text-slate-400 text-sm">
-                Add User refund processes with configurable policy enforcement.
-              </p>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6">
-              {/* File Upload Component */}
-              <FileUpload
-                onFilesUploaded={handleFilesUploaded}
-                onUploadStatusChange={handleUploadStatusChange}
-                onTableUsageChange={handleTableUsageChange}
-                disabled={!isAuthenticated}
-              />
-            </div>
-
-            {/* Modal Footer */}
-            <div className="p-6 border-t border-slate-600 flex gap-3 justify-end">
-              <Button
-                variant="outline"
-                onClick={() => setIsUploadModalOpen(false)}
-                className="border-slate-600 text-slate-300 hover:bg-slate-700 cursor-pointer"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  // Handle upload action
-                  setIsUploadModalOpen(false);
-                  toast.success("Files uploaded successfully!");
-                }}
-                className="bg-green-600 hover:bg-green-700 text-white cursor-pointer"
-              >
-                Upload
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setUploadedFiles([]);
-                  toast.info("Files cleared");
-                }}
-                className="border-red-500 text-red-400 hover:bg-red-500/10 cursor-pointer"
-              >
-                Clear
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Enhanced File Upload Modal */}
+      <EnhancedFileUploadModal
+        open={isUploadModalOpen}
+        onOpenChange={setIsUploadModalOpen}
+        onFilesUploaded={handleFilesUploaded}
+        onUploadStatusChange={handleUploadStatusChange}
+        disabled={!isAuthenticated}
+      />
       </div>
     </PageLayout>
   );

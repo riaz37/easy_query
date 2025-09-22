@@ -49,14 +49,14 @@ export function QuickSuggestions({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      <h3 className="text-lg font-semibold text-white mb-6">
+      <h3 className="text-sm font-semibold text-white mb-6">
         {title}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {suggestions.map((suggestion, index) => (
           <div
             key={index}
-            className="p-6 cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col justify-center items-center text-center min-h-[120px]"
+            className="px-4 py-3 cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col justify-center items-center text-center h-16"
             onClick={() => handleSuggestionClick(suggestion.query)}
             style={{
               background:
@@ -68,7 +68,7 @@ export function QuickSuggestions({
               backdropFilter: "blur(30px)",
             }}
           >
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-400 leading-tight">
               {suggestion.text}
             </p>
           </div>

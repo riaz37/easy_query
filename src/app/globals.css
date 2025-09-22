@@ -680,7 +680,7 @@ nav {
   right: -10px;
   bottom: -10px;
   border-radius: 30px;
-  padding: 2px;
+  padding: 1px;
   background: linear-gradient(
       132.56deg,
       rgba(19, 245, 132, 1) 0.71%,
@@ -1030,14 +1030,14 @@ nav {
 }
 
 .step-circle.completed {
-  background: var(--p-darker, #0c9551);
-  border-color: var(--p-darker, #0c9551);
+  background: var(--primary-20, rgba(19, 245, 132, 0.2));
+  border: 1px solid var(--primary-16, rgba(19, 245, 132, 0.16));
   color: white;
 }
 
 .step-circle.current {
-  background: var(--p-darker, #0c9551);
-  border-color: var(--p-darker, #0c9551);
+  background: var(--primary-20, rgba(19, 245, 132, 0.2));
+  border: 1px solid var(--primary-16, rgba(19, 245, 132, 0.16));
   color: white;
 }
 
@@ -1079,12 +1079,12 @@ nav {
   width: 5rem;
   height: 0.125rem;
   margin: 0 1rem;
-  margin-top: -0.7rem;
+  margin-top: -1.5rem;
   transition: all 0.3s ease;
 }
 
 .step-connector.completed {
-  background: var(--p-darker, #0c9551);
+  background: var(--primary-16, rgba(19, 245, 132, 0.16));
 }
 
 .step-connector.upcoming {
