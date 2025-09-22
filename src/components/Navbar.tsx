@@ -102,12 +102,10 @@ export default function Navbar() {
         {/* Notification Bell */}
         <div className="relative">
           <div
-            className={cn(
-              "w-10 h-10 rounded-full flex items-center justify-center border transition-colors cursor-pointer",
-              theme === "dark"
-                ? "bg-gray-700/50 border-gray-600/30 hover:bg-gray-600/50"
-                : "bg-gray-200/50 border-gray-300/30 hover:bg-gray-300/50"
-            )}
+            className="w-10 h-10 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+            style={{
+              background: "rgba(255, 255, 255, 0.08)",
+            }}
           >
             <Bell
               className={cn(
@@ -134,12 +132,10 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div
-                className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center border transition-colors cursor-pointer",
-                  theme === "dark"
-                    ? "bg-gray-700/50 border-gray-600/30 hover:bg-gray-600/50"
-                    : "bg-gray-200/50 border-gray-300/30 hover:bg-gray-300/50"
-                )}
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+                style={{
+                  background: "rgba(255, 255, 255, 0.08)",
+                }}
               >
                 <User
                   className={cn(

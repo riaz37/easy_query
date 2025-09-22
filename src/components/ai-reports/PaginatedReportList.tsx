@@ -307,9 +307,15 @@ linear-gradient(67.9deg, rgba(19, 245, 132, 0) 66.65%, rgba(19, 245, 132, 0.2) 1
                         <div className="flex items-center gap-2 justify-end">
                           <Button
                             onClick={() => handleViewReport(task)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                            variant="outline"
+                            className="border-0 text-white hover:bg-emerald-400/10"
                             size="sm"
-                            style={{ borderRadius: "99px", height: "32px", minWidth: "80px" }}
+                            style={{ 
+                              borderRadius: "99px", 
+                              height: "32px", 
+                              minWidth: "80px",
+                              background: "rgba(255, 255, 255, 0.04)"
+                            }}
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             View
