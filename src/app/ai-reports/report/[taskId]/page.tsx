@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { FileText, Brain } from "lucide-react";
-import { ESAPBrandLoader } from "@/components/ui/loading";
+import { EasyQueryBrandLoader } from "@/components/ui/loading";
 import { ReportResults } from "@/types/reports";
 import { useTaskStore } from "@/store/task-store";
 import { ServiceRegistry } from "@/lib/api";
@@ -108,7 +108,7 @@ export default function ReportDetailPage() {
     return (
       <PageLayout background={["frame", "gridframe"]}>
         <div className="text-center">
-          <ESAPBrandLoader size="xl" className="mx-auto" />
+          <EasyQueryBrandLoader size="xl" className="mx-auto" />
           <p className="text-white mt-4">Loading report details...</p>
         </div>
       </PageLayout>

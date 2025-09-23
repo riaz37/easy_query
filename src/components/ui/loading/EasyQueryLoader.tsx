@@ -20,7 +20,7 @@ const logoSizeClasses = {
   xl: "w-16 h-16"
 };
 
-export function ESAPLoader({ 
+export function EasyQueryLoader({ 
   size = "md", 
   className 
 }: Omit<LoadingProps, 'variant'>) {
@@ -44,8 +44,8 @@ export function ESAPLoader({
         style={{ animationDuration: "1.5s" }}
       >
         <Image
-          src="/logo/ESAP_B_PNG.png"
-          alt="ESAP Logo"
+          src="/logo/logo.svg"
+          alt="Easy Query Logo"
           width={64}
           height={64}
           className={cn(

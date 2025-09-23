@@ -15,8 +15,8 @@ export { InlineLoader } from './InlineLoader';
 export { LoadingStates } from './LoadingStates';
 export { LoadingProvider } from './LoadingProvider';
 export { GradientLoader } from './GradientLoader';
-export { ESAPLoader } from './ESAPLoader';
-export { ESAPBrandLoader } from './ESAPBrandLoader';
+export { EasyQueryLoader } from './EasyQueryLoader';
+export { EasyQueryBrandLoader } from './EasyQueryBrandLoader';
 export { EmeraldLoader } from './EmeraldLoader';
 
 // Report-specific Skeleton Components

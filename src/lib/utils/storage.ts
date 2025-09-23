@@ -1,17 +1,17 @@
 /**
- * Storage utility functions for ESAP application
+ * Storage utility functions for Easy Query application
  */
 
-// Storage keys for ESAP application
+// Storage keys for Easy Query application
 export const STORAGE_KEYS = {
   // Database context
-  CURRENT_DATABASE: 'esap_current_database',
-  AVAILABLE_DATABASES: 'esap_available_databases',
-  USER_DATABASES: 'esap_user_databases',
-  MSSQL_DATABASES: 'esap_mssql_databases',
+  CURRENT_DATABASE: 'easy_query_current_database',
+  AVAILABLE_DATABASES: 'easy_query_available_databases',
+  USER_DATABASES: 'easy_query_user_databases',
+  MSSQL_DATABASES: 'easy_query_mssql_databases',
   
   // Business rules context
-  BUSINESS_RULES: 'esap_business_rules',
+  BUSINESS_RULES: 'easy_query_business_rules',
   
   // Auth (if needed)
   AUTH_TOKENS: 'auth_tokens',
@@ -19,9 +19,9 @@ export const STORAGE_KEYS = {
 } as const;
 
 /**
- * Clear all ESAP-related storage for a specific user
+ * Clear all Easy Query-related storage for a specific user
  */
-export function clearESAPStorage(userId?: string): void {
+export function clearEasyQueryStorage(userId?: string): void {
   try {
     if (userId) {
       // Clear user-specific storage
@@ -29,24 +29,24 @@ export function clearESAPStorage(userId?: string): void {
         localStorage.removeItem(`${key}_${userId}`);
       });
     } else {
-      // Clear all ESAP storage (for logout)
+      // Clear all Easy Query storage (for logout)
       Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('esap_')) {
+        if (key.startsWith('easy_query_')) {
           localStorage.removeItem(key);
         }
       });
     }
-    console.log('ESAP storage cleared successfully');
+    console.log('Easy Query storage cleared successfully');
   } catch (error) {
-    console.error('Failed to clear ESAP storage:', error);
+    console.error('Failed to clear Easy Query storage:', error);
   }
 }
 
 /**
- * Clear all ESAP storage (used during logout)
+ * Clear all Easy Query storage (used during logout)
  */
-export function clearAllESAPStorage(): void {
-  clearESAPStorage();
+export function clearAllEasyQueryStorage(): void {
+  clearEasyQueryStorage();
 }
 
 /**

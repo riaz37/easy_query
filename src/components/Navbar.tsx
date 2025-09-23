@@ -51,11 +51,11 @@ export default function Navbar() {
     >
       {/* Left side - Logo and Menu */}
       <div className="flex items-center gap-6">
-        {/* ESAP Logo - Theme Aware */}
+        {/* Easy Query Logo */}
         <div className="flex items-center gap-2 px-4 py-2 rounded-full">
           <Image
-            src={theme === "dark" ? "/logo/ESAP_W.png" : "/logo/ESAP_B_PNG.png"}
-            alt="ESAP"
+            src="/logo/logo.svg"
+            alt="Easy Query Logo"
             width={120}
             height={40}
             className="h-8 w-auto"

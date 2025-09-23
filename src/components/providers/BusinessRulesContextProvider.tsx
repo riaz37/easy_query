@@ -3,7 +3,7 @@
 import React, { createContext, useContext, ReactNode, useState, useCallback, useMemo, useEffect } from 'react';
 import { useAuthContext } from './AuthContextProvider';
 import { BusinessRulesValidator } from '@/lib/utils/business-rules-validator';
-import { STORAGE_KEYS, saveToUserStorage, loadFromUserStorage, clearESAPStorage } from '@/lib/utils/storage';
+import { STORAGE_KEYS, saveToUserStorage, loadFromUserStorage, clearEasyQueryStorage } from '@/lib/utils/storage';
 
 // Types for business rules context
 export interface BusinessRulesState {
@@ -102,7 +102,7 @@ export function BusinessRulesContextProvider({ children }: BusinessRulesContextP
     } catch (error) {
       console.error('Error loading business rules from storage:', error);
       // Clear corrupted storage
-      clearESAPStorage(user?.user_id);
+      clearEasyQueryStorage(user?.user_id);
     }
   }, [user?.user_id]);
 

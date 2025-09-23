@@ -20,7 +20,7 @@ const logoSizeClasses = {
   xl: "w-20 h-20"
 };
 
-export function ESAPBrandLoader({ 
+export function EasyQueryBrandLoader({ 
   size = "md", 
   className 
 }: Omit<LoadingProps, 'variant'>) {
@@ -52,8 +52,8 @@ export function ESAPBrandLoader({
         }}
       >
         <Image
-          src="/logo/ESAP_W.png"
-          alt="ESAP Logo"
+          src="/logo/logo.svg"
+          alt="Easy Query Logo"
           width={80}
           height={80}
           className={cn(

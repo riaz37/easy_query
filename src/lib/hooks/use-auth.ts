@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ServiceRegistry } from '@/lib/api';
-import { clearAllESAPStorage } from '@/lib/utils/storage';
+import { clearAllEasyQueryStorage } from '@/lib/utils/storage';
 import type { 
   LoginRequest, 
   SignupRequest,
@@ -168,7 +168,7 @@ export function useAuth() {
 
       // Clear storage
     clearAuthStorage();
-    clearAllESAPStorage();
+    clearAllEasyQueryStorage();
 
     } catch (err: any) {
       console.error('Logout error:', err);

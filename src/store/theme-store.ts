@@ -126,7 +126,7 @@ export const useThemeStore = create<ThemeState>()(
       },
     }),
     {
-      name: 'esap-theme',
+      name: 'easy-query-theme',
       partialize: (state) => ({ themeMode: state.themeMode }),
     }
   )

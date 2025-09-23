@@ -418,7 +418,7 @@ export class VoiceAgentService {
     this.state.connectionStatus = "Connected";
     this.addMessage(
       MessageService.createSystemMessage(
-        "Connected to ESAP Voice Agent - Audio ready!",
+        "Connected to Easy Query Voice Agent - Audio ready!",
       ),
     );
     this.notifyStateChange();

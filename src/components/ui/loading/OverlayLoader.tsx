@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { OverlayLoadingProps } from "./types";
-import { ESAPBrandLoader } from "./ESAPBrandLoader";
+import { EasyQueryBrandLoader } from "./EasyQueryBrandLoader";
 
 export function OverlayLoader({ 
   size = "lg", 
@@ -28,7 +28,7 @@ export function OverlayLoader({
         <div className="text-center space-y-4">
           {/* Loader */}
           <div className="flex justify-center">
-            <ESAPBrandLoader size={size} />
+            <EasyQueryBrandLoader size={size} />
           </div>
           
           {/* Message */}

@@ -502,7 +502,7 @@ export const ReportStructureTab = React.memo<ReportStructureTabProps>(
                       onChange={(e) =>
                         setNewStructureValue(e.target.value)
                       }
-                      placeholder="ESAP"
+                      placeholder="Easy Query"
                       className="modal-input-enhanced mt-2"
                     />
                   </div>

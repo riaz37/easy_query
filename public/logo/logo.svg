@@ -1,0 +1,65 @@
+<svg viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Main gradient for text -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#047857;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Icon gradient -->
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#34d399;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Drop shadow -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle for icon -->
+  <circle cx="50" cy="50" r="35" fill="url(#iconGradient)" opacity="0.1" filter="url(#glow)"/>
+  
+  <!-- Search magnifying glass -->
+  <g transform="translate(25, 25)" filter="url(#shadow)">
+    <!-- Glass circle -->
+    <circle cx="18" cy="18" r="15" stroke="url(#iconGradient)" stroke-width="4" fill="none" opacity="0.9"/>
+    <!-- Handle -->
+    <line x1="30" y1="30" x2="42" y2="42" stroke="url(#iconGradient)" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+    
+    <!-- Query symbol inside (stylized Q) -->
+    <circle cx="18" cy="18" r="8" stroke="url(#primaryGradient)" stroke-width="2" fill="none" opacity="0.7"/>
+    <line x1="22" y1="22" x2="25" y2="25" stroke="url(#primaryGradient)" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  </g>
+  
+  <!-- Floating elements for "easy" concept -->
+  <circle cx="75" cy="25" r="3" fill="#34d399" opacity="0.6">
+    <animate attributeName="cy" values="25;20;25" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="85" cy="35" r="2" fill="#10b981" opacity="0.5">
+    <animate attributeName="cy" values="35;30;35" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="95" cy="20" r="2.5" fill="#059669" opacity="0.6">
+    <animate attributeName="cy" values="20;15;20" dur="2.8s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Main text "Easy" -->
+  <text x="115" y="45" font-family="'Segoe UI', Arial, sans-serif" font-size="32" font-weight="300" fill="url(#primaryGradient)" filter="url(#shadow)">Easy</text>
+  
+  <!-- Secondary text "Query" -->
+  <text x="115" y="70" font-family="'Segoe UI', Arial, sans-serif" font-size="32" font-weight="600" fill="url(#iconGradient)" filter="url(#shadow)">Query</text>
+  
+  <!-- Subtle connecting line -->
+  <path d="M 95 50 Q 105 45 115 50" stroke="url(#primaryGradient)" stroke-width="1" fill="none" opacity="0.3"/>
+</svg>

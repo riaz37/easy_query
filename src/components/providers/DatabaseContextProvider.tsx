@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, ReactNode, useState, useCallback, useMemo, useEffect } from 'react';
 import { useAuthContext } from './AuthContextProvider';
-import { STORAGE_KEYS, saveToUserStorage, loadFromUserStorage, clearESAPStorage } from '@/lib/utils/storage';
+import { STORAGE_KEYS, saveToUserStorage, loadFromUserStorage, clearEasyQueryStorage } from '@/lib/utils/storage';
 
 // Types for database context
 export interface DatabaseConfig {
@@ -127,7 +127,7 @@ export function DatabaseContextProvider({ children }: DatabaseContextProviderPro
       }
     } catch (error) {
       // Clear corrupted storage
-      clearESAPStorage(user?.user_id);
+      clearEasyQueryStorage(user?.user_id);
     }
   }, [user?.user_id]);
 

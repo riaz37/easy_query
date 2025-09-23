@@ -22,7 +22,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { formatDistanceToNow, format, isValid, parseISO } from 'date-fns';
-import { ESAPBrandLoader, ReportListSkeleton } from '@/components/ui/loading';
+import { EasyQueryBrandLoader, ReportListSkeleton } from '@/components/ui/loading';
 
 interface ReportTask {
   task_id: string;
