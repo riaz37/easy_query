@@ -16,6 +16,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.prompts.chat import ChatPromptTemplate
+from langchain_groq import ChatGroq
 
 # Add database manager import for direct access
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'db_manager'))
@@ -28,6 +29,7 @@ sys.path.append(os.getcwd())
 # --- Environment Setup --- #
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # Add configuration manager API URL
 CONFIG_MANAGER_API_URL = os.getenv("BASE_URL", "https://localhost:8200")
 
@@ -49,12 +51,52 @@ except Exception as e:
 router = APIRouter()
 app = FastAPI()
 
-# --- LLM Initialization --- #
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    temperature=0.1,
-    google_api_key=GOOGLE_API_KEY
-)
+# --- Available Models Configuration --- #
+AVAILABLE_MODELS = {
+    "gemini": "gemini-2.0-flash",
+    "llama-3.3-70b-versatile": "llama-3.3-70b-versatile", 
+    "openai/gpt-oss-120b": "openai/gpt-oss-120b"
+}
+
+# --- Model Factory Function --- #
+def create_llm_instance(model_name: str = "gemini"):
+    """
+    Create an LLM instance based on the specified model name.
+    
+    Args:
+        model_name (str): The model to use. Defaults to "gemini" for backward compatibility.
+        
+    Returns:
+        LLM instance (ChatGoogleGenerativeAI or ChatGroq)
+        
+    Raises:
+        ValueError: If model_name is not supported
+    """
+    if model_name not in AVAILABLE_MODELS:
+        raise ValueError(f"Unsupported model: {model_name}. Available models: {list(AVAILABLE_MODELS.keys())}")
+    
+    actual_model = AVAILABLE_MODELS[model_name]
+    
+    if model_name == "gemini":
+        if not GOOGLE_API_KEY:
+            raise ValueError("GOOGLE_API_KEY environment variable is required for Gemini model")
+        return ChatGoogleGenerativeAI(
+            model=actual_model,
+            temperature=0.1,
+            google_api_key=GOOGLE_API_KEY
+        )
+    else:
+        # All other models are Groq models
+        if not GROQ_API_KEY:
+            raise ValueError("GROQ_API_KEY environment variable is required for Groq models")
+        return ChatGroq(
+            model=actual_model,
+            temperature=0.1,
+            groq_api_key=GROQ_API_KEY
+        )
+
+# --- Default LLM Initialization (for backward compatibility) --- #
+llm = create_llm_instance("gemini")
 
 # --- Engine Setup (Per-User) --- #
 # We will build engines dynamically per user (per db_id) using the configuration manager
@@ -574,8 +616,22 @@ custom_table_info = {}
 table_info = ""
 
 
-def get_rules_suggestions(question: str, business_rules: str):
-    system_template = """You are a Context Extractor assistant. Use the business rules to select the most relevant Business Rules to the user’s question."""
+def get_rules_suggestions(question: str, business_rules: str, llm_instance=None):
+    """
+    Get business rules suggestions using the specified LLM instance.
+    
+    Args:
+        question (str): User question
+        business_rules (str): Available business rules
+        llm_instance: LLM instance to use. If None, uses the default global llm.
+    
+    Returns:
+        str: Selected business rules
+    """
+    if llm_instance is None:
+        llm_instance = llm
+        
+    system_template = """You are a Context Extractor assistant. Use the business rules to select the most relevant Business Rules to the user's question."""
     user_template = """
     Question: {question}
 
@@ -591,7 +647,7 @@ def get_rules_suggestions(question: str, business_rules: str):
         ("system", system_template),
         ("user", user_template)
     ])
-    rules_chain = LLMChain(llm=llm, prompt=chat_prompt)
+    rules_chain = LLMChain(llm=llm_instance, prompt=chat_prompt)
     response = rules_chain.invoke({
         "question": question,
         "business_rules": business_rules
@@ -602,8 +658,23 @@ def get_rules_suggestions(question: str, business_rules: str):
 
 
 # --- Table Suggestion --- #
-def get_table_suggestions(question: str, business_rules: str, tables_str: str):
-    system_template = """You are a database assistant. Use the business rules and available table information to select the SQL tables most relevant to the user’s question.
+def get_table_suggestions(question: str, business_rules: str, tables_str: str, llm_instance=None):
+    """
+    Get table suggestions using the specified LLM instance.
+    
+    Args:
+        question (str): User question
+        business_rules (str): Available business rules
+        tables_str (str): Available tables as string
+        llm_instance: LLM instance to use. If None, uses the default global llm.
+    
+    Returns:
+        List[str]: List of suggested table names
+    """
+    if llm_instance is None:
+        llm_instance = llm
+        
+    system_template = """You are a database assistant. Use the business rules and available table information to select the SQL tables most relevant to the user's question.
     - Select ONLY from the provided list of table names
     - The provided list contains schema-qualified names; always return and use names EXACTLY as provided
     - Do NOT invent or modify table names
@@ -626,7 +697,7 @@ def get_table_suggestions(question: str, business_rules: str, tables_str: str):
         ("system", system_template),
         ("user", user_template)
     ])
-    table_chain = LLMChain(llm=llm, prompt=chat_prompt)
+    table_chain = LLMChain(llm=llm_instance, prompt=chat_prompt)
     response = table_chain.invoke({
         "question": question,
         "tables": tables_str,
@@ -680,7 +751,25 @@ query_chain = LLMChain(llm=llm, prompt=query_prompt)
 
 # --- FastAPI Routes --- #
 @router.post("/query")
-async def query_database(question: str, user_id: str = "default"):
+async def query_database(question: str, user_id: str = "default", model: str = "gemini"):
+    # Validate model parameter
+    if model not in AVAILABLE_MODELS:
+        return {
+            "status_code": 400,
+            "error": "Invalid model specified",
+            "message": f"Model '{model}' is not supported. Available models: {list(AVAILABLE_MODELS.keys())}"
+        }
+    
+    # Create LLM instance for this request
+    try:
+        request_llm = create_llm_instance(model)
+    except ValueError as e:
+        return {
+            "status_code": 400,
+            "error": "Model configuration error",
+            "message": str(e)
+        }
+    
     # Fast-path: if the input looks like raw SQL, execute it directly (bypass LLM and config manager)
     try:
         raw_input = question.strip()
@@ -706,7 +795,8 @@ async def query_database(question: str, user_id: str = "default"):
                 query=clean_sql_direct,
                 results=data_direct
             )
-            return {"status_code": 200, "payload": {"sql": clean_sql_direct, "data": data_direct, "history": history_direct}}
+            print(f"DEBUG: Direct SQL execution using model: {model} for user: {user_id}")
+            return {"status_code": 200, "payload": {"sql": clean_sql_direct, "data": data_direct, "history": history_direct, "model_used": model}}
     except Exception as _e:
         # If detection fails for any reason, fall back to normal flow
         print(f"DEBUG: Direct SQL detection failed: {_e}")
@@ -744,7 +834,7 @@ async def query_database(question: str, user_id: str = "default"):
         ])
     }
 
-    business_rules_to_use = get_rules_suggestions(question, business_rules)
+    business_rules_to_use = get_rules_suggestions(question, business_rules, request_llm)
     print(f"DEBUG: Business rules suggestions: {business_rules_to_use}")
     
     # Only provide schema-qualified table names to reduce ambiguity
@@ -755,7 +845,7 @@ async def query_database(question: str, user_id: str = "default"):
         available_tables_str = str(full_table_names)
     print(f"DEBUG: Available tables (schema-qualified only): {available_tables_str}")
     
-    table_names_to_use = get_table_suggestions(question, business_rules_to_use, available_tables_str)
+    table_names_to_use = get_table_suggestions(question, business_rules_to_use, available_tables_str, request_llm)
     print(f"DEBUG: Table suggestions: {table_names_to_use}")
     
     # Check if any tables were suggested
@@ -777,7 +867,10 @@ async def query_database(question: str, user_id: str = "default"):
         }
     
     table_info_subset = generate_slim_table_info(available_tables)
-    response = query_chain.invoke({
+    
+    # Create dynamic query chain with the selected model
+    dynamic_query_chain = LLMChain(llm=request_llm, prompt=query_prompt)
+    response = dynamic_query_chain.invoke({
         "question": question,
         "table_info": table_info_subset,
         "business_rules": business_rules_to_use,
@@ -836,6 +929,7 @@ async def query_database(question: str, user_id: str = "default"):
         print(f"DEBUG: qualify_table_names failed: {_e}")
 
     print(f"DEBUG: Final SQL to execute: {sql}")
+    print(f"DEBUG: Using model: {model} for user: {user_id}")
     try:
         stmt = text(sql)
         eng = await get_engine_for_user(user_id)
@@ -853,7 +947,7 @@ async def query_database(question: str, user_id: str = "default"):
             query=sql,
             results=data
         )
-    return {"status_code": 200, "payload": {"sql": sql, "data": data, "history": history}}
+    return {"status_code": 200, "payload": {"sql": sql, "data": data, "history": history, "model_used": model}}
 
 @router.post("/reload-db")
 async def reload_db(user_id: str = "default"):
@@ -896,6 +990,24 @@ async def get_history(user_id: str):
 async def clear_history(user_id: str):
     memory_manager.clear_conversation_history(user_id)
     return {"status_code": 200, "message": f"Conversation history cleared for user {user_id}"}
+
+@router.get("/available-models")
+async def get_available_models():
+    """
+    Get list of available models for query processing
+    """
+    return {
+        "status_code": 200,
+        "available_models": list(AVAILABLE_MODELS.keys()),
+        "default_model": "gemini",
+        "model_details": {
+            model_name: {
+                "provider": "groq" if model_name != "gemini" else "google",
+                "model_id": actual_model
+            }
+            for model_name, actual_model in AVAILABLE_MODELS.items()
+        }
+    }
 
 @router.get("/get_business-rules", response_class=PlainTextResponse)
 async def get_business_rules(user_id: str = "default"):
