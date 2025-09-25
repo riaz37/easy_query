@@ -1,0 +1,68 @@
+{
+  "frontend_user": [
+    {
+      "id": "456db2a6-84b1-435a-8ffa-26e09fd11171",
+      "user_id": "frontend_user",
+      "message_type": "assistant",
+      "content": "I am MSSQL Search AI, a",
+      "timestamp": "2025-08-30T19:03:21.610570",
+      "metadata": {
+        "timestamp": "2025-08-30T13:03:19.749+00:00",
+        "session_id": "64cbc5ce-4709-45ab-bc9b-7b079fe349d6"
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "22e1a481-5343-4dd7-b21c-7b0ed2331efc",
+      "user_id": "frontend_user",
+      "message_type": "assistant",
+      "content": "I do not have access to personal information such as your name. How can I help you with database queries or navigation today?",
+      "timestamp": "2025-08-30T19:03:32.732515",
+      "metadata": {
+        "timestamp": "2025-08-30T13:03:24.553+00:00",
+        "session_id": "64cbc5ce-4709-45ab-bc9b-7b079fe349d6"
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "aa094636-dce6-4047-b14d-e178664d220e",
+      "user_id": "frontend_user",
+      "message_type": "function_call",
+      "content": "Function: navigate_page({'user_id': 'frontend_user', 'action_type': 'navigate', 'target': 'file-query'})",
+      "timestamp": "2025-08-30T19:03:41.624015",
+      "metadata": {
+        "function_name": "navigate_page",
+        "arguments": {
+          "user_id": "frontend_user",
+          "action_type": "navigate",
+          "target": "file-query"
+        }
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "adaf3999-7571-43bf-89be-7a0210b08760",
+      "user_id": "frontend_user",
+      "message_type": "function_result",
+      "content": "Result: Navigated to file-query page.",
+      "timestamp": "2025-08-30T19:03:41.624974",
+      "metadata": {
+        "function_name": "navigate_page",
+        "result": "Navigated to file-query page."
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "78f06ec7-9f25-460c-95fb-8a439c014148",
+      "user_id": "frontend_user",
+      "message_type": "assistant",
+      "content": "Navigating you to the file-query page now.",
+      "timestamp": "2025-08-30T19:03:46.383402",
+      "metadata": {
+        "timestamp": "2025-08-30T13:03:42.522+00:00",
+        "session_id": "64cbc5ce-4709-45ab-bc9b-7b079fe349d6"
+      },
+      "agent_type": "voice"
+    }
+  ]
+}

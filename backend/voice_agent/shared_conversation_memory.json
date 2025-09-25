@@ -1,0 +1,198 @@
+{
+  "test_user_123": [
+    {
+      "id": "06039b89-b0a4-4572-bd37-ead8b32db2ee",
+      "user_id": "test_user_123",
+      "message_type": "user",
+      "content": "Hello, can you help me navigate to the database query page?",
+      "timestamp": "2025-08-30T19:03:28.721831",
+      "metadata": {},
+      "agent_type": "voice"
+    },
+    {
+      "id": "02c65ce3-3ef3-4318-a390-818c04351008",
+      "user_id": "test_user_123",
+      "message_type": "assistant",
+      "content": "Of course! I'll help you navigate to the database query page.",
+      "timestamp": "2025-08-30T19:03:28.722105",
+      "metadata": {},
+      "agent_type": "voice"
+    },
+    {
+      "id": "59948c8d-25f1-42b0-a314-552c474a85fa",
+      "user_id": "test_user_123",
+      "message_type": "function_call",
+      "content": "Function: navigate_page({'user_id': 'test_user_123', 'target': 'database-query', 'action_type': 'navigate'})",
+      "timestamp": "2025-08-30T19:03:28.722376",
+      "metadata": {
+        "function_name": "navigate_page",
+        "arguments": {
+          "user_id": "test_user_123",
+          "target": "database-query",
+          "action_type": "navigate"
+        }
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "e7731deb-1e6d-4817-99b0-94887e1ef17f",
+      "user_id": "test_user_123",
+      "message_type": "function_result",
+      "content": "Result: Successfully navigated to database-query page",
+      "timestamp": "2025-08-30T19:03:28.722524",
+      "metadata": {
+        "function_name": "navigate_page",
+        "result": "Successfully navigated to database-query page"
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "6d04b419-a36a-4a28-a3a1-4265e49c9b8a",
+      "user_id": "test_user_123",
+      "message_type": "user",
+      "content": "Now I want to search for all employees",
+      "timestamp": "2025-08-30T19:03:28.722736",
+      "metadata": {},
+      "agent_type": "voice"
+    },
+    {
+      "id": "baae5810-2be5-4b4d-83b2-c58aff648395",
+      "user_id": "test_user_123",
+      "message_type": "assistant",
+      "content": "I'll search for all employees in the database.",
+      "timestamp": "2025-08-30T19:03:28.722841",
+      "metadata": {},
+      "agent_type": "voice"
+    },
+    {
+      "id": "b1f833ff-c72d-4a2a-bd69-292453215f46",
+      "user_id": "test_user_123",
+      "message_type": "function_call",
+      "content": "Function: navigate_page({'user_id': 'test_user_123', 'target': 'Show all employees', 'action_type': 'search'})",
+      "timestamp": "2025-08-30T19:03:28.722955",
+      "metadata": {
+        "function_name": "navigate_page",
+        "arguments": {
+          "user_id": "test_user_123",
+          "target": "Show all employees",
+          "action_type": "search"
+        }
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "e3cd4c9a-c54c-43ee-9141-44a098c5c7d7",
+      "user_id": "test_user_123",
+      "message_type": "function_result",
+      "content": "Result: Found 150 employees in the database",
+      "timestamp": "2025-08-30T19:03:28.723055",
+      "metadata": {
+        "function_name": "navigate_page",
+        "result": "Found 150 employees in the database"
+      },
+      "agent_type": "voice"
+    },
+    {
+      "id": "279da865-5713-4df9-b5b6-a4fefb1c7ff8",
+      "user_id": "test_user_123",
+      "message_type": "user",
+      "content": "What was the last thing we discussed?",
+      "timestamp": "2025-08-30T19:03:28.723177",
+      "metadata": {},
+      "agent_type": "text"
+    },
+    {
+      "id": "dd995629-1ff9-439f-9db4-60e2cad752bb",
+      "user_id": "test_user_123",
+      "message_type": "assistant",
+      "content": "We were discussing employee data. I helped you navigate to the database query page and search for all employees. We found 150 employees in the database.",
+      "timestamp": "2025-08-30T19:03:28.723288",
+      "metadata": {},
+      "agent_type": "text"
+    },
+    {
+      "id": "527bf429-65b6-42ac-8e0f-951fa449eb77",
+      "user_id": "test_user_123",
+      "message_type": "user",
+      "content": "Can you show me the sales data?",
+      "timestamp": "2025-08-30T19:03:28.723429",
+      "metadata": {},
+      "agent_type": "text"
+    },
+    {
+      "id": "ba594631-0659-45b7-83ae-04a2541e4a7b",
+      "user_id": "test_user_123",
+      "message_type": "assistant",
+      "content": "I'll search for sales data for you.",
+      "timestamp": "2025-08-30T19:03:28.723689",
+      "metadata": {},
+      "agent_type": "text"
+    },
+    {
+      "id": "2ee7f428-46b0-43b4-92cc-b27ee1b4259c",
+      "user_id": "test_user_123",
+      "message_type": "function_call",
+      "content": "Function: navigate_page({'user_id': 'test_user_123', 'target': 'Show sales data', 'action_type': 'search'})",
+      "timestamp": "2025-08-30T19:03:28.723844",
+      "metadata": {
+        "function_name": "navigate_page",
+        "arguments": {
+          "user_id": "test_user_123",
+          "target": "Show sales data",
+          "action_type": "search"
+        }
+      },
+      "agent_type": "text"
+    },
+    {
+      "id": "f9cc0aa7-178b-46c1-8d91-5277e747fd4a",
+      "user_id": "test_user_123",
+      "message_type": "function_result",
+      "content": "Result: Found sales data for Q1 2024",
+      "timestamp": "2025-08-30T19:03:28.723999",
+      "metadata": {
+        "function_name": "navigate_page",
+        "result": "Found sales data for Q1 2024"
+      },
+      "agent_type": "text"
+    },
+    {
+      "id": "32f9624c-0460-4ec6-be81-2281dc04ce04",
+      "user_id": "test_user_123",
+      "message_type": "user",
+      "content": "What's the status of our conversation?",
+      "timestamp": "2025-08-30T19:03:28.724173",
+      "metadata": {},
+      "agent_type": "voice"
+    },
+    {
+      "id": "1411479f-1604-49c5-b37a-9cd273414a9b",
+      "user_id": "test_user_123",
+      "message_type": "assistant",
+      "content": "We've been working on database queries. We navigated to the database query page, searched for employees (found 150), and then you asked about sales data through text chat. I found sales data for Q1 2024.",
+      "timestamp": "2025-08-30T19:03:28.724335",
+      "metadata": {},
+      "agent_type": "voice"
+    }
+  ],
+  "persistence_test_user": [
+    {
+      "id": "79264ee7-f79b-4f41-b5fb-d6c02dee393d",
+      "user_id": "persistence_test_user",
+      "message_type": "user",
+      "content": "Test message for persistence",
+      "timestamp": "2025-08-30T19:03:28.724934",
+      "metadata": {},
+      "agent_type": "voice"
+    },
+    {
+      "id": "f3bac7da-24fc-4704-bf76-4a60f10abf80",
+      "user_id": "persistence_test_user",
+      "message_type": "assistant",
+      "content": "Test response for persistence",
+      "timestamp": "2025-08-30T19:03:28.725152",
+      "metadata": {},
+      "agent_type": "text"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+
+"xyz_reportw"": "qqq",
+
+"financial_report:" 
+  "### Section 1: Employee Daily Attendance Summary
+
+  **Query 1:** Get employee-wise punch count for March 2024.  
+
+  **Query 2:** Who are the users absent today (August 17, 2024), including:
+  - ID  
+  - Name  
+  - Email  
+  - User type  
+  - Department ID  
+  - Status = 'Absent'  
+  - Absent date  
+
+  ---
+
+  ### Section 2: Employee Salary Information
+
+  **Query 1:** What is the total paid salary for July 2024, where salaries are marked as paid?  
+  - Show result with formatted month, e.g., **"July 2024"**  
+
+  **Query 2:** List all salary details for every employee in July 2024.  "
+
+
+{
+  "report_structure": "{\"xyz_reportw\": \"qqq\", \"financial_report\": \"### Section 1: Employee Daily Attendance Summary\\n\\n**Query 1:** Get employee-wise punch count for March 2024.\\n\\n**Query 2:** Who are the users absent today (August 17, 2024), including:\\n- ID\\n- Name\\n- Email\\n- User type\\n- Department ID\\n- Status = \\\"Absent\\\"\\n- Absent date\\n\\n---\\n\\n### Section 2: Employee Salary Information\\n\\n**Query 1:** What is the total paid salary for July 2024, where salaries are marked as paid?\\n- Show result with formatted month, e.g., **\\\"July 2024\\\"**\\n\\n**Query 2:** List all salary details for every employee in July 2024.\"}"
+}
+
+{
+  "xyz_reportw": "qqq",
+  "financial_report": "### Section 1: Employee Daily Attendance Summary\n\n**Query 1:** Get employee-wise punch count for March 2024.\n\n**Query 2:** Who are the users absent today (August 17, 2024), including:\n- ID\n- Name\n- Email\n- User type\n- Department ID\n- Status = \"Absent\"\n- Absent date\n\n---\n\n### Section 2: Employee Salary Information\n\n**Query 1:** What is the total paid salary for July 2024, where salaries are marked as paid?\n- Show result with formatted month, e.g., **\"July 2024\"**\n\n**Query 2:** List all salary details for every employee in July 2024."
+}
+
+
+curl -k -X PUT "https://0.0.0.0:8200/mssql-config/mssql-config/1/report-structure" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "report_structure": "{\"xyz_reportw\": \"qqq\", \"financial_report\": \"### Section 1: Employee Daily Attendance Summary\\n\\n**Query 1:** Get employee-wise punch count for March 2024.\\n\\n**Query 2:** Who are the users absent today (August 17, 2024), including:\\n- ID\\n- Name\\n- Email\\n- User type\\n- Department ID\\n- Status = \\\"Absent\\\"\\n- Absent date\\n\\n---\\n\\n### Section 2: Employee Salary Information\\n\\n**Query 1:** What is the total paid salary for July 2024, where salaries are marked as paid?\\n- Show result with formatted month, e.g., **\\\"July 2024\\\"**\\n\\n**Query 2:** List all salary details for every employee in July 2024.\"}"
+  }'

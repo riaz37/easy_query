@@ -1,0 +1,3258 @@
+{
+  "success": true,
+  "database_id": 1,
+  "total_queries": 4,
+  "successful_queries": 4,
+  "failed_queries": 0,
+  "results": [
+    {
+      "section_number": 1,
+      "section_name": "Employee Daily Attendance Summary for any Month",
+      "query_number": 1,
+      "query": "Get employee-wise punch count for March 2023.",
+      "success": true,
+      "table": {
+        "total_rows": 252,
+        "columns": [
+          "emp_name",
+          "AttendanceDate",
+          "TotalPunches"
+        ],
+        "data": [
+          {
+            "emp_name": "205-ALAA SAEED",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "205-ALAA SAEED",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "205-ALAA SAEED",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "205-ALAA SAEED",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "205-ALAA SAEED",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "205-ALAA SAEED",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "205-ALAA SAEED",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-11",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-13",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "231-Ali Mousa",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-11",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-13",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "238-Abdallah Hasanein",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "243-Mahmoud Nasr",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 3
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "247-Shoukat Ullah ",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-11",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "250-Syed Imam",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "254-Jamilur rehman",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "261-Abdullah Mousa",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-13",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "272-Musab Elnour",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-13",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "275-Abdullah Salem",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-01",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-11",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 2
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-14",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-15",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "278-Raef Khattab",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-02",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-04",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-05",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-06",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-07",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-08",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-09",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-12",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-13",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-16",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-18",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-19",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-20",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-21",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-22",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-23",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-25",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-26",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-27",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-28",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-29",
+            "TotalPunches": 1
+          },
+          {
+            "emp_name": "287-Ahmed Mohammed",
+            "AttendanceDate": "2023-03-30",
+            "TotalPunches": 1
+          }
+        ]
+      },
+      "graph_and_analysis": {
+        "graph_type": "bar",
+        "theme": "modern",
+        "image_path": "/Users/nilab/Desktop/projects/Esap-database_agent/Knowledge_base_backend/storage/graphs/images/graph_bar_1755548916.png",
+        "analysis": {
+          "total_records": 252,
+          "columns_count": 3,
+          "sql_query": "SELECT emp_name, CONVERT(DATE, punc_time) AS AttendanceDate, COUNT(*) AS TotalPunches FROM dbo.attendance WHERE YEAR(created_at) = 2023 AND MONTH(created_at) = 3 GROUP BY emp_name, CONVERT(DATE, punc_time) ORDER BY emp_name, AttendanceDate",
+          "generation_time": "2025-08-19T02:28:50.465051",
+          "data_summary": "Generated Bar chart with 252 records across 3 columns",
+          "query": "Get employee-wise punch count for March 2023."
+        },
+        "llm_analysis": {
+          "analysis": "EXECUTIVE SUMMARY:\nThis dataset provides daily attendance records for various employees during March 2023, detailing each employee's name, the specific date of attendance, and the total punches recorded for that day. The primary objective is to aggregate these daily punch counts to determine the total punches for each employee across the entire month of March 2023.\n\nKEY INSIGHTS:\n• The dataset is pre-filtered for March 2023, as all sample dates fall within this month, directly addressing the query's time frame.\n• The 'TotalPunches' column consistently shows a value of '1' in the provided samples, suggesting it might represent a single daily attendance record or a count of days present rather than multiple clock-in/out events per day.\n• To fulfill the user query, the 'TotalPunches' for each employee needs to be summed across all their attendance records within March 2023.\n\nTRENDS AND PATTERNS:\n• **Consistent Daily Records:** The uniform 'TotalPunches: 1' across all sample entries indicates a consistent method of recording daily attendance, where each record signifies one day of presence.\n• **Varying Attendance Frequencies:** Some employees (e.g., '287-Ahmed Mohammed') show consecutive daily attendance, implying regular work schedules, while others (e.g., '205-ALAA SAEED') exhibit gaps, suggesting non-continuous workdays or absences.\n\nANOMALIES:\n• **Consistent 'TotalPunches: 1':** The most notable observation is that 'TotalPunches' is always '1' in the sample. If 'TotalPunches' was expected to represent the actual number of clock-in/out events (e.g., 2 for a typical workday), then this consistent '1' would be an anomaly requiring clarification on the column's definition. However, if '1' signifies a single daily attendance record, then it is consistent with the data's structure.\n\nBUSINESS IMPLICATIONS:\n• **Payroll Accuracy:** The aggregated employee-wise punch count is fundamental for accurate payroll processing, especially for employees paid based on attendance days or hours.\n• **Attendance Management:** This data enables businesses to monitor individual employee attendance patterns, identify potential absenteeism, and ensure compliance with work schedules.\n• **Workforce Planning:** Understanding total employee presence helps in assessing overall workforce availability and can inform future staffing and resource allocation decisions.\n\nRECOMMENDATIONS:\n• **Perform Aggregation:** Calculate the sum of 'TotalPunches' for each unique 'emp_name' for all records within March 2023 to directly answer the user's query.\n• **Clarify 'TotalPunches' Definition:** Confirm the precise meaning of the 'TotalPunches' column. If it consistently represents 'days present' (value of 1), this should be explicitly documented for future analysis and reporting.\n• **Analyze Attendance vs. Expected Workdays:** Compare each employee's total punch count against the expected number of workdays in March 2023 to identify employees with significantly high or low attendance, which could warrant further investigation.",
+          "metadata": {
+            "analysis_timestamp": "2025-08-19T02:28:50.464925",
+            "data_summary": {
+              "total_rows": 252,
+              "total_columns": 3,
+              "columns": [
+                "emp_name",
+                "AttendanceDate",
+                "TotalPunches"
+              ],
+              "first_100_rows": 100,
+              "last_100_rows": 100
+            },
+            "query": "Get employee-wise punch count for March 2023.",
+            "subject": "general"
+          }
+        }
+      }
+    },
+    {
+      "section_number": 1,
+      "section_name": "Employee Daily Attendance Summary for any Month",
+      "query_number": 2,
+      "query": "Who are the users absent today on August 17, 2023, including their ID, name, email, user type, department ID, with 'Absent' as status and the absent date?",
+      "success": true,
+      "table": {
+        "total_rows": 129,
+        "columns": [
+          "u_id",
+          "u_name",
+          "email",
+          "user_type",
+          "fk_department_id",
+          "AttendanceStatus",
+          "AbsentDate"
+        ],
+        "data": [
+          {
+            "u_id": 101,
+            "u_name": "101-Baker Abukhater",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 102,
+            "u_name": "102-essam Mohammad",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 103,
+            "u_name": "103-Hassan",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 104,
+            "u_name": "104-Mohammad Nour",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 105,
+            "u_name": "105-Abbas ",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 106,
+            "u_name": "106-Maher Alshamy",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 107,
+            "u_name": "107-MOHAmmad Rahman",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 108,
+            "u_name": "108-Mohammad Babi",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 109,
+            "u_name": "109-Mouner Al-Nahare",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 110,
+            "u_name": "110-AMIR HANIF",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 112,
+            "u_name": "112-FAROOQ ATTA",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 201,
+            "u_name": "201-تركي الموزان ",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 202,
+            "u_name": "202-BAKER ABUKHATER",
+            "email": "bf2020@hotmail.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 203,
+            "u_name": "203-زاكي الدين",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 204,
+            "u_name": "204-محمد الفاتح",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 206,
+            "u_name": "206-علاء زهارنة",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 207,
+            "u_name": "207-أحمد الحبشي",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 208,
+            "u_name": "208-بلال حسين",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 209,
+            "u_name": "209-محمد الياس + معين",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 210,
+            "u_name": "210-عماد + شعيب",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 211,
+            "u_name": "211-محمد أسكندر + محمد ياسين + غلام",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 212,
+            "u_name": "212-رمضان + ياسر + صلاح",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 213,
+            "u_name": "213-عبدالقادر",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 214,
+            "u_name": "214-بسمة",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 215,
+            "u_name": "215-محمد عباس",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 220,
+            "u_name": "220-ALLAN NAVARRO",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 221,
+            "u_name": "221-ARNOLD TATA TUMILAP",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 223,
+            "u_name": "223-MORAD KHALI",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 224,
+            "u_name": "224-REMY ABDUL",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 225,
+            "u_name": "225-JOHARI HASSAN BANGON",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 226,
+            "u_name": "226-SARIP ODIN",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 227,
+            "u_name": "227-ABDUL DAUMILANG",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 228,
+            "u_name": "228-أحمد المصري",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 229,
+            "u_name": "229-سفيان الطيب",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 230,
+            "u_name": "230-Omar Abukhater",
+            "email": "omar@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 232,
+            "u_name": "232-رمضان محمود",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 234,
+            "u_name": "234-عبدالله الشاعر",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 235,
+            "u_name": "235-عمر العريني",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 236,
+            "u_name": "236-Adel Balkhair",
+            "email": "aabuabed@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 237,
+            "u_name": "237-أبوبكر يدك",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 240,
+            "u_name": "240-مؤسسة الطاقة المثمرة",
+            "email": null,
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 241,
+            "u_name": "241-Mohannad Sweiss",
+            "email": "msweiss@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 242,
+            "u_name": "242-Hamza Babi",
+            "email": "hamza@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 244,
+            "u_name": "244-Khalid Saeed",
+            "email": "ksaeed@empoweringeng.com\r\n",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 246,
+            "u_name": "246-Empwering Energy Co",
+            "email": "aabuabed@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 248,
+            "u_name": "248-Abdulrahman Yousif",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 249,
+            "u_name": "249-Harun Mia",
+            "email": "harunmia00x00@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 251,
+            "u_name": "251-Yousuf Hagus",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 252,
+            "u_name": "252-Old Invoice",
+            "email": "baker@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 253,
+            "u_name": "253-Mohmmed Nafeth",
+            "email": "mohammednafez53@hotmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 255,
+            "u_name": "255-Allan Solis",
+            "email": "allan@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 230,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 256,
+            "u_name": "256-Omar Hasan",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 257,
+            "u_name": "257-سعاد العنزي",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 258,
+            "u_name": "258-رشدة العنزي",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 259,
+            "u_name": "259-جواهر العنزي",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 260,
+            "u_name": "260-JAAD ALKAREEM",
+            "email": "akarim@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 262,
+            "u_name": "262-Mohammed Ahmed",
+            "email": "mlasud.isp@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 263,
+            "u_name": "263-Ahmed Ali",
+            "email": "R14-3@hotmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 264,
+            "u_name": "264-Saleh Fahad",
+            "email": "binlaswadsaleh@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 265,
+            "u_name": "265-Abdullah Mahmoud",
+            "email": "abismail1988@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 266,
+            "u_name": "266-Muhammad Sikandar",
+            "email": "sikandar1992s@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 267,
+            "u_name": "267-Muhammad Dilawar",
+            "email": "Dilawarbhatti836@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 268,
+            "u_name": "268-Omer Mukhtar",
+            "email": "syedimam@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 269,
+            "u_name": "269-Mohammed Abdulaziz",
+            "email": "hmooodabinlasod@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 270,
+            "u_name": "270-Ayman Ibrahim",
+            "email": "ssaqer1414@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 271,
+            "u_name": "271-Faisal Fahad",
+            "email": "ifaisalbinfahad@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 273,
+            "u_name": "273-Khalid Ahmed",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 274,
+            "u_name": "274-Mohammed Nabih",
+            "email": "mnabih@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 276,
+            "u_name": "276-Noor Hossin",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 277,
+            "u_name": "277-Mohammad Bahar",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 279,
+            "u_name": "279-Midhad Ibrahim",
+            "email": "medad@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 280,
+            "u_name": "280-Abdalkarim Isleem",
+            "email": "akarim@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 281,
+            "u_name": "281-Mohammad Ramadan",
+            "email": "akarim@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 283,
+            "u_name": "283-Mohammad Rizwan",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 284,
+            "u_name": "284-Jani Sikder",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 285,
+            "u_name": "285-Abdul Ali",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 286,
+            "u_name": "286-Bellal Hossain",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 288,
+            "u_name": "288-MD Ashabuddin",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 289,
+            "u_name": "289-MD Masud",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 291,
+            "u_name": "291-انوار بنت عواد",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 292,
+            "u_name": "292-Kamal Uldeen",
+            "email": "syedimam@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 295,
+            "u_name": "295-Obaidullah Jalil",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 299,
+            "u_name": "299-Ossama Hassanein",
+            "email": "osama@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 301,
+            "u_name": "301-Riyadh Hazzoury",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 302,
+            "u_name": "302-Mohamad Yehia",
+            "email": "mhallak@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 303,
+            "u_name": "303-Ayed Al.Anazi",
+            "email": "ayed@empoweringeng.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 304,
+            "u_name": "304-Sandra Albani",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 305,
+            "u_name": "305-Mohamed Moustafa",
+            "email": "m635379@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 306,
+            "u_name": "306-Hamed Hasan",
+            "email": "swe.hamedhasan@gmail.com",
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 308,
+            "u_name": "308-GHIYATH MOHAMED",
+            "email": "gmohamed@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 311,
+            "u_name": "311-Hesham  Abbas",
+            "email": "heshamabas365@gmail.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 314,
+            "u_name": "314-AZHARUDDIN ASLAM ",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 315,
+            "u_name": "315-SAUD ALFURHUD",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 316,
+            "u_name": "316-SAUOD ABDALLAH",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 317,
+            "u_name": "317-ARIF MIAH",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 318,
+            "u_name": "318-OSAMAH YOUSSEF",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 319,
+            "u_name": "319-SAMSON SAHLI",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 320,
+            "u_name": "320-NAYIF MOHA",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 321,
+            "u_name": "321-SADDAD ADZID",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 322,
+            "u_name": "322-NAYEM MIA",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 323,
+            "u_name": "323-SUJON MIAH",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 324,
+            "u_name": "324-AKKASH",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 325,
+            "u_name": "325-ABU RAIHAN",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 326,
+            "u_name": "326-MEDUL MIA",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 327,
+            "u_name": "327-RASEL SARDAR",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 328,
+            "u_name": "328-FORHAD KHAN",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 330,
+            "u_name": "330-Mostafa Elbahy",
+            "email": "melbahy@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 331,
+            "u_name": "331-Abdullatif alhassan",
+            "email": "aalhassan@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 334,
+            "u_name": "334-NAJMUL HOSSAIN",
+            "email": "00000000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 335,
+            "u_name": "جمايل العنزي-335",
+            "email": null,
+            "user_type": 1,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 336,
+            "u_name": "336-Mosaraf Miah",
+            "email": "0000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 337,
+            "u_name": "337-برمشوار ساهو",
+            "email": "0000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 338,
+            "u_name": "338-دانيل مكامي",
+            "email": "0000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 339,
+            "u_name": "339-عمير",
+            "email": "0000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 340,
+            "u_name": "340-Mohamed Ibrahim",
+            "email": "mibrahim@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 341,
+            "u_name": "341-Umair Muhammad",
+            "email": "0000",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 347,
+            "u_name": "347-Odai Keewan",
+            "email": "okeewan@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 348,
+            "u_name": "348-ameen abdelkader",
+            "email": "aabdelkader@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 349,
+            "u_name": "349-Mehmood Ahmed",
+            "email": "mehmood@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 352,
+            "u_name": "352-ALAA SIAJ",
+            "email": "asiaj@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 353,
+            "u_name": "353-Abdelhamid Brikah",
+            "email": "abrikah@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 354,
+            "u_name": "354-Ahmed Mubarak",
+            "email": "amubarak@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 355,
+            "u_name": "355-SALAHALDEEN FAKHOURI",
+            "email": "sfakhouri@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 356,
+            "u_name": "356-mohammed saliman",
+            "email": "msaliman@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 357,
+            "u_name": "357-Mojahed Yassin",
+            "email": "myassin@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 358,
+            "u_name": "358-mustafa jawabreh",
+            "email": "mjawabreh@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 359,
+            "u_name": "359-aomir Ali",
+            "email": "aali@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 360,
+            "u_name": "360-mahmoud mohsen",
+            "email": "mmohsen@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          },
+          {
+            "u_id": 361,
+            "u_name": "361-abdullah alqahtani",
+            "email": "aalqahtani@empoweringeng.com",
+            "user_type": null,
+            "fk_department_id": 0,
+            "AttendanceStatus": "Absent",
+            "AbsentDate": "2023-08-17"
+          }
+        ]
+      },
+      "graph_and_analysis": {
+        "graph_type": "column",
+        "theme": "modern",
+        "image_path": "/Users/nilab/Desktop/projects/Esap-database_agent/Knowledge_base_backend/storage/graphs/images/graph_column_1755548970.png",
+        "analysis": {
+          "total_records": 129,
+          "columns_count": 7,
+          "sql_query": "SELECT u.u_id, u.u_name, u.email, u.user_type, u.fk_department_id, 'Absent' AS AttendanceStatus, CONVERT(DATE, '2023-08-17') AS AbsentDate FROM dbo.users u WHERE NOT EXISTS ( SELECT 1 FROM dbo.attendance a WHERE a.fk_u_id = u.u_id AND CONVERT(DATE, a.punc_time) = CONVERT(DATE, '2023-08-17') )",
+          "generation_time": "2025-08-19T02:29:39.530438",
+          "data_summary": "Generated Column chart with 129 records across 7 columns",
+          "query": "Who are the users absent today on August 17, 2023, including their ID, name, email, user type, department ID, with 'Absent' as status and the absent date?"
+        },
+        "llm_analysis": {
+          "analysis": "EXECUTIVE SUMMARY:\nThis dataset exclusively identifies 129 users who were recorded as absent on August 17, 2023. All records consistently show 'Absent' status for this specific date, providing a clear list of individuals not present.\n\nKEY INSIGHTS:\n• The entire dataset of 129 records pertains to users absent on August 17, 2023, directly addressing the user query.\n• A significant portion of the 'email' and 'user_type' fields are null, indicating incomplete user profile data.\n• The 'fk_department_id' is uniformly '0' for all absent users, suggesting either a single department or a default/unassigned department value.\n• The 'u_name' field often includes the 'u_id' as a prefix, which could be a naming convention or a data entry artifact.\n\nTRENDS AND PATTERNS:\n• The most prominent pattern is the collective absence of 129 users on a single specific date (August 17, 2023), which is a substantial number relative to the dataset size.\n• The consistent 'fk_department_id' of '0' across all records suggests a lack of departmental granularity in this particular dataset for these absent users.\n\nANOMALIES:\n• The high prevalence of null values in the 'email' and 'user_type' columns is a data quality anomaly, limiting the ability to contact or categorize these absent users.\n• The uniform 'fk_department_id: 0' could be an anomaly if the organization has multiple departments, indicating a potential data mapping issue or a specific group of unassigned users.\n\nBUSINESS IMPLICATIONS:\n• A large number of simultaneous absences on a single day can significantly impact daily operations, productivity, and resource allocation.\n• The lack of complete contact (email) and role (user_type) information for absent users hinders effective follow-up or communication regarding their absence.\n• The absence of specific department IDs prevents departmental-level analysis of attendance, making it difficult to identify which teams are most affected.\n\nRECOMMENDATIONS:\n• Investigate the underlying reason for the widespread absence on August 17, 2023, to determine if it was a planned event, holiday, or an unexpected issue.\n• Implement data validation and enrichment processes to ensure 'email', 'user_type', and 'fk_department_id' fields are accurately populated for all users.\n• Cross-reference this absence data with departmental structures and company calendars to gain a more comprehensive understanding of the impact and context of these absences.",
+          "analysis_subject": "general",
+          "data_coverage": "First 100 and last 100 rows analyzed",
+          "metadata": {
+            "analysis_timestamp": "2025-08-19T02:29:39.530342",
+            "data_summary": {
+              "total_rows": 129,
+              "total_columns": 7,
+              "columns": [
+                "u_id",
+                "u_name",
+                "email",
+                "user_type",
+                "fk_department_id",
+                "AttendanceStatus",
+                "AbsentDate"
+              ],
+              "first_100_rows": 100,
+              "last_100_rows": 100
+            },
+            "query": "Who are the users absent today on August 17, 2023, including their ID, name, email, user type, department ID, with 'Absent' as status and the absent date?",
+            "subject": "general"
+          }
+        }
+      }
+    },
+    {
+      "section_number": 2,
+      "section_name": "Get last month/given Month/ any month Paid Salary",
+      "query_number": 1,
+      "query": "What is the total paid salary for July 2023, where salaries are marked as paid, and show it with the formatted month like 'July 2023'?",
+      "success": true,
+      "table": {
+        "total_rows": 1,
+        "columns": [
+          "TotalPaidSalary",
+          "SalaryMonth"
+        ],
+        "data": [
+          {
+            "TotalPaidSalary": "131067.00",
+            "SalaryMonth": "July 2023"
+          }
+        ]
+      },
+      "graph_and_analysis": {
+        "graph_type": "column",
+        "theme": "modern",
+        "image_path": "/Users/nilab/Desktop/projects/Esap-database_agent/Knowledge_base_backend/storage/graphs/images/graph_column_1755549006.png",
+        "analysis": {
+          "total_records": 1,
+          "columns_count": 2,
+          "sql_query": "SELECT ISNULL(SUM(total_salary), 0) AS TotalPaidSalary, FORMAT(DATEFROMPARTS(2023, 7, 1), 'MMMM yyyy') AS SalaryMonth FROM dbo.salary WHERE isPaid = 1 AND YEAR(month_date) = 2023 AND MONTH(month_date) = 7",
+          "generation_time": "2025-08-19T02:30:13.764929",
+          "data_summary": "Generated Column chart with 1 records across 2 columns",
+          "query": "What is the total paid salary for July 2023, where salaries are marked as paid, and show it with the formatted month like 'July 2023'?"
+        },
+        "llm_analysis": {
+          "analysis": "EXECUTIVE SUMMARY:\nThe provided dataset directly answers the query, showing the total paid salary for July 2023. The total paid salary for this specific month is 131,067.00, clearly formatted with the corresponding month as 'July 2023'. This single data point confirms the exact salary expenditure for the specified period.\n\nKEY INSIGHTS:\n• The total paid salary for July 2023 is precisely 131,067.00.\n• The dataset explicitly confirms that this salary amount corresponds to the month of 'July 2023', fulfilling the formatting requirement.\n• The data is highly focused, providing only the requested aggregate value for a specific month.\n\nTRENDS AND PATTERNS:\n• Due to the dataset containing only a single data point for July 2023, it is not possible to identify any trends, patterns, or seasonality over time. A single observation cannot establish a trend.\n\nANOMALIES:\n• With only one data point available, it is impossible to identify any anomalies or outliers. The value 131,067.00 is simply the reported total for July 2023 without any comparative context.\n\nBUSINESS IMPLICATIONS:\n• This data point provides a clear and precise figure for the total salary expenditure in July 2023, which is essential for accurate financial reporting, budgeting, and reconciliation for that specific month.\n• It confirms the successful processing and payment of salaries for the specified period, ensuring operational compliance and financial transparency for July 2023.\n\nRECOMMENDATIONS:\n• To enable more robust analysis and identify trends, collect historical salary data for previous months and future periods, allowing for comparisons and the detection of changes over time.\n• Expand the dataset to include additional dimensions such as department, employee count, or salary components (e.g., base, bonus, overtime) to gain deeper insights into salary distribution and cost drivers beyond just the total aggregate.",
+          "metadata": {
+            "analysis_timestamp": "2025-08-19T02:30:13.764828",
+            "data_summary": {
+              "total_rows": 1,
+              "total_columns": 2,
+              "columns": [
+                "TotalPaidSalary",
+                "SalaryMonth"
+              ],
+              "first_100_rows": 1,
+              "last_100_rows": 1
+            },
+            "query": "What is the total paid salary for July 2023, where salaries are marked as paid, and show it with the formatted month like 'July 2023'?",
+            "subject": "general"
+          }
+        }
+      }
+    },
+    {
+      "section_number": 2,
+      "section_name": "Get last month/given Month/ any month Paid Salary",
+      "query_number": 2,
+      "query": "Can you list all salary details for every employee in July 2023?",
+      "success": true,
+      "table": {
+        "total_rows": 30,
+        "columns": [
+          "salary_id",
+          "employee_name",
+          "month_name",
+          "salary_amount",
+          "deducted_amount",
+          "description",
+          "total_salary",
+          "created_at",
+          "created_by",
+          "created_by_id",
+          "isPaid",
+          "fk_u_id",
+          "month_date",
+          "FkSalaryReqId",
+          "AttenDeductedAmount",
+          "LoanDeductedAmount",
+          "PenaltyDeductedAmount"
+        ],
+        "data": [
+          {
+            "salary_id": 471,
+            "employee_name": "202-BAKER ABUKHATER",
+            "month_name": "July",
+            "salary_amount": "5000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "5000.00",
+            "created_at": "2023-07-23T11:27:05.127000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 202,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 472,
+            "employee_name": "205-ALAA SAEED",
+            "month_name": "July",
+            "salary_amount": "6500.00",
+            "deducted_amount": "1000.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "5500.00",
+            "created_at": "2023-07-23T11:27:21.033000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 205,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 473,
+            "employee_name": "230-Omar Abukhater",
+            "month_name": "July",
+            "salary_amount": "6000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "6000.00",
+            "created_at": "2023-07-23T11:27:32.917000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 230,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 474,
+            "employee_name": "231-Ali Mousa",
+            "month_name": "July",
+            "salary_amount": "7000.00",
+            "deducted_amount": "1000.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "6000.00",
+            "created_at": "2023-07-23T11:27:45.603000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 231,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 475,
+            "employee_name": "233-Usman Nazir",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:28:00.403000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 233,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 476,
+            "employee_name": "238-Abdallah Hasanein",
+            "month_name": "July",
+            "salary_amount": "8700.00",
+            "deducted_amount": "1000.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "7700.00",
+            "created_at": "2023-07-23T11:28:19.787000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 238,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 477,
+            "employee_name": "243-Mahmoud Nasr",
+            "month_name": "July",
+            "salary_amount": "4200.00",
+            "deducted_amount": "1000.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "3200.00",
+            "created_at": "2023-07-23T11:28:39.187000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 243,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 478,
+            "employee_name": "247-Shoukat Ullah ",
+            "month_name": "July",
+            "salary_amount": "4500.00",
+            "deducted_amount": "500.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:29:22.897000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 247,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 479,
+            "employee_name": "250-Syed Imam",
+            "month_name": "July",
+            "salary_amount": "6000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "6000.00",
+            "created_at": "2023-07-23T11:29:38.030000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 250,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 480,
+            "employee_name": "254-Jamilur rehman",
+            "month_name": "July",
+            "salary_amount": "4500.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4500.00",
+            "created_at": "2023-07-23T11:29:53.937000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 254,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 481,
+            "employee_name": "257-سعاد العنزي",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:30:07.533000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 257,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 482,
+            "employee_name": "258-رشدة العنزي",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:30:22.453000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 258,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 483,
+            "employee_name": "259-جواهر العنزي",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:30:34.043000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 259,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 484,
+            "employee_name": "261-Abdullah Mousa",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:30:52.907000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 261,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 485,
+            "employee_name": "278-Raef Khattab",
+            "month_name": "July",
+            "salary_amount": "12000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "12000.00",
+            "created_at": "2023-07-23T11:31:17.953000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 278,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 486,
+            "employee_name": "279-Midhad Ibrahim",
+            "month_name": "July",
+            "salary_amount": "2200.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "2200.00",
+            "created_at": "2023-07-23T11:31:34.127000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 279,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 487,
+            "employee_name": "275-Abdullah Salem",
+            "month_name": "July",
+            "salary_amount": "4500.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4500.00",
+            "created_at": "2023-07-23T11:32:54.690000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 275,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 488,
+            "employee_name": "287-Ahmed Mohammed",
+            "month_name": "July",
+            "salary_amount": "3500.00",
+            "deducted_amount": "300.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "3200.00",
+            "created_at": "2023-07-23T11:33:52.983000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 287,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 489,
+            "employee_name": "291-انوار بنت عواد",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:34:14.317000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 291,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 490,
+            "employee_name": "255-Allan Solis",
+            "month_name": "July",
+            "salary_amount": "4400.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4400.00",
+            "created_at": "2023-07-23T11:40:09.653000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 255,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 491,
+            "employee_name": "272-Musab Elnour",
+            "month_name": "July",
+            "salary_amount": "8000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "8000.00",
+            "created_at": "2023-07-23T11:40:45.343000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 272,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 492,
+            "employee_name": "280-Abdalkarim Isleem",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4000.00",
+            "created_at": "2023-07-23T11:41:14.290000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 280,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 493,
+            "employee_name": "281-Mohammad Ramadan",
+            "month_name": "July",
+            "salary_amount": "2100.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "2100.00",
+            "created_at": "2023-07-23T11:41:33.240000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 281,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 494,
+            "employee_name": "290-Sameer Abdullah",
+            "month_name": "July",
+            "salary_amount": "2000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "2000.00",
+            "created_at": "2023-07-23T11:41:59.023000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 290,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 495,
+            "employee_name": "293-Arif Hossen",
+            "month_name": "July",
+            "salary_amount": "4000.00",
+            "deducted_amount": "1000.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "3000.00",
+            "created_at": "2023-07-23T11:42:25.490000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 293,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 496,
+            "employee_name": "294-Rafeq Awlaqi",
+            "month_name": "July",
+            "salary_amount": "2500.00",
+            "deducted_amount": "600.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "1900.00",
+            "created_at": "2023-07-23T11:43:01.673000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 294,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 497,
+            "employee_name": "295-Obaidullah Jalil",
+            "month_name": "July",
+            "salary_amount": "2000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "2000.00",
+            "created_at": "2023-07-23T11:43:26.613000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 295,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 498,
+            "employee_name": "296-Ahmed Atef",
+            "month_name": "July",
+            "salary_amount": "4200.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "4200.00",
+            "created_at": "2023-07-23T11:43:47.047000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 296,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 499,
+            "employee_name": "298-Moaz Shaban",
+            "month_name": "July",
+            "salary_amount": "8000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 7/2023",
+            "total_salary": "2667.00",
+            "created_at": "2023-07-27T09:56:12.390000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 298,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          },
+          {
+            "salary_id": 500,
+            "employee_name": "297-Awais Rehman",
+            "month_name": "July",
+            "salary_amount": "3000.00",
+            "deducted_amount": "0.00",
+            "description": "راتب شهر 07/2023",
+            "total_salary": "3000.00",
+            "created_at": "2023-07-30T14:50:59.947000",
+            "created_by": "205-ALAA SAEED",
+            "created_by_id": 205,
+            "isPaid": true,
+            "fk_u_id": 297,
+            "month_date": "2023-07-01T00:00:00",
+            "FkSalaryReqId": null,
+            "AttenDeductedAmount": null,
+            "LoanDeductedAmount": null,
+            "PenaltyDeductedAmount": null
+          }
+        ]
+      },
+      "graph_and_analysis": {
+        "graph_type": "grouped_bar",
+        "theme": "modern",
+        "image_path": "/Users/nilab/Desktop/projects/Esap-database_agent/Knowledge_base_backend/storage/graphs/images/graph_grouped_bar_1755549056.png",
+        "analysis": {
+          "total_records": 30,
+          "columns_count": 17,
+          "sql_query": "SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM dbo.salary WHERE YEAR(month_date) = 2023 AND MONTH(month_date) = 7",
+          "generation_time": "2025-08-19T02:31:26.795025",
+          "data_summary": "Generated Grouped_Bar chart with 30 records across 17 columns",
+          "query": "Can you list all salary details for every employee in July 2023?"
+        },
+        "llm_analysis": {
+          "analysis": "EXECUTIVE SUMMARY:\nThis analysis provides a comprehensive overview of all 30 employee salary details for July 2023, as recorded in the provided dataset. The total gross salary disbursed was 132,200.00, with total explicit deductions of 2,600.00, resulting in a net total salary of 124,267.00. A critical data inconsistency was identified for one employee, where the total salary does not align with the stated salary amount and deductions.\n\nKEY INSIGHTS:\n• All 30 employees in the dataset have recorded salary entries for July 2023, and all entries are marked as 'isPaid'.\n• The total gross salary for July 2023 across all employees is 132,200.00, with total explicit deductions amounting to 2,600.00.\n• Three employees (205-ALAA SAEED, 231-Ali Mousa, 294-Rafeq Awlaqi) had explicit deductions recorded, ranging from 600.00 to 1000.00.\n• The average gross salary per employee for July 2023 is approximately 4,406.67.\n\nTRENDS AND PATTERNS:\n• Payroll processing for July 2023 appears to have been centralized, as all salary entries were created by \"205-ALAA SAEED\" on or around July 23, 2023, with some later entries.\n• A significant number of employees (22 out of 30) have a consistent gross salary of 4,000.00 and no deductions, indicating a common salary tier or role.\n• The `AttenDeductedAmount`, `LoanDeductedAmount`, and `PenaltyDeductedAmount` columns are consistently null, suggesting that specific deduction categories are either not tracked in this system or not applicable for these entries, with all deductions aggregated under `deducted_amount`.\n\nANOMALIES:\n• A significant anomaly exists for employee \"298-Moaz Shaban\" (salary_id: 499): The `salary_amount` is 8,000.00, and `deducted_amount` is 0.00, yet the `total_salary` is recorded as 2,667.00. This represents an unexplained discrepancy of 5,333.00, where the `total_salary` is substantially lower than the gross salary without any recorded deduction.\n\nBUSINESS IMPLICATIONS:\n• The identified data inconsistency for \"Moaz Shaban\" poses a significant risk for financial accuracy, potentially leading to incorrect payroll disbursements, accounting errors, or employee dissatisfaction.\n• The consistent use of a single `created_by` user suggests a centralized payroll process, which can be efficient but also creates a single point of failure for data entry errors.\n• The lack of detailed breakdown for deductions limits the ability to analyze the reasons for deductions and manage employee finances effectively.\n\nRECOMMENDATIONS:\n• Immediately investigate the discrepancy for \"298-Moaz Shaban\" to understand the root cause of the 5,333.00 difference and rectify the record to ensure accurate payroll and financial reporting.\n• Implement data validation rules within the payroll system to ensure that `total_salary` is always equal to `salary_amount` minus `deducted_amount`, preventing similar inconsistencies in the future.\n• Enhance the deduction tracking by populating specific deduction columns (`AttenDeductedAmount`, `LoanDeductedAmount`, `PenaltyDeductedAmount`) to provide granular insights into deduction types and improve financial transparency.",
+          "analysis_subject": "general",
+          "data_coverage": "First 30 and last 30 rows analyzed",
+          "metadata": {
+            "analysis_timestamp": "2025-08-19T02:31:26.794839",
+            "data_summary": {
+              "total_rows": 30,
+              "total_columns": 17,
+              "columns": [
+                "salary_id",
+                "employee_name",
+                "month_name",
+                "salary_amount",
+                "deducted_amount",
+                "description",
+                "total_salary",
+                "created_at",
+                "created_by",
+                "created_by_id",
+                "isPaid",
+                "fk_u_id",
+                "month_date",
+                "FkSalaryReqId",
+                "AttenDeductedAmount",
+                "LoanDeductedAmount",
+                "PenaltyDeductedAmount"
+              ],
+              "first_100_rows": 30,
+              "last_100_rows": 30
+            },
+            "query": "Can you list all salary details for every employee in July 2023?",
+            "subject": "general"
+          }
+        }
+      }
+    }
+  ],
+  "total_processing_time": 205.21616101264954,
+  "summary": {
+    "total_sections": 2,
+    "total_queries": 4,
+    "successful_queries": 4,
+    "failed_queries": 0,
+    "success_rate": 100.0,
+    "total_processing_time": 205.21616101264954,
+    "average_processing_time": 51.304040253162384,
+    "sections_processed": 2,
+    "processing_method": "optimized_batch_function",
+    "database_id": 1,
+    "errors_summary": {},
+    "user_id": "nabil",
+    "generation_time": 222.21680903434753,
+    "timestamp": "2025-08-19T02:31:26.903271"
+  },
+  "user_id": "nabil",
+  "generation_time": 222.21680903434753,
+  "timestamp": "2025-08-19T02:31:26.903265"
+}

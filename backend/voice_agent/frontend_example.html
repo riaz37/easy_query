@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Agent Navigation - Frontend Example</title>
+    <style>
+        /* Basic page styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-connected { background-color: #28a745; }
+        .status-disconnected { background-color: #dc3545; }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        /* Pages */
+        .page {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page h2 {
+            color: #333;
+            margin-top: 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        /* Search areas */
+        .search-area {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #dee2e6;
+        }
+
+        .upload-area {
+            background: #e8f5e8;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #28a745;
+            text-align: center;
+        }
+
+        /* Report section */
+        .report-section {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #ffc107;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            color: #6c757d;
+        }
+
+        .breadcrumb-item.active {
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .breadcrumb-separator {
+            margin: 0 10px;
+            color: #6c757d;
+        }
+
+        /* Voice command display */
+        .voice-command {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .voice-command h4 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+
+        .voice-command p {
+            margin: 0;
+            color: #424242;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-list {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span class="status-indicator status-disconnected" id="connection-status"></span>
+                Voice Agent Navigation System
+            </h1>
+            <div class="breadcrumb">
+                <span class="breadcrumb-item">Home</span>
+                <span class="breadcrumb-separator">→</span>
+                <span class="breadcrumb-item active">Dashboard</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <ul class="nav-list">
+                <li class="nav-item active" data-page="dashboard" data-element="dashboard">Dashboard</li>
+                <li class="nav-item" data-page="database-query" data-element="database-query">Database Query</li>
+                <li class="nav-item" data-page="file-query" data-element="file-query">File Query</li>
+            </ul>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page active">
+            <h2>🏠 Dashboard</h2>
+            <p>Welcome to the Voice Agent Navigation System. Use voice commands to navigate and interact with the system.</p>
+            
+            <div class="voice-command">
+                <h4>🎤 Try these voice commands:</h4>
+                <p><strong>"Go to database query"</strong> - Navigate to database search page</p>
+                <p><strong>"Go to file query"</strong> - Navigate to file management page</p>
+            </div>
+
+            <div class="search-area">
+                <h3>Quick Actions</h3>
+                <button class="btn btn-primary" data-element="quick-search">Quick Search</button>
+                <button class="btn btn-success" data-element="view-reports">View Reports</button>
+                <button class="btn btn-warning" data-element="settings">Settings</button>
+            </div>
+        </div>
+
+        <!-- Database Query Page -->
+        <div id="database-query-page" class="page">
+            <h2>🗄️ Database Query</h2>
+            <p>Search and query your database using voice commands or manual input.</p>
+
+            <div class="voice-command">
+                <h4>🎤 Database voice commands:</h4>
+                <p><strong>"Search for financial reports"</strong> - Search database</p>
+                <p><strong>"Set database db_id:123"</strong> - Set database connection</p>
+                <p><strong>"Click load tables"</strong> - Load available tables</p>
+                <p><strong>"View report sales data"</strong> - View specific report</p>
+                <p><strong>"Generate report monthly summary"</strong> - Generate new report</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="db-search">Database Search</label>
+                <input type="text" id="db-search" class="form-input" placeholder="Enter search query..." data-element="search">
+            </div>
+
+            <div class="search-area">
+                <h3>Database Actions</h3>
+                <button class="btn btn-primary" data-element="load tables">Load Tables</button>
+                <button class="btn btn-success" data-element="set database">Set Database</button>
+                <button class="btn btn-warning" data-element="clear results">Clear Results</button>
+            </div>
+
+            <div class="report-section">
+                <h3>📊 Report Management</h3>
+                <button class="btn btn-primary" data-element="view report">View Report</button>
+                <button class="btn btn-success" data-element="report generation">Report Generation</button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="db-id">Database ID</label>
+                <input type="text" id="db-id" class="form-input" placeholder="Enter database ID..." data-element="database-id">
+            </div>
+        </div>
+
+        <!-- File Query Page -->
+        <div id="file-query-page" class="page">
+            <h2>📁 File Query</h2>
+            <p>Search and upload files using voice commands or manual input.</p>
+
+            <div class="voice-command">
+                <h4>🎤 File voice commands:</h4>
+                <p><strong>"Search for sales documents"</strong> - Search files</p>
+                <p><strong>"Search in finance table"</strong> - Table-specific search</p>
+                <p><strong>"Upload quarterly report to finance table"</strong> - Upload file</p>
+                <p><strong>"Upload multiple files"</strong> - Bulk upload</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="file-search">File Search</label>
+                <input type="text" id="file-search" class="form-input" placeholder="Enter file search query..." data-element="search">
+            </div>
+
+            <div class="search-area">
+                <h3>File Search Options</h3>
+                <label>
+                    <input type="checkbox" id="table-specific" data-element="table-specific"> 
+                    Table Specific Search
+                </label>
+                <select id="table-select" class="form-input" data-element="table-select">
+                    <option value="">Select table...</option>
+                    <option value="finance">Finance</option>
+                    <option value="hr">HR</option>
+                    <option value="sales">Sales</option>
+                    <option value="marketing">Marketing</option>
+                </select>
+            </div>
+
+            <div class="upload-area">
+                <h3>📤 File Upload</h3>
+                <p>Drag and drop files here or click to browse</p>
+                <input type="file" id="file-upload" multiple style="display: none;" data-element="upload">
+                <button class="btn btn-primary" onclick="document.getElementById('file-upload').click()" data-element="upload">
+                    Choose Files
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="target-table">Target Table</label>
+                <select id="target-table" class="form-input" data-element="target-table">
+                    <option value="">Select target table...</option>
+                    <option value="finance">Finance</option>
+                    <option value="hr">HR</option>
+                    <option value="sales">Sales</option>
+                    <option value="marketing">Marketing</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Navigation Handler Script -->
+    <script src="frontend_voice_navigation.js"></script>
+    
+    <script>
+        // Initialize voice navigation with custom configuration
+        const voiceHandler = new VoiceNavigationHandler({
+            websocketUrl: 'ws://localhost:8000/ws/voice',
+            userId: 'frontend_user'
+        });
+
+        // Update connection status indicator
+        function updateConnectionStatus() {
+            const statusIndicator = document.getElementById('connection-status');
+            const status = voiceHandler.getStatus();
+            
+            if (status.connected) {
+                statusIndicator.className = 'status-indicator status-connected';
+                statusIndicator.title = 'Connected to voice agent';
+            } else {
+                statusIndicator.className = 'status-indicator status-disconnected';
+                statusIndicator.title = 'Disconnected from voice agent';
+            }
+        }
+
+        // Update status every second
+        setInterval(updateConnectionStatus, 1000);
+
+        // Manual navigation for testing
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const page = item.getAttribute('data-page');
+                
+                // Update navigation
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Show page
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(`${page}-page`).classList.add('active');
+                
+                // Update breadcrumb
+                document.querySelector('.breadcrumb').innerHTML = `
+                    <span class="breadcrumb-item">Home</span>
+                    <span class="breadcrumb-separator">→</span>
+                    <span class="breadcrumb-item active">${page.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                `;
+            });
+        });
+
+        // File upload handling
+        document.getElementById('file-upload').addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files.length > 0) {
+                const fileNames = Array.from(files).map(f => f.name).join(', ');
+                voiceHandler.showNotification(`Selected ${files.length} file(s): ${fileNames}`, 'info');
+            }
+        });
+
+        // Search input handling
+        document.querySelectorAll('input[data-element="search"]').forEach(input => {
+            input.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    const query = event.target.value;
+                    if (query.trim()) {
+                        voiceHandler.showNotification(`Manual search: ${query}`, 'info');
+                    }
+                }
+            });
+        });
+
+        // Button click handling for manual testing
+        document.querySelectorAll('button[data-element]').forEach(button => {
+            button.addEventListener('click', () => {
+                const elementName = button.getAttribute('data-element');
+                voiceHandler.showNotification(`Manual click: ${elementName}`, 'info');
+            });
+        });
+
+        // Initialize connection status
+        updateConnectionStatus();
+    </script>
+</body>
+</html>

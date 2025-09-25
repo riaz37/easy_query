@@ -1,0 +1,30 @@
+uploads/1. Summary by Ministry  Division_20250724_200058_8ed88971.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_200323_3c2c805f.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_200443_30785817.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_200506_1905d757.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_200633_46d52560.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_201102_5f69d4da.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_201605_93589897.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_201901_9a71e685.pdf |Chunks: 1
+uploads/112 - Financial Institutions Division (1)_20250724_202154_789887d3.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_202421_51160704.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_202827_613d5d1f.pdf |Chunks: 1
+uploads/112 - Financial Institutions Division (1)_20250724_202827_3b1aaa23.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_203439_a2d6cca1.pdf |Chunks: 1
+uploads/112 - Financial Institutions Division (1)_20250724_203439_4115e6a7.pdf |Chunks: 1
+uploads/1. Summary by Ministry  Division_20250724_203843_e1077bed.pdf |Chunks: 1
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmpejunc7yi.md |Chunks: 7
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmpadbg2bp6.md |Chunks: 7
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmp8d5d7hl2.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmpmupkpmew.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmp3udok0db.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmp5cc83j6k.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmppr5yrkq6.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmpcohglvxh.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmpd0zyyz15.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmp_hd0gu3t.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmp8oray55d.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmpdosl7h34.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmp3enbx8m4.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmp1m5kalf9.md |Chunks: 4
+/var/folders/4w/mlft4ck14h1197mkbcw4ghrw0000gn/T/tmplzaaxj4d.md |Chunks: 4

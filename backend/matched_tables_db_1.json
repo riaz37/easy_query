@@ -1,0 +1,4739 @@
+{
+  "status": "success",
+  "message": "Successfully processed database 1 for user nilab",
+  "metadata": {
+    "user_id": "nilab",
+    "db_id": 1,
+    "db_name": "JustForRestore",
+    "generated_at": "2025-08-03T17:38:23.294696",
+    "total_business_rules_tables": 15,
+    "total_schema_tables": 200,
+    "total_matches": 15
+  },
+  "matched_tables": [
+    "all_transactions",
+    "all_transactions_returned",
+    "attendance",
+    "bank",
+    "banktranshistory",
+    "expenseitems",
+    "expensereport",
+    "itemdescription",
+    "po",
+    "project",
+    "project_uploads",
+    "projectmembers",
+    "salary",
+    "supplier",
+    "users"
+  ],
+  "matched_tables_details": [
+    {
+      "schema": "dbo",
+      "table_name": "attendance",
+      "full_name": "dbo.attendance",
+      "primary_keys": [
+        "id"
+      ],
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "emp_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "punc_time",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "location",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 500
+        },
+        {
+          "name": "latitude",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 500
+        },
+        {
+          "name": "longitude",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 500
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_u_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "addressDetails",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 500
+        }
+      ],
+      "relationships": [],
+      "sample_data": [
+        {
+          "id": 1,
+          "emp_name": "250-Syed Imam",
+          "punc_time": "2022-03-28T15:57:43.380000",
+          "location": "https://www.google.com/maps/search/?api=1&query=24.7557711,46.6802013",
+          "latitude": "24.7557711",
+          "longitude": "46.6802013",
+          "created_at": "2022-03-28T15:57:43.380000",
+          "fk_u_id": 250,
+          "addressDetails": "3215 Al Rajmiah, حي المصيف، Riyadh 12465 6262, Saudi Arabia"
+        },
+        {
+          "id": 2,
+          "emp_name": "250-Syed Imam",
+          "punc_time": "2022-03-29T10:50:38.250000",
+          "location": "https://www.google.com/maps/search/?api=1&query=24.7557711,46.6802013",
+          "latitude": "24.7557711",
+          "longitude": "46.6802013",
+          "created_at": "2022-03-29T10:50:38.250000",
+          "fk_u_id": 250,
+          "addressDetails": "3215 Al Rajmiah, حي المصيف، Riyadh 12465 6262, Saudi Arabia"
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "po",
+      "full_name": "dbo.po",
+      "primary_keys": [
+        "id"
+      ],
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "project_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "po_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "po_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "tax_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "po_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "vat15perc",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "totalWithVat",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "po_paid_percentage",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "createdBy_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "aa_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "aa_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "aa_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "aa_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_proj_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.project",
+            "column": "id",
+            "constraint": "FK__po__fk_proj_id__171ADD5E"
+          }
+        },
+        {
+          "name": "poGuid",
+          "type": "UNIQUEIDENTIFIER",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AdaComment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaDate",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AdaName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaStatus",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AfterDeductAmount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "DeductAmount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "RefNo",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.project",
+          "type": "many_to_one",
+          "via_column": "fk_proj_id",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.PoOriginalItems",
+          "type": "one_to_many",
+          "via_column": "FkPoId",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.PoGiftItems",
+          "type": "one_to_many",
+          "via_column": "FkPoId",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.PoAdditionalItems",
+          "type": "one_to_many",
+          "via_column": "FkPoId",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.po_transaction",
+          "type": "one_to_many",
+          "via_column": "fk_po_id",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.EInvoices",
+          "type": "one_to_many",
+          "via_column": "FkPoId",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.PO_items",
+          "type": "one_to_many",
+          "via_column": "fk_po_id",
+          "via_related": "id"
+        }
+      ],
+      "sample_data": [
+        {
+          "id": 1,
+          "project_name": "مشروع مدارس التربية والتعليم",
+          "description": "تركيب صبورات سمارت",
+          "po_no": "6522",
+          "po_date": "2013-12-22T00:00:00",
+          "tax_no": "N/A",
+          "po_amount": 8602.0,
+          "vat15perc": 26748.0,
+          "totalWithVat": 178320.0,
+          "po_paid_percentage": 120.0,
+          "date": "2013-12-22T00:00:00",
+          "created_at": "2013-12-22T00:00:00",
+          "created_by": "Excel",
+          "createdBy_id": null,
+          "aa_status": "Approved",
+          "aa_name": null,
+          "aa_comment": null,
+          "aa_date": null,
+          "pma_status": "Approved",
+          "pma_name": null,
+          "pma_comment": null,
+          "pma_date": null,
+          "fk_proj_id": 24,
+          "poGuid": "19B00B80-AF7D-4193-9C69-4F81458F6BB7",
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:49:28.047000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved",
+          "AfterDeductAmount": 0.0,
+          "DeductAmount": 0.0,
+          "RefNo": 0
+        },
+        {
+          "id": 2,
+          "project_name": "مشروع مدارس التربية والتعليم",
+          "description": "تركيب الطاولة والكميرا الوثائقية والحاسب",
+          "po_no": "6415",
+          "po_date": "2013-11-14T00:00:00",
+          "tax_no": "N/A",
+          "po_amount": 4503.0,
+          "vat15perc": 72000.0,
+          "totalWithVat": 480000.0,
+          "po_paid_percentage": 100.0,
+          "date": "2013-11-14T00:00:00",
+          "created_at": "2013-11-14T00:00:00",
+          "created_by": "Excel",
+          "createdBy_id": null,
+          "aa_status": "Approved",
+          "aa_name": null,
+          "aa_comment": null,
+          "aa_date": null,
+          "pma_status": "Approved",
+          "pma_name": null,
+          "pma_comment": null,
+          "pma_date": null,
+          "fk_proj_id": 24,
+          "poGuid": "462D9E8A-BC18-49D0-A3C4-6F873DA8E6F8",
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:49:28.047000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved",
+          "AfterDeductAmount": 0.0,
+          "DeductAmount": 0.0,
+          "RefNo": 0
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "salary",
+      "full_name": "dbo.salary",
+      "primary_keys": [
+        "salary_id"
+      ],
+      "columns": [
+        {
+          "name": "salary_id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "employee_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 250
+        },
+        {
+          "name": "month_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "salary_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "deducted_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 500
+        },
+        {
+          "name": "total_salary",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "created_by_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "isPaid",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_u_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "month_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "FkSalaryReqId",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AttenDeductedAmount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "LoanDeductedAmount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "PenaltyDeductedAmount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        }
+      ],
+      "relationships": [],
+      "sample_data": [
+        {
+          "salary_id": 1,
+          "employee_name": "254-Jamilur rehman",
+          "month_name": "March",
+          "salary_amount": 4000.0,
+          "deducted_amount": 0.0,
+          "description": "راتب شهر مارس 2022",
+          "total_salary": 4000.0,
+          "created_at": "2022-03-23T13:36:11.367000",
+          "created_by": "205-ALAA SAEED",
+          "created_by_id": 205,
+          "isPaid": true,
+          "fk_u_id": 254,
+          "month_date": "2022-03-01T00:00:00",
+          "FkSalaryReqId": null,
+          "AttenDeductedAmount": null,
+          "LoanDeductedAmount": null,
+          "PenaltyDeductedAmount": null
+        },
+        {
+          "salary_id": 2,
+          "employee_name": "250-Syed Imam",
+          "month_name": "March",
+          "salary_amount": 4000.0,
+          "deducted_amount": 1000.0,
+          "description": "راتب شهر مارس 2022",
+          "total_salary": 3000.0,
+          "created_at": "2022-03-23T13:36:44.820000",
+          "created_by": "205-ALAA SAEED",
+          "created_by_id": 205,
+          "isPaid": true,
+          "fk_u_id": 250,
+          "month_date": "2022-03-01T00:00:00",
+          "FkSalaryReqId": null,
+          "AttenDeductedAmount": null,
+          "LoanDeductedAmount": null,
+          "PenaltyDeductedAmount": null
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "expenseItems",
+      "full_name": "dbo.expenseItems",
+      "primary_keys": [
+        "report_ID"
+      ],
+      "columns": [
+        {
+          "name": "report_ID",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "report_code",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "report_Description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "quantity",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "price",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_exp_ID",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": true,
+          "max_length": null,
+          "references": {
+            "table": "dbo.expenseReport",
+            "column": "exp_ID",
+            "constraint": "FK__expenseIt__fk_pr__54F67D98"
+          }
+        },
+        {
+          "name": "fk_item_ID",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "vat15perc",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "vatSelected",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "amount_vat",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "vatSingle",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "invoice_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "invoice_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "supplier_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "tax_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "item_img",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "unit",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "invoiceNo_only",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 100
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.expenseReport",
+          "type": "many_to_one",
+          "via_column": "fk_exp_ID",
+          "via_related": "exp_ID"
+        }
+      ],
+      "sample_data": [
+        {
+          "report_ID": 1,
+          "report_code": null,
+          "report_Description": "11103-electrical technicians فني كهرباء",
+          "comment": "N/A",
+          "quantity": 1,
+          "price": 150.0,
+          "amount": 5095.0,
+          "fk_exp_ID": 1,
+          "fk_item_ID": 11103,
+          "vat15perc": 22.5,
+          "vatSelected": 0,
+          "created_at": "2012-10-19T00:00:00",
+          "amount_vat": 150.0,
+          "vatSingle": 0.0,
+          "invoice_no": "N/A",
+          "invoice_date": "2012-10-19T00:00:00",
+          "supplier_name": "N/A",
+          "tax_no": "N/A",
+          "item_img": null,
+          "unit": null,
+          "invoiceNo_only": null
+        },
+        {
+          "report_ID": 2,
+          "report_code": null,
+          "report_Description": "12102-Assam Food أكل عصام",
+          "comment": "N/A",
+          "quantity": 1,
+          "price": 20.0,
+          "amount": 5901.0,
+          "fk_exp_ID": 2,
+          "fk_item_ID": 12102,
+          "vat15perc": 3.0,
+          "vatSelected": 0,
+          "created_at": "2012-10-19T00:00:00",
+          "amount_vat": 20.0,
+          "vatSingle": 0.0,
+          "invoice_no": "N/A",
+          "invoice_date": "2012-10-19T00:00:00",
+          "supplier_name": "N/A",
+          "tax_no": "N/A",
+          "item_img": null,
+          "unit": null,
+          "invoiceNo_only": null
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "all_transactions_returned",
+      "full_name": "dbo.all_transactions_returned",
+      "primary_keys": [
+        "return_id"
+      ],
+      "columns": [
+        {
+          "name": "return_id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "fk_all_trans_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "main_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "returned_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "returned_percnt",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 500
+        },
+        {
+          "name": "type",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "type_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 500
+        },
+        {
+          "name": "isFully_returned",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_bank_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "aa_isReturned",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "isExpense",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AddedBy",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaComment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaDate",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AdaName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaStatus",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        }
+      ],
+      "relationships": [],
+      "sample_data": [
+        {
+          "return_id": 1,
+          "fk_all_trans_id": 772,
+          "main_amount": 5350.0,
+          "returned_amount": 74300.0,
+          "returned_percnt": 0.81,
+          "description": "مرتجع من قيمة الشاشات",
+          "type": "supplier payment",
+          "type_id": 2,
+          "created_at": "2022-04-25T14:44:11.643000",
+          "pma_status": "Approved",
+          "pma_name": "202-BAKER ABUKHATER",
+          "pma_comment": null,
+          "isFully_returned": false,
+          "pma_date": "2022-04-25T16:35:08.817000",
+          "fk_bank_id": 1,
+          "aa_isReturned": true,
+          "isExpense": null,
+          "AddedBy": "N/A",
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:41:03.523000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved"
+        },
+        {
+          "return_id": 2,
+          "fk_all_trans_id": 794,
+          "main_amount": 1308.0,
+          "returned_amount": 61500.0,
+          "returned_percnt": 6.5,
+          "description": "مرتجع راتب سعاد العنزي",
+          "type": "Request Money",
+          "type_id": 1,
+          "created_at": "2022-04-27T12:49:22.767000",
+          "pma_status": "Approved",
+          "pma_name": "202-BAKER ABUKHATER",
+          "pma_comment": null,
+          "isFully_returned": false,
+          "pma_date": "2022-04-27T15:22:02.063000",
+          "fk_bank_id": 1,
+          "aa_isReturned": true,
+          "isExpense": null,
+          "AddedBy": "N/A",
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:41:03.523000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved"
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "bank",
+      "full_name": "dbo.bank",
+      "primary_keys": [
+        "bank_id"
+      ],
+      "columns": [
+        {
+          "name": "bank_id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "code",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "bank_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "acc_holder_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "acc_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 100
+        },
+        {
+          "name": "IBAN_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 100
+        },
+        {
+          "name": "total_in_acc",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "total_deposit",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "total_expenses",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "bank_file1",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "bank_file2",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "bank_file3",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "created_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "reminder",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder_checked",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_comp_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "logo",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "ActualTotalInAcc",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "IsMatched",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "LastCheckedAt",
+          "type": "DATETIME2",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        }
+      ],
+      "relationships": [],
+      "sample_data": [
+        {
+          "bank_id": 1,
+          "code": 1,
+          "bank_name": "ALAHLI BANK SNB",
+          "acc_holder_name": "EMPOWERING ENERGEY CO.",
+          "acc_no": "25 7000 0070 8203",
+          "IBAN_no": "SA02 1000 0025 7000 0070 8203",
+          "total_in_acc": 175035.85,
+          "total_deposit": 115641669.19,
+          "total_expenses": 115245258.39,
+          "date": "2021-12-04T13:29:35.483000",
+          "created_at": "2021-12-04T13:29:35.483000",
+          "bank_file1": null,
+          "bank_file2": null,
+          "bank_file3": null,
+          "created_by": "202-BAKER ABUKHATER",
+          "reminder": null,
+          "reminder_checked": false,
+          "fk_comp_id": 1,
+          "logo": null,
+          "ActualTotalInAcc": 273125.81,
+          "IsMatched": false,
+          "LastCheckedAt": "2025-05-25T16:47:41.232654"
+        },
+        {
+          "bank_id": 2,
+          "code": 2,
+          "bank_name": "CASH SAFE BOX",
+          "acc_holder_name": "EMPOWERING ENERGEY CO.",
+          "acc_no": "00000000001",
+          "IBAN_no": "00000000001",
+          "total_in_acc": 2272.5,
+          "total_deposit": 632298.0,
+          "total_expenses": 640025.5,
+          "date": "2023-01-22T14:07:18.877000",
+          "created_at": "2022-04-09T14:28:41",
+          "bank_file1": null,
+          "bank_file2": null,
+          "bank_file3": null,
+          "created_by": "202-BAKER ABUKHATER",
+          "reminder": null,
+          "reminder_checked": false,
+          "fk_comp_id": 1,
+          "logo": null,
+          "ActualTotalInAcc": 2422.5,
+          "IsMatched": false,
+          "LastCheckedAt": "2025-05-10T16:30:48.552953"
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "project",
+      "full_name": "dbo.project",
+      "primary_keys": [
+        "id"
+      ],
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "code",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "proj_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "proj_description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "location_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "po_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "po_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "proj_file1",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "proj_file2",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "proj_file3",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "aa_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "aa_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "aa_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "po_paid_percentage",
+          "type": "FLOAT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_location_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma2_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma2_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma2_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "fk_user_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "createdBy_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "po_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma2_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "aa_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "vat15perc",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "totalWithVat",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "reminder",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder_checked",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_comp_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "tax_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "ref_No",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "isSubmitted",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "project_uniqueID",
+          "type": "UNIQUEIDENTIFIER",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "isDeleted",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "projGuid",
+          "type": "UNIQUEIDENTIFIER",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "ClientName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "FkClientId",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AdaComment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaDate",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AdaName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaStatus",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.po",
+          "type": "one_to_many",
+          "via_column": "fk_proj_id",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.PoOriginalItems",
+          "type": "one_to_many",
+          "via_column": "FkProjectId",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.PoGiftItems",
+          "type": "one_to_many",
+          "via_column": "FkProjectId",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.PoAdditionalItems",
+          "type": "one_to_many",
+          "via_column": "FkProjectId",
+          "via_related": "id"
+        },
+        {
+          "related_table": "dbo.projectMembers",
+          "type": "one_to_many",
+          "via_column": "FkProjId",
+          "via_related": "id"
+        }
+      ],
+      "sample_data": [
+        {
+          "id": 1,
+          "code": null,
+          "proj_name": "1-New office for EE",
+          "proj_description": null,
+          "location_name": null,
+          "po_amount": 500000.0,
+          "po_no": null,
+          "date": null,
+          "created_at": "2021-10-02T01:35:36.900000",
+          "created_by": "Excel",
+          "proj_file1": null,
+          "proj_file2": null,
+          "proj_file3": null,
+          "aa_status": "Approved",
+          "pma_status": "Approved",
+          "aa_name": null,
+          "pma_name": "202-BAKER ABUKHATER",
+          "aa_comment": null,
+          "pma_comment": null,
+          "po_paid_percentage": 0.0,
+          "fk_location_id": null,
+          "pma2_status": "Approved",
+          "pma2_name": null,
+          "pma2_comment": null,
+          "fk_user_id": null,
+          "createdBy_id": 202,
+          "po_date": null,
+          "pma_date": "2023-07-25T17:09:56.690000",
+          "pma2_date": null,
+          "aa_date": null,
+          "vat15perc": 0.0,
+          "totalWithVat": 500000.0,
+          "reminder": null,
+          "reminder_checked": false,
+          "fk_comp_id": 1,
+          "tax_no": null,
+          "ref_No": 0,
+          "isSubmitted": true,
+          "project_uniqueID": "0389471A-FAD0-4F41-B9EC-819EEAC91E24",
+          "isDeleted": false,
+          "projGuid": "0A836818-A407-4208-920B-757C3CE96F0C",
+          "ClientName": null,
+          "FkClientId": null,
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:49:50.600000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved"
+        },
+        {
+          "id": 2,
+          "code": null,
+          "proj_name": "2-Store and room",
+          "proj_description": null,
+          "location_name": null,
+          "po_amount": 500000.0,
+          "po_no": null,
+          "date": null,
+          "created_at": "2021-10-02T01:35:36.900000",
+          "created_by": "Excel",
+          "proj_file1": null,
+          "proj_file2": null,
+          "proj_file3": null,
+          "aa_status": "Approved",
+          "pma_status": "Approved",
+          "aa_name": null,
+          "pma_name": null,
+          "aa_comment": null,
+          "pma_comment": null,
+          "po_paid_percentage": 0.0,
+          "fk_location_id": null,
+          "pma2_status": "Approved",
+          "pma2_name": null,
+          "pma2_comment": null,
+          "fk_user_id": null,
+          "createdBy_id": 202,
+          "po_date": null,
+          "pma_date": null,
+          "pma2_date": null,
+          "aa_date": null,
+          "vat15perc": 0.0,
+          "totalWithVat": 500000.0,
+          "reminder": null,
+          "reminder_checked": false,
+          "fk_comp_id": 1,
+          "tax_no": null,
+          "ref_No": 0,
+          "isSubmitted": true,
+          "project_uniqueID": "AF3240D0-E745-41AC-BA8A-4EEDF639EB8B",
+          "isDeleted": false,
+          "projGuid": "F714FC8A-3DE4-42F5-BF8C-7E9F55881A1D",
+          "ClientName": null,
+          "FkClientId": null,
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:49:50.600000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved"
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "all_transactions",
+      "full_name": "dbo.all_transactions",
+      "primary_keys": [
+        "all_trans_id"
+      ],
+      "columns": [
+        {
+          "name": "all_trans_id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "transfer_from",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "transfer_to",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 250
+        },
+        {
+          "name": "transfer_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "transfer_project",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "transaction_fee",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "trans_fee_vat",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "deposit_amount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "transaction_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 250
+        },
+        {
+          "name": "trans_file1",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "fk_bank_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_user_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_transfer_proj_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "transBy_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_req_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.requestMoney",
+            "column": "req_id",
+            "constraint": "FK__all_trans__fk_re__4727812E"
+          }
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "reminder",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder_checked",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "transType",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 250
+        },
+        {
+          "name": "transType_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "transPercnt",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_ps_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.supplierPurchases",
+            "column": "ps_id",
+            "constraint": "FK__all_trans__fk_ps__78772604"
+          }
+        },
+        {
+          "name": "fk_ps_ReqPay_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.ps_RequsetPayment",
+            "column": "ps_reqPay_id",
+            "constraint": "FK__all_trans__fk_ps__010C6C05"
+          }
+        },
+        {
+          "name": "invoiceTotal",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "transTotal",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_sup_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_po_trans_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.po_transaction",
+            "column": "po_trans_id",
+            "constraint": "FK__all_trans__fk_po__481BA567"
+          }
+        },
+        {
+          "name": "ref_No",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.users",
+            "column": "u_id",
+            "constraint": "FK__all_trans__ref_N__5378497A"
+          }
+        },
+        {
+          "name": "fk_comp_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "isReturned",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fkBankHistoryId",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.BankTransHistory",
+            "column": "historyId",
+            "constraint": "FK_all_transactions_BankTransHistory_fkBankHistoryId"
+          }
+        },
+        {
+          "name": "TransTotalAfterReturn",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.BankTransHistory",
+          "type": "many_to_one",
+          "via_column": "fkBankHistoryId",
+          "via_related": "historyId"
+        },
+        {
+          "related_table": "dbo.requestMoney",
+          "type": "many_to_one",
+          "via_column": "fk_req_id",
+          "via_related": "req_id"
+        },
+        {
+          "related_table": "dbo.requestMoney",
+          "type": "many_to_one",
+          "via_column": "fk_req_id",
+          "via_related": "req_id"
+        },
+        {
+          "related_table": "dbo.supplierPurchases",
+          "type": "many_to_one",
+          "via_column": "fk_ps_id",
+          "via_related": "ps_id"
+        },
+        {
+          "related_table": "dbo.ps_RequsetPayment",
+          "type": "many_to_one",
+          "via_column": "fk_ps_ReqPay_id",
+          "via_related": "ps_reqPay_id"
+        },
+        {
+          "related_table": "dbo.po_transaction",
+          "type": "many_to_one",
+          "via_column": "fk_po_trans_id",
+          "via_related": "po_trans_id"
+        },
+        {
+          "related_table": "dbo.users",
+          "type": "many_to_one",
+          "via_column": "ref_No",
+          "via_related": "u_id"
+        }
+      ],
+      "sample_data": [
+        {
+          "all_trans_id": 14,
+          "transfer_from": "ALAHLI BANK SNB",
+          "transfer_to": "233-Usman Nazir",
+          "transfer_amount": 1000.0,
+          "transfer_project": "6-Privete Baker",
+          "description": "Aldrees Petrol for Ramadan",
+          "transaction_fee": 0.0,
+          "trans_fee_vat": 0.0,
+          "deposit_amount": null,
+          "date": "2021-12-04T13:37:35.230000",
+          "created_at": "2021-12-04T13:37:35.230000",
+          "transaction_by": "205-ALAA SAEED",
+          "trans_file1": null,
+          "fk_bank_id": 1,
+          "fk_user_id": 233,
+          "fk_transfer_proj_id": 6,
+          "pma_status": "Approved",
+          "pma_name": "205-ALAA SAEED",
+          "pma_comment": "Transaction Done Successfully for Req NO 3",
+          "transBy_id": 205,
+          "fk_req_id": 3,
+          "pma_date": "2021-12-04T13:37:35.230000",
+          "reminder": null,
+          "reminder_checked": false,
+          "transType": "Request Money",
+          "transType_id": 1,
+          "transPercnt": 100.0,
+          "fk_ps_id": null,
+          "fk_ps_ReqPay_id": null,
+          "invoiceTotal": 1000.0,
+          "transTotal": 4151.0,
+          "fk_sup_id": null,
+          "fk_po_trans_id": null,
+          "ref_No": null,
+          "fk_comp_id": 1,
+          "isReturned": false,
+          "fkBankHistoryId": null,
+          "TransTotalAfterReturn": 1000.0
+        },
+        {
+          "all_trans_id": 15,
+          "transfer_from": "ALAHLI BANK SNB",
+          "transfer_to": "242-Hamza Babi",
+          "transfer_amount": 3008.05,
+          "transfer_project": "168-جامعة نايف العربية للعلوم الأمنية / مسرح",
+          "description": "دفعه ورق جدران + تسكيرات كهرباء + يوميات عمال ",
+          "transaction_fee": 7.0,
+          "trans_fee_vat": 1.05,
+          "deposit_amount": null,
+          "date": "2021-12-04T13:38:01.463000",
+          "created_at": "2021-12-04T13:38:01.463000",
+          "transaction_by": "205-ALAA SAEED",
+          "trans_file1": null,
+          "fk_bank_id": 1,
+          "fk_user_id": 242,
+          "fk_transfer_proj_id": 168,
+          "pma_status": "Approved",
+          "pma_name": "205-ALAA SAEED",
+          "pma_comment": "Transaction Done Successfully for Req NO 4",
+          "transBy_id": 205,
+          "fk_req_id": 4,
+          "pma_date": "2021-12-04T13:38:01.463000",
+          "reminder": null,
+          "reminder_checked": false,
+          "transType": "Request Money",
+          "transType_id": 1,
+          "transPercnt": 100.0,
+          "fk_ps_id": null,
+          "fk_ps_ReqPay_id": null,
+          "invoiceTotal": 3000.0,
+          "transTotal": 3568.0,
+          "fk_sup_id": null,
+          "fk_po_trans_id": null,
+          "ref_No": null,
+          "fk_comp_id": 1,
+          "isReturned": false,
+          "fkBankHistoryId": null,
+          "TransTotalAfterReturn": 3000.0
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "project_Uploads",
+      "full_name": "dbo.project_Uploads",
+      "primary_keys": [
+        "id"
+      ],
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "file_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "fk_proj_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        }
+      ],
+      "relationships": [],
+      "sample_data": [
+        {
+          "id": 2,
+          "file_name": "4417544854_Dammam_Porta.pdf",
+          "fk_proj_id": 230,
+          "created_at": "2021-12-20T13:38:06.393000"
+        },
+        {
+          "id": 3,
+          "file_name": "تعميد الجمارك_العقد الإيطاري الثالث.pdf",
+          "fk_proj_id": 193,
+          "created_at": "2021-12-22T14:17:32.537000"
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "expenseReport",
+      "full_name": "dbo.expenseReport",
+      "primary_keys": [
+        "exp_ID"
+      ],
+      "columns": [
+        {
+          "name": "exp_ID",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "project_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "location_code",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "location_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "the_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "epc_code",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "epc_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "totalAmount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "timeStamp",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "aa_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 20
+        },
+        {
+          "name": "pma_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "aa_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "aa_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reportBy",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "projFile",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "fk_project_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_location_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_user_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "aa_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "projFile2",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "projFile3",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder_checked",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "isSubmitted",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "current_user_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma2_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma2_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma2_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "pma2_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pm2_user_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "ref_No",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_comp_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_req_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.requestMoney",
+            "column": "req_id",
+            "constraint": "FK__expenseRe__fk_re__114DC0C6"
+          }
+        },
+        {
+          "name": "fk_ps_reqPay_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.ps_RequsetPayment",
+            "column": "ps_reqPay_id",
+            "constraint": "FK__expenseRe__fk_ps__5A529197"
+          }
+        },
+        {
+          "name": "reject_count",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "request_type",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "request_type_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AllMemberStatus",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "isAllMemberAprvd",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "expGuid",
+          "type": "UNIQUEIDENTIFIER",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "type",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "typeId",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AdaComment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaDate",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AdaName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "AdaStatus",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.requestMoney",
+          "type": "many_to_one",
+          "via_column": "fk_req_id",
+          "via_related": "req_id"
+        },
+        {
+          "related_table": "dbo.ps_RequsetPayment",
+          "type": "many_to_one",
+          "via_column": "fk_ps_reqPay_id",
+          "via_related": "ps_reqPay_id"
+        },
+        {
+          "related_table": "dbo.expense_Uploads",
+          "type": "one_to_many",
+          "via_column": "fk_exp_id",
+          "via_related": "exp_ID"
+        },
+        {
+          "related_table": "dbo.expenseItems",
+          "type": "one_to_many",
+          "via_column": "fk_exp_ID",
+          "via_related": "exp_ID"
+        },
+        {
+          "related_table": "dbo.ExpenseApprovalss",
+          "type": "one_to_many",
+          "via_column": "fkExpID",
+          "via_related": "exp_ID"
+        }
+      ],
+      "sample_data": [
+        {
+          "exp_ID": 1,
+          "project_name": "7-expend office",
+          "location_code": null,
+          "description": null,
+          "location_name": "0-#N/A",
+          "the_date": "2012-10-19T00:00:00",
+          "epc_code": null,
+          "epc_name": null,
+          "totalAmount": 5721.0,
+          "timeStamp": "2012-10-19T00:00:00",
+          "aa_status": "Approved",
+          "pma_status": "Approved",
+          "aa_name": "NO NAME",
+          "pma_name": "NO NAME",
+          "aa_comment": "NO COMMENT",
+          "pma_comment": "NO COMMENT",
+          "reportBy": "102-essam Mohammad",
+          "projFile": null,
+          "fk_project_id": 7,
+          "fk_location_id": 0,
+          "fk_user_id": 102,
+          "pma_date": null,
+          "aa_date": null,
+          "projFile2": null,
+          "projFile3": null,
+          "reminder": null,
+          "reminder_checked": false,
+          "isSubmitted": true,
+          "current_user_id": null,
+          "pma2_status": null,
+          "pma2_name": null,
+          "pma2_comment": null,
+          "pma2_date": null,
+          "pm2_user_id": null,
+          "ref_No": null,
+          "fk_comp_id": 0,
+          "fk_req_id": null,
+          "fk_ps_reqPay_id": null,
+          "reject_count": null,
+          "request_type": null,
+          "request_type_id": null,
+          "AllMemberStatus": "Approved",
+          "isAllMemberAprvd": true,
+          "expGuid": "DDE68D53-0B54-4FC3-9B41-B74EF18C633B",
+          "type": null,
+          "typeId": null,
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:48:48.020000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved"
+        },
+        {
+          "exp_ID": 2,
+          "project_name": "7-expend office",
+          "location_code": null,
+          "description": null,
+          "location_name": "0-#N/A",
+          "the_date": "2012-10-19T00:00:00",
+          "epc_code": null,
+          "epc_name": null,
+          "totalAmount": 4224.0,
+          "timeStamp": "2012-10-19T00:00:00",
+          "aa_status": "Approved",
+          "pma_status": "Approved",
+          "aa_name": "NO NAME",
+          "pma_name": "NO NAME",
+          "aa_comment": "NO COMMENT",
+          "pma_comment": "NO COMMENT",
+          "reportBy": "102-essam Mohammad",
+          "projFile": null,
+          "fk_project_id": 7,
+          "fk_location_id": 0,
+          "fk_user_id": 102,
+          "pma_date": null,
+          "aa_date": null,
+          "projFile2": null,
+          "projFile3": null,
+          "reminder": null,
+          "reminder_checked": false,
+          "isSubmitted": true,
+          "current_user_id": null,
+          "pma2_status": null,
+          "pma2_name": null,
+          "pma2_comment": null,
+          "pma2_date": null,
+          "pm2_user_id": null,
+          "ref_No": null,
+          "fk_comp_id": 0,
+          "fk_req_id": null,
+          "fk_ps_reqPay_id": null,
+          "reject_count": null,
+          "request_type": null,
+          "request_type_id": null,
+          "AllMemberStatus": "Approved",
+          "isAllMemberAprvd": true,
+          "expGuid": "FDA8E3AE-79C4-42A5-995C-0CD08F22F74C",
+          "type": null,
+          "typeId": null,
+          "AdaComment": null,
+          "AdaDate": "2024-10-22T09:48:48.020000",
+          "AdaName": "205-ALAA SAEED",
+          "AdaStatus": "Approved"
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "itemDescription",
+      "full_name": "dbo.itemDescription",
+      "primary_keys": [
+        "item_ID"
+      ],
+      "columns": [
+        {
+          "name": "item_ID",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "code",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "item_Description",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "added_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "added_by_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "reminder",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder_checked",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_comp_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        }
+      ],
+      "relationships": [],
+      "sample_data": [
+        {
+          "item_ID": 6666,
+          "code": null,
+          "item_Description": "6666-Container Rant تاجير حاوية",
+          "pma_name": null,
+          "pma_status": "Approved",
+          "pma_comment": null,
+          "added_by": "Excel",
+          "created_at": "2021-10-02T10:03:33.943000",
+          "added_by_id": null,
+          "pma_date": null,
+          "reminder": null,
+          "reminder_checked": null,
+          "fk_comp_id": null
+        },
+        {
+          "item_ID": 11101,
+          "code": null,
+          "item_Description": "11101-electrical cable أسلاك كهرباء",
+          "pma_name": null,
+          "pma_status": "Approved",
+          "pma_comment": null,
+          "added_by": "Excel",
+          "created_at": "2021-10-02T10:03:33.943000",
+          "added_by_id": null,
+          "pma_date": null,
+          "reminder": null,
+          "reminder_checked": null,
+          "fk_comp_id": null
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "BankTransHistory",
+      "full_name": "dbo.BankTransHistory",
+      "primary_keys": [
+        "historyId"
+      ],
+      "columns": [
+        {
+          "name": "historyId",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "TransAmount",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AccountBefore",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AccountAfter",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "DepositBefore",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "DepositAfter",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "ExpensesBefore",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "ExpensesAfter",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "TransType",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "CreatedAt",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "FkBankId",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.all_transactions",
+          "type": "one_to_many",
+          "via_column": "fkBankHistoryId",
+          "via_related": "historyId"
+        }
+      ],
+      "sample_data": [
+        {
+          "historyId": 125,
+          "TransAmount": 540.0,
+          "AccountBefore": 130422.64,
+          "AccountAfter": 129882.64,
+          "DepositBefore": 0.0,
+          "DepositAfter": 0.0,
+          "ExpensesBefore": 0.0,
+          "ExpensesAfter": 0.0,
+          "TransType": "Request Money",
+          "CreatedAt": "2024-02-19T10:25:27.143000",
+          "FkBankId": 1
+        },
+        {
+          "historyId": 126,
+          "TransAmount": 1500.0,
+          "AccountBefore": 129882.64,
+          "AccountAfter": 128382.64,
+          "DepositBefore": 0.0,
+          "DepositAfter": 0.0,
+          "ExpensesBefore": 0.0,
+          "ExpensesAfter": 0.0,
+          "TransType": "Request Money",
+          "CreatedAt": "2024-02-20T09:23:43.180000",
+          "FkBankId": 1
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "users",
+      "full_name": "dbo.users",
+      "primary_keys": [
+        "u_id"
+      ],
+      "columns": [
+        {
+          "name": "u_id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "u_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "u_username",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "u_password",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "u_status",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "u_roleID",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": true,
+          "max_length": null,
+          "references": {
+            "table": "dbo.roles",
+            "column": "role_id",
+            "constraint": "FK_users_roles_u_roleID"
+          }
+        },
+        {
+          "name": "u_balance",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "added_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 40
+        },
+        {
+          "name": "added_by_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "user_type",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "reminder",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder_checked",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "u_color",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "profile_pic",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "phon_No",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "email",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 250
+        },
+        {
+          "name": "fk_department_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "bioTime_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "passwordSalt",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "RefreshToken",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "TokenCreated",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "TokenExpires",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "user_uniqueID",
+          "type": "UNIQUEIDENTIFIER",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "isDeleted",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "u_ArName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.roles",
+          "type": "many_to_one",
+          "via_column": "u_roleID",
+          "via_related": "role_id"
+        },
+        {
+          "related_table": "dbo.RequestLeaves",
+          "type": "one_to_many",
+          "via_column": "UserId",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.payRoll",
+          "type": "one_to_many",
+          "via_column": "fk_u_id",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.user_aboutMe",
+          "type": "one_to_many",
+          "via_column": "fk_u_id",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.PoAdditionalItems",
+          "type": "one_to_many",
+          "via_column": "FkUserId",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.PoGiftItems",
+          "type": "one_to_many",
+          "via_column": "FkUserId",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.PoOriginalItems",
+          "type": "one_to_many",
+          "via_column": "FkUserId",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.all_transactions",
+          "type": "one_to_many",
+          "via_column": "ref_No",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.attendance_setting",
+          "type": "one_to_many",
+          "via_column": "fk_u_id",
+          "via_related": "u_id"
+        },
+        {
+          "related_table": "dbo.POItemParticipants",
+          "type": "one_to_many",
+          "via_column": "EmployeeId",
+          "via_related": "u_id"
+        }
+      ],
+      "sample_data": [
+        {
+          "u_id": 101,
+          "u_name": "101-Baker Abukhater",
+          "u_username": "user",
+          "u_password": "12345",
+          "u_status": 4,
+          "u_roleID": 3,
+          "u_balance": 0.0,
+          "created_at": "2021-10-02T10:58:19.997000",
+          "pma_name": null,
+          "pma_comment": null,
+          "added_by": "Excel",
+          "added_by_id": null,
+          "user_type": null,
+          "pma_date": null,
+          "reminder": null,
+          "reminder_checked": false,
+          "u_color": null,
+          "profile_pic": null,
+          "phon_No": null,
+          "email": null,
+          "fk_department_id": 0,
+          "bioTime_id": null,
+          "passwordSalt": null,
+          "RefreshToken": null,
+          "TokenCreated": null,
+          "TokenExpires": null,
+          "user_uniqueID": "8BA90D04-0C76-459B-9FD3-F5C8FDED73C3",
+          "isDeleted": null,
+          "u_ArName": "بكر أبوخاطر"
+        },
+        {
+          "u_id": 102,
+          "u_name": "102-essam Mohammad",
+          "u_username": "user",
+          "u_password": "12345",
+          "u_status": 4,
+          "u_roleID": 3,
+          "u_balance": 0.0,
+          "created_at": "2021-10-02T10:58:19",
+          "pma_name": null,
+          "pma_comment": null,
+          "added_by": "Excel",
+          "added_by_id": null,
+          "user_type": null,
+          "pma_date": null,
+          "reminder": null,
+          "reminder_checked": false,
+          "u_color": null,
+          "profile_pic": null,
+          "phon_No": null,
+          "email": null,
+          "fk_department_id": 0,
+          "bioTime_id": null,
+          "passwordSalt": null,
+          "RefreshToken": null,
+          "TokenCreated": null,
+          "TokenExpires": null,
+          "user_uniqueID": "CE803781-F30C-41A3-836A-687C2487DD7B",
+          "isDeleted": null,
+          "u_ArName": "عصام محمد"
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "projectMembers",
+      "full_name": "dbo.projectMembers",
+      "primary_keys": [
+        "pm_id"
+      ],
+      "columns": [
+        {
+          "name": "pm_id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "memberName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 300
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "addedBy",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 300
+        },
+        {
+          "name": "fk_user_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "fk_project_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "seqNo",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "memberPic",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "FkProjId",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.project",
+            "column": "id",
+            "constraint": "FK_projectMembers_project_FkProjId"
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.project",
+          "type": "many_to_one",
+          "via_column": "FkProjId",
+          "via_related": "id"
+        }
+      ],
+      "sample_data": [
+        {
+          "pm_id": 320,
+          "memberName": "230-Omar Abukhater",
+          "created_at": null,
+          "addedBy": null,
+          "fk_user_id": 230,
+          "fk_project_id": 143,
+          "seqNo": 1,
+          "memberPic": "omernew.png",
+          "FkProjId": null
+        },
+        {
+          "pm_id": 321,
+          "memberName": "230-Omar Abukhater",
+          "created_at": null,
+          "addedBy": null,
+          "fk_user_id": 230,
+          "fk_project_id": 144,
+          "seqNo": 1,
+          "memberPic": "omernew.png",
+          "FkProjId": null
+        }
+      ],
+      "row_count_sample": 2
+    },
+    {
+      "schema": "dbo",
+      "table_name": "supplier",
+      "full_name": "dbo.supplier",
+      "primary_keys": [
+        "sup_id"
+      ],
+      "columns": [
+        {
+          "name": "sup_id",
+          "type": "INT",
+          "is_primary": true,
+          "is_foreign": false,
+          "is_required": true,
+          "max_length": null
+        },
+        {
+          "name": "sup_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "sup_register_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "sup_logo",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "sup_taxNumber",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "sup_file1",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "sup_file2",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "sup_file3",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "created_at",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "added_by",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "added_by_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "comp_balance",
+          "type": "DECIMAL",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "pma_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "pma_comment",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "pma_status",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "reminder",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "reminder_checked",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "sup_name_ar",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "sup_name_en",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "pma_date",
+          "type": "DATETIME",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "bank_name",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "account_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "IBAN_no",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "phoneNo",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "email",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 150
+        },
+        {
+          "name": "sup_type",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": 50
+        },
+        {
+          "name": "fk_comp_id",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "AccountName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "CompanyWebsite",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "ConEmail",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "ConName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "ConPhone",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "ConPosition",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "Country",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "City",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "Currency",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "IsApproved",
+          "type": "BIT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "Location",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "MngEmail",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "MngName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "MngPhone",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "MngPosition",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "OfficeNo",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "RoleId",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": true,
+          "is_required": false,
+          "max_length": null,
+          "references": {
+            "table": "dbo.roles",
+            "column": "role_id",
+            "constraint": "FK_supplier_roles_RoleId"
+          }
+        },
+        {
+          "name": "SupStatus",
+          "type": "INT",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": null
+        },
+        {
+          "name": "SupUserName",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        },
+        {
+          "name": "SwiftCode",
+          "type": "NVARCHAR",
+          "is_primary": false,
+          "is_foreign": false,
+          "is_required": false,
+          "max_length": -1
+        }
+      ],
+      "relationships": [
+        {
+          "related_table": "dbo.roles",
+          "type": "many_to_one",
+          "via_column": "RoleId",
+          "via_related": "role_id"
+        },
+        {
+          "related_table": "dbo.SupplierQuotations",
+          "type": "one_to_many",
+          "via_column": "SupplierId",
+          "via_related": "sup_id"
+        },
+        {
+          "related_table": "dbo.SupplierPricings",
+          "type": "one_to_many",
+          "via_column": "SupplierId",
+          "via_related": "sup_id"
+        },
+        {
+          "related_table": "dbo.SupplierAndCategories",
+          "type": "one_to_many",
+          "via_column": "SupplierId",
+          "via_related": "sup_id"
+        }
+      ],
+      "sample_data": [
+        {
+          "sup_id": 5,
+          "sup_name": "5-مؤسسة زان للتجارة/Zan Trading Est",
+          "sup_register_no": "1010673297",
+          "sup_logo": null,
+          "sup_taxNumber": "310793936800003",
+          "sup_file1": null,
+          "sup_file2": null,
+          "sup_file3": null,
+          "date": "2021-12-04T15:28:08.923000",
+          "created_at": "2021-12-04T15:28:08.923000",
+          "added_by": "205-ALAA SAEED",
+          "added_by_id": 205,
+          "comp_balance": 0.0,
+          "pma_name": "202-BAKER ABUKHATER",
+          "pma_comment": null,
+          "pma_status": "Approved",
+          "reminder": null,
+          "reminder_checked": false,
+          "sup_name_ar": "مؤسسة زان للتجارة",
+          "sup_name_en": "Zan Trading Est",
+          "pma_date": "2021-12-04T16:07:42.437000",
+          "bank_name": "ALANMA BANK",
+          "account_no": "00002225614",
+          "IBAN_no": "SA8805000068203000801000",
+          "phoneNo": null,
+          "email": null,
+          "sup_type": "supplier",
+          "fk_comp_id": 1,
+          "AccountName": null,
+          "CompanyWebsite": null,
+          "ConEmail": null,
+          "ConName": null,
+          "ConPhone": "966509699231",
+          "ConPosition": null,
+          "Country": null,
+          "City": null,
+          "Currency": null,
+          "IsApproved": null,
+          "Location": null,
+          "MngEmail": null,
+          "MngName": null,
+          "MngPhone": null,
+          "MngPosition": null,
+          "OfficeNo": null,
+          "RoleId": 7,
+          "SupStatus": null,
+          "SupUserName": null,
+          "SwiftCode": null
+        },
+        {
+          "sup_id": 6,
+          "sup_name": "6-شركة السعودية للحلول الذكية/Saudi Intelligent Solutions Co",
+          "sup_register_no": "1010472107",
+          "sup_logo": null,
+          "sup_taxNumber": "300137368700003",
+          "sup_file1": null,
+          "sup_file2": null,
+          "sup_file3": null,
+          "date": "2021-12-06T12:38:05.020000",
+          "created_at": "2021-12-06T12:38:05.020000",
+          "added_by": "205-ALAA SAEED",
+          "added_by_id": 205,
+          "comp_balance": 0.0,
+          "pma_name": "202-BAKER ABUKHATER",
+          "pma_comment": null,
+          "pma_status": "Approved",
+          "reminder": null,
+          "reminder_checked": false,
+          "sup_name_ar": "شركة السعودية للحلول الذكية",
+          "sup_name_en": "Saudi Intelligent Solutions Co",
+          "pma_date": "2021-12-06T13:08:29.833000",
+          "bank_name": "ALANMA BANK",
+          "account_no": null,
+          "IBAN_no": "SA5005000068201603335003",
+          "phoneNo": null,
+          "email": null,
+          "sup_type": "supplier",
+          "fk_comp_id": 1,
+          "AccountName": null,
+          "CompanyWebsite": null,
+          "ConEmail": null,
+          "ConName": null,
+          "ConPhone": null,
+          "ConPosition": null,
+          "Country": null,
+          "City": null,
+          "Currency": null,
+          "IsApproved": null,
+          "Location": null,
+          "MngEmail": null,
+          "MngName": null,
+          "MngPhone": null,
+          "MngPosition": null,
+          "OfficeNo": null,
+          "RoleId": 7,
+          "SupStatus": null,
+          "SupUserName": null,
+          "SwiftCode": null
+        }
+      ],
+      "row_count_sample": 2
+    }
+  ],
+  "business_rules_tables": [
+    "all_transactions",
+    "all_transactions_returned",
+    "attendance",
+    "bank",
+    "banktranshistory",
+    "expenseitems",
+    "expensereport",
+    "itemdescription",
+    "po",
+    "project",
+    "project_uploads",
+    "projectmembers",
+    "salary",
+    "supplier",
+    "users"
+  ],
+  "schema_tables": [
+    "'po transactions$'",
+    "'علاء سعيد 205$'",
+    "__efmigrationshistory",
+    "all_transaction_uploads",
+    "all_transactions",
+    "all_transactions_returned",
+    "all_transbetweenbanks",
+    "alllocationdb",
+    "alltables",
+    "allunits",
+    "attendance",
+    "attendance_overtime",
+    "attendance_setting",
+    "attendance_tickets",
+    "attendanceplaces",
+    "attendovertime_reqmoney",
+    "bank",
+    "bank_uploads",
+    "banktranshistory",
+    "bioattendances",
+    "budget_resolver",
+    "budgetdeductionbanks",
+    "budgetdeductionhistories",
+    "cafebranches",
+    "cafebranchitemhistories",
+    "cafebranchitems",
+    "cafeitemcategories",
+    "cafemetas",
+    "cafeorderproducts",
+    "cafeorders",
+    "cafeprintingstatuses",
+    "cafeproductcategories",
+    "cafeproductingredientitems",
+    "cafeproducts",
+    "cafeproductskitchens",
+    "certificatemembers",
+    "certificates",
+    "certificateuploads",
+    "company",
+    "companydocumentss",
+    "compnay_uploads",
+    "conpurchases_uploads",
+    "contract",
+    "contractor",
+    "contractor_uploads",
+    "contractorpurchases",
+    "dailylabour",
+    "dailylabour_reqmoney",
+    "dailylabour_uploads",
+    "dailylabouraddmng",
+    "dailylabouritems",
+    "department",
+    "department_expense",
+    "depositpaymentsoptionss",
+    "dlabourapprovalss",
+    "einvoiceapprovals",
+    "einvoiceclients",
+    "einvoiceitemss",
+    "einvoices",
+    "emailmessages",
+    "empcodefromexcel",
+    "employeedependenciesdocs",
+    "employeedependenciesuploads",
+    "employeedocuments",
+    "employeedocumentuploads",
+    "employeeemails",
+    "employeereviews",
+    "endofservices",
+    "expense_uploads",
+    "expenseapprovalss",
+    "expenseitems",
+    "expensereport",
+    "extractproofitemhistories",
+    "inventories",
+    "inventoryitemgenerals",
+    "inventoryitemhistories",
+    "inventoryitems",
+    "inventoryrequests",
+    "inventoryrequestsitems",
+    "itemcodesfromexcel",
+    "itemdescription",
+    "kanbanactivitieslogs",
+    "kanbancard",
+    "kanbanlist",
+    "kanbantag",
+    "kanbantask",
+    "kanbanusersonline",
+    "labours",
+    "loabour_category",
+    "location",
+    "loccodefromexcel",
+    "memberspecificprojectaccess",
+    "notification",
+    "our_po",
+    "our_po_items",
+    "ourquotationitemcategories",
+    "ourquotationrequestitems",
+    "ourquotationrequests",
+    "payroll",
+    "pc_requestpayment",
+    "permissions",
+    "po",
+    "po$",
+    "po_items",
+    "po_trans_uploads",
+    "po_transaction",
+    "po_uploads",
+    "poadditionalitemhistory",
+    "poadditionalitems",
+    "pogiftitemhistory",
+    "pogiftitems",
+    "poitemlabel",
+    "poitemparticipants",
+    "poitemprogress",
+    "poitemscategory",
+    "pokanbanboardmemberss",
+    "pooriginalitemhistory",
+    "pooriginalitems",
+    "projboardcolumnss",
+    "projboardcolumntaskss",
+    "projboardss",
+    "project",
+    "project_uploads",
+    "projectmembers",
+    "projkanbanboard",
+    "ps_requsetpayment",
+    "psrequestpaymentuploads",
+    "purchaseproofitemapprovals",
+    "purchaseproofitems",
+    "purchpaymentapprovalss",
+    "quotationdeliveries",
+    "quotationitems",
+    "quotationpaymentcriterias",
+    "quotations",
+    "quotationterms",
+    "quotationtitles",
+    "quotationuploads",
+    "quotationvalidityoffers",
+    "quotclients",
+    "quotcompanies",
+    "quotitemcategories",
+    "quotitems",
+    "quotprojects",
+    "quotterms",
+    "registeredusers",
+    "reqmoneyapprovalss",
+    "requestleavecategories",
+    "requestleaves",
+    "requestleaveuploads",
+    "requestmoney",
+    "requestmoney_uploads",
+    "roles",
+    "roles_permissions",
+    "salary",
+    "salaryrequest",
+    "sentmessages",
+    "sheet1$",
+    "sheet2$",
+    "sheetlastexp$",
+    "sidebussalaries",
+    "sidebussalaryrequests",
+    "supcategories",
+    "supplier",
+    "supplier_uploads",
+    "supplierandcategories",
+    "supplierbanks",
+    "suppliercities",
+    "suppliercountries",
+    "supplierpricings",
+    "supplierpricinguploads",
+    "supplierpurchases",
+    "supplierquotationdiscounthistories",
+    "supplierquotations",
+    "supplierregisteredusers",
+    "suppurchaseapprovalss",
+    "suppurchases_uploads",
+    "sysdiagrams",
+    "taskassignedemps",
+    "taskcoins",
+    "taskcointransactions",
+    "taskcreatedemps",
+    "taskscategories",
+    "taskss",
+    "tasksuploads",
+    "tempdepositsfromexcel",
+    "tempexpfromexcel",
+    "tempitemfromexcel",
+    "tempmainitemfromexcel",
+    "tempposfromexcel",
+    "tempprojfromexcel",
+    "termsandconditionss",
+    "textmessages",
+    "trans_feedb",
+    "transaction_debit",
+    "transdebit_uploads",
+    "user_aboutme",
+    "user_uploads",
+    "usermoneyrestriction",
+    "users",
+    "vatdbs"
+  ],
+  "unmatched_business_rules": [],
+  "unmatched_schema": [
+    "'po transactions$'",
+    "'علاء سعيد 205$'",
+    "__efmigrationshistory",
+    "all_transaction_uploads",
+    "all_transbetweenbanks",
+    "alllocationdb",
+    "alltables",
+    "allunits",
+    "attendance_overtime",
+    "attendance_setting",
+    "attendance_tickets",
+    "attendanceplaces",
+    "attendovertime_reqmoney",
+    "bank_uploads",
+    "bioattendances",
+    "budget_resolver",
+    "budgetdeductionbanks",
+    "budgetdeductionhistories",
+    "cafebranches",
+    "cafebranchitemhistories",
+    "cafebranchitems",
+    "cafeitemcategories",
+    "cafemetas",
+    "cafeorderproducts",
+    "cafeorders",
+    "cafeprintingstatuses",
+    "cafeproductcategories",
+    "cafeproductingredientitems",
+    "cafeproducts",
+    "cafeproductskitchens",
+    "certificatemembers",
+    "certificates",
+    "certificateuploads",
+    "company",
+    "companydocumentss",
+    "compnay_uploads",
+    "conpurchases_uploads",
+    "contract",
+    "contractor",
+    "contractor_uploads",
+    "contractorpurchases",
+    "dailylabour",
+    "dailylabour_reqmoney",
+    "dailylabour_uploads",
+    "dailylabouraddmng",
+    "dailylabouritems",
+    "department",
+    "department_expense",
+    "depositpaymentsoptionss",
+    "dlabourapprovalss",
+    "einvoiceapprovals",
+    "einvoiceclients",
+    "einvoiceitemss",
+    "einvoices",
+    "emailmessages",
+    "empcodefromexcel",
+    "employeedependenciesdocs",
+    "employeedependenciesuploads",
+    "employeedocuments",
+    "employeedocumentuploads",
+    "employeeemails",
+    "employeereviews",
+    "endofservices",
+    "expense_uploads",
+    "expenseapprovalss",
+    "extractproofitemhistories",
+    "inventories",
+    "inventoryitemgenerals",
+    "inventoryitemhistories",
+    "inventoryitems",
+    "inventoryrequests",
+    "inventoryrequestsitems",
+    "itemcodesfromexcel",
+    "kanbanactivitieslogs",
+    "kanbancard",
+    "kanbanlist",
+    "kanbantag",
+    "kanbantask",
+    "kanbanusersonline",
+    "labours",
+    "loabour_category",
+    "location",
+    "loccodefromexcel",
+    "memberspecificprojectaccess",
+    "notification",
+    "our_po",
+    "our_po_items",
+    "ourquotationitemcategories",
+    "ourquotationrequestitems",
+    "ourquotationrequests",
+    "payroll",
+    "pc_requestpayment",
+    "permissions",
+    "po$",
+    "po_items",
+    "po_trans_uploads",
+    "po_transaction",
+    "po_uploads",
+    "poadditionalitemhistory",
+    "poadditionalitems",
+    "pogiftitemhistory",
+    "pogiftitems",
+    "poitemlabel",
+    "poitemparticipants",
+    "poitemprogress",
+    "poitemscategory",
+    "pokanbanboardmemberss",
+    "pooriginalitemhistory",
+    "pooriginalitems",
+    "projboardcolumnss",
+    "projboardcolumntaskss",
+    "projboardss",
+    "projkanbanboard",
+    "ps_requsetpayment",
+    "psrequestpaymentuploads",
+    "purchaseproofitemapprovals",
+    "purchaseproofitems",
+    "purchpaymentapprovalss",
+    "quotationdeliveries",
+    "quotationitems",
+    "quotationpaymentcriterias",
+    "quotations",
+    "quotationterms",
+    "quotationtitles",
+    "quotationuploads",
+    "quotationvalidityoffers",
+    "quotclients",
+    "quotcompanies",
+    "quotitemcategories",
+    "quotitems",
+    "quotprojects",
+    "quotterms",
+    "registeredusers",
+    "reqmoneyapprovalss",
+    "requestleavecategories",
+    "requestleaves",
+    "requestleaveuploads",
+    "requestmoney",
+    "requestmoney_uploads",
+    "roles",
+    "roles_permissions",
+    "salaryrequest",
+    "sentmessages",
+    "sheet1$",
+    "sheet2$",
+    "sheetlastexp$",
+    "sidebussalaries",
+    "sidebussalaryrequests",
+    "supcategories",
+    "supplier_uploads",
+    "supplierandcategories",
+    "supplierbanks",
+    "suppliercities",
+    "suppliercountries",
+    "supplierpricings",
+    "supplierpricinguploads",
+    "supplierpurchases",
+    "supplierquotationdiscounthistories",
+    "supplierquotations",
+    "supplierregisteredusers",
+    "suppurchaseapprovalss",
+    "suppurchases_uploads",
+    "sysdiagrams",
+    "taskassignedemps",
+    "taskcoins",
+    "taskcointransactions",
+    "taskcreatedemps",
+    "taskscategories",
+    "taskss",
+    "tasksuploads",
+    "tempdepositsfromexcel",
+    "tempexpfromexcel",
+    "tempitemfromexcel",
+    "tempmainitemfromexcel",
+    "tempposfromexcel",
+    "tempprojfromexcel",
+    "termsandconditionss",
+    "textmessages",
+    "trans_feedb",
+    "transaction_debit",
+    "transdebit_uploads",
+    "user_aboutme",
+    "user_uploads",
+    "usermoneyrestriction",
+    "vatdbs"
+  ]
+}

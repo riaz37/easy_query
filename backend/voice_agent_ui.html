@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESAP Voice Agent Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .control-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .output-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+        
+        .connection-status {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .status-connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .connected {
+            background: #28a745;
+        }
+        
+        .disconnected {
+            background: #dc3545;
+        }
+        
+        .user-controls {
+            margin-bottom: 25px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .voice-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .endpoint-testing {
+            margin-bottom: 25px;
+        }
+        
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .tool-testing {
+            margin-bottom: 25px;
+        }
+        
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .output-section {
+            margin-bottom: 25px;
+        }
+        
+        .output-content {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .timestamp {
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .message-user {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        
+        .message-assistant {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .message-tool {
+            color: #ff6600;
+            margin-bottom: 10px;
+            background: #fff3cd;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        
+        .message-error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 5px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .audio-visualizer {
+            width: 100%;
+            height: 60px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+        
+        .recording-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #dc3545;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .health-status {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .health-healthy {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .health-unhealthy {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .json-display {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .voice-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .endpoint-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎤 ESAP Voice Agent Interface</h1>
+            <p>Real-time voice interaction with tool call monitoring</p>
+        </div>
+        
+        <!-- Health Status -->
+        <div id="healthStatus" class="health-status health-unhealthy">
+            <strong>System Status:</strong> <span id="healthText">Checking...</span>
+        </div>
+        
+        <div class="main-grid">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <h2 class="section-title">🎛️ Control Panel</h2>
+                
+                <!-- Connection Status -->
+                <div class="connection-status">
+                    <div class="status-item status-disconnected" id="rtviStatus">
+                        <div class="status-indicator disconnected"></div>
+                        RTVI Chat
+                    </div>
+                    <div class="status-item status-disconnected" id="toolsStatus">
+                        <div class="status-indicator disconnected"></div>
+                        Tools
+                    </div>
+                    <div class="status-item status-disconnected" id="productStatus">
+                        <div class="status-indicator disconnected"></div>
+                        Product Info
+                    </div>
+                </div>
+                
+                <!-- User Controls -->
+                <div class="user-controls">
+                    <div class="input-group">
+                        <label for="userId">User ID:</label>
+                        <input type="text" id="userId" placeholder="Enter your user ID" value="test_user_001">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="serverUrl">Server URL:</label>
+                        <input type="text" id="serverUrl" placeholder="Server URL" value="ws://localhost:8002">
+                    </div>
+                </div>
+                
+                <!-- Voice Controls -->
+                <div class="voice-controls">
+                    <button class="btn btn-success" id="connectBtn" onclick="connectAll()">
+                        🔌 Connect All
+                    </button>
+                    <button class="btn btn-danger" id="disconnectBtn" onclick="disconnectAll()">
+                        ❌ Disconnect All
+                    </button>
+                    <button class="btn btn-primary" id="startVoiceBtn" onclick="startVoiceChat()">
+                        🎤 Start Voice
+                    </button>
+                    <button class="btn btn-warning" id="stopVoiceBtn" onclick="stopVoiceChat()">
+                        🛑 Stop Voice
+                    </button>
+                </div>
+                
+                <!-- Audio Visualizer -->
+                <div class="audio-visualizer" id="audioVisualizer">
+                    <span id="audioStatus">Audio Ready - Click Start Voice</span>
+                </div>
+                
+                <!-- Endpoint Testing -->
+                <div class="endpoint-testing">
+                    <h3 class="section-title">🌐 REST Endpoints</h3>
+                    <div class="endpoint-grid">
+                        <button class="btn btn-info" onclick="checkHealth()">Health</button>
+                        <button class="btn btn-info" onclick="callConnect()">Connect</button>
+                        <button class="btn btn-info" onclick="getProductStatus()">Product Status</button>
+                        <button class="btn btn-info" onclick="resetProductInfo()">Reset Product</button>
+                        <button class="btn btn-info" onclick="resetAllProduct()">Reset All</button>
+                    </div>
+                </div>
+                
+                <!-- Tool Testing -->
+                <div class="tool-testing">
+                    <h3 class="section-title">🔧 Test Tools</h3>
+                    <div class="tool-grid">
+                        <button class="btn btn-primary" onclick="testQuotationTool()">Test Quotation</button>
+                        <button class="btn btn-primary" onclick="testNavigationTool()">Test Navigation</button>
+                        <button class="btn btn-primary" onclick="testProductTool()">Test Product Info</button>
+                        <button class="btn btn-primary" onclick="sendCustomMessage()">Custom Message</button>
+                    </div>
+                    
+                    <div class="input-group" style="margin-top: 15px;">
+                        <label for="customMessage">Custom Voice Message:</label>
+                        <input type="text" id="customMessage" placeholder="Type a message to send via voice chat" 
+                               value="Find price for iPhone in USA">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Output Panel -->
+            <div class="output-panel">
+                <h2 class="section-title">📊 Real-time Output</h2>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab(event, 'conversation')">💬 Conversation</div>
+                    <div class="tab" onclick="switchTab(event, 'tools')">🔧 Tool Calls</div>
+                    <div class="tab" onclick="switchTab(event, 'product')">📦 Product Info</div>
+                    <div class="tab" onclick="switchTab(event, 'system')">⚙️ System Logs</div>
+                </div>
+                
+                <!-- Conversation Tab -->
+                <div id="conversation" class="tab-content active">
+                    <div class="output-section">
+                        <h4>💬 Voice Conversation</h4>
+                        <div class="output-content" id="conversationOutput">
+                            <div class="timestamp">Ready for conversation...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tools Tab -->
+                <div id="tools" class="tab-content">
+                    <div class="output-section">
+                        <h4>🔧 Tool Function Calls</h4>
+                        <div class="output-content" id="toolsOutput">
+                            <div class="timestamp">Waiting for tool calls...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Info Tab -->
+                <div id="product" class="tab-content">
+                    <div class="output-section">
+                        <h4>📦 Product Information Stream</h4>
+                        <div class="output-content" id="productOutput">
+                            <div class="timestamp">Waiting for product info...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Tab -->
+                <div id="system" class="tab-content">
+                    <div class="output-section">
+                        <h4>⚙️ System & Connection Logs</h4>
+                        <div class="output-content" id="systemOutput">
+                            <div class="timestamp">System initialized...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let rtviWebSocket = null;
+        let toolsWebSocket = null;
+        let productWebSocket = null;
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioStream = null;
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkHealth();
+            logSystem('Page loaded - Ready to connect');
+        });
+        
+        // Utility Functions
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString();
+        }
+        
+        function logMessage(elementId, message, className = '') {
+            const element = document.getElementById(elementId);
+            const timestamp = getCurrentTime();
+            const messageDiv = document.createElement('div');
+            messageDiv.innerHTML = `<div class="timestamp">[${timestamp}]</div><div class="${className}">${message}</div>`;
+            element.appendChild(messageDiv);
+            element.scrollTop = element.scrollHeight;
+        }
+        
+        function logConversation(message, type = 'user') {
+            logMessage('conversationOutput', message, `message-${type}`);
+        }
+        
+        function logTool(message) {
+            logMessage('toolsOutput', message, 'message-tool');
+        }
+        
+        function logProduct(message) {
+            logMessage('productOutput', message, 'message-tool');
+        }
+        
+        function logSystem(message, isError = false) {
+            logMessage('systemOutput', message, isError ? 'message-error' : '');
+        }
+        
+        function logError(elementId, message) {
+            logMessage(elementId, `ERROR: ${message}`, 'message-error');
+        }
+        
+        // Tab switching
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        // Status update functions
+        function updateConnectionStatus(elementId, connected) {
+            const element = document.getElementById(elementId);
+            const indicator = element.querySelector('.status-indicator');
+            
+            if (connected) {
+                element.className = 'status-item status-connected';
+                indicator.className = 'status-indicator connected';
+            } else {
+                element.className = 'status-item status-disconnected';
+                indicator.className = 'status-indicator disconnected';
+            }
+        }
+        
+        // Health Check
+        async function checkHealth() {
+            try {
+                const serverUrl = document.getElementById('serverUrl').value.replace('ws://', 'http://').replace('wss://', 'https://');
+                const response = await fetch(`${serverUrl}/health`);
+                const data = await response.json();
+                
+                document.getElementById('healthStatus').className = 'health-status health-healthy';
+                document.getElementById('healthText').textContent = `${data.status} - ${data.llm_service.provider}`;
+                
+                logSystem(`Health check: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                document.getElementById('healthStatus').className = 'health-status health-unhealthy';
+                document.getElementById('healthText').textContent = 'Connection failed';
+                
+                logSystem(`Health check failed: ${error.message}`, true);
+            }
+        }
+        
+        // Connect endpoint
+        async function callConnect() {
+            try {
+                const serverUrl = document.getElementById('serverUrl').value.replace('ws://', 'http://').replace('wss://', 'https://');
+                const userId = document.getElementById('userId').value;
+                
+                const response = await fetch(`${serverUrl}/connect?user_id=${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_id: userId })
+                });
+                
+                const data = await response.json();
+                logSystem(`Connect response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                logError('systemOutput', `Connect call failed: ${error.message}`);
+            }
+        }
+        
+        // Product status endpoints
+        async function getProductStatus() {
+            try {
+                const serverUrl = document.getElementById('serverUrl').value.replace('ws://', 'http://').replace('wss://', 'https://');
+                const response = await fetch(`${serverUrl}/product-info-status`);
+                const data = await response.json();
+                
+                logSystem(`Product status: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                logError('systemOutput', `Product status failed: ${error.message}`);
+            }
+        }
+        
+        async function resetProductInfo() {
+            try {
+                const serverUrl = document.getElementById('serverUrl').value.replace('ws://', 'http://').replace('wss://', 'https://');
+                const userId = document.getElementById('userId').value;
+                
+                const response = await fetch(`${serverUrl}/product-info-reset/${userId}`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                logSystem(`Product reset: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                logError('systemOutput', `Product reset failed: ${error.message}`);
+            }
+        }
+        
+        async function resetAllProduct() {
+            try {
+                const serverUrl = document.getElementById('serverUrl').value.replace('ws://', 'http://').replace('wss://', 'https://');
+                
+                const response = await fetch(`${serverUrl}/product-info-reset-all`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                logSystem(`Product reset all: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                logError('systemOutput', `Product reset all failed: ${error.message}`);
+            }
+        }
+        
+        // WebSocket Connections
+        function connectRTVI() {
+            const serverUrl = document.getElementById('serverUrl').value;
+            const userId = document.getElementById('userId').value;
+            const wsUrl = `${serverUrl}/ws?user_id=${userId}`;
+            
+            try {
+                rtviWebSocket = new WebSocket(wsUrl);
+                
+                rtviWebSocket.onopen = function(event) {
+                    updateConnectionStatus('rtviStatus', true);
+                    logSystem(`RTVI WebSocket connected to ${wsUrl}`);
+                    logConversation('Connected to voice chat', 'assistant');
+                };
+                
+                rtviWebSocket.onmessage = function(event) {
+                    try {
+                        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                        logConversation(`Received: ${JSON.stringify(data, null, 2)}`, 'assistant');
+                    } catch (e) {
+                        logConversation(`Received (raw): ${event.data}`, 'assistant');
+                    }
+                };
+                
+                rtviWebSocket.onclose = function(event) {
+                    updateConnectionStatus('rtviStatus', false);
+                    logSystem(`RTVI WebSocket closed: ${event.reason || 'Unknown reason'}`);
+                    logConversation('Voice chat disconnected', 'assistant');
+                };
+                
+                rtviWebSocket.onerror = function(error) {
+                    updateConnectionStatus('rtviStatus', false);
+                    logError('systemOutput', `RTVI WebSocket error: ${error.message || 'Connection failed'}`);
+                    logError('conversationOutput', 'Voice chat connection failed');
+                };
+                
+            } catch (error) {
+                logError('systemOutput', `Failed to create RTVI WebSocket: ${error.message}`);
+            }
+        }
+        
+        function connectTools() {
+            const serverUrl = document.getElementById('serverUrl').value;
+            const userId = document.getElementById('userId').value;
+            const wsUrl = `${serverUrl}/ws/tools?user_id=${userId}`;
+            
+            try {
+                toolsWebSocket = new WebSocket(wsUrl);
+                
+                toolsWebSocket.onopen = function(event) {
+                    updateConnectionStatus('toolsStatus', true);
+                    logSystem(`Tools WebSocket connected to ${wsUrl}`);
+                    logTool('Tools WebSocket connected - Ready for tool calls');
+                };
+                
+                toolsWebSocket.onmessage = function(event) {
+                    try {
+                        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                        logTool(`Tool Call Result:\n${JSON.stringify(data, null, 2)}`);
+                    } catch (e) {
+                        logTool(`Tool Call Result (raw):\n${event.data}`);
+                    }
+                };
+                
+                toolsWebSocket.onclose = function(event) {
+                    updateConnectionStatus('toolsStatus', false);
+                    logSystem(`Tools WebSocket closed: ${event.reason || 'Unknown reason'}`);
+                    logTool('Tools WebSocket disconnected');
+                };
+                
+                toolsWebSocket.onerror = function(error) {
+                    updateConnectionStatus('toolsStatus', false);
+                    logError('systemOutput', `Tools WebSocket error: ${error.message || 'Connection failed'}`);
+                    logError('toolsOutput', 'Tools WebSocket connection failed');
+                };
+                
+            } catch (error) {
+                logError('systemOutput', `Failed to create Tools WebSocket: ${error.message}`);
+            }
+        }
+        
+        function connectProductInfo() {
+            const serverUrl = document.getElementById('serverUrl').value;
+            const userId = document.getElementById('userId').value;
+            const wsUrl = `${serverUrl}/ws/product_info?user_id=${userId}`;
+            
+            try {
+                productWebSocket = new WebSocket(wsUrl);
+                
+                productWebSocket.onopen = function(event) {
+                    updateConnectionStatus('productStatus', true);
+                    logSystem(`Product Info WebSocket connected to ${wsUrl}`);
+                    logProduct('Product Info WebSocket connected - Ready for product queries');
+                };
+                
+                productWebSocket.onmessage = function(event) {
+                    try {
+                        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                        logProduct(`Product Info:\n${JSON.stringify(data, null, 2)}`);
+                    } catch (e) {
+                        logProduct(`Product Info (raw):\n${event.data}`);
+                    }
+                };
+                
+                productWebSocket.onclose = function(event) {
+                    updateConnectionStatus('productStatus', false);
+                    logSystem(`Product Info WebSocket closed: ${event.reason || 'Unknown reason'}`);
+                    logProduct('Product Info WebSocket disconnected');
+                };
+                
+                productWebSocket.onerror = function(error) {
+                    updateConnectionStatus('productStatus', false);
+                    logError('systemOutput', `Product Info WebSocket error: ${error.message || 'Connection failed'}`);
+                    logError('productOutput', 'Product Info WebSocket connection failed');
+                };
+                
+            } catch (error) {
+                logError('systemOutput', `Failed to create Product Info WebSocket: ${error.message}`);
+            }
+        }
+        
+        // Main connection functions
+        function connectAll() {
+            logSystem('Connecting to all WebSocket endpoints...');
+            connectRTVI();
+            connectTools();
+            connectProductInfo();
+        }
+        
+        function disconnectAll() {
+            if (rtviWebSocket) {
+                rtviWebSocket.close();
+                rtviWebSocket = null;
+            }
+            if (toolsWebSocket) {
+                toolsWebSocket.close();
+                toolsWebSocket = null;
+            }
+            if (productWebSocket) {
+                productWebSocket.close();
+                productWebSocket = null;
+            }
+            
+            updateConnectionStatus('rtviStatus', false);
+            updateConnectionStatus('toolsStatus', false);
+            updateConnectionStatus('productStatus', false);
+            
+            logSystem('All WebSocket connections closed');
+        }
+        
+        // Voice chat functions
+        async function startVoiceChat() {
+            try {
+                audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                mediaRecorder = new MediaRecorder(audioStream);
+                const audioChunks = [];
+                
+                mediaRecorder.ondataavailable = function(event) {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = function() {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    // Here you would send the audio to the voice chat WebSocket
+                    logConversation('Audio recorded and ready to send', 'user');
+                };
+                
+                mediaRecorder.start();
+                isRecording = true;
+                
+                document.getElementById('audioStatus').innerHTML = 
+                    '<span class="recording-indicator"></span>Recording... Click Stop to end';
+                    
+                logSystem('Voice recording started');
+                logConversation('Started recording voice...', 'user');
+                
+            } catch (error) {
+                logError('systemOutput', `Failed to start voice recording: ${error.message}`);
+                logError('conversationOutput', 'Failed to access microphone');
+            }
+        }
+        
+        function stopVoiceChat() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                if (audioStream) {
+                    audioStream.getTracks().forEach(track => track.stop());
+                }
+                
+                document.getElementById('audioStatus').textContent = 'Audio Ready - Click Start Voice';
+                
+                logSystem('Voice recording stopped');
+                logConversation('Stopped recording voice', 'user');
+            }
+        }
+        
+        // Test tool functions
+        function testQuotationTool() {
+            const testMessage = {
+                type: 'test_tool',
+                tool: 'quotation_management',
+                action: 'create_new_quotation',
+                user_id: document.getElementById('userId').value
+            };
+            
+            if (toolsWebSocket && toolsWebSocket.readyState === WebSocket.OPEN) {
+                toolsWebSocket.send(JSON.stringify(testMessage));
+                logTool(`Sent quotation test: ${JSON.stringify(testMessage, null, 2)}`);
+            } else {
+                logError('toolsOutput', 'Tools WebSocket not connected');
+            }
+        }
+        
+        function testNavigationTool() {
+            const testMessage = {
+                type: 'test_tool',
+                tool: 'navigation',
+                action: 'show_home_page',
+                user_id: document.getElementById('userId').value
+            };
+            
+            if (toolsWebSocket && toolsWebSocket.readyState === WebSocket.OPEN) {
+                toolsWebSocket.send(JSON.stringify(testMessage));
+                logTool(`Sent navigation test: ${JSON.stringify(testMessage, null, 2)}`);
+            } else {
+                logError('toolsOutput', 'Tools WebSocket not connected');
+            }
+        }
+        
+        function testProductTool() {
+            const testMessage = {
+                type: 'test_tool',
+                tool: 'product_info',
+                query_type: 'price',
+                input_type: 'names',
+                products: ['iPhone'],
+                country: 'USA',
+                user_id: document.getElementById('userId').value
+            };
+            
+            if (productWebSocket && productWebSocket.readyState === WebSocket.OPEN) {
+                productWebSocket.send(JSON.stringify(testMessage));
+                logProduct(`Sent product test: ${JSON.stringify(testMessage, null, 2)}`);
+            } else {
+                logError('productOutput', 'Product Info WebSocket not connected');
+            }
+        }
+        
+        function sendCustomMessage() {
+            const message = document.getElementById('customMessage').value;
+            
+            if (rtviWebSocket && rtviWebSocket.readyState === WebSocket.OPEN) {
+                const textMessage = {
+                    type: 'text_message',
+                    content: message,
+                    user_id: document.getElementById('userId').value
+                };
+                
+                rtviWebSocket.send(JSON.stringify(textMessage));
+                logConversation(`Sent: ${message}`, 'user');
+            } else {
+                logError('conversationOutput', 'RTVI WebSocket not connected');
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey || event.metaKey) {
+                switch(event.key) {
+                    case 'Enter':
+                        event.preventDefault();
+                        sendCustomMessage();
+                        break;
+                    case ' ':
+                        event.preventDefault();
+                        if (isRecording) {
+                            stopVoiceChat();
+                        } else {
+                            startVoiceChat();
+                        }
+                        break;
+                }
+            }
+        });
+        
+        // Auto-refresh health every 30 seconds
+        setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>
