@@ -4,13 +4,8 @@ import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CustomTypewriter, TYPEWRITER_TEXTS, TypewriterTextType } from "@/components/ui/custom-typewriter";
 import { Spinner } from "@/components/ui/loading/Spinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { ModelSelector } from "./ModelSelector";
+import { Label } from "@/components/ui/label";
 
 interface QueryFormProps {
   query: string;
@@ -26,10 +21,9 @@ interface QueryFormProps {
   className?: string;
   disabled?: boolean;
   enableTypewriter?: boolean;
-  // Model selection props
-  model?: string;
-  onModelChange?: (model: string) => void;
   showModelSelector?: boolean;
+  selectedModel?: string;
+  onModelChange?: (model: string) => void;
 }
 
 export function QueryForm({
@@ -46,21 +40,14 @@ export function QueryForm({
   className = "",
   disabled = false,
   enableTypewriter = true,
-  // Model selection props
-  model = "gemini",
-  onModelChange,
   showModelSelector = false,
+  selectedModel = "gemini",
+  onModelChange,
 }: QueryFormProps) {
   const textareaRef = useRef<HTMLDivElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
 
-  // Available AI models
-  const modelOptions = [
-    { value: "gemini", label: "Gemini" },
-    { value: "llama-3.3-70b-versatile", label: "Llama 3.3 70B" },
-    { value: "openai/gpt-oss-120b", label: "GPT OSS 120B" },
-  ];
 
   // Auto-resize contentEditable div based on content
   useEffect(() => {
@@ -136,6 +123,8 @@ export function QueryForm({
         padding: "16px",
       }}
     >
+      {/* Model Selector - Will be positioned with buttons */}
+      
       {/* ContentEditable div */}
       <div className="text-white text-sm leading-relaxed relative">
         <div
@@ -159,7 +148,7 @@ export function QueryForm({
             margin: "0",
             lineHeight: "24px", // Single line height
             whiteSpace: "pre-wrap", // Allow wrapping
-            paddingRight: isMultiLine ? "0" : showModelSelector && onModelChange ? "180px" : "140px", // Space for buttons and model selector when single line
+            paddingRight: isMultiLine ? "0" : "140px", // Space for buttons when single line
             direction: "ltr", // Ensure left-to-right text direction
             textAlign: "left", // Ensure left alignment
           }}
@@ -173,7 +162,7 @@ export function QueryForm({
             className="absolute top-0 left-0 pointer-events-none"
             style={{
               lineHeight: "24px",
-              paddingRight: isMultiLine ? "0" : showModelSelector && onModelChange ? "180px" : "140px",
+              paddingRight: isMultiLine ? "0" : "140px",
             }}
           >
             {enableTypewriter ? (
@@ -193,34 +182,19 @@ export function QueryForm({
           </div>
         )}
 
-        {/* Model Selector - inline when single line and enabled */}
-        {!isMultiLine && showModelSelector && onModelChange && (
-          <div className="absolute right-16 top-0 flex items-center" style={{ height: "24px" }}>
-            <Select value={model} onValueChange={onModelChange}>
-              <SelectTrigger 
-                className="w-28 h-6 text-xs border-slate-600 bg-slate-800/50 text-white"
-                style={{
-                  background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-                  border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-                  borderRadius: "99px",
-                }}
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-slate-800 border-slate-600">
-                {modelOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-white hover:bg-slate-700">
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
 
         {/* Buttons - inline when single line, separate section when multiline */}
         {!isMultiLine && (
-          <div className={`absolute top-0 flex gap-2 items-center ${showModelSelector && onModelChange ? '-right-1' : '-right-1'}`} style={{ height: "24px" }}>
+          <div className="absolute top-0 flex gap-2 items-center -right-1" style={{ height: "24px" }}>
+            {showModelSelector && onModelChange && (
+              <ModelSelector
+                value={selectedModel}
+                onValueChange={onModelChange}
+                size="sm"
+                disabled={isExecuting}
+                className="h-10"
+              />
+            )}
             {showUploadButton && onUploadClick && (
               <Button
                 variant="outline"
@@ -265,30 +239,17 @@ export function QueryForm({
         )}
       </div>
 
-      {/* Separate button and model selector section when multiline */}
+      {/* Separate button section when multiline */}
       {isMultiLine && (
         <div className="flex items-center justify-end gap-2 mt-2">
-          {/* Model Selector for multiline */}
           {showModelSelector && onModelChange && (
-            <Select value={model} onValueChange={onModelChange}>
-              <SelectTrigger 
-                className="w-36 h-10 text-xs border-slate-600 bg-slate-800/50 text-white"
-                style={{
-                  background: "var(--components-button-Fill, rgba(255, 255, 255, 0.12))",
-                  border: "1px solid var(--primary-16, rgba(19, 245, 132, 0.16))",
-                  borderRadius: "99px",
-                }}
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-slate-800 border-slate-600">
-                {modelOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-white hover:bg-slate-700">
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <ModelSelector
+              value={selectedModel}
+              onValueChange={onModelChange}
+              size="sm"
+              disabled={isExecuting}
+              className="h-10"
+            />
           )}
           {showUploadButton && onUploadClick && (
             <Button
