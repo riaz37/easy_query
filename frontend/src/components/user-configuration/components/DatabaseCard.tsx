@@ -44,7 +44,6 @@ export const DatabaseCard = React.memo<DatabaseCardProps>(({
         </div>
         <div className="text-sm space-y-1">
           <div><span className="text-gray-400">Type</span> <span className="text-white">{database.db_type}</span></div>
-          <div className="truncate"><span className="text-gray-400">URL</span> <span className="text-white">{database.db_url}</span></div>
           <div><span className="text-gray-400">Rules</span> <span className="text-white">{getRulesInfo()}</span></div>
         </div>
       </div>
