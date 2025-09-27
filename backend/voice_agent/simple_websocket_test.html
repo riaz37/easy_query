@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple WebSocket Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .connected { background: #d4edda; color: #155724; }
+        .disconnected { background: #f8d7da; color: #721c24; }
+        .messages { background: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; height: 300px; overflow-y: auto; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Simple WebSocket Test</h1>
+    
+    <div id="status" class="status disconnected">Disconnected</div>
+    
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+    <button onclick="testTool()">Test MSSQL Tool</button>
+    <button onclick="clearMessages()">Clear Messages</button>
+    
+    <h3>Messages:</h3>
+    <div id="messages" class="messages">Ready to connect...</div>
+
+    <script>
+        let ws = null;
+        
+        function connect() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                addMessage('Already connected');
+                return;
+            }
+            
+            addMessage('Connecting to WebSocket...');
+            ws = new WebSocket('ws://localhost:8002/ws/tools?user_id=test_user');
+            
+            ws.onopen = function() {
+                document.getElementById('status').textContent = 'Connected';
+                document.getElementById('status').className = 'status connected';
+                addMessage('✅ WebSocket connected!');
+            };
+            
+            ws.onmessage = function(event) {
+                addMessage('📨 Received: ' + event.data);
+                try {
+                    const data = JSON.parse(event.data);
+                    addMessage('📋 Parsed: ' + JSON.stringify(data, null, 2));
+                } catch (e) {
+                    addMessage('❌ Parse error: ' + e.message);
+                }
+            };
+            
+            ws.onclose = function() {
+                document.getElementById('status').textContent = 'Disconnected';
+                document.getElementById('status').className = 'status disconnected';
+                addMessage('🔌 WebSocket disconnected');
+            };
+            
+            ws.onerror = function(error) {
+                addMessage('❌ WebSocket error: ' + error);
+            };
+        }
+        
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+        
+        async function testTool() {
+            addMessage('🔍 Testing MSSQL search tool...');
+            try {
+                const response = await fetch('http://localhost:8002/test-mssql-search');
+                const data = await response.json();
+                addMessage('📊 Test result: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                addMessage('❌ Test failed: ' + error.message);
+            }
+        }
+        
+        function addMessage(text) {
+            const messages = document.getElementById('messages');
+            const time = new Date().toLocaleTimeString();
+            messages.innerHTML += '<div>[' + time + '] ' + text + '</div>';
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function clearMessages() {
+            document.getElementById('messages').innerHTML = 'Messages cleared...';
+        }
+        
+        // Auto-connect on page load
+        window.onload = function() {
+            addMessage('Page loaded, click Connect to start...');
+        };
+    </script>
+</body>
+</html>

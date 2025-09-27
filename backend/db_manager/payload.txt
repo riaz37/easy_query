@@ -1,0 +1,52 @@
+{
+  "user_id": "nilab",
+  "parent_company_id": 1,
+  "sub_company_ids": [1],
+  "database_access": {
+    "parent_databases": [
+      {
+        "db_id": 1,
+        "access_level": "full"
+      }
+    ],
+    "sub_databases": [
+      {
+        "sub_company_id": 2,
+        "databases": [
+          {
+            "db_id": 17,
+            "access_level": "full"
+          }
+        ]
+      }
+    ]
+  },
+  "database_access_vector": {
+    "parent_databases": [
+      {
+        "db_id": 1,
+        "access_level": "full"
+      }
+    ],
+    "sub_databases": [
+      {
+        "sub_company_id": 2,
+        "databases": [
+          {
+            "db_id": 2,
+            "access_level": "full"
+          }
+        ]
+      }
+    ]
+  },
+  "table_shows": {
+    "1": ["users", "orders", "products"],
+    "2": ["reports", "analytics"],
+    "3": ["inventory", "sales"]
+  }
+}
+
+
+docker exec -it pgvector_container bash
+psql -U postgres

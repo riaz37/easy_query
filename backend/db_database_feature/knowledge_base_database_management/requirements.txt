@@ -1,0 +1,22 @@
+# fastapi
+# uvicorn
+# python-multipart
+# sqlalchemy  # SQL toolkit and ORM
+# pyodbc      # Microsoft SQL Server driver (commented out - using PostgreSQL now)
+# python-dotenv  # For managing environment variables
+
+fastapi
+uvicorn
+sqlalchemy
+# pyodbc  # Commented out - MSSQL driver not needed
+psycopg2-binary  # PostgreSQL driver
+python-dotenv
+python-multipart
+
+
+#------------------Phase 3------------
+
+passlib[bcrypt]
+python-jose
+email-validator
+requests

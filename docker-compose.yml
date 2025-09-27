@@ -1,0 +1,118 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15
+    container_name: easy_query_db
+    environment:
+      POSTGRES_DB: easyquery
+      POSTGRES_USER: easyuser
+      POSTGRES_PASSWORD: easypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - easyquery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U easyuser -d easyquery"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: easy_query_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - easyquery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: easy_query_backend
+    ports:
+      - "8200:8200"
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_USER=easyuser
+      - DB_PASSWORD=easypassword
+      - DB_NAME=easyquery
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_CLOUD=false
+      - ENVIRONMENT=development
+      - DEV_BACKEND_URL=https://localhost:8200
+      - PROD_BACKEND_URL=https://localhost:8200
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - easyquery-network
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+      - backend_storage:/app/storage
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/voice/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: easy_query_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://localhost:8200
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - easyquery-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+  redis_data:
+  backend_uploads:
+  backend_storage:
+
+networks:
+  easyquery-network:
+    driver: bridge

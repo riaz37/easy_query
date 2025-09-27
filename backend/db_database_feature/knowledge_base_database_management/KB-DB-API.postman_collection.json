@@ -1,0 +1,209 @@
+{
+  "info": {
+    "name": "KB DB API (db_database_feature only)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000" },
+    { "key": "token", "value": "" },
+    { "key": "username", "value": "user_{{timestamp}}" },
+    { "key": "email", "value": "user_{{timestamp}}@example.com" },
+    { "key": "password", "value": "Password123!" },
+    { "key": "companyId", "value": "1" },
+    { "key": "dataSourceId", "value": "1" },
+    { "key": "timestamp", "value": "{{$timestamp}}" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{base_url}}/signup", "host": ["{{base_url}}"], "path": ["signup"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201/200 created', ()=> pm.expect(pm.response.code).to.be.oneOf([200,201]));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{base_url}}/login", "host": ["{{base_url}}"], "path": ["login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', ()=> pm.response.to.have.status(200));",
+                  "const json = pm.response.json(); pm.environment.set('token', json.access_token); pm.test('has token', ()=> pm.expect(json).to.have.property('access_token'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Profile",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{base_url}}/profile", "host": ["{{base_url}}"], "path": ["profile"] }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', ()=> pm.response.to.have.status(200));"] } } ]
+        },
+        {
+          "name": "Protected",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{base_url}}/protected", "host": ["{{base_url}}"], "path": ["protected"] }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', ()=> pm.response.to.have.status(200));"] } } ]
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/change-password", "host": ["{{base_url}}"], "path": ["change-password"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"{{password}}\",\n  \"new_password\": \"New{{password}}\"\n}"
+            }
+          },
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": [
+              "pm.test('200 OK', ()=> pm.response.to.have.status(200));",
+              "pm.test('message present', ()=> pm.expect(pm.response.json()).to.have.property('message'));"
+            ] } }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{base_url}}/logout", "host": ["{{base_url}}"], "path": ["logout"] }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', ()=> pm.response.to.have.status(200));"] } } ]
+        },
+        {
+          "name": "Logout All",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{base_url}}/logout-all", "host": ["{{base_url}}"], "path": ["logout-all"] }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', ()=> pm.response.to.have.status(200));"] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Create Company",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{base_url}}/companies", "host": ["{{base_url}}"], "path": ["companies"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Company {{timestamp}}\",\n  \"description\": \"Test company\",\n  \"parent_id\": null\n}"
+            }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200/201', ()=> pm.expect(pm.response.code).to.be.oneOf([200,201])); const j=pm.response.json(); if(j.id){ pm.environment.set('companyId', j.id);} "] } } ]
+        },
+        {
+          "name": "Get Company",
+          "request": { "method": "GET", "url": { "raw": "{{base_url}}/companies/{{companyId}}", "host": ["{{base_url}}"], "path": ["companies", "{{companyId}}"] } },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', ()=> pm.response.to.have.status(200));"] } } ]
+        },
+        {
+          "name": "List Companies",
+          "request": { "method": "GET", "url": { "raw": "{{base_url}}/companies", "host": ["{{base_url}}"], "path": ["companies"] } },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', ()=> pm.response.to.have.status(200));"] } } ]
+        },
+        {
+          "name": "Update Company",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{base_url}}/companies/{{companyId}}", "host": ["{{base_url}}"], "path": ["companies", "{{companyId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Company {{timestamp}} Updated\",\n  \"description\": \"Updated description\",\n  \"parent_id\": null\n}" }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', ()=> pm.response.to.have.status(200));"] } } ]
+        },
+        {
+          "name": "Delete Company",
+          "request": { "method": "DELETE", "url": { "raw": "{{base_url}}/companies/{{companyId}}", "host": ["{{base_url}}"], "path": ["companies", "{{companyId}}"] } },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', ()=> pm.response.to.have.status(200));"] } } ]
+        }
+      ]
+    },
+    {
+      "name": "DataSources",
+      "item": [
+        {
+          "name": "Create Data Source (multipart)",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/companies/{{companyId}}/data-sources", "host": ["{{base_url}}"], "path": ["companies", "{{companyId}}", "data-sources"] },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "DS {{timestamp}}", "type": "text" },
+                { "key": "description", "value": "Sample data source", "type": "text" },
+                { "key": "business_rules_file_name", "value": "rules.md", "type": "text" },
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200/201', ()=> pm.expect(pm.response.code).to.be.oneOf([200,201])); const j=pm.response.json(); if(j.id){ pm.environment.set('dataSourceId', j.id);} "] } } ]
+        },
+        {
+          "name": "Update Data Source",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{base_url}}/data-sources/{{dataSourceId}}", "host": ["{{base_url}}"], "path": ["data-sources", "{{dataSourceId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated DS\",\n  \"description\": \"Updated\"\n}" }
+          },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', ()=> pm.response.to.have.status(200));"] } } ]
+        },
+        {
+          "name": "Delete Data Source",
+          "request": { "method": "DELETE", "url": { "raw": "{{base_url}}/data-sources/{{dataSourceId}}", "host": ["{{base_url}}"], "path": ["data-sources", "{{dataSourceId}}"] } },
+          "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', ()=> pm.response.to.have.status(200));"] } } ]
+        }
+      ]
+    }
+  ]
+}
+
+

@@ -1,0 +1,444 @@
+{
+  "success": true,
+  "excel_data": {
+    "excel_file_path": "/Users/nilab/Desktop/projects/Esap-database_agent/Knowledge_base_backend/tableConvert.com_i9hj3x.xlsx",
+    "total_rows": 2,
+    "total_columns": 21,
+    "column_names": [
+      "report_ID",
+      "report_code",
+      "report_Description",
+      "comment",
+      "quantity",
+      "price",
+      "amount",
+      "fk_exp_ID",
+      "fk_item_ID",
+      "vat15perc",
+      "vatSelected",
+      "created_at",
+      "amount_vat",
+      "vatSingle",
+      "invoice_no",
+      "invoice_date",
+      "supplier_name",
+      "tax_no",
+      "item_img",
+      "unit",
+      "invoiceNo_only"
+    ],
+    "preview_data": [
+      {
+        "report_ID": 1,
+        "report_code": NaN,
+        "report_Description": "11103-electrical technicians \u0641\u0646\u064a \u0643\u0647\u0631\u0628\u0627\u0621",
+        "comment": NaN,
+        "quantity": 1,
+        "price": 150.0,
+        "amount": 5095.0,
+        "fk_exp_ID": 1,
+        "fk_item_ID": 11103,
+        "vat15perc": 22.5,
+        "vatSelected": 0,
+        "created_at": "2012-10-19T00:00:00",
+        "amount_vat": 150.0,
+        "vatSingle": 0.0,
+        "invoice_no": NaN,
+        "invoice_date": "2012-10-19T00:00:00",
+        "supplier_name": NaN,
+        "tax_no": NaN,
+        "item_img": NaN,
+        "unit": NaN,
+        "invoiceNo_only": NaN
+      },
+      {
+        "report_ID": 2,
+        "report_code": NaN,
+        "report_Description": "12102-Assam Food \u0623\u0643\u0644 \u0639\u0635\u0627\u0645",
+        "comment": NaN,
+        "quantity": 1,
+        "price": 20.0,
+        "amount": 5901.0,
+        "fk_exp_ID": 2,
+        "fk_item_ID": 12102,
+        "vat15perc": 3.0,
+        "vatSelected": 0,
+        "created_at": "2012-10-19T00:00:00",
+        "amount_vat": 20.0,
+        "vatSingle": 0.0,
+        "invoice_no": NaN,
+        "invoice_date": "2012-10-19T00:00:00",
+        "supplier_name": NaN,
+        "tax_no": NaN,
+        "item_img": NaN,
+        "unit": NaN,
+        "invoiceNo_only": NaN
+      }
+    ],
+    "preview_rows_count": 5
+  },
+  "table_info": {
+    "table_name": "expenseItems",
+    "schema_name": "dbo",
+    "full_name": "dbo.expenseItems",
+    "create_table_statement": "CREATE TABLE [expenseItems] (\n\t[report_ID] INT NOT NULL IDENTITY(1,1),\n\t[report_code] INT NULL,\n\t[report_Description] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\t[comment] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\t[quantity] INT NULL,\n\t[price] DECIMAL(18,2) NULL,\n\t[amount] DECIMAL(18,2) NULL,\n\t[fk_exp_ID] INT NOT NULL,\n\t[fk_item_ID] INT NULL,\n\t[vat15perc] DECIMAL(18,2) NULL,\n\t[vatSelected] INT NULL,\n\t[created_at] DATETIME NULL,\n\t[amount_vat] DECIMAL(18,2) NULL,\n\t[vatSingle] DECIMAL(18,2) NULL,\n\t[invoice_no] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\t[invoice_date] DATETIME NULL,\n\t[supplier_name] NVARCHAR(150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\t[tax_no] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\t[item_img] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\t[unit] NVARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\t[invoiceNo_only] NVARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,\n\tCONSTRAINT [PK_expenseItems] PRIMARY KEY CLUSTERED ([report_ID]),\n\tCONSTRAINT [FK_expenseItems_fk_exp_ID] FOREIGN KEY([fk_exp_ID]) REFERENCES dbo.expenseReport(exp_ID)\n)",
+    "columns": [
+      "[report_ID] INT NOT NULL IDENTITY(1,1)",
+      "[report_code] INT NULL",
+      "[report_Description] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL",
+      "[comment] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL",
+      "[quantity] INT NULL",
+      "[price] DECIMAL(18,2) NULL",
+      "[amount] DECIMAL(18,2) NULL",
+      "[fk_exp_ID] INT NOT NULL",
+      "[fk_item_ID] INT NULL",
+      "[vat15perc] DECIMAL(18,2) NULL",
+      "[vatSelected] INT NULL",
+      "[created_at] DATETIME NULL",
+      "[amount_vat] DECIMAL(18,2) NULL",
+      "[vatSingle] DECIMAL(18,2) NULL",
+      "[invoice_no] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL",
+      "[invoice_date] DATETIME NULL",
+      "[supplier_name] NVARCHAR(150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL",
+      "[tax_no] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL",
+      "[item_img] NVARCHAR(-1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL",
+      "[unit] NVARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL",
+      "[invoiceNo_only] NVARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL"
+    ],
+    "identity_columns": [
+      "report_ID"
+    ],
+    "primary_keys": [
+      "report_ID"
+    ],
+    "foreign_keys": [
+      "fk_exp_ID FOREIGN KEY REFERENCES dbo.expenseReport(exp_ID)"
+    ],
+    "sample_data": [
+      {
+        "report_ID": 1,
+        "report_code": null,
+        "report_Description": "11103-electrical technicians \u0641\u0646\u064a \u0643\u0647\u0631\u0628\u0627\u0621",
+        "comment": "N/A",
+        "quantity": 1,
+        "price": 150.0,
+        "amount": 5095.0,
+        "fk_exp_ID": 1,
+        "fk_item_ID": 11103,
+        "vat15perc": 22.5,
+        "vatSelected": 0,
+        "created_at": "2012-10-19T00:00:00",
+        "amount_vat": 150.0,
+        "vatSingle": 0.0,
+        "invoice_no": "N/A",
+        "invoice_date": "2012-10-19T00:00:00",
+        "supplier_name": "N/A",
+        "tax_no": "N/A",
+        "item_img": null,
+        "unit": null,
+        "invoiceNo_only": null
+      },
+      {
+        "report_ID": 2,
+        "report_code": null,
+        "report_Description": "12102-Assam Food \u0623\u0643\u0644 \u0639\u0635\u0627\u0645",
+        "comment": "N/A",
+        "quantity": 1,
+        "price": 20.0,
+        "amount": 5901.0,
+        "fk_exp_ID": 2,
+        "fk_item_ID": 12102,
+        "vat15perc": 3.0,
+        "vatSelected": 0,
+        "created_at": "2012-10-19T00:00:00",
+        "amount_vat": 20.0,
+        "vatSingle": 0.0,
+        "invoice_no": "N/A",
+        "invoice_date": "2012-10-19T00:00:00",
+        "supplier_name": "N/A",
+        "tax_no": "N/A",
+        "item_img": null,
+        "unit": null,
+        "invoiceNo_only": null
+      },
+      {
+        "report_ID": 3,
+        "report_code": null,
+        "report_Description": "12102-Assam Food \u0623\u0643\u0644 \u0639\u0635\u0627\u0645",
+        "comment": "N/A",
+        "quantity": 1,
+        "price": 10.0,
+        "amount": 5308.0,
+        "fk_exp_ID": 3,
+        "fk_item_ID": 12102,
+        "vat15perc": 1.5,
+        "vatSelected": 0,
+        "created_at": "2012-10-18T00:00:00",
+        "amount_vat": 10.0,
+        "vatSingle": 0.0,
+        "invoice_no": "N/A",
+        "invoice_date": "2012-10-18T00:00:00",
+        "supplier_name": "N/A",
+        "tax_no": "N/A",
+        "item_img": null,
+        "unit": null,
+        "invoiceNo_only": null
+      }
+    ],
+    "total_columns": 21
+  },
+  "mapping": {
+    "excel_to_db": {
+      "report_ID": "",
+      "report_code": "report_code",
+      "report_Description": "report_Description",
+      "comment": "comment",
+      "quantity": "quantity",
+      "price": "price",
+      "amount": "amount",
+      "fk_exp_ID": "fk_exp_ID",
+      "fk_item_ID": "fk_item_ID",
+      "vat15perc": "vat15perc",
+      "vatSelected": "vatSelected",
+      "created_at": "created_at",
+      "amount_vat": "amount_vat",
+      "vatSingle": "vatSingle",
+      "invoice_no": "invoice_no",
+      "invoice_date": "invoice_date",
+      "supplier_name": "supplier_name",
+      "tax_no": "tax_no",
+      "item_img": "item_img",
+      "unit": "unit",
+      "invoiceNo_only": "invoiceNo_only"
+    },
+    "db_to_excel": {
+      "report_ID": "",
+      "report_code": "report_code",
+      "report_Description": "report_Description",
+      "comment": "comment",
+      "quantity": "quantity",
+      "price": "price",
+      "amount": "amount",
+      "fk_exp_ID": "fk_exp_ID",
+      "fk_item_ID": "fk_item_ID",
+      "vat15perc": "vat15perc",
+      "vatSelected": "vatSelected",
+      "created_at": "created_at",
+      "amount_vat": "amount_vat",
+      "vatSingle": "vatSingle",
+      "invoice_no": "invoice_no",
+      "invoice_date": "invoice_date",
+      "supplier_name": "supplier_name",
+      "tax_no": "tax_no",
+      "item_img": "item_img",
+      "unit": "unit",
+      "invoiceNo_only": "invoiceNo_only"
+    },
+    "all_table_columns": [
+      "report_ID",
+      "report_code",
+      "report_Description",
+      "comment",
+      "quantity",
+      "price",
+      "amount",
+      "fk_exp_ID",
+      "fk_item_ID",
+      "vat15perc",
+      "vatSelected",
+      "created_at",
+      "amount_vat",
+      "vatSingle",
+      "invoice_no",
+      "invoice_date",
+      "supplier_name",
+      "tax_no",
+      "item_img",
+      "unit",
+      "invoiceNo_only"
+    ],
+    "all_excel_columns": [
+      "report_ID",
+      "report_code",
+      "report_Description",
+      "comment",
+      "quantity",
+      "price",
+      "amount",
+      "fk_exp_ID",
+      "fk_item_ID",
+      "vat15perc",
+      "vatSelected",
+      "created_at",
+      "amount_vat",
+      "vatSingle",
+      "invoice_no",
+      "invoice_date",
+      "supplier_name",
+      "tax_no",
+      "item_img",
+      "unit",
+      "invoiceNo_only"
+    ],
+    "identity_columns": [
+      "report_ID"
+    ],
+    "mapping_details": [
+      {
+        "table_column": "report_ID",
+        "excel_column": "",
+        "is_identity": true,
+        "is_mapped": false,
+        "mapping_status": "IDENTITY"
+      },
+      {
+        "table_column": "report_code",
+        "excel_column": "report_code",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "report_Description",
+        "excel_column": "report_Description",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "comment",
+        "excel_column": "comment",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "quantity",
+        "excel_column": "quantity",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "price",
+        "excel_column": "price",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "amount",
+        "excel_column": "amount",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "fk_exp_ID",
+        "excel_column": "fk_exp_ID",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "fk_item_ID",
+        "excel_column": "fk_item_ID",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "vat15perc",
+        "excel_column": "vat15perc",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "vatSelected",
+        "excel_column": "vatSelected",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "created_at",
+        "excel_column": "created_at",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "amount_vat",
+        "excel_column": "amount_vat",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "vatSingle",
+        "excel_column": "vatSingle",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "invoice_no",
+        "excel_column": "invoice_no",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "invoice_date",
+        "excel_column": "invoice_date",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "supplier_name",
+        "excel_column": "supplier_name",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "tax_no",
+        "excel_column": "tax_no",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "item_img",
+        "excel_column": "item_img",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "unit",
+        "excel_column": "unit",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      },
+      {
+        "table_column": "invoiceNo_only",
+        "excel_column": "invoiceNo_only",
+        "is_identity": false,
+        "is_mapped": true,
+        "mapping_status": "MAPPED"
+      }
+    ]
+  },
+  "mapping_summary": {
+    "total_excel_columns": 21,
+    "total_table_columns": 21,
+    "identity_columns": 1,
+    "mapped_columns": 20,
+    "unmapped_columns": 0,
+    "mapping_percentage": 100.0
+  }
+}

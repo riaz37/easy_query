@@ -1,0 +1,114 @@
+{
+  "default": [
+    {
+      "timestamp": "2025-06-29T13:00:44.026630",
+      "question": "Show all transactions for bank ID 1.",
+      "query": "SELECT historyId, FkBankId, bank_name, TransType, TransAmount, AccountBefore, AccountAfter, DepositBefore, DepositAfter, ExpensesBefore, ExpensesAfter, CreatedAt FROM BankTransHistory INNER JOIN bank ON BankTransHistory.FkBankId = bank.bank_id WHERE FkBankId = 1",
+      "results_summary": "Found 4874 records"
+    },
+    {
+      "timestamp": "2025-07-24T18:12:23.589682",
+      "question": "give me salary",
+      "query": "DECLARE @MonthName NVARCHAR(50) = NULL; DECLARE @Year INT = NULL; SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM salary WHERE employee_name LIKE '%' + '' + '%' AND MONTH(month_date) = MONTH(GETDATE()) AND YEAR(month_date) = YEAR(GETDATE())",
+      "results_summary": "Found 0 records"
+    },
+    {
+      "timestamp": "2025-08-04T13:23:28.523134",
+      "question": "give me the salary chart",
+      "query": "SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM salary WHERE MONTH(month_date) = MONTH(GETDATE()) AND YEAR(month_date) = YEAR(GETDATE())",
+      "results_summary": "Found 0 records"
+    },
+    {
+      "timestamp": "2025-08-04T13:24:25.478967",
+      "question": "give me the salary of empluyess",
+      "query": "DECLARE @MonthName NVARCHAR(50) = NULL; DECLARE @Year INT = NULL; IF @MonthName IS NULL AND @Year IS NULL BEGIN SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM salary WHERE MONTH(month_date) = MONTH(DATEADD(MONTH, -1, GETDATE())) AND YEAR(month_date) = YEAR(DATEADD(MONTH, -1, GETDATE())) END ELSE IF @MonthName IS NOT NULL AND @Year IS NULL BEGIN SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM salary WHERE month_name LIKE '%' + @MonthName + '%' AND YEAR(month_date) = YEAR(GETDATE()) END ELSE BEGIN SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM salary WHERE month_name LIKE '%' + @MonthName + '%' AND YEAR(month_date) = @Year END",
+      "results_summary": "Found 0 records"
+    },
+    {
+      "timestamp": "2025-08-04T13:49:02.567430",
+      "question": "give me salary chart",
+      "query": "SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM salary WHERE MONTH(month_date) = MONTH(GETDATE()) AND YEAR(month_date) = YEAR(GETDATE())",
+      "results_summary": "Found 0 records"
+    }
+  ],
+  "nilab": [
+    {
+      "timestamp": "2025-09-01T02:54:52.298163",
+      "question": "List all salary details for every employee in July 2024.",
+      "query": "SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM dbo.salary WHERE MONTH(month_date) = 7 AND YEAR(month_date) = 2024",
+      "results_summary": "Found 32 records"
+    },
+    {
+      "timestamp": "2025-09-01T11:37:00.260738",
+      "question": "Get employee-wise punch count for March 2024, which can be used for payroll calculations.",
+      "query": "SELECT emp_name, CONVERT(date, punc_time) AS AttendanceDate, COUNT(*) AS TotalPunches FROM dbo.attendance WHERE MONTH(punc_time) = 3 AND YEAR(punc_time) = 2024 GROUP BY emp_name, CONVERT(date, punc_time) ORDER BY emp_name, AttendanceDate",
+      "results_summary": "Found 115 records"
+    },
+    {
+      "timestamp": "2025-09-01T11:37:46.204315",
+      "question": "Who are the users absent today (August 17, 2024), to assess potential payroll or leave accrual impacts, including: ID, Name, Email, User type, Department ID, Status = \"Absent\", Absent date",
+      "query": "SELECT u.u_id, u.u_name, u.email, u.user_type, u.fk_department_id, 'Absent' AS AttendanceStatus, CONVERT(date, '2024-08-17') AS AbsentDate FROM dbo.users u WHERE NOT EXISTS ( SELECT 1 FROM dbo.attendance a WHERE a.fk_u_id = u.u_id AND CONVERT(date, a.punc_time) = CONVERT(date, '2024-08-17') )",
+      "results_summary": "Found 141 records"
+    },
+    {
+      "timestamp": "2025-09-01T11:38:48.513994",
+      "question": "What is the total paid salary for July 2024, where salaries are marked as paid? Show result with formatted month, e.g., \"July 2024\"",
+      "query": "SELECT ISNULL(SUM(total_salary), 0) AS TotalPaidSalary, FORMAT(DATEFROMPARTS(2024, 7, 1), 'MMMM yyyy') AS SalaryMonth FROM dbo.salary WHERE isPaid = 1 AND MONTH(month_date) = 7 AND YEAR(month_date) = 2024",
+      "results_summary": "Found 1 records"
+    },
+    {
+      "timestamp": "2025-09-01T11:39:24.281396",
+      "question": "List all salary details for every employee in July 2024.",
+      "query": "SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM dbo.salary WHERE MONTH(month_date) = 7 AND YEAR(month_date) = 2024",
+      "results_summary": "Found 32 records"
+    }
+  ],
+  "nilab111": [
+    {
+      "timestamp": "2025-08-04T13:58:02.892918",
+      "question": "give me salary chart",
+      "query": "SELECT ISNULL(TRY_CAST(s.salary_id AS INT), 0) AS salary_id, s.employee_name, s.month_name, ISNULL(TRY_CAST(s.salary_amount AS INT), 0) AS salary_amount, ISNULL(TRY_CAST(s.deducted_amount AS INT), 0) AS deducted_amount, s.description, ISNULL(TRY_CAST(s.total_salary AS INT), 0) AS total_salary, s.created_at, s.created_by, ISNULL(TRY_CAST(s.created_by_id AS INT), 0) AS created_by_id, ISNULL(TRY_CAST(s.isPaid AS INT), 0) AS isPaid, ISNULL(TRY_CAST(s.fk_u_id AS INT), 0) AS fk_u_id, s.month_date, ISNULL(TRY_CAST(s.FkSalaryReqId AS INT), 0) AS FkSalaryReqId, ISNULL(TRY_CAST(s.AttenDeductedAmount AS INT), 0) AS AttenDeductedAmount, ISNULL(TRY_CAST(s.LoanDeductedAmount AS INT), 0) AS LoanDeductedAmount, ISNULL(TRY_CAST(s.PenaltyDeductedAmount AS INT), 0) AS PenaltyDeductedAmount FROM salary s;",
+      "results_summary": "Found 1244 records"
+    }
+  ],
+  "nabil": [
+    {
+      "timestamp": "2025-08-27T14:55:48.896997",
+      "question": "List all salary details for every employee in July 2024.",
+      "query": "SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM dbo.salary WHERE YEAR(month_date) = 2024 AND MONTH(month_date) = 7",
+      "results_summary": "Found 32 records"
+    },
+    {
+      "timestamp": "2025-09-11T12:04:52.544483",
+      "question": "Get employee-wise punch count for March 2024, relevant for calculating attendance-based pay or deductions.",
+      "query": "SELECT emp_name, CONVERT(DATE, punc_time) AS AttendanceDate, COUNT(*) AS TotalPunches FROM dbo.attendance WHERE YEAR(created_at) = 2024 AND MONTH(created_at) = 3 GROUP BY emp_name, CONVERT(DATE, punc_time) ORDER BY emp_name, AttendanceDate",
+      "results_summary": "Found 115 records"
+    },
+    {
+      "timestamp": "2025-09-11T12:06:12.644840",
+      "question": "Identify users absent today (August 17, 2024), as this may impact payroll or leave liability, including: ID, Name, Email, User type, Department ID, Status = \"Absent\", Absent date.",
+      "query": "SELECT u.u_id, u.u_name, u.email, u.user_type, u.fk_department_id, 'Absent' AS AttendanceStatus, CONVERT(DATE, '2024-08-17') AS AbsentDate FROM dbo.users u WHERE NOT EXISTS ( SELECT 1 FROM dbo.attendance a WHERE a.fk_u_id = u.u_id AND CONVERT(DATE, a.punc_time) = CONVERT(DATE, '2024-08-17') )",
+      "results_summary": "Found 141 records"
+    },
+    {
+      "timestamp": "2025-09-11T12:07:17.211582",
+      "question": "What is the total paid salary for July 2024, where salaries are marked as paid? Show result with formatted month, e.g., \"July 2024\".",
+      "query": "SELECT ISNULL(SUM(total_salary), 0) AS TotalPaidSalary, FORMAT(DATEFROMPARTS(2024, 7, 1), 'MMMM yyyy') AS SalaryMonth FROM dbo.salary WHERE isPaid = 1 AND YEAR(month_date) = 2024 AND MONTH(month_date) = 7",
+      "results_summary": "Found 1 records"
+    },
+    {
+      "timestamp": "2025-09-11T12:07:59.002443",
+      "question": "List all salary details for every employee in July 2024.",
+      "query": "SELECT salary_id, employee_name, month_name, salary_amount, deducted_amount, description, total_salary, created_at, created_by, created_by_id, isPaid, fk_u_id, month_date, FkSalaryReqId, AttenDeductedAmount, LoanDeductedAmount, PenaltyDeductedAmount FROM dbo.salary WHERE YEAR(month_date) = 2024 AND MONTH(month_date) = 7",
+      "results_summary": "Found 32 records"
+    }
+  ],
+  "raihan": [
+    {
+      "timestamp": "2025-08-10T02:49:48.746651",
+      "question": "a list of employees",
+      "query": "SELECT u_id, u_name, u_username, u_status, u_roleID, u_balance, created_at, pma_name, pma_comment, added_by, added_by_id, user_type, pma_date, reminder, reminder_checked, u_color, profile_pic, phon_No, email, fk_department_id, bioTime_id, passwordSalt, RefreshToken, TokenCreated, TokenExpires, user_uniqueID, isDeleted, u_ArName FROM dbo.users",
+      "results_summary": "Found 149 records"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+### Section 1:  Employee Daily Attendance Summary for any Month
+
+
+**Query:** Get employee-wise punch count for March. 2024.
+
+#### 2. Get Absent User List
+
+**Query:** Who are the users absent today on August 17, 2024, including their ID, name, email, user type, department ID, with 'Absent' as status and the absent date?
+
+### Section 2: Get last month/given Month/ any month Paid Salary
+
+** Query:** What is the total paid salary for July 2024, where salaries are marked as paid, and show it with the formatted month like 'July 2024'? .
+
+#### 2. Get All Employee Salary List for last month / given month / any month
+
+**Query:** Can you list all salary details for every employee in July 2024?.
