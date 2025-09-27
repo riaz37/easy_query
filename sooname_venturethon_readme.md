@@ -64,4 +64,4 @@ Pull requests welcome! For major changes, open an issue first.
 
 ## License
 
-MIT License''')
+MIT License
