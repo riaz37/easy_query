@@ -30,6 +30,7 @@ export { useDatabaseQueryValidation } from "./use-database-query-validation";
 export { useToast } from "./use-toast";
 export { useUserSettings } from "./use-user-settings";
 export { useThemeTransition } from "./useThemeTransition";
+export { useAIModels } from "./use-ai-models";
 
 // Context hooks
 export { useUserContext } from "./use-user-context";

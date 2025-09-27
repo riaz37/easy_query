@@ -2,6 +2,9 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useAIModels } from "@/lib/hooks/use-ai-models";
+import { Brain } from "lucide-react";
 
 interface QueryFormProps {
   query: string;
@@ -15,6 +18,10 @@ interface QueryFormProps {
   onUploadClick?: () => void;
   className?: string;
   disabled?: boolean;
+  // Model selection props
+  showModelSelector?: boolean;
+  selectedModel?: string;
+  onModelChange?: (model: string) => void;
 }
 
 export function QueryForm({
@@ -29,9 +36,16 @@ export function QueryForm({
   onUploadClick,
   className = "",
   disabled = false,
+  // Model selection props
+  showModelSelector = false,
+  selectedModel,
+  onModelChange,
 }: QueryFormProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
+  
+  // Use AI models hook
+  const { getModelDisplayInfo, getModelsWithDisplayInfo } = useAIModels();
 
   // Auto-resize textarea based on content
   useEffect(() => {
@@ -87,7 +101,7 @@ export function QueryForm({
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="w-full min-h-16 px-4 pr-40 py-4 bg-slate-800/50 text-white placeholder-slate-400 focus:outline-none border-0 resize-none overflow-y-auto"
+          className={`w-full min-h-16 px-4 py-4 bg-slate-800/50 text-white placeholder-slate-400 focus:outline-none border-0 resize-none overflow-y-auto ${showModelSelector ? 'pr-80' : 'pr-40'}`}
           style={{
             background:
               "var(--components-paper-bg-paper-blur, rgba(255, 255, 255, 0.04))",
@@ -102,6 +116,48 @@ export function QueryForm({
         />
         
         <div className={`absolute right-2 flex gap-2 items-center ${isMultiLine ? 'bottom-3' : 'top-3'}`}>
+          {/* Model Selector */}
+          {showModelSelector && (
+            <Select
+              value={selectedModel}
+              onValueChange={(value) => onModelChange?.(value)}
+              disabled={disabled || isExecuting}
+            >
+              <SelectTrigger className="w-32 h-10 bg-slate-800/50 border-slate-700 text-white text-xs">
+                <SelectValue>
+                  {selectedModel && (() => {
+                    const { name, icon: Icon, color } = getModelDisplayInfo(selectedModel);
+                    return (
+                      <div className="flex items-center gap-1">
+                        <Icon className={`w-3 h-3 ${color}`} />
+                        <span className="truncate">{name.split(' ')[0]}</span>
+                      </div>
+                    );
+                  })()}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border-slate-700 w-48">
+                {getModelsWithDisplayInfo().map(({ value, name, icon: Icon, description, color }) => (
+                  <SelectItem 
+                    key={value} 
+                    value={value} 
+                    className="text-white hover:bg-slate-700 focus:bg-slate-700 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Icon className={`w-4 h-4 ${color}`} />
+                      <div className="flex flex-col items-start">
+                        <span className="text-sm font-medium">{name}</span>
+                        {description && (
+                          <span className="text-xs text-slate-400">{description}</span>
+                        )}
+                      </div>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          
           {showUploadButton && onUploadClick && (
             <Button
               variant="outline"

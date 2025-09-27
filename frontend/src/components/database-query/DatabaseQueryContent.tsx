@@ -40,6 +40,7 @@ import { DatabaseQueryStatsCards, DatabaseQueryHeader } from "@/components/datab
 import { QuickSuggestions } from "@/components/file-query/QuickSuggestions";
 import { QueryForm } from "@/components/shared/QueryForm";
 import { IntegratedReportGenerator } from "@/components/database-query/IntegratedReportGenerator";
+import { useAIModels } from "@/lib/hooks/use-ai-models";
 
 export function DatabaseQueryContent() {
   const router = useRouter();
@@ -57,6 +58,7 @@ export function DatabaseQueryContent() {
   } = useDatabaseOperations();
   const { createQueryTask, executeTask } = useTaskCreator();
   const reports = useReports();
+  const { selectedModel, changeModel, MODELS } = useAIModels();
 
   // State
   const [queryMode, setQueryMode] = useState<'query' | 'reports'>('query');
@@ -355,6 +357,9 @@ export function DatabaseQueryContent() {
                   buttonText="Ask"
                   showClearButton={true}
                   disabled={!hasCurrentDatabase}
+                  showModelSelector={true}
+                  selectedModel={selectedModel}
+                  onModelChange={changeModel}
                 />
               ) : (
                 <IntegratedReportGenerator

@@ -102,7 +102,7 @@ export const OpeningAnimation = ({
               className="text-center"
             >
               <h1 className="text-2xl md:text-4xl font-bold text-white mb-4">
-                Knowledge Base Solution
+                Easy Query
               </h1>
               <p className="text-green-400 text-lg">
                 Powered by AI • Secure • Fast

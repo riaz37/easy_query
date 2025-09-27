@@ -2,6 +2,17 @@ const baseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://176.9.16.194:8200";
 
 /**
+ * Available AI models for database queries
+ */
+export const AVAILABLE_MODELS = {
+  LLAMA_3_3_70B_VERSATILE: "llama-3.3-70b-versatile",
+  OPENAI_GPT_OSS_120B: "openai/gpt-oss-120b",
+  GEMINI: "gemini",
+} as const;
+
+export type AvailableModel = typeof AVAILABLE_MODELS[keyof typeof AVAILABLE_MODELS];
+
+/**
  * API endpoint definitions
  * All endpoints use JWT authentication - user ID is extracted from token on backend
  */
@@ -15,6 +26,19 @@ export const API_ENDPOINTS = {
   // Query endpoints
   SEARCH: `${baseUrl}/search`,
   QUERY: `${baseUrl}/mssql/query`,
+  QUERY_WITH_MODEL: (params: {
+    question: string;
+    user_id: string;
+    model?: AvailableModel;
+  }) => {
+    const queryParams = new URLSearchParams();
+    queryParams.append('question', params.question);
+    queryParams.append('user_id', params.user_id);
+    if (params.model) {
+      queryParams.append('model', params.model);
+    }
+    return `${baseUrl}/mssql/query?${queryParams.toString()}`;
+  },
 
   // File system endpoints
   SMART_FILE_SYSTEM: `${baseUrl}/files/smart_file_system`,
@@ -150,4 +174,19 @@ export function buildEndpointWithPathParams(
   });
 
   return endpoint;
+}
+
+/**
+ * Helper function to build query endpoint with model selection
+ */
+export function buildQueryEndpoint(
+  question: string,
+  userId: string,
+  model?: AvailableModel,
+): string {
+  return API_ENDPOINTS.QUERY_WITH_MODEL({
+    question,
+    user_id: userId,
+    model,
+  });
 }
