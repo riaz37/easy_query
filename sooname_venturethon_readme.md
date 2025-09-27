@@ -20,7 +20,7 @@ Built with React (frontend), FastAPI/Python (backend), RLHF with agentic RAG, an
 
 1. Clone the repo:
    ```
-   git clone https://github.com/yourusername/easy-query.ai.git
+   git clone https://github.com/riaz37/easy_query.git
    cd easy-query.ai
    ```
 
@@ -56,12 +56,7 @@ During the soonami Venturethon (Edition 8, Sept 15-28, 2025), our team accelerat
 - **Dashboard Polish**: Enhanced UI/UX with Tailwind CSS for responsive design, adding real-time metrics widgets, quick actions, and admin views.
 - **Query Generator**: Developed core NLP query engine with SQL preview, execution, and 90% success rate via AI assistance.
 
-These advancements align with Venturethon tracks (New Ventures), demonstrating innovation in AI for database orchestration. We completed daily check-ins, team building, and prepared for Demo Day on Oct 3.
-
-## Team
-
-- **Khan Muhammad Nafiul Akbar**: Founder & Full-Stack AI Engineer (AI, Blockchain, IoT expertise).
-- **Mahtab Khandoker**: Data Engineer (Geospatial data optimization, Python/ML).
+These advancements align with Venturethon tracks (New Ventures & EIR), demonstrating innovation in AI for database orchestration. We completed daily check-ins, team building, and prepared for Demo Day on Oct 3.
 
 ## Contributing
 
