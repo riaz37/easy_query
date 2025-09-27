@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -9,6 +10,8 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+/frontend/node_modules/
+pnpm-lock.yaml
 
 # testing
 /coverage
@@ -16,9 +19,12 @@
 # next.js
 /.next/
 /out/
+/frontend/.next/
+/frontend/out/
 
 # production
 /build
+/frontend/build/
 
 # misc
 .DS_Store
@@ -39,6 +45,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/frontend/tsconfig.tsbuildinfo
 
 .cursor
 
