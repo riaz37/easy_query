@@ -1,7 +1,7 @@
 # Easy Query
 
 <div align="center">
-  <img src="./public/logo/logo.svg" alt="Easy Query Logo" width="120" height="120">
+  <img src="https://github.com/riaz37/easy_query/blob/main/wmremove-transformed-removebg-preview.png" alt="Easy Query Logo" width="120" height="120">
   
   **A powerful AI-driven knowledge base and database query platform**
   
