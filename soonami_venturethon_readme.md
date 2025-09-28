@@ -1,4 +1,4 @@
-## Venturethon Achievements
+## Soonami Venturethon Achievements
 
 During the soonami Venturethon (Edition 8, Sept 15-28, 2025), our team accelerated easy-query.ai from a frontend-only prototype to a full-stack MVP. Key achievements:
 
