@@ -14,6 +14,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import Image from 'next/image';
 import { ButtonLoader } from '@/components/ui/loading';
 import { cn } from '@/lib/utils';
+import { ExternalLink, Shield, AlertTriangle } from 'lucide-react';
 
 // Validation schema for login form
 const loginSchema = z.object({
@@ -87,6 +88,48 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
             </p>
           </div>
         </div>
+        
+        {/* SSL Instructions Banner */}
+        <div className={cn(
+          "mb-6 p-4 rounded-lg border-l-4",
+          theme === "dark" 
+            ? "bg-amber-900/20 border-amber-500 text-amber-100" 
+            : "bg-amber-50 border-amber-400 text-amber-800"
+        )}>
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h3 className="font-semibold text-sm mb-2">
+                Important: SSL Certificate Setup Required
+              </h3>
+              <p className="text-sm mb-3 leading-relaxed">
+                Before signing in, please visit our API documentation to accept the SSL certificate. 
+                When you see the security warning:
+              </p>
+              <ol className="text-sm mb-3 ml-4 space-y-1 list-decimal">
+                <li>Click <strong>"Advanced..."</strong> button</li>
+                <li>Click <strong>"Accept the Risk and Continue"</strong></li>
+                <li>This ensures secure communication with our backend services</li>
+              </ol>
+              <a
+                href="https://176.9.16.194:8200/docs#/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105",
+                  theme === "dark"
+                    ? "bg-amber-600 hover:bg-amber-700 text-white"
+                    : "bg-amber-500 hover:bg-amber-600 text-white"
+                )}
+              >
+                <Shield className="w-4 h-4" />
+                Visit API Documentation
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div className="space-y-4">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {error && (
