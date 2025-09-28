@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Bell, User, LogIn, Settings } from "lucide-react";
+import { Bell, User, LogIn, Settings, Sun, Moon } from "lucide-react";
 import { useUIStore } from "@/store/uiStore";
 import { useAuthContext } from "@/components/providers/AuthContextProvider";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NavbarTaskIndicator } from "@/components/task-manager";
+import { useThemeState } from "@/store/theme-store";
 
 export default function Navbar() {
   const { showSidebar, setShowSidebar } = useUIStore();
   const { isAuthenticated, user, logout } = useAuthContext();
+  const { themeMode, theme, toggleTheme } = useThemeState();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -32,6 +34,19 @@ export default function Navbar() {
 
   const handleMenuClick = () => {
     setShowSidebar(!showSidebar);
+  };
+
+  const handleThemeToggle = (event: React.MouseEvent) => {
+    const button = event.currentTarget as HTMLButtonElement;
+    const switchingToDark = theme === 'light';
+
+    // Add smooth scaling effect
+    button.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      button.style.transform = '';
+    }, 150);
+
+    toggleTheme(event);
   };
 
   return (
@@ -118,6 +133,24 @@ export default function Navbar() {
 
         {/* Task Indicator */}
         <NavbarTaskIndicator />
+
+        {/* Theme Toggle */}
+        <div className="relative">
+          <button
+            onClick={handleThemeToggle}
+            className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer hover:scale-110 active:scale-95"
+            style={{
+              background: "rgba(255, 255, 255, 0.08)",
+            }}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Current: ${themeMode} mode (${theme})`}
+          >
+            <div className="relative transition-transform duration-300 ease-in-out hover:rotate-12">
+              <Sun className="w-5 h-5 text-white/90 scale-100 rotate-0 transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] dark:scale-0 dark:-rotate-90" />
+              <Moon className="absolute inset-0 w-5 h-5 text-white/90 scale-0 rotate-90 transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] dark:scale-100 dark:rotate-0" />
+            </div>
+          </button>
+        </div>
 
         {/* User Avatar */}
         {isAuthenticated && user ? (
