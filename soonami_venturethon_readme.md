@@ -18,5 +18,7 @@ These advancements align with Venturethon tracks (New Ventures & EIR), demonstra
 ## Live Demo
 
 -**Live Demo Link**: https://easy-query.vercel.app/
+
 -**Demo Access** : username: riaz  password: Hello302001@
+
 -**Product Demo Video** : https://www.loom.com/share/a06a23f1b31741eab1c033ddac128c78?sid=d1a63348-9eef-434e-9df1-844d8df73c9f
