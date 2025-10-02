@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -224,7 +224,7 @@ export function EnhancedFileUploadModal({
               const completedFiles = updatedFiles
         .filter((file) => file.status === "completed")
         .map((file) => file.id);
-      
+
       if (completedFiles.length > 0) {
         onFilesUploaded(completedFiles);
       }
@@ -260,10 +260,13 @@ export function EnhancedFileUploadModal({
       "text/plain": [".txt"],
       "application/pdf": [".pdf"],
       "application/msword": [".doc"],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        [".docx"],
       "text/csv": [".csv"],
       "application/vnd.ms-excel": [".xls"],
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+        ".xlsx",
+      ],
     },
     maxFiles: 10,
     maxSize: 50 * 1024 * 1024, // 50MB
@@ -294,22 +297,20 @@ export function EnhancedFileUploadModal({
     toast.info("All files cleared");
   };
 
-
   const handleClose = () => {
     onOpenChange(false);
   };
 
-
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   // Cleanup effect to clear intervals on unmount
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       // Clear all polling intervals when component unmounts
       Object.values(pollingIntervals).forEach(interval => clearInterval(interval));
@@ -317,7 +318,7 @@ export function EnhancedFileUploadModal({
   }, [pollingIntervals]);
 
   // Sync with parent component when uploadedFiles changes
-  useEffect(() => {
+  React.useEffect(() => {
     if (uploadedFiles.length > 0) {
       onUploadStatusChange(uploadedFiles);
     }
@@ -362,7 +363,10 @@ export function EnhancedFileUploadModal({
                     Upload files to query and analyze their content
                   </p>
                 </div>
-                <button onClick={handleClose} className="modal-close-button cursor-pointer">
+                <button
+                  onClick={handleClose}
+                  className="modal-close-button cursor-pointer"
+                >
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -372,10 +376,10 @@ export function EnhancedFileUploadModal({
               {/* File Drop Zone */}
               <div
                 {...getRootProps()}
-                className={`modal-input-enhanced border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden flex-1 max-w-2xl mx-auto ${
+                className={`border rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden flex-1 w-full ${
                   isDragActive
                     ? "border-green-400 bg-green-400/10 scale-105"
-                    : "hover:border-slate-500 hover:bg-slate-700/20"
+                    : ""
                 }`}
               >
                 <input {...getInputProps()} />
@@ -396,23 +400,25 @@ export function EnhancedFileUploadModal({
                   </div>
 
                   {/* Text Content - Right Side */}
-                  <div className="flex-1 px-6 flex flex-col justify-center">
+                  <div className="flex-1 flex flex-col justify-center">
                     {isDragActive ? (
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         <p className="text-lg font-semibold text-green-400">
                           Drop the files here...
                         </p>
-                        <p className="text-green-300">Release to upload</p>
+                        <p className="text-xs text-green-300">Release to upload</p>
                       </div>
                     ) : (
                       <div className="space-y-2">
                         <p className="text-lg font-semibold text-white">
                           Drop or select files
                         </p>
-                        <p className="text-slate-400">
+                        <p className="text-xs text-slate-400">
                           Drop files here or{" "}
-                          <span className="text-green-400 font-medium">click</span> to
-                          browse through your machine
+                          <span className="text-green-400 font-medium">
+                            click
+                          </span>{" "}
+                          to browse through your machine
                         </p>
                       </div>
                     )}
