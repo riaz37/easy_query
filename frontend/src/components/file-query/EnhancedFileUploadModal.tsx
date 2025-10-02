@@ -473,11 +473,6 @@ export function EnhancedFileUploadModal({
                         <div className="flex items-center  flex-shrink-0 ml-4">
                             <div className="flex items-center gap-2">
                             {getStatusIcon(file.status)}
-                            {(file.status === "uploading" || file.status === "processing") && (
-                              <span className="text-green-400 text-xs">
-                                {Math.round(file.progress)}%
-                              </span>
-                            )}
                             </div>
 
                           <button
