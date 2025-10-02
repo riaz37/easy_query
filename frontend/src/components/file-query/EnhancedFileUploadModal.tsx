@@ -475,18 +475,21 @@ export function EnhancedFileUploadModal({
                             {getStatusIcon(file.status)}
                             </div>
 
-                          <button
-                            onClick={() => handleRemoveFile(file.id)}
-                            className="p-2 hover:bg-red-500/20 rounded-lg transition-all duration-200 cursor-pointer group"
-                            title="Remove file"
-                            disabled={isUploading}
-                          >
-                            <img
-                              src="/tables/cross.svg"
-                              alt="Remove"
-                              className="h-5 w-5 opacity-70 group-hover:opacity-100 transition-opacity"
-                            />
-                          </button>
+                          {/* Only show remove button if file is not completed */}
+                          {file.status !== "completed" && (
+                            <button
+                              onClick={() => handleRemoveFile(file.id)}
+                              className="p-2 hover:bg-red-500/20 rounded-lg transition-all duration-200 cursor-pointer group"
+                              title="Remove file"
+                              disabled={isUploading}
+                            >
+                              <img
+                                src="/tables/cross.svg"
+                                alt="Remove"
+                                className="h-5 w-5 opacity-70 group-hover:opacity-100 transition-opacity"
+                              />
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
